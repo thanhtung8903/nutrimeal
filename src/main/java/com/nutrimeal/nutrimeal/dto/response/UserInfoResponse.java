@@ -20,7 +20,5 @@ public class UserInfoResponse {
     private Date dob;
     private int point;
     private List<String> roles;
-    private String tokenType;
-    private String accessToken;
 
 }
