@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<nav th:fragment="navbar">
+
+
+    <div class="logo">
+        <img src="path/to/your/logo.png" alt="FITFOOD.VN">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#">TRANG CHỦ</a></li>
+            <li><a href="#">THỰC ĐƠN</a></li>
+            <li><a href="#">TƯ VẤN</a></li>
+            <li><a href="#">ĐẶT HÀNG</a></li>
+            <li><a href="#">TIN TỨC</a></li>
+            <li><a href="#">FAQS</a></li>
+        </ul>
+    </nav>
+    <div class="user-options">
+        <a href="#">Đăng Ký</a>
+        <a href="#">Đăng Nhập</a>
+        <div class="cart">
+            <a href="#"><i class="fa fa-shopping-cart"></i><span class="cart-count">0</span></a>
+        </div>
+        <div class="language">
+            <a href="#">EN</a> / <a href="#">VI</a>
+        </div>
+    </div>
+</nav>
+
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<!--Header-->
+<head th:fragment="head(title, remove)" th:remove="${remove}">
+    <meta charset="UTF-8">
+    <title>[[${title}]]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.png}"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.7.1/dist/jquery.js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+    <!--    Custom css-->
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+
+
+<!--add header-->
+
+</html>
