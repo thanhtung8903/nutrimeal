@@ -1,4 +1,4 @@
-package com.nutrimeal.nutrimeal.security.config;
+package com.nutrimeal.nutrimeal.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,26 +24,11 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
 
-
-
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-//        http.authenticationProvider(authenticationProvider());
-//        http.csrf(AbstractHttpConfigurer::disable);
-//        return http.build();
-//    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("api/v1/customer/**").hasAnyRole("CUSTOMER", "MANAGER","ADMIN")
-                        .requestMatchers("api/v1/manager/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers("/api/v1/shipper/**").hasAnyRole("SHIPPER"));
-        httpSecurity.authenticationProvider(authenticationProvider());
-
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+//        httpSecurity.authenticationProvider(authenticationProvider());
         return httpSecurity.build();
     }
 
