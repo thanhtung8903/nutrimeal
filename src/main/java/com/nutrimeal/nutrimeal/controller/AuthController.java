@@ -41,5 +41,6 @@ public class AuthController {
             model.addAttribute("errorMessage", e.getMessage());
             return "signup";
         }
+
     }
 }
