@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('Login', 'none')"></head>
+<head th:replace="fragments :: head('Login', 'none')"></head>
 <body>
+<header th:replace="~{fragments :: header}"></header>
 
 <h1>Sign In</h1>
 <!--    create form signin with email, password-->

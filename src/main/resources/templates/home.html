@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('NutriMeal', 'none')"></head>
+<head th:replace="fragments :: head('NutriMeal', 'none')"></head>
 <body>
-<center>
+    <header th:replace="~{fragments:: header}"></header>
 
-    <header th:replace="~{fragments/header :: header}"></header>
-
-
-    <button class="btn btn-primary">Test Button</button>
-
-</center>
+    <footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>
