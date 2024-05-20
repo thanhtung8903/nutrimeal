@@ -14,15 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SignupRequest {
 
-    @NotBlank(message = "Full name is required")
     private String fullName;
-
-    @NotBlank(message = "Email is required")
-    @Email
     private String email;
-
-    @NotBlank(message = "Password is required")
     private String password;
-
+    private String confirmPassword;
 
 }

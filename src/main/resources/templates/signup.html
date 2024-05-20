@@ -4,8 +4,6 @@
 <head th:replace="~{fragments :: head('Signup', 'none')}">
 
 
-
-
     <style>
         body {
             height: 100px;
@@ -28,8 +26,9 @@
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                <div class="">Đăng ký</div>
-
+                <div class="text-center">
+                    <h1>ĐĂNG KÝ</h1>
+                </div>
                 <div th:if="${errorMessage}" class="alert alert-danger" role="alert"><span
                         th:text="${errorMessage}"></span></div>
                 <div th:if="${successMessage}" class="alert alert-success" role="alert"><span
@@ -47,18 +46,21 @@
                            required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Mật khẩu</label>
                     <input type="password" class="form-control" id="password" placeholder="Mật khẩu"
                            th:field="*{password}" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Re Password</label>
+                    <label for="password">Nhập lại mật khẩu</label>
                     <input type="password" class="form-control" id="repassword" placeholder="Xác nhận mật khẩu"
+                           th:field="*{confirmPassword}"
                            required>
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+
+                <div class="text-center mb-5">
+                    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                </div>
             </div>
-<!--            <div class="col-md-4"></div>-->
 
         </div>
     </div>

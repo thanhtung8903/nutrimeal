@@ -8,14 +8,7 @@
     <header th:replace="~{fragments :: header}"></header>
 
 
-    <button class="btn btn-primary">Test Button</button>
 
-    <h1><a href="#" th:href="@{/home}" class="h3">Nutri Meal</a></h1>
-    <h1 sec:authorize="isAnonymous()">Xin chao 1<span th:text="${username}"></span></h1>
-    <h1 sec:authorize="isAuthenticated()">Xin chao 2<span th:text="${username}"></span></h1>
-    <h1 sec:authorize="isAuthenticated()">Tam bien</h1>
-    <h1 sec:authorize="isAuthenticated()"><a href="#" th:href="@{/logout}">Logout</a></h1>
-    <h1 sec:authorize="isAnonymous()"><a href="#" th:href="@{/login}">Login</a></h1>
 
     <footer th:replace="~{fragments :: footer}"></footer>
 </div>

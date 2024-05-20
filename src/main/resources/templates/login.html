@@ -4,7 +4,6 @@
 <body>
 <header th:replace="~{fragments :: header}"></header>
 
-<!--    create form signin with email, password-->
 <div class="container mt-5">
     <h1 class="text-center">ĐĂNG NHẬP</h1>
 
@@ -18,6 +17,10 @@
                 <div class="form-group">
                     <label for="password">Password:</label>
                     <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+
+                <div th:if="${param.error}" class="alert alert-danger mt-2" role="alert">
+                    <span>Email hoặc mật khẩu không chính xác!</span>
                 </div>
 
                 <div class="text-center mt-3 mb-3">

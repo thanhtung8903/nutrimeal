@@ -10,6 +10,7 @@ import com.nutrimeal.nutrimeal.repository.RoleRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -34,7 +37,11 @@ public class AuthService {
 
     public void signupUser(SignupRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email is already in use");
+            throw new RuntimeException("Email đã được sử dụng");
+        } else if (!request.getPassword().matches("^(?=.*\\\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*()]).{8,}$")) {
+            throw new RuntimeException("Mật khẩu phải chứa ít nhất 1 chữ số, 1 chữ thường, 1 chữ hoa, 1 ký tự đặc biệt và dài hơn 8 ký tự");
+        } else if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("Mật khẩu không khớp");
         } else {
             User user = new User();
             user.setFullName(request.getFullName());
@@ -49,11 +56,10 @@ public class AuthService {
 
             userRepository.save(user);
         }
-
     }
+
     public void handleAuthenticateUser(LoginRequest loginRequest) {
         try {
-
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
@@ -61,14 +67,11 @@ public class AuthService {
                     )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            session.setAttribute("user", authentication.getPrincipal());
-        }catch (AuthenticationException e){
-            throw new RuntimeException("Email or password incorrect !");
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Email hoặc mật khẩu không chính xác");
         }
 
         User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow();
-
-
 
         List<String> roles = user.getRoles()
                 .stream()
@@ -86,6 +89,6 @@ public class AuthService {
                 .avatar(user.getAvatar())
                 .point(user.getPoint())
                 .build();
-    }
 
+    }
 }
