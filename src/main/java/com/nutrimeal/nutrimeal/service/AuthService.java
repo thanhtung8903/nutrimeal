@@ -8,6 +8,7 @@ import com.nutrimeal.nutrimeal.model.RoleName;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.RoleRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +30,7 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
+    private final HttpSession session;
 
     public void signupUser(SignupRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -50,18 +51,9 @@ public class AuthService {
         }
 
     }
-    public UserInfoResponse handleAuthenticateUser(LoginRequest loginRequest) {
+    public void handleAuthenticateUser(LoginRequest loginRequest) {
         try {
-            // when call authenticationManager.authenticate()
-            // AuthenticationManager will access all AuthenticationProviders
-            // =>  DaoAuthenticationProvider use UserDetailsService to check user in the database
-            // check with user login does it match with the user in the database
-//            authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            loginRequest.getEmail(),
-//                            loginRequest.getPassword()
-//                    )
-//            );
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
@@ -69,6 +61,7 @@ public class AuthService {
                     )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            session.setAttribute("user", authentication.getPrincipal());
         }catch (AuthenticationException e){
             throw new RuntimeException("Email or password incorrect !");
         }
@@ -82,7 +75,7 @@ public class AuthService {
                 .map(role -> role.getRoleName().name())
                 .toList();
 
-        return UserInfoResponse.builder()
+        UserInfoResponse.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .fullName(user.getFullName())
