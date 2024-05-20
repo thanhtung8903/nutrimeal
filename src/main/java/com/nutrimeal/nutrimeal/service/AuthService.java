@@ -36,7 +36,9 @@ public class AuthService {
     private final HttpSession session;
 
     public void signupUser(SignupRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("Username đã được sử dụng");
+        } else if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email đã được sử dụng");
         } else if (!request.getPassword().matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*()]).{8,}$")) {
             throw new RuntimeException("Mật khẩu phải chứa ít nhất 1 chữ số, 1 chữ thường, 1 chữ hoa, 1 ký tự đặc biệt và dài hơn 8 ký tự");
@@ -44,6 +46,7 @@ public class AuthService {
             throw new RuntimeException("Mật khẩu không khớp");
         } else {
             User user = new User();
+            user.setUsername(request.getUsername());
             user.setFullName(request.getFullName());
             user.setEmail(request.getEmail());
             user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -62,16 +65,16 @@ public class AuthService {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getEmail(),
+                            loginRequest.getUsername(),
                             loginRequest.getPassword()
                     )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (RuntimeException e) {
-            throw new RuntimeException("Email hoặc mật khẩu không chính xác");
+            throw new RuntimeException("Username hoặc mật khẩu không chính xác");
         }
 
-        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow();
+        User user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow();
 
         List<String> roles = user.getRoles()
                 .stream()
