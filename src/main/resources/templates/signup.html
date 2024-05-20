@@ -1,21 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: head('Signup', 'none')}"></head>
+<head th:replace="~{fragments :: head('Signup', 'none')}">
+
+
+
+
+    <style>
+        body {
+            height: 100px;
+        }
+
+        .form-signup {
+            margin-top: 100px;
+            /*margin-bottom: 500px;*/
+        }
+    </style>
+
+</head>
 
 
 <body>
-<header th:replace="~{fragments/header :: header}"></header>
+<header th:replace="~{fragments :: header}"></header>
 
 <form action="#" th:action="@{/signup}" th:object="${SignupRequest}" method="post">
-    <div class="container">
+    <div class="container form-signup">
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-4">
                 <div class="">Đăng ký</div>
 
-                <div th:if="${errorMessage}" class="alert alert-danger" role="alert"><span th:text="${errorMessage}"></span> </div>
-                <div th:if="${successMessage}" class="alert alert-success" role="alert"><span th:text="${successMessage}"></span> </div>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert"><span
+                        th:text="${errorMessage}"></span></div>
+                <div th:if="${successMessage}" class="alert alert-success" role="alert"><span
+                        th:text="${successMessage}"></span></div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -36,15 +54,17 @@
                 <div class="form-group">
                     <label for="password">Re Password</label>
                     <input type="password" class="form-control" id="repassword" placeholder="Xác nhận mật khẩu"
-                            required>
+                           required>
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
             </div>
-            <div class="col-md-4"></div>
+<!--            <div class="col-md-4"></div>-->
 
         </div>
     </div>
 </form>
+
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 
 </html>

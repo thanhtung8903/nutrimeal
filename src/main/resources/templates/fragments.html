@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title, remove)" th:remove="${remove}">
+    <meta charset="UTF-8">
+    <title>[[${title}]]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.7.1/dist/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/"><h1>NutriMeal</h1></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+<!--            add trang chu, thuc don, tu van, dat hang, tin tuc, faq-->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/menu">Thực đơn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/consult">Tư vấn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/order">Đặt hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/news">Tin tức</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/faq">FAQ</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Đăng ký</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Đăng nhập</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<footer th:fragment="footer" class="bg-dark text-white p-4">
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <h5>About Us</h5>
+                <p class="text-justify">We are a team of NutriMeal enthusiasts who believe that a healthy lifestyle can
+                    be achieved through healthy meals. We are committed to providing the best quality meals to our
+                    customers.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Contact Us</h5>
+                <p class="text-justify">Address: 1234 Main St, HCM City, Vietnam</p>
+                <p class="text-justify">Phone: 0123 456 789</p>
+                <p class="text-justify">Email: </p>
+            </div>
+            <div class="col-md-4">
+                <h5>Follow Us</h5>
+                <a href="#" class="btn btn-primary"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="btn btn-info"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="btn btn-danger"><i class="fab fa-google-plus"></i></a>
+                <a href="#" class="btn btn-secondary"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+</html>

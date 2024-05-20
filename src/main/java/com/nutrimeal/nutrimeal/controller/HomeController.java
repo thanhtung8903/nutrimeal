@@ -26,4 +26,5 @@ public class HomeController {
         model.addAttribute("vl", "vlllll");
         return "home";
     }
+
 }
