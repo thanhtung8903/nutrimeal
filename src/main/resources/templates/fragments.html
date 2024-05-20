@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:fragment="head(title, remove)" th:remove="${remove}">
     <meta charset="UTF-8">
     <title>[[${title}]]</title>
@@ -18,14 +18,14 @@
 <header th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
+
             <a class="navbar-brand" href="/"><h1>NutriMeal</h1></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-<!--            add trang chu, thuc don, tu van, dat hang, tin tuc, faq-->
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/">Trang chủ</a>
@@ -48,7 +48,8 @@
                 </ul>
             </div>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+
+            <div sec:authorize="isAnonymous()" class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/signup">Đăng ký</a>
@@ -58,6 +59,19 @@
                     </li>
                 </ul>
             </div>
+
+            <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Hồ sơ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
+                    </li>
+                </ul>
+            </div>
+
+
         </div>
     </nav>
 </header>
