@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Nutrimeal FAQs</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
+            background-color: #e5e5e5;
+        }
+        h1.title{
+            font-weight: 700;
+            font-size: 40px;
+            font-family: var(--font-secondary);
+            text-transform: uppercase;
+            margin-top: 40px;
+        }
+        .faq-heading{
+            display: inline-block;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .italic{
+            font-style: italic;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="offset-lg-1 col-lg-10">
+            <h1 class="title mb-5 faq-heading">FAQs</h1>
+            <p class="italic">Bạn muốn trải nghiệm Nutrimeal nhưng không biết bắt đầu từ đâu? Hãy tham khảo những câu hỏi thường gặp bên dưới.</p>
+            <div class="accordion mb-5" id="faq">
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link " type="button" data-toggle="collapse"
+                                    data-target="#collapse-0" aria-expanded="true" aria-controls="collapse-0">
+                                Mô hình của Nutrimeal là gì?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-0" class="collapse show" aria-labelledby="heading-0" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Nutrimeal chuyên cung cấp các bữa ăn sạch hàng tuần được chuẩn bị sẵn theo đa dạng các phong cách,
+                                giúp bạn theo đuổi một phong cách sống khỏe và cân bằng dinh dưỡng.</p>
+
+                            <p>Tùy theo nhu cầu của bạn là giảm cân hay tăng cơ, bạn có thể chọn gói sản phẩm phù hợp tại trang Đặt Hàng.
+                                Nutrimeal sẽ đảm nhận việc nấu nướng và giao hàng mỗi ngày cho bạn.
+                                Các bữa ăn đều được tính toán calories cẩn thận và sử dụng các nguyên liệu tươi ngon tốt cho sức khỏe.</p>
+
+                            <p>Với Menu rất nhiều món của mình, Nutrimeal luôn đảm bảo các phần ăn luôn giàu đạm, nhiều rau củ và ít tinh bột.
+                                Tất cả các bữa ăn đều được làm lạnh nhằm đảm bảo an toàn thực phẩm trong quá trình vận chuyển.
+                                Bạn vui lòng bảo quản trong tủ lạnh và hâm nóng bằng lò vi sóng trước khi ăn.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                                Cách đặt hàng như thế nào?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-1" class="collapse " aria-labelledby="heading-1" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Bạn chọn gói ăn bạn mong muốn tại nutrimeal.click/đặt hàng, đừng quên thêm vào giỏ hàng các sản phẩm dùng kèm nha.
+                                Sau khi cho hết các sản phẩm vào giỏ hàng, bạn chỉ cần điền đầy đủ thông tin giao hàng trên website,
+                                chọn thời gian giao hàng.</p>
+
+                            <p>Sau khi hoàn tất, một email xác nhận sẽ được tự động gửi vào email bạn đăng ký.
+                                Bạn vui lòng kiểm tra thư mục SPAM nếu bạn không nhận được email, Bạn lưu ý là Nutrimeal không gọi điện xác nhận nha. </p>
+
+                            <p>Nếu gặp bất cứ khó khăn nào trong quá trình đặt hàng,
+                                hãy gọi ngay số Hotline của Nutrimeal. 0333 311 102  - 0384 370 666. hoặc inbox Facebook : https://www.facebook.com/duong1793</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapse-2" aria-expanded="true" aria-controls="collapse-2">
+                                Các lưu ý khi sử dụng Nutrimeal?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-2" class="collapse " aria-labelledby="heading-2" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Các phần ăn theo tuần hoặc tháng sẽ được giao đến cho bạn vào buổi sáng các ngày trong tuần
+                                (từ 8h - 12h tùy khu vực) hoặc vào buổi tối hôm trước đối với các yêu cầu giao sớm </p>
+
+                            <p>Ngay sau khi nhận phần ăn, bạn vui lòng để ngay vào ngăn mát tủ lạnh và
+                                hâm lại bằng lò vi sóng trong 02 phút trước khi dùng để đảm bảo chất lượng thức ăn tốt nhất. </p>
+
+                            <p>Vui lòng liên hệ nhân viên Nutrimeal để được hỗ trợ hâm nóng, lưu ý các món có nước súp sẽ không hâm nóng được</p>
+
+                            <p>Đối với các món nước, vui lòng xé túi canh súp cho vào hộp rồi hâm nóng hộp đồ ăn trong
+                                lò vi sóng để nhận được trải nghiệm món súp tươi nóng thơm ngon hơn. </p>
+
+                            <p>Đối với các khách không có tủ lạnh hoặc không hâm nóng bằng Lò Vi Sóng,
+                                Nutrimeal không đảm bảo được chất lượng thức ăn tốt nhất.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapse-3" aria-expanded="true" aria-controls="collapse-3">
+                                Phần ăn Nutrimeal có gì đặc biệt?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-3" class="collapse " aria-labelledby="heading-3" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Tỷ lệ tinh bột phức (complex carb), chất béo (fat) và đạm (protein) trong các phần ăn của Fitfood được thiết kế
+                                để đảm bảo chế độ cân bằng dinh dưỡng tốt nhất. Hầu hết các phần ăn trưa của Nutrimeal được bổ sung tinh bột
+                                phức (complex carb) để đảm bảo hoạt động não bộ và duy trì năng suất công việc trong thời gian dài.</p>
+
+                            <p>Các phần ăn được hạn chế để không có hoặc ít xương, hay phải sử dụng đến tay để ăn, tạo điều kiện thuận tiện và vệ sinh nhất cho khách hàng.</p>
+
+                            <p>Một số phần ăn sẽ đi kèm với hủ sốt, tùy theo nhu cầu của từng khách có thể tự nêm nếm cho hợp khẩu vị.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapse-4" aria-expanded="true" aria-controls="collapse-4">
+                                Muốn đặt gói tháng thì như thế nào?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-4" class="collapse " aria-labelledby="heading-4" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Gói ăn tháng của Nutrimeal sẽ được giao trong 4 tuần liên tục. Giá cả chi tiết của từng gói ăn vui lòng
+                                liên hệ Facebook: https://www.facebook.com/duong1793 để được tư vấn cụ thể. </p>
+
+                            <p><em>* Bạn lưu ý giúp Nutrimeal về một số chính sách đối với GÓI THÁNG nha:</em></p>
+
+                            <p>- Ưu đãi giá tháng chỉ áp dụng cho khách cam kết ăn liên tục trong 01 tháng (4 tuần).
+                                Nếu khách hủy gói giữa chừng, Nutrimeal sẽ tính các phần ăn đã sử dụng theo giá bình thường (không giảm giá),
+                                quà tặng gói tháng (nếu có) là 10% cho tổng giá trị đơn hàng.</p>
+
+                            <p>- Quý khách có thể bảo lưu gói ăn trong thời gian tối đa là 02 tuần.
+                                Nutrmeal sẽ không nhận bảo lưu trong thời gian lâu hơn. Nếu khách ngưng thời gian dài hơn thì Nutrmeal sẽ tính
+                                các phần ăn đã sử dụng theo giá bình thường và hoàn tiền lại cho khách phần giá trị chưa dùng.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapse-5" aria-expanded="true" aria-controls="collapse-5">
+                                Thức ăn Nutrimeal nhạt quá, phải làm sao?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-5" class="collapse " aria-labelledby="heading-5" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Bạn có thể nêm nếm bằng cách tinh chỉnh định lượng của hủ sốt để phù hợp với khẩu vị của bạn.&nbsp;</p>
+
+                            <p>Chất ngọt của Nutrimeal đa phần đến từ rau củ hoặc đường nâu có trong các hủ sốt dùng kèm.
+                                Nutrimeal cũng luôn khuyến khích khách không nên ăn quá mặn hoặc ngọt ảnh hưởng đến khả năng tích nước
+                                hoặc viêm nhiễm của cơ thể. </p>
+
+                            <p>Khi thay đổi gia vị một cách đột ngột thì bạn có thể cảm thấy thức ăn nhạt rất khó ăn.
+                                Rất nhiều khách hàng của Nutrimeal đều có trải nghiệm tương tự. Tuy nhiên, sau khi dùng khoảng 3 -  5 ngày,
+                                cơ thể bạn sẽ làm quen và có thể cảm thấy được sự thay đổi như cơ thể khỏe khoắn nhẹ nhàng hơn,
+                                da mặt ít nhờn và đỡ mụn hơn</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapse-6" aria-expanded="true" aria-controls="collapse-6">
+                                Ăn bao lâu và ăn gói nào để giảm cân?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-6" class="collapse " aria-labelledby="heading-6" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Tùy theo thể trạng và cơ địa của từng người (nhiều hoặc ít mỡ thừa) mà bạn sẽ cảm nhận được hiệu quả giảm cân và giảm mỡ bụng.</p>
+
+                            <p>Hiệu quả bước đầu sẽ nhận thấy rõ nhất ở vòng eo trong 1- 2 tuần đầu. Giảm từ 1-2cm vòng bụng.
+                                Bắt đầu từ tuần thứ 3, bạn sẽ cảm thấy ngán và không muốn ăn, đây là thời điểm giảm cân phát huy hiệu quả nhất.
+                                Nếu bạn tuân thủ nghiêm ngặt và theo đuổi chế độ ăn của Nutrimeal trong những tuần kế tiếp,
+                                hiệu quả giảm cân có thể lên đến 3kg - 5kg trong 1 tháng. Việc giảm mỡ sẽ đạt hiệu quả tối đa khi kết hợp
+                                với việc tập luyện thể dục và gym.</p>
+
+                            <p>Quan trọng là bạn phải theo đuổi nghiêm túc để đạt được hiệu quả cao nhất,
+                                tránh trà sữa hoặc các thực phẩm quá nhiều tinh bột.
+                                Nutrimeal khuyến khích khách hàng khi đã đạt được cân nặng mong muốn có thể quay lại chế độ ăn bình thường.
+                                Chỉ cần hạn chế lượng đường và tinh bột trong các khẩu phần ăn.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapse-7" aria-expanded="true" aria-controls="collapse-7">
+                                Nutrimeal thải ra nhựa nhiều quá?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-7" class="collapse " aria-labelledby="heading-7" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Nhận biết được việc sử dụng nhựa trong các sản phẩm của mình gây tác động tiêu cực đến môi trường,
+                                NutriMeal có một số chính sách nhằm giúp giảm bớt lượng rác thải của chính sản phẩm mình gây ra:</p>
+
+                            <p>1/ Tất cả các hộp đựng thức ăn bên Nutrimeal đều được làm từ giấy trắng để tránh gây ô nhiễm môi trường. &nbsp;</p>
+
+                            <p>2/ Chính sách của Nutrimeal là chỉ cung cấp một bộ Muỗng Nĩa mỗi ngày, Nutrimeal thành thật xin lỗi vì sự bất tiện này, nhưng bạn vui lòng giúp Nutrimeal rửa sạch muỗng nĩa và sử dụng lại. NutriMeal cám ơn bạn rất nhiều!</p>
+
+                            <p>3/ Túi nylon đựng các phần ăn là Túi Tự Hủy thân thiện với môi trường. Túi sẽ tự hủy sau 3 tháng ngoài môi trường
+                                tự nhiên nên bên mình hy vọng sẽ có thể giảm thiểu được một phần nào tác hại tiêu cực đến môi trường xung quanh.&nbsp;</p>
+
+                            <p><em>* Nutrimeal có thử nghiệm sử dụng hộp bã mía một thời gian. Tuy nhiên, hộp bã mía không đảm bảo được chất lượng
+                                sản phẩm trong quá trình vận chuyển ảnh hưởng lớn đến trải nghiệm khách hàng nên tạm thời sẽ sử dụng hộp có chất liệu giấy. Bên mình vẫn sẽ tiếp tục tìm kiếm
+                                các giải pháp thân thiện với môi trường và Nutrimeal sẽ thông báo sớm đến tất cả các bạn khi bên mình có
+                                giải pháp mới hoàn thiện hơn!</em></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapse-8" aria-expanded="true" aria-controls="collapse-8">
+                                Nutrimeal có phải là lowcarb?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-8" class="collapse " aria-labelledby="heading-8" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Đây là câu hỏi phổ biến nhất mà Nutrimeal nhận được. Nutrimeal không cung cấp các phần ăn theo chế độ DAS hoặc lowcarb.&nbsp;</p>
+
+                            <p>Có đến 90% các khách quan niệm lowcarb là zero carb mà ko biết rằng chế độ ăn giảm cân hiệu quả vẫn cần một lượng
+                                carb nhất định. Tức là nếu cắt bỏ hoàn toàn các thực phẩm có chứa tinh bột hoặc đường, thay vào đó lại nạp vào
+                                các chất béo và đạm với hàm lượng cao, lâu dài sẽ gây mất cân bằng nội tiết tố và có thể dẫn đến nhiều tác hại
+                                cho sức khỏe do lượng Cholesterol và Acid uric trong máu tăng.</p>
+
+                            <p>Các khẩu phần ăn của Nutrimeal được dung hòa giữa ẩm thực Đông Tây, áp dụng dựa trên nguyên tắc
+                                Healthy Eating Plate của Đại học Harvard, sử dụng các nguyên liệu tốt giúp cân bằng dinh dưỡng và duy trì một
+                                lối sống khỏe.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapse-9" aria-expanded="true" aria-controls="collapse-9">
+                                Tại sao lại giao phần ăn cấp đông?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse-9" class="collapse " aria-labelledby="heading-9" data-parent="#faq">
+                        <div class="card-body">
+                            <p>Nutrimeal sử dụng quy trình cấp đông làm lạnh nhanh (Blast Chiller) ngay sau khi nấu chín.
+                                Giúp hạ nhiệt độ thực phẩm tại lõi tứ 120 độ C xuống 5 độ C trong vòng 60 phút, giúp hạn chế sự phát triển của
+                                vi khuẩn, đồng thời giữ lại được hàm lượng vitamin cao nhất, đảm bảo được chất lượng thức ăn luôn tươi ngon</p>
+
+                            <p>Quy trình tiêu chuẩn này đã được kiểm nghiệm bởi Cục Quản lý Vệ Sinh An Toàn Thực Phẩm và được áp dụng rộng rãi
+                                ở các nước phát triển cũng như các suất ăn hàng không hoặc khách sạn 5 sao cao cấp.</p>
+
+                            <p>Bạn vui lòng bỏ các phần ăn vào tủ lạnh ngay khi nhận để đảm bảo chất lượng tốt nhất.&nbsp;</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -13,9 +13,8 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/xinchaodungua/{name}")
+    @GetMapping("/faqs/{name}")
     public String dunua(@PathVariable String name, Model model) {
-        model.addAttribute("name", name);
-        return "Beoo";
+        return "faqs";
     }
 }
