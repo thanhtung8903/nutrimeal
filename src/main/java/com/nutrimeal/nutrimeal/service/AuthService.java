@@ -8,10 +8,13 @@ import com.nutrimeal.nutrimeal.model.RoleName;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.RoleRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,35 +30,38 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final HttpSession session;
 
+    public void signupUser(SignupRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email is already in use");
+        } else {
+            User user = new User();
+            user.setFullName(request.getFullName());
+            user.setEmail(request.getEmail());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setPoint(0);
+            user.setActive(true);
 
-    public void handleRegisterUser(SignupRequest request) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByRoleName(RoleName.ROLE_CUSTOMER).orElseThrow(() -> new RuntimeException("Error: Role is not found.")));
+            Set<Role> roles = new HashSet<>();
+            roles.add(roleRepository.findByRoleName(RoleName.ROLE_CUSTOMER).orElseThrow(() -> new RuntimeException("Error: Role is not found")));
+            user.setRoles(roles);
 
-        User user = new User();
-        user.setRoles(roles);
-        user.setFullName(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setPoint(0);
-        user.setActive(true);
-        userRepository.save(user);
+            userRepository.save(user);
+        }
 
     }
-
-    public UserInfoResponse handleAuthenticateUser(LoginRequest loginRequest) {
+    public void handleAuthenticateUser(LoginRequest loginRequest) {
         try {
-            // when call authenticationManager.authenticate()
-            // AuthenticationManager will access all AuthenticationProviders
-            // =>  DaoAuthenticationProvider use UserDetailsService to check user in the database
-            // check with user login does it match with the user in the database
-            authenticationManager.authenticate(
+
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
                             loginRequest.getPassword()
                     )
             );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            session.setAttribute("user", authentication.getPrincipal());
         }catch (AuthenticationException e){
             throw new RuntimeException("Email or password incorrect !");
         }
@@ -69,7 +75,7 @@ public class AuthService {
                 .map(role -> role.getRoleName().name())
                 .toList();
 
-        return UserInfoResponse.builder()
+        UserInfoResponse.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .fullName(user.getFullName())

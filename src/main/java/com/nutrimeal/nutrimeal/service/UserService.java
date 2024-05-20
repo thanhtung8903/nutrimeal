@@ -29,24 +29,6 @@ public class UserService {
     }
 
 
-    public void signupUser(SignupRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email is already in use");
-        } else {
-            User user = new User();
-            user.setFullName(request.getFullName());
-            user.setEmail(request.getEmail());
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-            user.setPoint(0);
-            user.setActive(true);
 
-            Set<Role> roles = new HashSet<>();
-            roles.add(roleRepository.findByRoleName(RoleName.ROLE_CUSTOMER).orElseThrow(() -> new RuntimeException("Error: Role is not found")));
-            user.setRoles(roles);
-
-            userRepository.save(user);
-        }
-
-    }
 }
 
