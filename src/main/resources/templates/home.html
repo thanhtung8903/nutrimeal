@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="~{fragments/head :: head('NutriMeal', 'none')}"></head>
+<head th:replace="~{fragments :: head('NutriMeal', 'none')}"></head>
 <body>
 <div style="text-align: center;">
 
-<!--    <header th:replace="~{fragments/header :: header}"></header>-->
+    <header th:replace="~{fragments :: header}"></header>
 
 
     <button class="btn btn-primary">Test Button</button>
@@ -17,6 +17,7 @@
     <h1 sec:authorize="isAuthenticated()"><a href="#" th:href="@{/logout}">Logout</a></h1>
     <h1 sec:authorize="isAnonymous()"><a href="#" th:href="@{/login}">Login</a></h1>
 
+    <footer th:replace="~{fragments :: footer}"></footer>
 </div>
 
 </body>

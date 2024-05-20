@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head('Login', 'none')}"></head>
+<head th:replace="~{fragments :: head('Login', 'none')}"></head>
 <body>
 <header th:replace="~{fragments :: header}"></header>
 
-<h1>Sign In</h1>
 <!--    create form signin with email, password-->
-<form action="#" th:action="@{/login}" th:object="${LoginRequest}" method="post">
-    <label for="username">Email:</label>
-    <input type="email" id="username" name="username"/>
-    <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password">
-    <br>
-    <button type="submit" value="Login">Sign In</button>
-</form>
+<div class="container mt-5">
+    <h1 class="text-center">ĐĂNG NHẬP</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-3">
+            <form action="#" th:action="@{/login}" th:object="${LoginRequest}" method="post" class="form-horizontal">
+                <div class="form-group">
+                    <label for="username">Email:</label>
+                    <input type="email" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+
+                <div class="text-center mt-3 mb-3">
+                    <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 
 </html>
