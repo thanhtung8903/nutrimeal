@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/head :: head('NutriMeal', 'none')"></head>
 <body>
-<center>
+<div style="text-align: center;">
 
     <header th:replace="~{fragments/header :: header}"></header>
 
 
     <button class="btn btn-primary">Test Button</button>
 
-</center>
+
+            <h1 sec:authorize="isAnonymous()">Xin chao vo danh</h1>
+            <h1 sec:authorize="isAuthenticated()">Xin chao</h1>
+            <h1 sec:authorize="isAuthenticated()">Tam bien</h1>
+
+</div>
 </body>
 </html>

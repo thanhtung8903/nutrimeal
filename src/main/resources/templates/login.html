@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('Login', 'none')"></head>
+<head th:replace="~{fragments/head :: head('Login', 'none')}"></head>
 <body>
 
 <h1>Sign In</h1>
 <!--    create form signin with email, password-->
-<form action="#" th:action="@{/signin}" th:object="${user}" method="post">
+<form action="#" th:action="@{/login}" th:object="${LoginRequest}" method="post">
     <label for="email">Email:</label>
     <input type="email" id="email" name="email"/>
     <br>

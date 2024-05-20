@@ -1,6 +1,8 @@
 package com.nutrimeal.nutrimeal.controller;
 
+import com.nutrimeal.nutrimeal.dto.request.LoginRequest;
 import com.nutrimeal.nutrimeal.dto.request.SignupRequest;
+import com.nutrimeal.nutrimeal.service.AuthService;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +18,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("/login")
     public String getLoginForm() {
         return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@ModelAttribute("LoginRequest") LoginRequest request, BindingResult result, Model model) {
+        try {
+            authService.handleAuthenticateUser(request);
+            return "home";
+        } catch (RuntimeException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "login";
+        }
     }
 
     @GetMapping("/signup")
@@ -34,7 +47,7 @@ public class AuthController {
     @PostMapping("/signup")
     public String signupUser(@ModelAttribute("SignupRequest") SignupRequest request, BindingResult result, Model model) {
         try {
-            userService.signupUser(request);
+            authService.signupUser(request);
             model.addAttribute("successMessage", "User registered successfully!");
             return "signup";
         } catch (RuntimeException e) {
