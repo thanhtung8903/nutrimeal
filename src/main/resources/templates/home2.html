@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head('NutriMeal', 'none')">
+</head>
+<body>
+<header th:replace="~{fragment2:: header}"></header>
+<script>
+    document.querySelector('#show-login').addEventListener('click', function () {
+        document.querySelector('#login-popup').classList.add('active')
+    })
+    document.querySelector('#show-signup').addEventListener('click', function () {
+        document.querySelector('#signup-popup').classList.add('active')
+    })
+    document.querySelectorAll('.popup .close-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.querySelector('.popup.active').classList.remove('active')
+        })
+    })
+</script>
+<footer th:replace="~{fragment2 :: footer}"></footer>
+</body>
+</html>
