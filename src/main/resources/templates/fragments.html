@@ -43,7 +43,7 @@
                         <a class="nav-link" href="/news">Tin tức</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/faq">FAQ</a>
+                        <a class="nav-link" href="/faq" th:href="@{/faqs}">FAQ</a>
                     </li>
                 </ul>
             </div>
@@ -63,7 +63,7 @@
             <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/profile">Hồ sơ</a>
+                        <a class="nav-link" th:href="@{/profile/account}">Hồ sơ</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>

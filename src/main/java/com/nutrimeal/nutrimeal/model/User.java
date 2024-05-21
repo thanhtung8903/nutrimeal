@@ -19,6 +19,9 @@ public class User {
     @Column(name = "user_id")
     private String userId;
 
+    @Column(name = "username")
+    private String username;
+    
     @Column(name = "full_name")
     private String fullName;
 
@@ -38,6 +41,7 @@ public class User {
     private Boolean gender;
 
     @Column(name = "dob")
+    @Temporal(TemporalType.DATE)
     private Date dob;
 
     @Column(name = "point")

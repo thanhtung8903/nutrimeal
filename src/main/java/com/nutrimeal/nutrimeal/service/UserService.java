@@ -1,7 +1,9 @@
 package com.nutrimeal.nutrimeal.service;
 
 
+import com.nutrimeal.nutrimeal.dto.request.ChangePasswordRequest;
 import com.nutrimeal.nutrimeal.dto.request.SignupRequest;
+import com.nutrimeal.nutrimeal.dto.request.UpdateUserRequest;
 import com.nutrimeal.nutrimeal.model.Role;
 import com.nutrimeal.nutrimeal.model.RoleName;
 import com.nutrimeal.nutrimeal.model.User;
@@ -11,6 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +35,41 @@ public class UserService {
     }
 
 
+    public User updateUser(UpdateUserRequest updateUserRequest, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
 
+        if (updateUserRequest.getEmail().equals(user.getEmail())) {
+            user.setEmail(updateUserRequest.getEmail());
+        } else {
+            if (userRepository.existsByEmail(updateUserRequest.getEmail())) {
+                throw new RuntimeException("Email already exists");
+            } else {
+                user.setEmail(updateUserRequest.getEmail());
+            }
+        }
+
+//        user.setDob(updateUserRequest.getDob());
+        user.setFullName(updateUserRequest.getFullName());
+        user.setPhone(updateUserRequest.getPhone());
+        user.setAvatar(updateUserRequest.getAvatar());
+        user.setGender(updateUserRequest.getGender());
+        user.setDob(updateUserRequest.getDob());
+        return userRepository.save(user);
+    }
+
+    public void changePassword(ChangePasswordRequest changePasswordRequest, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        if (!passwordEncoder.matches(changePasswordRequest.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Password not match");
+        } else if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
+            throw new RuntimeException("Password not match");
+        } else if (!changePasswordRequest.getNewPassword().matches("^.{8,}$")) {
+            throw new RuntimeException("Password must be at least 8 characters");
+        }
+
+
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        userRepository.save(user);
+    }
 }
 
