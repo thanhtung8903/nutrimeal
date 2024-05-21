@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thực đơn</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e5e5e5;
+            font-family: Montserrat, sans-serif;
+            font-weight: 500;
+            font-size: .875rem;
+            line-height: 1.5625rem;
+            color: #686868;
+        }
+
+        .banner {
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            height: 41.6667vw;
+            min-height: 600px;
+            padding: 0;
+            text-transform: uppercase;
+            color: #fff;
+            line-height: normal;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        .title {
+            font-size: 40px;
+            letter-spacing: 5px;
+        }
+
+        .time {
+            font-size: 60px;
+            font-weight: 900;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            background-color: #ff2033;
+            color: #fff;
+            width: 160px;
+            border-radius: 5px;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-weight: 400;
+        }
+
+        .btn-primary:hover {
+            background-color: rgb(231, 16, 16);
+            text-decoration: none;
+        }
+
+        .container1 {
+            max-width: 1200px;
+            margin: auto;
+            padding: 2em;
+        }
+
+        .title1 {
+            font-size: 36px;
+            color: #141414;
+            text-transform: uppercase;
+            margin-bottom: 1em;
+            margin-top: 2em;
+            position: relative;
+            letter-spacing: 4px;
+            font-weight: 790;
+        }
+
+
+        .des p {
+            margin-bottom: 1em;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+
+        /* Menu table styling */
+        .table-menu {
+            margin-top: 2em;
+        }
+
+        .table-menu .mb-4 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-menu .time-week {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2em;
+
+        }
+
+        .table-menu .time-week a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-family: Montserrat, sans-serif;
+            text-transform: uppercase;
+
+        }
+
+        .table-menu .time-week a:hover {
+            color: #ff2033;
+        }
+
+        .active-week:hover {
+            border-bottom: 1px solid #ff2033;
+        }
+
+        .table-menu .time-week p {
+            font-size: 1.5em;
+            color: #333;
+            margin: 0 10px;
+        }
+
+        .table-menu .thead-menu {
+            display: flex;
+            background-color: #212529;
+            color: white;
+            padding: 1em 0;
+            border-radius: 5px;
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .thead-menu .col-menu {
+            border-right: 2px solid white;
+        }
+
+        .thead-menu .col-menu:last-child {
+            border-right: none;
+        }
+
+        .table-menu .day-menu {
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1em 0;
+            border-radius: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table-menu .day-menu .col-menu {
+            width: 30%;
+            text-align: center;
+        }
+
+        .table-menu .day-menu h3 {
+            font-size: 1.2em;
+            margin-bottom: 0.5em;
+            color: #212529;
+            font-weight: 500;
+        }
+
+        .table-menu .day-menu p {
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .table-menu .day-menu .text-danger {
+            color: #ff2033;
+            font-weight: bold;
+        }
+
+        .text-danger {
+            color: #ff2033 !important;
+        }
+
+        .text-danger1 {
+            font-weight: 700;
+            font-size: 26px;
+        }
+
+        .btn {
+            background-color: #ff2033;
+            color: white;
+            padding: 0.75em 2em;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: rgb(231, 16, 16);
+        }
+
+        .date {
+            background-color: #ff2033;
+            text-align: center;
+            color: white;
+            display: inline-block;
+            padding: 1em;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            line-height: 1.7;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .day-menu .col-menu {
+            border-right: 2px solid #eee3e3;
+            padding: 10px;
+        }
+
+        .day-menu .col-menu:last-child {
+            border-right: none;
+        }
+
+        .underline {
+            width: 50px;
+            height: 10px;
+            background-color: #ff2033;
+            margin-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+<section class="banner"
+         style="background-image: url(https://fitfood.vn/img/2160x900/uploads/menu-16952880378313.jpg)">
+    <div class="align-self-center text-center">
+        <div class="container">
+            <div class="title" style="margin-bottom: 5px;">WEEKLY MEAL PLAN</div>
+            <p class="time" style="margin-bottom: 15px;">27.05 &ndash; 31.05</p>
+            <a href="order.html" class="btn-order btn-primary">Đặt Ngay</a>
+        </div>
+    </div>
+</section>
+<div class="container1">
+    <h1 class="title1 pb-4 mb-4">Thực đơn
+        <hr class="underline">
+    </h1>
+    <div class="des">
+        <p>Thực đơn Nutrimeal là sự kết hợp tinh tế của ẩm thực Đông Tây</p>
+        <p>Từng bữa ăn được thiết kế bởi bếp trưởng nhà hàng cùng đội ngũ dinh dưỡng để đảm bảo được sự cân bằng
+            trong hương vị nhưng vẫn giữ được chất lượng ở mức cao nhất. Tất cả các món đều đảm bảo ko bột ngọt và
+            ít đường.</p>
+        <p><br></p>
+    </div>
+    <div class="table-menu pb-5 mb-5">
+        <div class="d-md-flex align-items-center text-center justify-content-md-between mb-4">
+            <div class="time-week mb-3 mb-md-0 d-flex week">
+                <a href="javascript:;" class="prev active active-week">Tuần trước</a>
+                <p class="time1 20240527 active" data-id="20240527" style="font-size: 30px; font-weight: 700;">27.05
+                    &ndash; 31.05</p>
+                <a href="javascript:;" class="next active-week">Tuần sau</a>
+            </div>
+            <a href="order.html" class="btn btn-primary order-now">Đặt Ngay</a>
+        </div>
+        <div class="thead-menu d-none mb-3 d-md-flex flex-fill justify-content-between text-center day">
+            <div class="col-menu text-danger col-md-2">Ngày</div>
+            <div class="col-menu col-md-3">Sáng</div>
+            <div class="col-menu col-md-3">Trưa</div>
+            <div class="col-menu col-md-3">Tối</div>
+        </div>
+
+        <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-item 20240527 active ">
+                <div class="tab-pane fade active show" id="v-pills-mon-20240527" role="tabpanel"
+                     aria-labelledby="v-pills-mon-tab">
+                    <div class="day-menu mb-3">
+                        <div class="col-menu d-none d-md-block col-md-2">
+                            <div class="date">T2<br>27.05</div>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">breakfast</p> -->
+                            <h3>Bò Khoai Tây Đút Lò</h3>
+                            Loaded Baked Potatoes
+                            <br>
+                            <span class="text-danger">437 Kcal | 42, 17, 26</span>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">lunch</p> -->
+                            <h3>Heo Sốt Á + Mì Rau Củ</h3>
+                            Grilled Pork W Bell Pepper + Noodles
+                            <br>
+                            <span class="text-danger">600 Kcal | 43, 24, 40</span>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">dinner</p> -->
+                            <h3>Gà Nướng Xá Xíu + Gạo Lức</h3>
+                            Charsiu Chicken + Brơwn Rice
+                            <br>
+                            <span class="text-danger">506 Kcal | 48, 8, 50</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="tab-pane fade" id="v-pills-tue-20240527" role="tabpanel"
+                    aria-labelledby="v-pills-tue-tab"> -->
+                <div class="day-menu mb-3">
+                    <div class="col-menu d-none d-md-block col-md-2">
+                        <div class="date">T3<br>28.05</div>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">breakfast</p> -->
+                        <h3>**Bún nưa gà xé** (MÓN NƯỚC)</h3>
+                        **Chicken Shirataki noodles Soup** (SOUP)
+                        <br>
+                        <span class="text-danger">330 Kcal | 12, 10, 43</span>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">lunch</p> -->
+                        <h3>Bò Xào Sa Tế + Mì Rau Củ</h3>
+                        Spicy Stir-Fried Beef W Veggie Noodle
+                        <br>
+                        <span class="text-danger">519 Kcal | 42, 9, 52</span>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">dinner</p> -->
+                        <h3>Mực Kiểu Ấn + Gạo Lức</h3>
+                        Indian Baby Squid with Brown Rice
+                        <br>
+                        <span class="text-danger">526 Kcal | 46, 14, 43</span>
+                    </div>
+                </div>
+                <!-- </div> -->
+                <!-- <div class="tab-pane fade" id="v-pills-wed-20240527" role="tabpanel"
+                    aria-labelledby="v-pills-wed-tab"> -->
+                <div class="day-menu mb-3">
+                    <div class="col-menu d-none d-md-block col-md-2">
+                        <div class="date">T4<br>29.05</div>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">breakfast</p> -->
+                        <h3>Salad Heo Xay kiểu Nhật</h3>
+                        Japanese Minced Pork Salad
+                        <br>
+                        <span class="text-danger">421 Kcal | 21, 25, 30</span>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">lunch</p> -->
+                        <h3>Cá Sốt Mù Tạt Vàng + Cous Cous</h3>
+                        Grilled Fish W Yellow Mustard &amp; Cous Cous
+                        <br>
+                        <span class="text-danger">524 Kcal | 31, 25, 31</span>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">dinner</p> -->
+                        <h3>Mì rau củ xào gà sốt xí muội</h3>
+                        Apricot chicken with veggies noodles
+                        <br>
+                        <span class="text-danger">520 Kcal | 30, 27, 28</span>
+                    </div>
+                </div>
+                <!-- </div> -->
+                <!-- <div class="tab-pane fade" id="v-pills-thu-20240527" role="tabpanel"
+                    aria-labelledby="v-pills-thu-tab"> -->
+                <div class="day-menu mb-3">
+                    <div class="col-menu d-none d-md-block col-md-2">
+                        <div class="date">T5<br>30.05</div>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">breakfast</p> -->
+                        <h3>Salad Gà Sốt Cà Rốt Gừng</h3>
+                        Chicken Salad Served With Carrot &amp; Ginger Sauce
+                        <br>
+                        <span class="text-danger">457 Kcal | 30, 25, 25</span>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">lunch</p> -->
+                        <h3>Chạo Tôm + Bún Rau Củ</h3>
+                        Shrimp Paste W Veggie Vermicelli
+                        <br>
+                        <span class="text-danger">519 Kcal | 61, 15, 32</span>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">dinner</p> -->
+                        <h3>Heo xào nấm ngọc châm bún gấc</h3>
+                        Stir fried pork with mushroom and noodles
+                        <br>
+                        <span class="text-danger">480 Kcal | 40, 28, 33</span>
+                    </div>
+                </div>
+                <!-- </div> -->
+                <!-- <div class="tab-pane fade" id="v-pills-fri-20240527" role="tabpanel"
+                    aria-labelledby="v-pills-fri-tab"> -->
+                <div class="day-menu mb-3">
+                    <div class="col-menu d-none d-md-block col-md-2">
+                        <div class="date">T6<br>31.05</div>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">breakfast</p> -->
+                        <h3>Cá Nướng Teriyaki &amp; Miến Xào</h3>
+                        Teriyaki Grilled Fish &amp; Noodles
+                        <br>
+                        <span class="text-danger">541 Kcal | 31, 23, 40</span>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">lunch</p> -->
+                        <h3>Nui Sốt Thịt Heo Kiểu Đài</h3>
+                        Taiwanese Pork and Pasta
+                        <br>
+                        <span class="text-danger">502 Kcal | 44, 19, 29</span>
+                    </div>
+                    <div class="col-menu col-md-3">
+                        <!-- <p class="d-md-none">dinner</p> -->
+                        <h3>Bò xào nấm ngọc châm gạo lức</h3>
+                        Beef &amp; mushroom stir fried with brown rice
+                        <br>
+                        <span class="text-danger">410 Kcal | 35, 19, 23</span>
+                    </div>
+                </div>
+                <!-- </div> -->
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mb-5 pb-5">
+        <h4 class="text-danger text-danger1">Note</h4>
+        <p></p>
+        <p>Các phần ăn được tính toán calories cẩn thận. Chỉ số dinh dưỡng dưới tên phần ăn được liệt kê theo thứ tự
+            Năng lượng (Kcal/Calories), Tinh Bột, Chất béo và Chất đạm.</p>
+        <p>Lưu ý: Các phần ăn của Fitfood luôn được giao lạnh, đựng trong hộp nhựa thân thiện với lò vi sóng. Vui
+            lòng bảo quản lạnh sau khi nhận hàng và hâm nóng từ 2-3 phút trước khi dùng.</p>
+        <p> Phần ăn bình thường chỉ bao gồm thịt và rau củ, Tinh bột phức (gạo lức, gạo nâu, mì rau củ, bún, bánh mì
+            nâu) sẽ được gửi kèm trong phần ăn có ghi chú dấu (+) </p>.<p></p>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

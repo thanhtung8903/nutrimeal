@@ -3,7 +3,7 @@
 <head th:replace="fragments :: head('NutriMeal', 'none')">
 </head>
 <body>
-<header th:replace="~{fragment2:: header}"></header>
+<header th:replace="~{Menu:: header}"></header>
 <script>
     document.querySelector('#show-login').addEventListener('click', function () {
         document.querySelector('#login-popup').classList.add('active')
@@ -17,6 +17,6 @@
         })
     })
 </script>
-<footer th:replace="~{fragment2 :: footer}"></footer>
+<footer th:replace="~{Menu :: footer}"></footer>
 </body>
 </html>
