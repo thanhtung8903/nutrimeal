@@ -9,25 +9,31 @@
 
     <div class="row justify-content-center">
         <div class="col-md-3">
-            <form action="#" th:action="@{/login}" th:object="${LoginRequest}" method="post" class="form-horizontal">
-                <div class="form-group">
-                    <label for="username">Email:</label>
-                    <input type="email" class="form-control" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
+            <!-- Thẻ card bắt đầu ở đây -->
+            <div class="card mb-5">
+                <div class="card-body">
+                    <form action="#" th:action="@{/login}" th:object="${LoginRequest}" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
 
-                <div th:if="${param.error}" class="alert alert-danger mt-2" role="alert">
-                    <span>Email hoặc mật khẩu không chính xác!</span>
-                </div>
+                        <div th:if="${param.error}" class="alert alert-danger mt-2" role="alert">
+                            <span>Email hoặc mật khẩu không chính xác!</span>
+                        </div>
 
-                <div class="text-center mt-3 mb-3">
-                    <button type="submit" class="btn btn-primary">Đăng nhập</button>
-                </div>
+                        <div class="text-center mt-3 mb-3">
+                            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                        </div>
 
-            </form>
+                    </form>
+                </div>
+            </div>
+            <!-- Thẻ card kết thúc ở đây -->
         </div>
     </div>
 </div>
