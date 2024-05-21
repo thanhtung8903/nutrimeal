@@ -41,6 +41,7 @@ public class User {
     private Boolean gender;
 
     @Column(name = "dob")
+    @Temporal(TemporalType.DATE)
     private Date dob;
 
     @Column(name = "point")

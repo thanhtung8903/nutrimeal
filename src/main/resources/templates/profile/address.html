@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Thông tin tài khoản', 'none')}"></head>
+<head th:replace="~{fragments :: head('Địa chỉ giao hàng', 'none')}"></head>
 <style>
     body {
         background-color: #EAEAEA;
@@ -46,8 +46,8 @@
 
 </style>
 
-<body>
 <header th:replace="~{fragments :: header}"></header>
+<body>
 <div class="profile__account container mt-3 mb-3">
 
     <div class="container-fluid">
@@ -61,10 +61,10 @@
                         width="80"
                 />
                 <p th:text="*{getFullName()}"></p>
-                <a href="#" th:href="@{/profile/account}" class="active">Thông tin tài khoản</a>
-                <a href="#" th:href="@{/profile/password}">Đổi mật khẩu</a>
-                <a href="#" th:href="@{/profile/point}">Point</a>
-                <a href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
+                <a href="#" th:href="@{/profile/account}">Thông tin tài khoản</a>
+                <a href="#" th:href="@{/profile/password}" >Đổi mật khẩu</a>
+                <a href="#" th:href="@{/profile/point}" >Point</a>
+                <a href="#" th:href="@{/profile/address}" class="active">Địa chỉ giao hàng</a>
                 <a href="#" th:href="@{/profile/order}">Đơn hàng hiện tại</a>
             </nav>
 
@@ -79,7 +79,7 @@
                                     type="email"
                                     class="form-control"
                                     th:value="*{getEmail()}"
-                                    name="email"
+                                    th:field="*{email}"
                             />
                         </div>
                         <div class="form-group col-md-6">
@@ -88,7 +88,7 @@
                                     type="text"
                                     class="form-control"
                                     th:value="*{getPhone()}"
-                                    name="phone"
+                                    th:field="*{phone}"
                             />
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                                 type="text"
                                 class="form-control"
                                 th:value="*{getFullName()}"
-                                name="fullName"
+                                th:field="*{fullName}"
                         />
                     </div>
                     <div class="form-group col-md-6">
@@ -128,32 +128,37 @@
                             </div>
                         </div>
                     </div>
-<!--                    <div class="form-row">-->
-<!--                        <div class="form-group col-md-6">-->
-<!--                            <label>Ngày sinh</label>-->
-<!--                            <input-->
-<!--                                    type="date"-->
-<!--                                    class="form-control"-->
-<!--                                    th:value="*{getDob()}"-->
-<!--                                    name="dob"-->
-<!--                            />-->
-<!--                        </div>-->
-<!--                    </div>-->
-                    <button type="submit" class="btn btn-danger mt-2">Lưu</button>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Ngày sinh</label>
+                            <input
+                                    type="date"
+                                    class="form-control"
+                                    th:value="*{getDob()}"
+                            />
+                            <!--                                    th:field="*{dob}"-->
+                        </div>
+                        <!--                    <div class="form-group">-->
+                        <!--                        <label>Avatar</label>-->
+                        <!--                        <div class="mb-3">-->
+                        <!--                            <img src="avatar.png" class="img-thumbnail" alt="Avatar" width="100"/>-->
+                        <!--                        </div>-->
+                        <!--                        <input type="file" class="form-control-file"/>-->
+                        <!--                        <small class="form-text text-muted">Kích thước tối đa là 1 MB. Format: .JPEG, .PNG</small>-->
+                        <!--                    </div>-->
+                        <button type="submit" class="btn btn-danger mt-2">Lưu</button>
 
-                    <div th:if="${param.success}" class="alert alert-success mt-2 col-md-3" role="alert">
-                        <span>Cập nhật thông tin thành công</span>
+                        <div th:if="${param.success}" class="alert alert-success mt-2 col-md-3" role="alert">
+                            <span>Cập nhật thông tin thành công</span>
+                        </div>
+                        <div th:if="${param.error}" class="alert alert-danger mt-2 col-md-5" role="alert">
+                            <span class="text-center">Cập nhật thông tin thất bại, vui lòng thử lại.</span>
+                        </div>
                     </div>
-                    <div th:if="${param.error}" class="alert alert-danger mt-2 col-md-5" role="alert">
-                        <span class="text-center">Cập nhật thông tin thất bại, vui lòng thử lại.</span>
-                    </div>
+                </form>
+            </main>
         </div>
-        </form>
-        </main>
     </div>
-</div>
-
-
 </div>
 
 </body>

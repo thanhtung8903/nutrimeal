@@ -40,8 +40,8 @@ public class AuthService {
             throw new RuntimeException("Username đã được sử dụng");
         } else if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email đã được sử dụng");
-        } else if (!request.getPassword().matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*()]).{8,}$")) {
-            throw new RuntimeException("Mật khẩu phải chứa ít nhất 1 chữ số, 1 chữ thường, 1 chữ hoa, 1 ký tự đặc biệt và dài hơn 8 ký tự");
+        } else if (!request.getPassword().matches("^.{8,}$")) {
+            throw new RuntimeException("Mật khẩu phải dài ít nhất 8 ký tự");
         } else if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new RuntimeException("Mật khẩu không khớp");
         } else {
