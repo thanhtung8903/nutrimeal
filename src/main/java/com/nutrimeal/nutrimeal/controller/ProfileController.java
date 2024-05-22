@@ -1,5 +1,6 @@
 package com.nutrimeal.nutrimeal.controller;
 
+import com.nutrimeal.nutrimeal.dto.request.AddressRequest;
 import com.nutrimeal.nutrimeal.dto.request.ChangePasswordRequest;
 import com.nutrimeal.nutrimeal.dto.request.UpdateUserRequest;
 import com.nutrimeal.nutrimeal.model.User;
@@ -73,6 +74,16 @@ public class ProfileController {
         User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         model.addAttribute("user", user);
         return "profile/address";
+    }
+
+    @PostMapping("/profile/address")
+    public String updateAddress(@ModelAttribute AddressRequest addressRequest, Principal principal) {
+        try {
+            userService.addNewAddress(addressRequest, principal.getName());
+            return "redirect:/profile/address?success=true";
+        } catch (RuntimeException e) {
+            return "redirect:/profile/address?error=true";
+        }
     }
 
     @GetMapping("/profile/order")
