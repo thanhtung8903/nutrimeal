@@ -22,4 +22,13 @@ public class HomeController {
         return "home/faqs";
     }
 
+    @GetMapping("/consult")
+    public String consult(Model model) {
+        return "home/consult";
+    }
+
+    @GetMapping("/combo")
+    public String combo(Model model) {
+        return "home/combo";
+    }
 }
