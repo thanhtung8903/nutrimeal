@@ -2,8 +2,11 @@ package com.nutrimeal.nutrimeal.controller;
 
 import com.nutrimeal.nutrimeal.dto.request.ChangePasswordRequest;
 import com.nutrimeal.nutrimeal.dto.request.UpdateUserRequest;
+import com.nutrimeal.nutrimeal.model.Address;
 import com.nutrimeal.nutrimeal.model.User;
+import com.nutrimeal.nutrimeal.repository.AddressRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
+import com.nutrimeal.nutrimeal.service.AddressService;
 import com.nutrimeal.nutrimeal.service.ImageUploadService;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 //@RequestMapping("/profile")
@@ -23,6 +27,8 @@ public class ProfileController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final ImageUploadService imageUploadService;
+    private final AddressService addressService;
+    private final AddressRepository addressRepository;
 
     @GetMapping("/profile/account")
     public String profileAccount(Model model, Principal principal) {
@@ -80,8 +86,34 @@ public class ProfileController {
     @GetMapping("/profile/address")
     public String profileAddress(Model model, Principal principal) {
         User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        List<Address> addressList = addressService.findAllAddressByUsername(user.getUsername());
         model.addAttribute("user", user);
+        model.addAttribute("addressList", addressList);
         return "profile/address";
+    }
+
+    @PostMapping("/profile/address")
+    public String profileAddressAdd(@ModelAttribute Address address, Model model, Principal principal) {
+        User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        addressService.saveAddress(address, user.getUsername());
+        return "redirect:/profile/address";
+    }
+
+    @PostMapping("/profile/address/edit")
+    public String profileAddressEdit(@ModelAttribute Address address, Model model, Principal principal) {
+        User user = userRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        addressService.updateAddress(address, user.getUsername());
+        return "redirect:/profile/address";
+    }
+
+
+
+    @GetMapping("/profile/address/delete/{addressId}")
+    public String profileAddressDelete(@PathVariable Integer addressId, Model model, Principal principal) {
+        User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        addressService.deleteAddress(addressId, user.getUsername());
+        return "redirect:/profile/address";
     }
 
     @GetMapping("/profile/order")
