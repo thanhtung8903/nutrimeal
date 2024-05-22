@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Địa chỉ giao hàng', 'none')}"></head>
+<head th:replace="~{fragments :: head('Địa chỉ giao hàng', 'none')}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <style>
     body {
         background-color: #EAEAEA;
@@ -43,124 +45,308 @@
         border-color: #F8B934;
     }
 
+    .text-primary {
+        color: #007bff !important;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+    }
+
+    .text-bg-danger {
+        background-color: #dc3545 !important;
+        color: #ffffff;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.2rem;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .mr-2 {
+        margin-right: 1.5rem !important;
+    }
 
 </style>
-
-<header th:replace="~{fragments :: header}"></header>
 <body>
+<header th:replace="~{fragments :: header}"></header>
 <div class="profile__account container mt-3 mb-3">
-
     <div class="container-fluid">
         <div class="row" th:object="${user}">
             <!-- Sidebar -->
             <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column align-items-center">
                 <img
-                        src="https://img.freepik.com/premium-vector/avatar-icon0002_750950-43.jpg?size=338&ext=jpg&ga=GA1.1.1224184972.1715212800&semt=ais"
+                        th:src="*{getImage()}"
                         class="rounded-circle mb-3"
                         alt="Avatar"
                         width="80"
                 />
                 <p th:text="*{getFullName()}"></p>
                 <a href="#" th:href="@{/profile/account}">Thông tin tài khoản</a>
-                <a href="#" th:href="@{/profile/password}" >Đổi mật khẩu</a>
-                <a href="#" th:href="@{/profile/point}" >Point</a>
+                <a href="#" th:href="@{/profile/password}">Đổi mật khẩu</a>
+                <a href="#" th:href="@{/profile/point}">Point</a>
                 <a href="#" th:href="@{/profile/address}" class="active">Địa chỉ giao hàng</a>
                 <a href="#" th:href="@{/profile/order}">Đơn hàng hiện tại</a>
             </nav>
 
-            <!-- Main content -->
             <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
-                <h2 class="my-4">Thông tin tài khoản</h2>
-                <form th:action="@{/profile/account}" method="post" th:object="${user}">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label>Email</label>
-                            <input
-                                    type="email"
-                                    class="form-control"
-                                    th:value="*{getEmail()}"
-                                    th:field="*{email}"
-                            />
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>SDT</label>
-                            <input
-                                    type="text"
-                                    class="form-control"
-                                    th:value="*{getPhone()}"
-                                    th:field="*{phone}"
-                            />
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Họ & Tên</label>
-                        <input
-                                type="text"
-                                class="form-control"
-                                th:value="*{getFullName()}"
-                                th:field="*{fullName}"
-                        />
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Giới tính</label>
-                        <div>
-                            <div class="form-check form-check-inline">
-                                <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        name="gender"
-                                        id="male"
-                                        value="true"
-                                        th:checked="${user.gender == true}"
-                                />
-                                <label class="form-check-label" for="male">Nam</label>
+                <div class="d-flex justify-content-end mt-3 mb-3"></div>
+                <h2 class="my-4">Địa chỉ giao hàng</h2>
+                <button type="button" class="btn btn-primary btn-change" data-toggle="modal"
+                        data-target="#addAddressModal">Thêm địa chỉ giao hàng
+                </button>
+                <hr>
+                <div class="row" th:each="address : ${addressList}">
+                    <div class="col-12">
+                        <div class="row mb-2">
+                            <div class="col-md-8 col-lg-9">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <strong>Tên:</strong> <span
+                                            th:text="${address.fullName}">Tung Nguyen Thanh</span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <strong>SĐT:</strong> <span th:text="${address.phone}">0384370677</span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <strong>Địa chỉ:</strong> <span
+                                            th:text="|${address.apartmentNumber}, ${address.ward}, ${address.district}|">Ha Noi, Xã Bình Hưng, Huyện Bình Chánh</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        name="gender"
-                                        id="female"
-                                        value="false"
-                                        th:checked="${user.gender == false}"
-                                />
-                                <label class="form-check-label" for="female">Nữ</label>
+                            <div class="col-md-4 col-lg-3 text-right">
+                                <a href="#"
+                                   class="text-primary mr-2 text-decoration-none edit-address"
+                                   data-toggle="modal"
+                                   data-target="#editAddressModal"
+                                   th:data-id="${address.getAddressId()}"
+                                   th:data-fullname="${address.fullName}"
+                                   th:data-phone="${address.phone}"
+                                   th:data-apartmentnumber="${address.apartmentNumber}"
+                                   th:data-district="${address.district}"
+                                   th:data-ward="${address.ward}"
+                                   th:data-gender="${address.gender}"
+                                   th:data-defaultaddress="${address.defaultAddress}">
+                                    Sửa
+                                </a>
+                                <a th:href="@{'/profile/address/delete/' + ${address.getAddressId()}}"
+                                   href="#"
+                                   onclick="if (!confirm('Bạn có chắc chắn muốn xóa địa chỉ này không?')) return false;"
+                                   class="text-danger mr-2 text-decoration-none">Xóa</a>
+                                <div th:if="${address.defaultAddress}" class="mt-3">
+                                    <button type="button" class="btn btn-danger">Mặc định</button>
+                                </div>
                             </div>
                         </div>
+                        <hr>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label>Ngày sinh</label>
-                            <input
-                                    type="date"
-                                    class="form-control"
-                                    th:value="*{getDob()}"
-                            />
-                            <!--                                    th:field="*{dob}"-->
-                        </div>
-                        <!--                    <div class="form-group">-->
-                        <!--                        <label>Avatar</label>-->
-                        <!--                        <div class="mb-3">-->
-                        <!--                            <img src="avatar.png" class="img-thumbnail" alt="Avatar" width="100"/>-->
-                        <!--                        </div>-->
-                        <!--                        <input type="file" class="form-control-file"/>-->
-                        <!--                        <small class="form-text text-muted">Kích thước tối đa là 1 MB. Format: .JPEG, .PNG</small>-->
-                        <!--                    </div>-->
-                        <button type="submit" class="btn btn-danger mt-2">Lưu</button>
-
-                        <div th:if="${param.success}" class="alert alert-success mt-2 col-md-3" role="alert">
-                            <span>Cập nhật thông tin thành công</span>
-                        </div>
-                        <div th:if="${param.error}" class="alert alert-danger mt-2 col-md-5" role="alert">
-                            <span class="text-center">Cập nhật thông tin thất bại, vui lòng thử lại.</span>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </main>
         </div>
     </div>
 </div>
 
-</body>
+<!-- Modal -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAddressModalLabel">Thêm địa chỉ mới</h5>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/profile/address}" method="post">
+                    <div class="form-group">
+                        <label for="name">Họ & Tên</label>
+                        <input type="text" class="form-control" id="name" placeholder="Nhập họ và tên" name="fullName"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">SĐT</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="Nhập số điện thoại" name="phone"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="male" value="true" checked>
+                            <label class="form-check-label" for="male">Nam</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="female" value="false">
+                            <label class="form-check-label" for="female">Nữ</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="district">Quận</label>
+                            <select id="district" class="form-control" name="district" required>
+                                <option selected>Chọn quận</option>
+                                <option value="Quận Long Biên">Quận Long Biên</option>
+                                <option value="Quận Hoàn Kiếm">Quận Hoàn Kiếm</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="ward">Phường</label>
+                            <select id="ward" class="form-control" name="ward" required>
+                                <option selected>Chọn phường</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                    </div>
+                    <script>
+                        // Danh sách các phường theo quận
+                        var districts = {
+                            "Quận Long Biên": ["Gia Thụy", "Ngọc Lâm", "Bồ Đề", "Phúc Đồng", "Phúc Lợi", "Thượng Thanh", "Giang Biên", "Ngọc Thụy", "Việt Hưng", "Long Biên", "Thạch Bàn", "Cự Khối", "Đức Giang", "Sài Đồng"],
+                            "Quận Hoàn Kiếm": ["Chương Dương", "Đồng Xuân", "Cửa Nam", "Cửa Đông", "Hàng Bạc", "Hàng Bồ", "Hàng Trống", "Hàng Gai", "Hàng Bài", "Hàng Bông", "Hàng Mã", "Hàng Buồm", "Hàng Đào", "Trần Hưng Đạo", "Phúc Tân", "Lý Thái Tổ", "Phan Chu Trinh", "Tràng Tiền"]
+                        };
+
+                        // Khi người dùng thay đổi quận
+                        document.getElementById('district').addEventListener('change', function () {
+                            // Lấy ra quận hiện tại
+                            var selectedDistrict = this.value;
+
+                            // Lấy ra thẻ select "Phường"
+                            var wardSelect = document.getElementById('ward');
+
+                            // Xóa tất cả các option hiện tại của thẻ select "Phường"
+                            wardSelect.innerHTML = "";
+
+                            // Thêm các option mới vào thẻ select "Phường" dựa vào quận hiện tại
+                            var wards = districts[selectedDistrict];
+                            for (var i = 0; i < wards.length; i++) {
+                                var option = document.createElement('option');
+                                option.text = 'Phường ' + wards[i];
+                                option.value = 'Phường '+ wards[i];
+                                wardSelect.add(option);
+                            }
+                        });
+                    </script>
+                    <div class="form-group">
+                        <label for="address">Số nhà & tên đường</label>
+                        <input type="text" class="form-control" id="address" placeholder="Nhập số nhà và tên đường" required
+                               name="apartmentNumber">
+                    </div>
+                    <div class="form-group form-check">
+                        <!--                        <input type="hidden" name="defaultAddress" value="false">-->
+                        <input type="checkbox" class="form-check-input" id="defaultAddress" name="defaultAddress">
+                        <label class="form-check-label" for="defaultAddress">Làm địa chỉ mặc định</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Hoàn thành</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Trở về</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal edit address-->
+<div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAddressModalLabel">Chỉnh sửa địa chỉ</h5>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/profile/address/edit}" method="post" id="editAddressForm">
+                    <input type="hidden" name="addressId" id="editAddressId">
+                    <div class="form-group">
+                        <label for="editName">Họ & Tên</label>
+                        <input type="text" class="form-control" id="editName" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhone">SĐT</label>
+                        <input type="tel" class="form-control" id="editPhone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="editMale" value="true">
+                            <label class="form-check-label" for="editMale">Nam</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="editFemale" value="false">
+                            <label class="form-check-label" for="editFemale">Nữ</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="editDistrict">Quận</label>
+                            <select id="editDistrict" class="form-control" name="district" required>
+                                <option selected>Chọn quận</option>
+                                <option value="Quận Long Biên">Quận Long Biên</option>
+                                <option value="Quận Hoàn Kiếm">Quận Hoàn Kiếm</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="editWard">Phường</label>
+                            <select id="editWard" class="form-control" name="ward" required>
+                                <option selected>Chọn phường</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                    </div>
+                    <script>
+                        document.getElementById('editDistrict').addEventListener('change', function () {
+                            var selectedDistrict = this.value;
+                            var wardSelect = document.getElementById('editWard');
+                            wardSelect.innerHTML = "";
+                            var wards = districts[selectedDistrict];
+                            for (var i = 0; i < wards.length; i++) {
+                                var option = document.createElement('option');
+                                option.text = 'Phường ' +  wards[i];
+                                option.value = 'Phường ' + wards[i];
+                                wardSelect.add(option);
+                            }
+                        });
+                    </script>
+                    <div class="form-group">
+                        <label for="editAddress">Số nhà & tên đường</label>
+                        <input type="text" class="form-control" id="editAddress" name="apartmentNumber" required>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="editDefaultAddress" name="defaultAddress">
+                        <label class="form-check-label" for="editDefaultAddress">Làm địa chỉ mặc định</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Hoàn thành</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Trở về</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.edit-address', function () {
+        var addressId = $(this).data('id');
+        var fullName = $(this).data('fullname');
+        var phone = $(this).data('phone');
+        var apartmentNumber = $(this).data('apartmentnumber');
+        var district = $(this).data('district');
+        var ward = $(this).data('ward');
+        var defaultAddress = $(this).data('defaultaddress');
+
+        $('#editAddressId').val(addressId);
+        $('#editName').val(fullName);
+        $('#editPhone').val(phone);
+        $('#editAddress').val(apartmentNumber);
+
+        $('#editDistrict').val(district).change(); // Trigger change to load wards
+        setTimeout(function() { $('#editWard').val(ward); }, 200); // Wait for wards to load
+        $('#editDefaultAddress').prop('checked', defaultAddress);
+    });
+</script>
+
 <footer th:replace="~{fragments :: footer}"></footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
