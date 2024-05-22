@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="~{fragments :: head('NutriMeal', 'none')}"></head>
-<body>
-<div style="text-align: center;">
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+  <head th:replace="~{fragments :: head('NutriMeal', 'none')}"></head>
+  <body>
+    <div style="text-align: center">
+      <header th:replace="~{fragments :: header}"></header>
 
-    <header th:replace="~{fragments :: header}"></header>
-
-
-
-
-    <footer th:replace="~{fragments :: footer}"></footer>
-</div>
-
-</body>
+      <footer th:replace="~{fragments :: footer}"></footer>
+    </div>
+  </body>
 </html>
