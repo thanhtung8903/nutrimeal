@@ -49,12 +49,11 @@ public class UserService {
             }
         }
 
-//        user.setDob(updateUserRequest.getDob());
         user.setFullName(updateUserRequest.getFullName());
         user.setPhone(updateUserRequest.getPhone());
-        user.setAvatar(updateUserRequest.getAvatar());
         user.setGender(updateUserRequest.getGender());
         user.setDob(updateUserRequest.getDob());
+        user.setImage(updateUserRequest.getImage());
         return userRepository.save(user);
     }
 
@@ -73,10 +72,5 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void addNewAddress(AddressRequest addressRequest, String name) {
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new RuntimeException("User not found"));
-        user.setAddress(addressRequest.getAddress());
-        userRepository.save(user);
-    }
 }
 

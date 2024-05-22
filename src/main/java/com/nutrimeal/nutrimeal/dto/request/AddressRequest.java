@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddressRequest {
 
-    private String name;
+    private String fullName;
     private String phone;
     private Boolean gender;
     private String district;
     private String ward;
-    private String address;
+    private String apartmentNumber;
     private Boolean defaultAddress;
 }

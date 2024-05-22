@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class HomeController {
 
+    private final HttpSession httpSession;
+
     @GetMapping(value = {"/", "/home"})
     public String home(Model model) {
         return "home";
@@ -20,9 +22,13 @@ public class HomeController {
         return "home/faqs";
     }
 
-    @GetMapping("/address")
-    public String address(Model model) {
-        return "profile/address2";
+    @GetMapping("/consult")
+    public String consult(Model model) {
+        return "home/consult";
     }
 
+    @GetMapping("/combo")
+    public String combo(Model model) {
+        return "home/combo";
+    }
 }
