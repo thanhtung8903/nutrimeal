@@ -53,9 +53,11 @@
     <div class="container-fluid">
         <div class="row" th:object="${user}">
             <!-- Sidebar -->
+<!--            src="https://img.freepik.com/premium-vector/avatar-icon0002_750950-43.jpg?size=338&ext=jpg&ga=GA1.1.1224184972.1715212800&semt=ais"-->
+
             <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column align-items-center">
                 <img
-                        src="https://img.freepik.com/premium-vector/avatar-icon0002_750950-43.jpg?size=338&ext=jpg&ga=GA1.1.1224184972.1715212800&semt=ais"
+                        th:src="*{getImage()}"
                         class="rounded-circle mb-3"
                         alt="Avatar"
                         width="80"
@@ -71,7 +73,7 @@
             <!-- Main content -->
             <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
                 <h2 class="my-4">Thông tin tài khoản</h2>
-                <form th:action="@{/profile/account}" method="post" th:object="${user}">
+                <form th:action="@{/profile/account}" method="post" th:object="${user}" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label>Email</label>
@@ -128,17 +130,26 @@
                             </div>
                         </div>
                     </div>
-<!--                    <div class="form-row">-->
-<!--                        <div class="form-group col-md-6">-->
-<!--                            <label>Ngày sinh</label>-->
-<!--                            <input-->
-<!--                                    type="date"-->
-<!--                                    class="form-control"-->
-<!--                                    th:value="*{getDob()}"-->
-<!--                                    name="dob"-->
-<!--                            />-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Ngày sinh</label>
+                            <input
+                                    type="date"
+                                    class="form-control"
+                                    th:value="*{getDob()}"
+                                    name="dob"
+                            />
+                        </div>
+                    </div>
+
+<!--                    image-->
+                    <div class="form-group col-md-6">
+                        <label for="image">Ảnh đại diện</label>
+                        <input type="file" class="form-control" id="image" name="imageuser"
+                                 accept="image/png, image/jpeg, image/jpg">
+                    </div>
+
+
                     <button type="submit" class="btn btn-danger mt-2">Lưu</button>
 
                     <div th:if="${param.success}" class="alert alert-success mt-2 col-md-3" role="alert">

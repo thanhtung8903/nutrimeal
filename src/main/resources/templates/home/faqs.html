@@ -3,25 +3,63 @@
 <head th:replace="~{fragments :: head('Nutrimeal FAQs', 'none')}"></head>
 
 <style>
-    body{
+    body {
         background-color: #e5e5e5;
     }
-    h1.title{
+
+    h1.title {
         font-weight: 700;
         font-size: 40px;
-        font-family: var(--font-secondary);
+        /*font-family: var(--font-secondary);*/
         text-transform: uppercase;
         margin-top: 40px;
     }
-    .faq-heading{
+
+    .faq-heading {
         display: inline-block;
-        background-color: #fff;
+        letter-spacing: 5px;
         padding: 10px;
         border-radius: 5px;
     }
-    .italic{
+
+    .italic {
         font-style: italic;
         font-weight: 500;
+    }
+
+    .btn-link {
+        width: 100%;
+        text-align: left;
+        color: #2f2f2f;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 18px;
+    }
+
+    .btn-link:focus {
+        outline: none;
+        box-shadow: none;
+        background-color: transparent;
+    }
+
+    .btn-link:hover,
+    .btn-link:focus,
+    .btn-link:active {
+        color: #2f2f2f;
+        text-decoration: none;
+        outline: none;
+        box-shadow: none;
+        background-color: transparent;
+    }
+
+    .underline1 {
+        width: 50px;
+        height: 10px;
+        background-color: #ff2033;
+        margin-left: 0;
+    }
+    .card-body p{
+        margin-left: 45px;
     }
 </style>
 
@@ -30,7 +68,9 @@
 <div class="container">
     <div class="row">
         <div class="offset-lg-1 col-lg-10">
-            <h1 class="title mb-5 faq-heading">FAQs</h1>
+            <h1 class="title mb-5 faq-heading">FAQs
+                <hr class="underline1">
+            </h1>
             <p class="italic">Bạn muốn trải nghiệm Nutrimeal nhưng không biết bắt đầu từ đâu? Hãy tham khảo những câu hỏi thường gặp bên dưới.</p>
             <div class="accordion mb-5" id="faq">
                 <div class="card mb-4">
@@ -287,6 +327,5 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <footer th:replace="~{fragments :: footer}"></footer>
 </html>

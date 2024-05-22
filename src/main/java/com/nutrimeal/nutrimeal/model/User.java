@@ -34,9 +34,6 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "avatar")
-    private String avatar;
-
     @Column(name = "gender")
     private Boolean gender;
 
@@ -46,6 +43,9 @@ public class User {
 
     @Column(name = "point")
     private int point;
+
+    @Column(name = "image")
+    private String image;
 
     @Column(name = "is_active")
     private boolean isActive;
