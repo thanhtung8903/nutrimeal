@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NutriMeal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- Bootstrap core JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      z-index: 1000;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+      animation: slideDown 0.4s ease;
+    }
+
+    @keyframes slideDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .nav-link:hover {
+      color: black;
+      font-weight: 600;
+    }
+
+    .dropdown-item:hover {
+      color: black;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <h1>NutriMeal</h1>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="home.html">Trang chủ</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="menuManagement.html">Quản lý thực đơn</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="orderManagement.html">Quản lý đơn hàng</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="customerManagement.html">Quản lý khách hàng</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Khác
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="expenses.html">Quản lý chi tiêu</a>
+              <a class="dropdown-item" href="statistic.html">Thống kê</a>
+              <a class="dropdown-item" href="/discount">Khuyến mãi</a>
+              <!-- You can add more dropdown items here -->
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Đăng xuất</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Your content here -->
+
+<footer class="bg-dark text-white p-4">
+  <div class="container">
+    <div class="row mt-5">
+      <div class="col-md-4">
+        <h5>About Us</h5>
+        <p class="text-justify">We are a team of NutriMeal enthusiasts who believe that a healthy lifestyle
+          can
+          be achieved through healthy meals. We are committed to providing the best quality meals to our
+          customers.</p>
+      </div>
+      <div class="col-md-4">
+        <h5>Contact Us</h5>
+        <p class="text-justify">Address: 1234 Main St, HCM City, Vietnam</p>
+        <p class="text-justify">Phone: 0123 456 789</p>
+        <p class="text-justify">Email: info@nutrimeal.com</p>
+      </div>
+      <div class="col-md-4">
+        <h5>Follow Us</h5>
+        <a href="#" class="btn btn-primary"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="btn btn-info"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="btn btn-danger"><i class="fab fa-google-plus"></i></a>
+        <a href="#" class="btn btn-secondary"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  // JavaScript to handle dropdown toggle
+  document.addEventListener("DOMContentLoaded", function () {
+    const moreDropdown = document.querySelector('.nav-item.dropdown');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    moreDropdown.addEventListener('click', function () {
+      dropdownMenu.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside of it
+    window.addEventListener('click', function (e) {
+      if (!moreDropdown.contains(e.target)) {
+        dropdownMenu.classList.remove('show');
+      }
+    });
+  });
+</script>
+</body>
+
+</html>
