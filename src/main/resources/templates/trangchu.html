@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="assets/css/home.css" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <style>
+        body {
+            margin: 0;
+            height: 100vh; /* Set body height to 100% viewport height */
+        }
+
+        .slide-show {
+            width: 100vw; /* Set slide-show width to 100% viewport width for full screen */
+            height: 100vh; /* Set slide-show height to 100% viewport height for full screen */
+            position: relative;
+        }
+
+        .list-image {
+            display: flex;
+            width: 500%; /* Set width to 500% viewport width to accommodate all images */
+            transform: translateX(0); /* Initial transform */
+            transition: transform 0.5s; /* Apply transition effect to transform property */
+        }
+
+        .image-with-text {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .text-overlay {
+            color: white;
+            font-size: 24px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+        .btn:hover {
+            color: whitesmoke;
+        }
+        .btn {
+            font-size: 40px;
+            color: #999;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .btn-left {
+            left: 0;
+        }
+        .btn-right {
+            right: 0;
+        }
+        .index-images {
+            position: absolute;
+            bottom: 10px;
+            display: flex;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .index-items {
+            border: 2px solid #999;
+            padding: 10px;
+            margin: 3px;
+            border-radius: 50%;
+        }
+        .active {
+            background-color: #999;
+        }
+        .main-about {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-color: black;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            align-items: center;
+            gap: 2rem;
+        }
+        .main-about-img {
+            width: 100%;
+            height: auto;
+        }
+        .main-about-text {
+            text-align: left;
+            margin-left: 40px;
+        }
+        .main-about-text h1 {
+            color: azure;
+            font-size: 90px;
+            font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        }
+        .main-about-text p {
+            color: #999;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif,
+            "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva,
+            Verdana, sans-serif;
+        }
+
+        .how-do-work-title {
+            font-family: "Courier New", Courier, monospace;
+            text-align: center;
+            margin: 50px;
+            text-decoration: underline;
+            text-decoration-color: red;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 10px;
+        }
+
+        .how-do-work-content .col-md-2 {
+            background-color: white; /* Màu nền của các ô sản phẩm */
+            padding: 2px 10px; /* Padding bên trong của các ô. Lưu ý: 2px cho top và bottom, 10px cho left và right */
+            border-radius: 8px; /* Bo tròn các góc */
+            border: 1px solid #ccc; /* Viền 1px với màu xám nhạt */
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+            margin: 10px;
+        }
+        .how-do-work-content .col-md-2 i {
+            font-size: 50px;
+        }
+        .featured-product {
+            background-color: #ececec;
+        }
+        .featured-product-list {
+            width: 90%;
+            padding: 30px;
+            margin: 10px auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .product {
+            background-color: white;
+            width: calc(30% - 10px);
+            margin: 30px 20px;
+            box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.1);
+            transition: 1s;
+            border-radius: 8px;
+        }
+        .product-image img {
+            display: block;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .product-image:hover {
+            transform: scale(1.2);
+            z-index: 2;
+        }
+        .product .product-content {
+            text-align: center;
+        }
+        .featured-product-title {
+            text-align: center;
+        }
+        .featured-product-title h1 {
+            font-family: "Courier New", Courier, monospace;
+            text-align: center;
+            margin: 20px;
+            padding-top: 20px;
+            text-decoration: underline;
+            text-decoration-color: red;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 10px;
+        }
+        .featured-product-title p {
+            font-size: 20px;
+            font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+        }
+
+    </style>
+</head>
+<body>
+<!-- banner -->
+<div class="banner">
+    <div class="slide-show">
+        <div class="list-image">
+            <div
+                    class="image-with-text"
+                    style="
+              background-image: url('https://www.pos365.vn/storage/app/media/uploaded-files/1652070833659.jpeg');
+            "
+            >
+                <div class="text-overlay">Text for Image 1</div>
+            </div>
+            <div
+                    class="image-with-text"
+                    style="
+              background-image: url('https://cdn.tgdd.vn/Files/2021/10/19/1391669/che-do-an-healthy-la-gi-co-cong-dung-gi-cho-suc-khoe-202110191938125150.jpg');
+            "
+            >
+                <div class="text-overlay">Text for Image 2</div>
+            </div>
+            <div
+                    class="image-with-text"
+                    style="
+              background-image: url('https://www.huongnghiepaau.com/wp-content/uploads/2020/08/kinh-doanh-do-an-eat-clean.jpg');
+            "
+            >
+                <div class="text-overlay">Text for Image 3</div>
+            </div>
+            <div
+                    class="image-with-text"
+                    style="
+              background-image: url('https://toplist.vn/images/800px/fitfood-vn-816220.jpg');
+            "
+            >
+                <div class="text-overlay">Text for Image 4</div>
+            </div>
+        </div>
+        <div class="btns">
+            <div class="btn-left btn"><i class="bi bi-arrow-left"></i></div>
+            <div class="btn-right btn"><i class="bi bi-arrow-right"></i></div>
+        </div>
+        <div class="index-images">
+            <div class="index-items index-items-0 active"></div>
+            <div class="index-items index-items-1"></div>
+            <div class="index-items index-items-2"></div>
+            <div class="index-items index-items-3"></div>
+        </div>
+    </div>
+</div>
+<!-- main -->
+<section class="main-about">
+    <div class="main-about-text">
+        <h1
+                data-aos="zoom-in-right"
+                data-aos-duration="1400"
+                data-aos-delay="200"
+        >
+            NUTRIMEAL
+        </h1>
+        <p data-aos="fade-right" data-aos-duration="1400" data-aos-delay="200">
+            NUTRIMEAL VN cung cấp các phần ăn lành mạnh hàng tuần giúp bạn duy trì
+            một lối sống khỏe. Chúng tôi tập trung vào chế độ ăn cân bằng được
+            thiết kế chuyên biệt để hỗ trợ bạn kiểm soát cân nặng một cách hiệu
+            quả nhất.
+        </p>
+
+        <p data-aos="fade-right" data-aos-duration="1400" data-aos-delay="200">
+            Nếu bạn đang tìm kiếm những bữa ăn ngon và tốt cho sức khỏe được chuẩn
+            bị sẵn ở Saigon thì Fitfood là một lựa chọn tối ưu. Thực đơn đa dạng
+            với hơn 100 món của chúng tôi có thể giúp bạn thưởng thức mà không
+            ngán trong hơn 1 tháng.
+        </p>
+    </div>
+    <div
+            class="main-about-img"
+            data-aos="zoom-in"
+            data-aos-duration="1400"
+            data-aos-delay="200"
+    >
+        <img
+                src="https://bizweb.dktcdn.net/100/022/012/articles/14370097-1593297264307847-8561826104965585706-n-40c9f161-abd8-4ec5-8d6b-2860f0fe57a7.jpg?v=1493360850770"
+        />
+    </div>
+</section>
+<section
+        class="how-do-work"
+        data-aos="fade-up"
+        data-aos-duration="1400"
+        data-aos-delay="400"
+>
+    <div class="how-do-work-title">
+        <h1>Cách Đặt Hàng</h1>
+    </div>
+    <div class="how-do-work-content">
+        <div class="row justify-content-center">
+            <div class="col-md-2 text-left">
+                <i class="bi bi-card-checklist"></i>
+                <h4>Chọn Gói Ăn</h4>
+                <p>Chọn gói ăn phù hợp và điền đầy đủ thông tin</p>
+            </div>
+            <div class="col-md-2 text-left">
+                <i class="bi bi-fire"></i>
+                <h4>Nutrimeal nấu</h4>
+                <p>
+                    Chúng tôi chọn nhưng nguyên liệu tốt nhất và nấu trong bếp công
+                    nghiệp hiện đại
+                </p>
+            </div>
+            <div class="col-md-2 text-left">
+                <i class="bi bi-truck"></i>
+                <h4>Giao hàng</h4>
+                <p>
+                    Đội ngũ giao hang Nutrimeal sẽ giao tận nơi phần ăn của bạn mỗi
+                    ngày
+                </p>
+            </div>
+            <div class="col-md-2 text-left">
+                <i class="bi bi-check2-circle"></i>
+                <h4>Thưởng thức</h4>
+                <p>
+                    Không cần suy nghĩ, shopping hay nấu nướng dầu mỡ, chỉ cần hâm lại
+                    đồ ăn và thưởng thức
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="featured-product">
+    <div class="featured-product-title">
+        <h1>Sản Phẩm Nổi Bật</h1>
+        <p>
+            NutriMeal cung cấp nhiều gói ăn đa dạng phù hợp với mọi nhu cầu của
+            bạn
+        </p>
+    </div>
+    <div class="featured-product-list">
+        <div class="product">
+            <div class="product-image">
+                <img
+                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
+                />
+            </div>
+            <div class="product-content">
+                <h3>Product Name</h3>
+                <p>Product Description</p>
+            </div>
+        </div>
+        <div class="product">
+            <div class="product-image">
+                <img
+                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
+                />
+            </div>
+            <div class="product-content">
+                <h3>Product Name</h3>
+                <p>Product Description</p>
+            </div>
+        </div>
+        <div class="product">
+            <div class="product-image">
+                <img
+                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
+                />
+            </div>
+            <div class="product-content">
+                <h3>Product Name</h3>
+                <p>Product Description</p>
+            </div>
+        </div>
+        <div class="product">
+            <div class="product-image">
+                <img
+                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
+                />
+            </div>
+            <div class="product-content">
+                <h3>Product Name</h3>
+                <p>Product Description</p>
+            </div>
+        </div>
+        <div class="product">
+            <div class="product-image">
+                <img
+                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
+                />
+            </div>
+            <div class="product-content">
+                <h3>Product Name</h3>
+                <p>Product Description</p>
+            </div>
+        </div>
+        <div class="product">
+            <div class="product-image">
+                <img
+                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
+                />
+            </div>
+            <div class="product-content">
+                <h3>Product Name</h3>
+                <p>Product Description</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="feedback"></section>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="assets/js/home.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    AOS.init({
+        offset: 1,
+    });
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    const listImage = document.querySelector(".list-image");
+    const imgs = document.getElementsByClassName("image-with-text");
+    const length = imgs.length;
+    const btnleft = document.querySelector(".btn-left");
+    const btnright = document.querySelector(".btn-right");
+    let current = 0;
+
+    const handleChangesSlide = () => {
+        if (current == length - 1) {
+            current = 0;
+            let width = imgs[0].offsetWidth;
+            listImage.style.transform = `translateX(0px)`;
+            document.querySelector(".active").classList.remove("active");
+            document.querySelector(".index-items-" + current).classList.add("active");
+        } else {
+            current++;
+            let width = imgs[0].offsetWidth;
+            listImage.style.transform = `translateX(${width * -1 * current}px)`;
+            document.querySelector(".active").classList.remove("active");
+            document.querySelector(".index-items-" + current).classList.add("active");
+        }
+    };
+    let handleEventChangeSlide = setInterval(handleChangesSlide, 4000);
+
+    btnright.addEventListener("click", () => {
+        clearInterval(handleEventChangeSlide);
+        handleChangesSlide();
+        handleEventChangeSlide = setInterval(handleChangesSlide, 4000);
+    });
+
+    btnleft.addEventListener("click", () => {
+        clearInterval(handleEventChangeSlide);
+        if (current == 0) {
+            current = length - 1;
+            let width = imgs[0].offsetWidth;
+            listImage.style.transform = `translateX(${width * -1 * current}px)`;
+            document.querySelector(".active").classList.remove("active");
+            document.querySelector(".index-items-" + current).classList.add("active");
+        } else {
+            current--;
+            let width = imgs[0].offsetWidth;
+            listImage.style.transform = `translateX(${width * -1 * current}px)`;
+            document.querySelector(".active").classList.remove("active");
+            document.querySelector(".index-items-" + current).classList.add("active");
+        }
+        handleEventChangeSlide = setInterval(handleChangesSlide, 4000);
+    });
+
+</script>
+</body>
+</html>
