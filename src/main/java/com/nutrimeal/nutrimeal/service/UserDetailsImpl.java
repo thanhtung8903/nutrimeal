@@ -21,6 +21,7 @@ public class UserDetailsImpl implements UserDetails {
     private String id;
     private String username;
     private String password;
+    private String fullName;
     private List<GrantedAuthority> authorities;
     private boolean enable;
 
@@ -33,6 +34,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getUserId(),
                 user.getUsername(),
                 user.getPassword(),
+                user.getFullName(),
                 authorities,
                 user.isActive());
     }

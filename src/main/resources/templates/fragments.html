@@ -63,7 +63,7 @@
             <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/profile/account}">Hồ sơ</a>
+                        <a class="nav-link" th:href="@{/profile/account}">Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
@@ -89,7 +89,7 @@
                 <h5>Contact Us</h5>
                 <p class="text-justify">Address: 1234 Main St, HCM City, Vietnam</p>
                 <p class="text-justify">Phone: 0123 456 789</p>
-                <p class="text-justify">Email: </p>
+                <p class="text-justify">Email: nutrimeal@gmail.com</p>
             </div>
             <div class="col-md-4">
                 <h5>Follow Us</h5>

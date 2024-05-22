@@ -89,7 +89,7 @@ public class AuthService {
                 .dob(user.getDob())
                 .gender(user.getGender())
                 .roles(roles)
-                .avatar(user.getAvatar())
+//                .image(user.getImage())
                 .point(user.getPoint())
                 .build();
 

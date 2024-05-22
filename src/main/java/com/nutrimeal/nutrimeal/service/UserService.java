@@ -48,12 +48,11 @@ public class UserService {
             }
         }
 
-//        user.setDob(updateUserRequest.getDob());
         user.setFullName(updateUserRequest.getFullName());
         user.setPhone(updateUserRequest.getPhone());
-        user.setAvatar(updateUserRequest.getAvatar());
         user.setGender(updateUserRequest.getGender());
         user.setDob(updateUserRequest.getDob());
+        user.setImage(updateUserRequest.getImage());
         return userRepository.save(user);
     }
 
