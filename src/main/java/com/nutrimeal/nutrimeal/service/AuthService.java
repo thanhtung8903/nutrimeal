@@ -51,7 +51,7 @@ public class AuthService {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setPoint(0);
             user.setActive(true);
-
+            user.setImage("https://img.freepik.com/premium-vector/avatar-icon0002_750950-43.jpg?size=338&ext=jpg&ga=GA1.1.1224184972.1715212800&semt=ais");
             Set<Role> roles = new HashSet<>();
             roles.add(roleRepository.findByRoleName(RoleName.ROLE_CUSTOMER).orElseThrow(() -> new RuntimeException("Error: Role is not found")));
             user.setRoles(roles);
