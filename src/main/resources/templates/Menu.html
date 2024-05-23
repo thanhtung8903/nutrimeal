@@ -79,6 +79,14 @@
             font-weight: 790;
         }
 
+        .time1 {
+            display: none;
+        }
+
+        .time1.active {
+            display: block;
+        }
+
 
         .des p {
             margin-bottom: 1em;
@@ -114,6 +122,11 @@
             font-family: Montserrat, sans-serif;
             text-transform: uppercase;
 
+        }
+
+        .table-menu .time-week a.active-week {
+            color: #ff2033;
+            border-bottom: 1px solid #ff2033;
         }
 
         .table-menu .time-week a:hover {
@@ -260,10 +273,12 @@
     <div class="table-menu pb-5 mb-5">
         <div class="d-md-flex align-items-center text-center justify-content-md-between mb-4">
             <div class="time-week mb-3 mb-md-0 d-flex week">
-                <a href="javascript:;" class="prev active active-week">Tuần trước</a>
-                <p class="time1 20240527 active" data-id="20240527" style="font-size: 30px; font-weight: 700;">27.05
+                <a href="javascript:;" class="prev active active-week" id="this-week">Tuần này</a>
+                <p class="time1 20240520 active" data-id="20240520" style="font-size: 30px; font-weight: 700;">20.05
+                    &ndash; 24.05</p>
+                <p class="time1 20240527" data-id="20240527" style="font-size: 30px; font-weight: 700;">27.05
                     &ndash; 31.05</p>
-                <a href="javascript:;" class="next active-week">Tuần sau</a>
+                <a href="javascript:;" class="next active-week1" id="next-week">Tuần sau</a>
             </div>
             <a href="order.html" class="btn btn-primary order-now">Đặt Ngay</a>
         </div>
@@ -275,154 +290,281 @@
         </div>
 
         <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-item 20240527 active ">
-                <div class="tab-pane fade active show" id="v-pills-mon-20240527" role="tabpanel"
-                     aria-labelledby="v-pills-mon-tab">
+            <div id="menu-content">
+                <div class="tab-item 20240527 active">
+                    <div class="tab-pane fade active show" id="v-pills-mon-20240527" role="tabpanel"
+                         aria-labelledby="v-pills-mon-tab">
+                        <div id="menu-content">
+                            <div class="day-menu mb-3">
+                                <div class="col-menu d-none d-md-block col-md-2">
+                                    <div class="date">T2<br>27.05</div>
+                                </div>
+                                <div class="col-menu col-md-3">
+                                    <!-- <p class="d-md-none">breakfast</p> -->
+                                    <h3>Bò Khoai Tây Đút Lò</h3>
+                                    Loaded Baked Potatoes
+                                    <br>
+                                    <span class="text-danger">437 Kcal | 42, 17, 26</span>
+                                </div>
+                                <div class="col-menu col-md-3">
+                                    <!-- <p class="d-md-none">lunch</p> -->
+                                    <h3>Heo Sốt Á + Mì Rau Củ</h3>
+                                    Grilled Pork W Bell Pepper + Noodles
+                                    <br>
+                                    <span class="text-danger">600 Kcal | 43, 24, 40</span>
+                                </div>
+                                <div class="col-menu col-md-3">
+                                    <!-- <p class="d-md-none">dinner</p> -->
+                                    <h3>Gà Nướng Xá Xíu + Gạo Lức</h3>
+                                    Charsiu Chicken + Brơwn Rice
+                                    <br>
+                                    <span class="text-danger">506 Kcal | 48, 8, 50</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="tab-pane fade" id="v-pills-tue-20240527" role="tabpanel"
+                    aria-labelledby="v-pills-tue-tab"> -->
                     <div class="day-menu mb-3">
                         <div class="col-menu d-none d-md-block col-md-2">
-                            <div class="date">T2<br>27.05</div>
+                            <div class="date">T3<br>28.05</div>
                         </div>
                         <div class="col-menu col-md-3">
                             <!-- <p class="d-md-none">breakfast</p> -->
-                            <h3>Bò Khoai Tây Đút Lò</h3>
-                            Loaded Baked Potatoes
+                            <h3>**Bún nưa gà xé** (MÓN NƯỚC)</h3>
+                            **Chicken Shirataki noodles Soup** (SOUP)
                             <br>
-                            <span class="text-danger">437 Kcal | 42, 17, 26</span>
+                            <span class="text-danger">330 Kcal | 12, 10, 43</span>
                         </div>
                         <div class="col-menu col-md-3">
                             <!-- <p class="d-md-none">lunch</p> -->
-                            <h3>Heo Sốt Á + Mì Rau Củ</h3>
-                            Grilled Pork W Bell Pepper + Noodles
+                            <h3>Bò Xào Sa Tế + Mì Rau Củ</h3>
+                            Spicy Stir-Fried Beef W Veggie Noodle
                             <br>
-                            <span class="text-danger">600 Kcal | 43, 24, 40</span>
+                            <span class="text-danger">519 Kcal | 42, 9, 52</span>
                         </div>
                         <div class="col-menu col-md-3">
                             <!-- <p class="d-md-none">dinner</p> -->
-                            <h3>Gà Nướng Xá Xíu + Gạo Lức</h3>
-                            Charsiu Chicken + Brơwn Rice
+                            <h3>Mực Kiểu Ấn + Gạo Lức</h3>
+                            Indian Baby Squid with Brown Rice
                             <br>
-                            <span class="text-danger">506 Kcal | 48, 8, 50</span>
+                            <span class="text-danger">526 Kcal | 46, 14, 43</span>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                    <!-- <div class="tab-pane fade" id="v-pills-wed-20240527" role="tabpanel"
+                    aria-labelledby="v-pills-wed-tab"> -->
+                    <div class="day-menu mb-3">
+                        <div class="col-menu d-none d-md-block col-md-2">
+                            <div class="date">T4<br>29.05</div>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">breakfast</p> -->
+                            <h3>Salad Heo Xay kiểu Nhật</h3>
+                            Japanese Minced Pork Salad
+                            <br>
+                            <span class="text-danger">421 Kcal | 21, 25, 30</span>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">lunch</p> -->
+                            <h3>Cá Sốt Mù Tạt Vàng + Cous Cous</h3>
+                            Grilled Fish W Yellow Mustard &amp; Cous Cous
+                            <br>
+                            <span class="text-danger">524 Kcal | 31, 25, 31</span>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">dinner</p> -->
+                            <h3>Mì rau củ xào gà sốt xí muội</h3>
+                            Apricot chicken with veggies noodles
+                            <br>
+                            <span class="text-danger">520 Kcal | 30, 27, 28</span>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                    <!-- <div class="tab-pane fade" id="v-pills-thu-20240527" role="tabpanel"
+                    aria-labelledby="v-pills-thu-tab"> -->
+                    <div class="day-menu mb-3">
+                        <div class="col-menu d-none d-md-block col-md-2">
+                            <div class="date">T5<br>30.05</div>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">breakfast</p> -->
+                            <h3>Salad Gà Sốt Cà Rốt Gừng</h3>
+                            Chicken Salad Served With Carrot &amp; Ginger Sauce
+                            <br>
+                            <span class="text-danger">457 Kcal | 30, 25, 25</span>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">lunch</p> -->
+                            <h3>Chạo Tôm + Bún Rau Củ</h3>
+                            Shrimp Paste W Veggie Vermicelli
+                            <br>
+                            <span class="text-danger">519 Kcal | 61, 15, 32</span>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">dinner</p> -->
+                            <h3>Heo xào nấm ngọc châm bún gấc</h3>
+                            Stir fried pork with mushroom and noodles
+                            <br>
+                            <span class="text-danger">480 Kcal | 40, 28, 33</span>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                    <!-- <div class="tab-pane fade" id="v-pills-fri-20240527" role="tabpanel"
+                    aria-labelledby="v-pills-fri-tab"> -->
+                    <div class="day-menu mb-3">
+                        <div class="col-menu d-none d-md-block col-md-2">
+                            <div class="date">T6<br>31.05</div>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">breakfast</p> -->
+                            <h3>Cá Nướng Teriyaki &amp; Miến Xào</h3>
+                            Teriyaki Grilled Fish &amp; Noodles
+                            <br>
+                            <span class="text-danger">541 Kcal | 31, 23, 40</span>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">lunch</p> -->
+                            <h3>Nui Sốt Thịt Heo Kiểu Đài</h3>
+                            Taiwanese Pork and Pasta
+                            <br>
+                            <span class="text-danger">502 Kcal | 44, 19, 29</span>
+                        </div>
+                        <div class="col-menu col-md-3">
+                            <!-- <p class="d-md-none">dinner</p> -->
+                            <h3>Bò xào nấm ngọc châm gạo lức</h3>
+                            Beef &amp; mushroom stir fried with brown rice
+                            <br>
+                            <span class="text-danger">410 Kcal | 35, 19, 23</span>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+
+                <div class="tab-pane fade active show" id="v-pills-mon-20240520" role="tabpanel"
+                     aria-labelledby="v-pills-mon-tab">
+                    <div class="day-menu mb-3">
+                        <div class="col-menu d-none d-md-block col-md-2">
+                            <div class="date">T2<br>20.05</div>
+                        </div>
+                        <div class="col-menu">
+                            <h3>Salad Cá Ngừ Rau Củ</h3>
+                            Tuna Veggie Salad
+                            <br>
+                            <span class="text-danger">360 Kcal | 27, 15, 29</span>
+                        </div>
+                        <div class="col-menu">
+                            <h3>Miến Hàn Quốc Xào Bò</h3>
+                            Stir-Fry Beef W Glass Noodles
+                            <br>
+                            <span class="text-danger">550 Kcal | 67, 17, 32</span>
+                        </div>
+                        <div class="col-menu">
+                            <h3>Gà mật ong đậu edamame</h3>
+                            Honey chicken with edamame bean
+                            <br>
+                            <span class="text-danger">503 Kcal | 33, 27, 32</span>
+                        </div>
+                    </div>
+
+                    <div class="day-menu mb-3">
+                        <div class="col-menu d-none d-md-block col-md-2">
+                            <div class="date">T3<br>21.05</div>
+                        </div>
+                        <div class="col-menu">
+                            <h3>**Bún bò huế** (MÓN NƯỚC)</h3>
+                            **Huế beef noodle Soup**
+                            <br>
+                            <span class="text-danger">435 Kcal | 45, 9, 40</span>
+                        </div>
+                        <div class="col-menu">
+                            <h3>**GÀ NƯỚNG CARI** (MÓN MỚI)</h3>
+                            **Fried Chicken w Curry Sauce** (NEW DISH)
+                            <br>
+                            <span class="text-danger">550 Kcal | 33, 30, 35</span>
+                        </div>
+                        <div class="col-menu">
+                            <h3>Tôm Cháy Tỏi + Cous Cous</h3>
+                            Garlic Shirmp W Cous Cous
+                            <br>
+                            <span class="text-danger">509 Kcal | 53, 16, 33</span>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="tab-pane fade" id="v-pills-tue-20240527" role="tabpanel"
-                    aria-labelledby="v-pills-tue-tab"> -->
-                <div class="day-menu mb-3">
-                    <div class="col-menu d-none d-md-block col-md-2">
-                        <div class="date">T3<br>28.05</div>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">breakfast</p> -->
-                        <h3>**Bún nưa gà xé** (MÓN NƯỚC)</h3>
-                        **Chicken Shirataki noodles Soup** (SOUP)
-                        <br>
-                        <span class="text-danger">330 Kcal | 12, 10, 43</span>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">lunch</p> -->
-                        <h3>Bò Xào Sa Tế + Mì Rau Củ</h3>
-                        Spicy Stir-Fried Beef W Veggie Noodle
-                        <br>
-                        <span class="text-danger">519 Kcal | 42, 9, 52</span>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">dinner</p> -->
-                        <h3>Mực Kiểu Ấn + Gạo Lức</h3>
-                        Indian Baby Squid with Brown Rice
-                        <br>
-                        <span class="text-danger">526 Kcal | 46, 14, 43</span>
-                    </div>
-                </div>
-                <!-- </div> -->
-                <!-- <div class="tab-pane fade" id="v-pills-wed-20240527" role="tabpanel"
-                    aria-labelledby="v-pills-wed-tab"> -->
-                <div class="day-menu mb-3">
-                    <div class="col-menu d-none d-md-block col-md-2">
-                        <div class="date">T4<br>29.05</div>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">breakfast</p> -->
-                        <h3>Salad Heo Xay kiểu Nhật</h3>
-                        Japanese Minced Pork Salad
-                        <br>
-                        <span class="text-danger">421 Kcal | 21, 25, 30</span>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">lunch</p> -->
-                        <h3>Cá Sốt Mù Tạt Vàng + Cous Cous</h3>
-                        Grilled Fish W Yellow Mustard &amp; Cous Cous
-                        <br>
-                        <span class="text-danger">524 Kcal | 31, 25, 31</span>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">dinner</p> -->
-                        <h3>Mì rau củ xào gà sốt xí muội</h3>
-                        Apricot chicken with veggies noodles
-                        <br>
-                        <span class="text-danger">520 Kcal | 30, 27, 28</span>
-                    </div>
-                </div>
-                <!-- </div> -->
-                <!-- <div class="tab-pane fade" id="v-pills-thu-20240527" role="tabpanel"
-                    aria-labelledby="v-pills-thu-tab"> -->
-                <div class="day-menu mb-3">
-                    <div class="col-menu d-none d-md-block col-md-2">
-                        <div class="date">T5<br>30.05</div>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">breakfast</p> -->
-                        <h3>Salad Gà Sốt Cà Rốt Gừng</h3>
-                        Chicken Salad Served With Carrot &amp; Ginger Sauce
-                        <br>
-                        <span class="text-danger">457 Kcal | 30, 25, 25</span>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">lunch</p> -->
-                        <h3>Chạo Tôm + Bún Rau Củ</h3>
-                        Shrimp Paste W Veggie Vermicelli
-                        <br>
-                        <span class="text-danger">519 Kcal | 61, 15, 32</span>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">dinner</p> -->
-                        <h3>Heo xào nấm ngọc châm bún gấc</h3>
-                        Stir fried pork with mushroom and noodles
-                        <br>
-                        <span class="text-danger">480 Kcal | 40, 28, 33</span>
-                    </div>
-                </div>
-                <!-- </div> -->
-                <!-- <div class="tab-pane fade" id="v-pills-fri-20240527" role="tabpanel"
-                    aria-labelledby="v-pills-fri-tab"> -->
-                <div class="day-menu mb-3">
-                    <div class="col-menu d-none d-md-block col-md-2">
-                        <div class="date">T6<br>31.05</div>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">breakfast</p> -->
-                        <h3>Cá Nướng Teriyaki &amp; Miến Xào</h3>
-                        Teriyaki Grilled Fish &amp; Noodles
-                        <br>
-                        <span class="text-danger">541 Kcal | 31, 23, 40</span>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">lunch</p> -->
-                        <h3>Nui Sốt Thịt Heo Kiểu Đài</h3>
-                        Taiwanese Pork and Pasta
-                        <br>
-                        <span class="text-danger">502 Kcal | 44, 19, 29</span>
-                    </div>
-                    <div class="col-menu col-md-3">
-                        <!-- <p class="d-md-none">dinner</p> -->
-                        <h3>Bò xào nấm ngọc châm gạo lức</h3>
-                        Beef &amp; mushroom stir fried with brown rice
-                        <br>
-                        <span class="text-danger">410 Kcal | 35, 19, 23</span>
-                    </div>
-                </div>
-                <!-- </div> -->
-            </div>
 
+                <div class="day-menu mb-3">
+                    <div class="col-menu d-none d-md-block col-md-2">
+                        <div class="date">T4<br>22.05</div>
+                    </div>
+                    <div class="col-menu">
+                        <h3>Salad Tôm Caesar</h3>
+                        Shrimp Caesar Salad
+                        <br>
+                        <span class="text-danger">385 Kcal | 21, 17, 35</span>
+                    </div>
+                    <div class="col-menu">
+                        <h3>Nui gạo lức gà sốt kem tiêu</h3>
+                        Creamy pepper chicken with brown pasta
+                        <br>
+                        <span class="text-danger">510 Kcal | 43, 24, 30</span>
+                    </div>
+                    <div class="col-menu">
+                        <h3>**Steak bò mỹ + khoai bó xôi** (món đặc biệt)</h3>
+                        **Top Blade Steak serve with Potato and Spinach** (SPECIAL DISH)
+                        <br>
+                        <span class="text-danger">572 Kcal | 35, 32, 36</span>
+                    </div>
+                </div>
+
+                <div class="day-menu mb-3">
+                    <div class="col-menu d-none d-md-block col-md-2">
+                        <div class="date">T5<br>23.05</div>
+                    </div>
+                    <div class="col-menu">
+                        <h3>**MÌ SƯỜN TIỀM** (MÓN NƯỚC)</h3>
+                        **Pork rib noodles** (SOUP)
+                        <br>
+                        <span class="text-danger">547 Kcal | 28, 35, 30</span>
+                    </div>
+                    <div class="col-menu">
+                        <h3>Cá Sốt Cambodia + Mì Rau Củ</h3>
+                        Sauteed Fish Fillets W Veggie Noodle
+                        <br>
+                        <span class="text-danger">565 Kcal | 67, 18, 33</span>
+                    </div>
+                    <div class="col-menu">
+                        <h3>Gà Xí Muội + Gạo Nâu</h3>
+                        Umeboshi Chicken W Brown Rice
+                        <br>
+                        <span class="text-danger">524 Kcal | 61, 15, 36</span>
+                    </div>
+                </div>
+
+                <div class="day-menu mb-3">
+                    <div class="col-menu d-none d-md-block col-md-2">
+                        <div class="date">T6<br>24.05</div>
+                    </div>
+                    <div class="col-menu">
+                        <h3>Mì Ý Dẹp Bò Bằm</h3>
+                        Homemade Linguine Bolognese
+                        <br>
+                        <span class="text-danger">439 Kcal | 51, 11, 34</span>
+                    </div>
+                    <div class="col-menu">
+
+                        <h3>**CƠM TRỘN HÀN QUỐC HEALTHY** (món mới)</h3>
+                        **Healthy Bibimbap** (NEW DISH)
+                        <br>
+                        <span class="text-danger">555 Kcal | 36, 30, 33</span>
+                    </div>
+                    <div class="col-menu">
+                        <h3>Cá Nướng Muối Ớt</h3>
+                        Spicy Grilled Fish Fillet
+                        <br>
+                        <span class="text-danger">493 Kcal | 41, 18, 38</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -438,8 +580,300 @@
     </div>
 </div>
 
+<script>
+    document.getElementById('next-week').addEventListener('click', function () {
+        document.querySelector('.time1[data-id="20240520"]').classList.remove('active');
+        document.querySelector('.time1[data-id="20240527"]').classList.add('active');
+    });
+
+    document.getElementById('this-week').addEventListener('click', function () {
+        document.querySelector('.time1[data-id="20240527"]').classList.remove('active');
+        document.querySelector('.time1[data-id="20240520"]').classList.add('active');
+    });
+</script>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const thisWeekData = `
+        <div class="day-menu mb-3">
+            <div class="col-menu d-none d-md-block col-md-2">
+                <div class="date">T2<br>20.05</div>
+            </div>
+            <div class="col-menu col-md-3">
+                <p class="d-md-none">breakfast</p>
+                <h3>Salad Cá Ngừ Rau Củ</h3>
+                Tuna Veggie Salad
+                <br>
+                <span class="text-danger">360 Kcal | 27, 15, 29</span>
+            </div>
+            <div class="col-menu col-md-3">
+                <h3>Miến Hàn Quốc Xào Bò</h3>
+                Stir-Fry Beef W Glass Noodles
+                <br>
+                <span class="text-danger">550 Kcal | 67, 17, 32</span>
+            </div>
+            <div class="col-menu col-md-3">
+                <p class="d-md-none">dinner</p>
+                <h3>Gà mật ong đậu edamame</h3>
+                Honey chicken with edamame bean
+                <br>
+                <span class="text-danger">503 Kcal | 33, 27, 32</span>
+            </div>
+        </div>
+
+        <div class="day-menu mb-3">
+                            <div class="col-menu d-none d-md-block col-md-2">
+                                <div class="date">T3<br>21.05</div>
+                            </div>
+                            <div class="col-menu">
+                                <h3>**Bún bò huế** (MÓN NƯỚC)</h3>
+                                **Huế beef noodle Soup**
+                                <br>
+                                <span class="text-danger">435 Kcal | 45, 9, 40</span>
+                            </div>
+                            <div class="col-menu">
+                                <h3>**GÀ NƯỚNG CARI** (MÓN MỚI)</h3>
+                                **Fried Chicken w Curry Sauce** (NEW DISH)
+                                <br>
+                                <span class="text-danger">550 Kcal | 33, 30, 35</span>
+                            </div>
+                            <div class="col-menu">
+                                <h3>Tôm Cháy Tỏi + Cous Cous</h3>
+                                Garlic Shirmp W Cous Cous
+                                <br>
+                                <span class="text-danger">509 Kcal | 53, 16, 33</span>
+                            </div>
+                        </div>
+
+                        <div class="day-menu mb-3">
+                        <div class="col-menu d-none d-md-block col-md-2">
+                            <div class="date">T4<br>22.05</div>
+                        </div>
+                        <div class="col-menu">
+                            <h3>Salad Tôm Caesar</h3>
+                            Shrimp Caesar Salad
+                            <br>
+                            <span class="text-danger">385 Kcal | 21, 17, 35</span>
+                        </div>
+                        <div class="col-menu">
+                            <h3>Nui gạo lức gà sốt kem tiêu</h3>
+                            Creamy pepper chicken with brown pasta
+                            <br>
+                            <span class="text-danger">510 Kcal | 43, 24, 30</span>
+                        </div>
+                        <div class="col-menu">
+                            <h3>**Steak bò mỹ + khoai bó xôi** (món đặc biệt)</h3>
+                            **Top Blade Steak serve with Potato and Spinach** (SPECIAL DISH)
+                            <br>
+                            <span class="text-danger">572 Kcal | 35, 32, 36</span>
+                        </div>
+                    </div>
+
+                    <div class="day-menu mb-3">
+                        <div class="col-menu d-none d-md-block col-md-2">
+                            <div class="date">T5<br>23.05</div>
+                        </div>
+                        <div class="col-menu">
+                            <h3>**MÌ SƯỜN TIỀM** (MÓN NƯỚC)</h3>
+                            **Pork rib noodles** (SOUP)
+                            <br>
+                            <span class="text-danger">547 Kcal | 28, 35, 30</span>
+                        </div>
+                        <div class="col-menu">
+                            <h3>Cá Sốt Cambodia + Mì Rau Củ</h3>
+                            Sauteed Fish Fillets W Veggie Noodle
+                            <br>
+                            <span class="text-danger">565 Kcal | 67, 18, 33</span>
+                        </div>
+                        <div class="col-menu">
+                            <h3>Gà Xí Muội + Gạo Nâu</h3>
+                            Umeboshi Chicken W Brown Rice
+                            <br>
+                            <span class="text-danger">524 Kcal | 61, 15, 36</span>
+                        </div>
+                    </div>
+
+        <!-- Add the rest of the day's menus here for T3, T4, T5 -->
+        <div class="day-menu mb-3">
+            <div class="col-menu d-none d-md-block col-md-2">
+                <div class="date">T6<br>24.05</div>
+            </div>
+            <div class="col-menu col-md-3">
+                <p class="d-md-none">breakfast</p>
+                <h3>Mì Ý Dẹp Bò Bằm</h3>
+                Homemade Linguine Bolognese
+                <br>
+                <span class="text-danger">439 Kcal | 51, 11, 34</span>
+            </div>
+            <div class="col-menu col-md-3">
+                <h3>**CƠM TRỘN HÀN QUỐC HEALTHY** (món mới)</h3>
+                **Healthy Bibimbap** (NEW DISH)
+                <br>
+                <span class="text-danger">555 Kcal | 36, 30, 33</span>
+            </div>
+            <div class="col-menu col-md-3">
+                <p class="d-md-none">dinner</p>
+                <h3>Cá Nướng Muối Ớt</h3>
+                Spicy Grilled Fish Fillet
+                <br>
+                <span class="text-danger">493 Kcal | 41, 18, 38</span>
+            </div>
+        </div>`;
+
+        const nextWeekData = `
+        <div class="day-menu mb-3">
+            <div class="col-menu d-none d-md-block col-md-2">
+                <div class="date">T2<br>27.05</div>
+            </div>
+            <div class="col-menu col-md-3">
+                <h3>Bò Khoai Tây Đút Lò</h3>
+                Loaded Baked Potatoes
+                <br>
+                <span class="text-danger">437 Kcal | 42, 17, 26</span>
+            </div>
+            <div class="col-menu col-md-3">
+                <h3>Heo Sốt Á + Mì Rau Củ</h3>
+                Grilled Pork W Bell Pepper + Noodles
+                <br>
+                <span class="text-danger">600 Kcal | 43, 24, 40</span>
+            </div>
+            <div class="col-menu col-md-3">
+                <h3>Gà Nướng Xá Xíu + Gạo Lức</h3>
+                Charsiu Chicken + Brown Rice
+                <br>
+                <span class="text-danger">506 Kcal | 48, 8, 50</span>
+            </div>
+        </div>
+
+        <div class="day-menu mb-3">
+            <div class="col-menu d-none d-md-block col-md-2">
+                <div class="date">T3<br>28.05</div>
+            </div>
+            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">breakfast</p> -->
+                                <h3>**Bún nưa gà xé** (MÓN NƯỚC)</h3>
+                                **Chicken Shirataki noodles Soup** (SOUP)
+                                <br>
+                                <span class="text-danger">330 Kcal | 12, 10, 43</span>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">lunch</p> -->
+                                <h3>Bò Xào Sa Tế + Mì Rau Củ</h3>
+                                Spicy Stir-Fried Beef W Veggie Noodle
+                                <br>
+                                <span class="text-danger">519 Kcal | 42, 9, 52</span>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">dinner</p> -->
+                                <h3>Mực Kiểu Ấn + Gạo Lức</h3>
+                                Indian Baby Squid with Brown Rice
+                                <br>
+                                <span class="text-danger">526 Kcal | 46, 14, 43</span>
+                            </div>
+                        </div>
+                        <div class="day-menu mb-3">
+                            <div class="col-menu d-none d-md-block col-md-2">
+                                <div class="date">T4<br>29.05</div>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">breakfast</p> -->
+                                <h3>Salad Heo Xay kiểu Nhật</h3>
+                                Japanese Minced Pork Salad
+                                <br>
+                                <span class="text-danger">421 Kcal | 21, 25, 30</span>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">lunch</p> -->
+                                <h3>Cá Sốt Mù Tạt Vàng + Cous Cous</h3>
+                                Grilled Fish W Yellow Mustard &amp; Cous Cous
+                                <br>
+                                <span class="text-danger">524 Kcal | 31, 25, 31</span>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">dinner</p> -->
+                                <h3>Mì rau củ xào gà sốt xí muội</h3>
+                                Apricot chicken with veggies noodles
+                                <br>
+                                <span class="text-danger">520 Kcal | 30, 27, 28</span>
+                            </div>
+                        </div>
+                        <div class="day-menu mb-3">
+                            <div class="col-menu d-none d-md-block col-md-2">
+                                <div class="date">T5<br>30.05</div>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">breakfast</p> -->
+                                <h3>Salad Gà Sốt Cà Rốt Gừng</h3>
+                                Chicken Salad Served With Carrot &amp; Ginger Sauce
+                                <br>
+                                <span class="text-danger">457 Kcal | 30, 25, 25</span>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">lunch</p> -->
+                                <h3>Chạo Tôm + Bún Rau Củ</h3>
+                                Shrimp Paste W Veggie Vermicelli
+                                <br>
+                                <span class="text-danger">519 Kcal | 61, 15, 32</span>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">dinner</p> -->
+                                <h3>Heo xào nấm ngọc châm bún gấc</h3>
+                                Stir fried pork with mushroom and noodles
+                                <br>
+                                <span class="text-danger">480 Kcal | 40, 28, 33</span>
+                            </div>
+                        </div>
+                        <div class="day-menu mb-3">
+                            <div class="col-menu d-none d-md-block col-md-2">
+                                <div class="date">T6<br>31.05</div>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">breakfast</p> -->
+                                <h3>Cá Nướng Teriyaki &amp; Miến Xào</h3>
+                                Teriyaki Grilled Fish &amp; Noodles
+                                <br>
+                                <span class="text-danger">541 Kcal | 31, 23, 40</span>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">lunch</p> -->
+                                <h3>Nui Sốt Thịt Heo Kiểu Đài</h3>
+                                Taiwanese Pork and Pasta
+                                <br>
+                                <span class="text-danger">502 Kcal | 44, 19, 29</span>
+                            </div>
+                            <div class="col-menu col-md-3">
+                                <!-- <p class="d-md-none">dinner</p> -->
+                                <h3>Bò xào nấm ngọc châm gạo lức</h3>
+                                Beef &amp; mushroom stir fried with brown rice
+                                <br>
+                                <span class="text-danger">410 Kcal | 35, 19, 23</span>
+                            </div>
+                        </div>`;
+
+        const menuContent = document.getElementById('menu-content');
+        const thisWeekBtn = document.getElementById('this-week');
+        const nextWeekBtn = document.getElementById('next-week');
+
+        // Set initial content
+        menuContent.innerHTML = thisWeekData;
+
+        thisWeekBtn.addEventListener('click', () => {
+            menuContent.innerHTML = thisWeekData;
+            thisWeekBtn.classList.add('active-week');
+            nextWeekBtn.classList.remove('active-week');
+        });
+
+        nextWeekBtn.addEventListener('click', () => {
+            menuContent.innerHTML = nextWeekData;
+            nextWeekBtn.classList.add('active-week');
+            thisWeekBtn.classList.remove('active-week');
+        });
+    });
+
+</script>
 </body>
 </html>

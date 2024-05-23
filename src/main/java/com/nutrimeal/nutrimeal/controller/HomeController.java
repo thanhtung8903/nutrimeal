@@ -13,8 +13,8 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/headermana/{name}")
+    @GetMapping("/menu/{name}")
     public String dunua(@PathVariable String name, Model model) {
-        return "orderManagement";
+        return "Menu";
     }
 }
