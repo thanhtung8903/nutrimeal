@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Đặt hàng', 'none')}"></head>
-
+<link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+/>
 <style>
     * {
         box-sizing: border-box; /* Giữ cho padding và border không làm tăng kích thước của phần tử */
@@ -115,100 +121,15 @@
             bạn
         </h5>
     </div>
-    <div class="order-combo-list">
-        <div class="order-combo" onclick="redirectToOrderComboDetail()">
+    <div class="order-combo-list" >
+        <div class="order-combo" onclick="redirectToOrderComboDetail()" th:each="combo : ${comboList}">
             <img
-                    src="https://kenh14cdn.com/2019/4/3/combo-do-han-5quequefood-15542908301231397801825.jpg"
-            />
+                  th:src="${combo.comboImage}"
+             alt=""/>
             <div class="order-combo-content">
-                <h3>Combo name</h3>
+                <h3 th:text="${combo.comboName}"></h3>
                 <div class="order-combo-description">
-                    <h4>Price</h4>
-                    <a href="#" style="color: black"
-                    ><i
-                            class="fa-solid fa-cart-shopping"
-                            style="font-size: 20px"
-                    ></i
-                    ></a>
-                </div>
-            </div>
-        </div>
-        <div class="order-combo" onclick="redirectToOrderComboDetail()">
-            <img
-                    src="https://kenh14cdn.com/2019/4/3/combo-do-han-5quequefood-15542908301231397801825.jpg"
-            />
-            <div class="order-combo-content">
-                <h3>Combo name</h3>
-                <div class="order-combo-description">
-                    <h4>Price</h4>
-                    <a href="#" style="color: black"
-                    ><i
-                            class="fa-solid fa-cart-shopping"
-                            style="font-size: 20px"
-                    ></i
-                    ></a>
-                </div>
-            </div>
-        </div>
-        <div class="order-combo" onclick="redirectToOrderComboDetail()">
-            <img
-                    src="https://kenh14cdn.com/2019/4/3/combo-do-han-5quequefood-15542908301231397801825.jpg"
-            />
-            <div class="order-combo-content">
-                <h3>Combo name</h3>
-                <div class="order-combo-description">
-                    <h4>Price</h4>
-                    <a href="#" style="color: black"
-                    ><i
-                            class="fa-solid fa-cart-shopping"
-                            style="font-size: 20px"
-                    ></i
-                    ></a>
-                </div>
-            </div>
-        </div>
-        <div class="order-combo" onclick="redirectToOrderComboDetail()">
-            <img
-                    src="https://kenh14cdn.com/2019/4/3/combo-do-han-5quequefood-15542908301231397801825.jpg"
-            />
-            <div class="order-combo-content">
-                <h3>Combo name</h3>
-                <div class="order-combo-description">
-                    <h4>Price</h4>
-                    <a href="#" style="color: black"
-                    ><i
-                            class="fa-solid fa-cart-shopping"
-                            style="font-size: 20px"
-                    ></i
-                    ></a>
-                </div>
-            </div>
-        </div>
-        <div class="order-combo" onclick="redirectToOrderComboDetail()">
-            <img
-                    src="https://kenh14cdn.com/2019/4/3/combo-do-han-5quequefood-15542908301231397801825.jpg"
-            />
-            <div class="order-combo-content">
-                <h3>Combo name</h3>
-                <div class="order-combo-description">
-                    <h4>Price</h4>
-                    <a href="#" style="color: black"
-                    ><i
-                            class="fa-solid fa-cart-shopping"
-                            style="font-size: 20px"
-                    ></i
-                    ></a>
-                </div>
-            </div>
-        </div>
-        <div class="order-combo" onclick="redirectToOrderComboDetail()">
-            <img
-                    src="https://kenh14cdn.com/2019/4/3/combo-do-han-5quequefood-15542908301231397801825.jpg"
-            />
-            <div class="order-combo-content">
-                <h3>Combo name</h3>
-                <div class="order-combo-description">
-                    <h4>Price</h4>
+                    <h4 th:text="${combo.comboPrice7Days}"></h4>
                     <a href="#" style="color: black"
                     ><i
                             class="fa-solid fa-cart-shopping"
