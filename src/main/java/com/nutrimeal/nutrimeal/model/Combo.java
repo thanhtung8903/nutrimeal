@@ -23,13 +23,13 @@ public class Combo {
     private String comboImage;
 
     @Column(name = "combo_price_7days")
-    private float comboPrice7Days;
+    private Float comboPrice7Days;
 
     @Column(name = "combo_price_30days")
-    private float comboPrice30Days;
+    private Float comboPrice30Days;
 
     @Column(name = "combo_calories")
-    private float comboCalories;
+    private Float comboCalories;
 
     @ManyToOne
     @JoinColumn(name = "combo_type_id")
