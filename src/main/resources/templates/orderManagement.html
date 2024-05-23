@@ -32,6 +32,34 @@
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
         }
 
+        input[type="tel"]:focus,
+        input[type="number"]:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        input[type="email"]:focus,
+        input[type="number"]:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        input[type="date"]:focus,
+        input[type="number"]:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        textarea:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        select:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
         .btn-primary {
             background-color: #343a40 !important;
             border-color: #343a40 !important;
@@ -42,11 +70,69 @@
             font-weight: 600;
         }
 
-        .btn-danger:hover{
+        .btn-danger:hover {
             background-color: red !important;
             font-weight: 600;
         }
-        h2{
+
+        h2 {
+            text-align: center;
+        }
+
+        .beo1 {
+            border: 1px solid rgb(255, 2, 2);
+        }
+
+        .beo1:hover {
+            background-color: rgb(255, 2, 2);
+            border: 1px solid rgb(255, 2, 2);
+        }
+
+        .beo1 a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .me-1 {
+            background-color: #343a40;
+            border: 1px solid #343a40;
+        }
+
+        .me-1:hover {
+            background-color: #000000;
+            font-weight: 600;
+            border: 1px solid #343a40;
+        }
+
+        .me-1 a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .order-content {
+            border-radius: 5px;
+        }
+
+        .order-content table {
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .order-content thead {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .order-content tbody tr:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .img-fluid {
+            border-radius: 5px;
+        }
+
+        .image-cell {
             text-align: center;
         }
     </style>
@@ -69,17 +155,143 @@
             <div id="content-view" class="order-content">
                 <h2>Xem và nhận đơn hàng</h2>
                 <!-- Add content for viewing and accepting orders -->
-                <p>...</p>
+                <center>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                        <tr style="text-align: center;">
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Mô tả</th>
+                            <th>Hình ảnh</th>
+                            <th>Loại</th>
+                            <th colspan="2">Action</th>
+                        </tr>
+                        </thead>
+                        <c:forEach>
+                            <tr style="text-align: center; vertical-align: middle;">
+                                <td>1</td>
+                                <td>Combo bá vương</td>
+                                <td>200</td>
+                                <td>40.000đ</td>
+                                <td>Combo best seller</td>
+                                <td class="image-cell"><img class="img-fluid" style="width: 100px; height: 60px;"
+                                                            src="img/img2.webp" alt="combo" />
+                                </td>
+                                <td>healthy</td>
+
+                                <td>
+                                    <button type="submit" class="btn btn-info btn-sm me-1"
+                                            style="float:left; margin-left: 13px;">
+                                        <a href="#">Update</a>
+                                    </button>
+
+                                    <button type="submit" class="btn btn-danger btn-sm beo1"
+                                            style="background-color: #ff2033" onclick="if (!(confirm('Are you sure you want to delete this todo?')))
+                                                    return false">
+                                        <a href="#">Delete</a>
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </center>
             </div>
             <div id="content-delivery-request" class="order-content" style="display: none;">
                 <h2>Gửi yêu cầu giao hàng</h2>
                 <!-- Add content for sending delivery requests -->
-                <p>...</p>
+                <center>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                        <tr style="text-align: center;">
+                            <th>Label</th>
+                            <th>Input</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="recipientName"
+                                                                                          class="form-label">Tên người nhận</label></td>
+                            <td><input type="text" class="form-control" id="recipientName" required></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="address"
+                                                                                          class="form-label">Địa chỉ</label></td>
+                            <td><input type="text" class="form-control" id="address" required></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="phone"
+                                                                                          class="form-label">Số điện thoại</label></td>
+                            <td><input type="tel" class="form-control" id="phone" required></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="email"
+                                                                                          class="form-label">Email</label></td>
+                            <td><input type="email" class="form-control" id="email" required></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="orderDetails"
+                                                                                          class="form-label">Chi tiết đơn hàng</label></td>
+                            <td><textarea class="form-control" id="orderDetails" rows="3" required></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="deliveryDate"
+                                                                                          class="form-label">Ngày giao hàng</label></td>
+                            <td><input type="date" class="form-control" id="deliveryDate" required></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="notes"
+                                                                                          class="form-label">Ghi chú</label></td>
+                            <td><textarea class="form-control" id="notes" rows="3"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button type="submit" class="btn btn-primary">Gửi yêu cầu</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </center>
             </div>
             <div id="content-change-status" class="order-content" style="display: none;">
                 <h2>Thay đổi trạng thái đơn</h2>
                 <!-- Add content for changing order status -->
-                <p>...</p>
+                <center>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                        <tr style="text-align: center;">
+                            <th>ID</th>
+                            <th>Tên đơn hàng</th>
+                            <th>Trạng thái hiện tại</th>
+                            <th>Chọn trạng thái mới</th>
+                            <th>Ghi chú</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr style="text-align: center; vertical-align: middle">
+                            <td>1</td>
+                            <td>Đơn hàng A</td>
+                            <td>Đang xử lý</td>
+                            <td>
+                                <select class="form-select">
+                                    <option value="1">Chờ xác nhận</option>
+                                    <option value="2">Đang giao hàng</option>
+                                    <option value="3">Hoàn thành</option>
+                                    <option value="4">Đã hủy</option>
+                                </select>
+                            </td>
+                            <td><textarea class="form-control" rows="2"></textarea></td>
+                            <td>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                        </tbody>
+                    </table>
+                </center>
             </div>
         </div>
     </div>
