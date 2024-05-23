@@ -321,70 +321,15 @@
         </p>
     </div>
     <div class="featured-product-list">
-        <div class="product">
+        <div class="product" th:each="combo : ${comboList}">
             <div class="product-image">
                 <img
-                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
+                        th:src="${combo.comboImage}"
                 />
             </div>
             <div class="product-content">
-                <h3>Product Name</h3>
-                <p>Product Description</p>
-            </div>
-        </div>
-        <div class="product">
-            <div class="product-image">
-                <img
-                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
-                />
-            </div>
-            <div class="product-content">
-                <h3>Product Name</h3>
-                <p>Product Description</p>
-            </div>
-        </div>
-        <div class="product">
-            <div class="product-image">
-                <img
-                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
-                />
-            </div>
-            <div class="product-content">
-                <h3>Product Name</h3>
-                <p>Product Description</p>
-            </div>
-        </div>
-        <div class="product">
-            <div class="product-image">
-                <img
-                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
-                />
-            </div>
-            <div class="product-content">
-                <h3>Product Name</h3>
-                <p>Product Description</p>
-            </div>
-        </div>
-        <div class="product">
-            <div class="product-image">
-                <img
-                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
-                />
-            </div>
-            <div class="product-content">
-                <h3>Product Name</h3>
-                <p>Product Description</p>
-            </div>
-        </div>
-        <div class="product">
-            <div class="product-image">
-                <img
-                        src="https://ik.imagekit.io/tvlk/blog/2023/06/do-an-y-2.jpg?tr=dpr-2,w-675"
-                />
-            </div>
-            <div class="product-content">
-                <h3>Product Name</h3>
-                <p>Product Description</p>
+                <h3 th:text="${combo.comboName}">Product Name</h3>
+                <p th:text="${combo.comboDescription}">Product Description</p>
             </div>
         </div>
     </div>

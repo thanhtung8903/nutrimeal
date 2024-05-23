@@ -1,6 +1,7 @@
 package com.nutrimeal.nutrimeal.service;
 
 
+import com.nutrimeal.nutrimeal.dto.request.AddressRequest;
 import com.nutrimeal.nutrimeal.dto.request.ChangePasswordRequest;
 import com.nutrimeal.nutrimeal.dto.request.SignupRequest;
 import com.nutrimeal.nutrimeal.dto.request.UpdateUserRequest;
@@ -70,5 +71,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
         userRepository.save(user);
     }
+
 }
 

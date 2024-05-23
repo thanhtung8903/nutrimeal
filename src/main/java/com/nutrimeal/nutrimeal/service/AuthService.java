@@ -33,7 +33,6 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final HttpSession session;
 
     public void signupUser(SignupRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {

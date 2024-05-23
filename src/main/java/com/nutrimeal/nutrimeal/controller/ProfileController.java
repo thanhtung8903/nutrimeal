@@ -93,7 +93,7 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/address")
-    public String profileAddressAdd(@ModelAttribute Address address, Model model, Principal principal) {
+    public String profileAddressAdd(@ModelAttribute Address address, Principal principal) {
         User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         addressService.saveAddress(address, user.getUsername());
         return "redirect:/profile/address";
