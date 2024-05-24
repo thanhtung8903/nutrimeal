@@ -31,7 +31,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/signup", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/","/home", "/faqs", "/consult", "combo").permitAll()
+                        .requestMatchers("/manager/**").hasAnyRole("MANAGER")
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                        .anyRequest().permitAll())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
@@ -51,6 +56,7 @@ public class SecurityConfig {
                         .maxSessionsPreventsLogin(false)
                         .expiredUrl("/login?expired=true")
                         );
+
 
          httpSecurity.authenticationProvider(authenticationProvider());
         return httpSecurity.build();
