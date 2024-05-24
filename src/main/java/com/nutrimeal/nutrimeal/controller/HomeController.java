@@ -15,6 +15,6 @@ public class HomeController {
 
     @GetMapping("/order/{name}")
     public String dunua(@PathVariable String name, Model model) {
-        return "orderManagement";
+        return "Menu";
     }
 }
