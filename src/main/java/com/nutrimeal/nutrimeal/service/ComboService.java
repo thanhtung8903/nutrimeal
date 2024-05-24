@@ -43,4 +43,8 @@ public class ComboService {
     public void deleteComboType(int id) {
         comboTypeRepository.deleteById(id);
     }
+
+    public List<Combo> getCombosByCalories(float min, float max) {
+        return comboRepository.findAllByComboCaloriesBetween(min, max);
+    }
 }

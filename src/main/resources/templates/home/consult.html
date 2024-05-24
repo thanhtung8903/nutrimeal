@@ -81,7 +81,7 @@
 
 <div class="container">
     <div class="box-info mb-5 brm">
-        <form class="bmr-form" action="form" method="">
+        <form class="bmr-form" th:action="@{/home/consult}" method="get">
             <div class="row d-flex">
                 <div class="col-md-6">
                     <div class="form-group row d-flex align-items-center">
@@ -166,19 +166,42 @@
                     <div class="col-sm-12 text-center">
                         <label>
                             <!-- <span id="calorieResult">   </span>   -->
-                            <span id="calorieResult" style="color: #686868;"></span>
-                            <span id="calorieValue" style="color: red; font-size: 20px;"></span>
+                            <span id="calorieResult" th:text="${calorieResult}" style="color: #686868;"></span>
+                            <span id="calorieValue"  th:text="|${calorieValue} Kcal|" style="color: red; font-size: 20px;"></span>
                         </label>
                     </div>
                 </div>
             </div>
         </form>
-
-
+        <div class="featured-packages">
+            <h2 class="title title-center pb-4 mb-4">Combo gợi ý</h2>
+            <div class="products mb-4" id="list-both-items">
+                <div class="row product-listing">
+                    <div class="col-md-3" th:each="combo : ${comboList}">
+                        <a th:href="@{https://fitfood.vn/san-pham/full}" class="link">
+                            <span class="icon"><i class="fa fa-check" aria-hidden="true"></i></span>
+                            <div class="card">
+                                <img th:src="${combo.comboImage}" class="card-img-top" alt="">
+                                <div class="card-body">
+                                    <h5 class="card-title d-flex justify-content-between" th:text="${combo.comboName}">
+                                        <span th:text="${combo.comboPrice7Days}"></span>
+                                    </h5>
+                                    <p class="card-text" th:text="${combo.comboDescription}"></p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
 <script>
+
+// bat dau tu day
+
+
     document.addEventListener("DOMContentLoaded", function() {
         function populateSelect(selectElement, minValue, maxValue, defaultValue) {
             for (let value = minValue; value <= maxValue; value++) {
@@ -229,16 +252,34 @@
 
             // Displaying the result
             // document.getElementById('calorieResult').textContent = Math.round(dailyCalories);
+            const calorieResult = "* Lượng năng lượng bạn cần tiêu thụ hàng ngày ~";
             if ((gender == '1' && dailyCalories < 1600) || (gender == '0' && dailyCalories < 1200)) {
                 document.getElementById('calorieResult').textContent = "* Xin lỗi bạn! Chúng tôi không thể phục vụ theo chỉ số trên.";
                 document.getElementById('calorieValue').textContent ="";
             } else {
-                document.getElementById('calorieResult').textContent = "* Lượng năng lượng bạn cần tiêu thụ hàng ngày ~" ;
+                document.getElementById('calorieResult').textContent = calorieResult ;
                 document.getElementById('calorieValue').textContent = Math.round(dailyCalories) +" Kcal";
             }
+            // Send the calorie value to the server using AJAX
+            sendCalorieValue(Math.round(dailyCalories), calorieResult);
         }
-        document.getElementById('calculateCalories').addEventListener('click', calculateCalories);
+        function sendCalorieValue(calorieValue, calorieResult) {
+            // fetch('/consult?calorieValue=' + calorieValue, {
+            //     method: 'GET',
+            // })
+            fetch('/consult?calorieValue=' + calorieValue + '&calorieResult=' + encodeURIComponent(calorieResult), {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.open();
+                    document.write(data);
+                    document.close();
+                })
+                .catch(error => console.error('Error:', error));
+        }
 
+        document.getElementById('calculateCalories').addEventListener('click', calculateCalories);
     });
 </script>
 
