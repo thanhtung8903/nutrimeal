@@ -38,6 +38,9 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/home", true)
                         .failureUrl("/login?error=true")
                         .permitAll())
+                .rememberMe(rememberMe -> rememberMe
+                        .key("remember-me-key")
+                        .tokenValiditySeconds(86400))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/home")
