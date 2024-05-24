@@ -7,13 +7,11 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,28 +31,41 @@ public class HomeController {
         return "home/faqs";
     }
 
-
-//    @GetMapping("/consult")
-//    public String consult(@RequestParam(value = "calorieValue", required = false) Float calorieValue, Model model) {
-//        if (calorieValue != null) {
-//            List<Combo> comboList = comboService.getCombosByCalories(calorieValue - 500, calorieValue + 3000);
-//            model.addAttribute("comboList", comboList);
-//        }
-//        return "home/consult";
-//    }
-
     @GetMapping("/consult")
-    public String consult(@RequestParam(value = "calorieValue", required = false) Float calorieValue,
+    public String consult(@RequestParam(value = "calorieValue", required = false) String calorieValue,
                           @RequestParam(value = "calorieResult", required = false) String calorieResult,
+                          @RequestParam(value = "age", required = false) String age,
+                          @RequestParam(value = "weight", required = false) String weight,
+                          @RequestParam(value = "height", required = false) String height,
+                          @RequestParam(value = "gender", required = false) String gender,
+                          @RequestParam(value = "activityMultiplier", required = false) String activityMultiplier,
+                          @RequestParam(value = "weightGoal", required = false) String weightGoal,
                           Model model) {
         if (calorieValue != null) {
-            List<Combo> comboList = comboService.getCombosByCalories(calorieValue - 400, calorieValue + 400);
-            model.addAttribute("comboList", comboList);
-            model.addAttribute("calorieValue", calorieValue);
+            float calorieValueResult = Float.parseFloat(calorieValue);
+            if (calorieValueResult > 0) {
+                List<Combo> comboList = comboService.getCombosByCalories(calorieValueResult - 400, calorieValueResult + 400);
+                model.addAttribute("comboList", comboList);
+                model.addAttribute("calorieValue", calorieValue);
+                model.addAttribute("comboSuggest", "Combo gợi ý");
+            }
         }
         if (calorieResult != null) {
             model.addAttribute("calorieResult", calorieResult);
         }
+        if (age != null && weight != null && height != null && gender != null && activityMultiplier != null && weightGoal != null) {
+            model.addAttribute("age", age);
+            model.addAttribute("weight", weight);
+            model.addAttribute("height", height);
+            model.addAttribute("gender", gender);
+            model.addAttribute("activityMultiplier", activityMultiplier);
+            model.addAttribute("weightGoal", weightGoal);
+        } else {
+            model.addAttribute("age", 25);
+            model.addAttribute("weight", 50);
+            model.addAttribute("height", 160);
+        }
+
         return "home/consult";
     }
 
