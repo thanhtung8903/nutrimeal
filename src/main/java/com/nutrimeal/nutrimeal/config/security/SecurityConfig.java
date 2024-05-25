@@ -28,12 +28,12 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/signup", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/","/home", "/faqs", "/consult", "/combo", "/menu", "/order").permitAll()
+                        .requestMatchers("/", "/home", "/faqs", "/consult", "/combo", "/menu").permitAll()
                         .requestMatchers("/manager/**").hasAnyRole("MANAGER")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().permitAll())
@@ -55,10 +55,10 @@ public class SecurityConfig {
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(false)
                         .expiredUrl("/login?expired=true")
-                        );
+                );
 
 
-         httpSecurity.authenticationProvider(authenticationProvider());
+        httpSecurity.authenticationProvider(authenticationProvider());
         return httpSecurity.build();
     }
 
@@ -68,7 +68,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
