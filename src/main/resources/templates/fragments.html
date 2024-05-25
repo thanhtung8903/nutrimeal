@@ -16,7 +16,7 @@
 
 </head>
 
-<header th:fragment="header">
+<header th:fragment="header-fragment">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
 
@@ -58,6 +58,14 @@
                 </ul>
             </div>
 
+            <div sec:authorize="hasAuthority('ROLE_MANAGER')" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/manager/}">Manager management<span class="bold" ></span></a>
+                    </li>
+                </ul>
+            </div>
+
             <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -67,10 +75,7 @@
                         <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
                     </li>
                 </ul>
-
             </div>
-
-
 
         </div>
     </nav>
@@ -102,5 +107,87 @@
     </div>
 </footer>
 
+<header th:fragment="manager">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+
+            <a class="navbar-brand" href="/manager/"><h1>Manager</h1></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manager/">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manager/menu" th:href="@{/manager/menu}">Quản lý thực đơn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manager/customer" th:href="@{/manager/customer}">Quản lý khách hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ordermanager" th:href="@{/manager/ordermanager}">Quản lý đơn hàng</a>
+                    </li>
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/faq" th:href="@{/faqs}">Quản lý chi tiêu</a>-->
+<!--                    </li>-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Khác
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="expenses.html">Quản lý chi tiêu</a>
+                            <a class="dropdown-item" href="statistic.html">Thống kê</a>
+                            <a class="dropdown-item" href="/discount">Khuyến mãi</a>
+                            <!-- You can add more dropdown items here -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div sec:authorize="hasAuthority('ROLE_MANAGER')" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Back to home page<span class="bold" ></span></a>
+                    </li>
+                </ul>
+            </div>
+
+            <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/profile/account}">Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <script>
+        // JavaScript to handle dropdown toggle
+        document.addEventListener("DOMContentLoaded", function () {
+            const moreDropdown = document.querySelector('.nav-item.dropdown');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            moreDropdown.addEventListener('click', function () {
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside of it
+            window.addEventListener('click', function (e) {
+                if (!moreDropdown.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</header>
 
 </html>

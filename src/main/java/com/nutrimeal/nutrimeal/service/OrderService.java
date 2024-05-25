@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.nutrimeal.nutrimeal.model.OrderStatus.PROCESSING;
 
 @Service
 @RequiredArgsConstructor

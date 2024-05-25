@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 import static com.nutrimeal.nutrimeal.model.OrderStatus.PENDING;
-import static com.nutrimeal.nutrimeal.model.OrderStatus.PROCESSING;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,6 +23,11 @@ public class ManagerController {
 
     private final OrderService orderService;
     private final UserService userService;
+
+    @GetMapping("/")
+    public String manager() {
+        return "manager/managerpage";
+    }
 
     @GetMapping("/ordermanager")
     public String dashboard(Model model) {
