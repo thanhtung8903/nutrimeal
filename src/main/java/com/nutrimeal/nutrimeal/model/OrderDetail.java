@@ -17,10 +17,6 @@ public class OrderDetail {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "dish_id")
-    private Dish dish;
-
     @Column(name = "order_detail_quantity")
     private int orderDetailQuantity;
 

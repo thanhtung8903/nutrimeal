@@ -33,5 +33,5 @@ public class Order {
     private Date orderDate;
 
     @Column(name = "order_status")
-    private Boolean orderStatus;
+    private String orderStatus;
 }

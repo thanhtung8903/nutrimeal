@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Quản lý đơn hàng', 'none')}">
+    <meta charset="UTF-8">
+    <title>Quản lý đơn hàng - NutriMeal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Your custom styles -->
+    <style>
+        body {
+            background-color: #e5e5e5;
+        }
+
+        .list-group-item {
+            background-color: #fff !important;
+            color: #343a40 !important;
+            cursor: pointer;
+        }
+
+        .list-group-item.active {
+            background-color: #fff !important;
+            border-color: none;
+            border: 1px solid #343a40;
+            font-weight: bold;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        input[type="tel"]:focus,
+        input[type="number"]:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        input[type="email"]:focus,
+        input[type="number"]:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        input[type="date"]:focus,
+        input[type="number"]:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        textarea:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        select:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        .btn-primary {
+            background-color: #343a40 !important;
+            border-color: #343a40 !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .btn-danger:hover {
+            background-color: red !important;
+            font-weight: 600;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .beo1 {
+            border: 1px solid rgb(255, 2, 2);
+        }
+
+        .beo1:hover {
+            background-color: rgb(255, 2, 2);
+            border: 1px solid rgb(255, 2, 2);
+        }
+
+        .beo1 a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .me-1 {
+            background-color: #343a40;
+            border: 1px solid #343a40;
+        }
+
+        .me-1:hover {
+            background-color: #000000;
+            font-weight: 600;
+            border: 1px solid #343a40;
+        }
+
+        .me-1 a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .order-content {
+            border-radius: 5px;
+        }
+
+        .order-content table {
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .order-content thead {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .order-content tbody tr:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .img-fluid {
+            border-radius: 5px;
+        }
+
+        .image-cell {
+            text-align: center;
+        }
+
+        .dropdown-toggle {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .dropdown-menu {
+            width: 100%;
+            text-align: center;
+            display: none;
+            position: absolute;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .navbar-nav {
+            justify-content: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<header th:replace="~{fragments :: header_manager}"></header>
+<div class="container">
+    <div class="row">
+        <!-- Left column -->
+        <div class="col-md-3">
+            <h2>Danh sách</h2>
+            <ul class="list-group" id="orderList">
+                <li class="list-group-item active" data-order="view">Xem và nhận đơn hàng</li>
+                <li class="list-group-item" data-order="delivery-request">Gửi yêu cầu giao hàng</li>
+                <li class="list-group-item" data-order="change-status">Thay đổi trạng thái đơn</li>
+            </ul>
+        </div>
+        <!-- Right column -->
+        <div class="col-md-9">
+            <!-- Content for managing orders -->
+            <div id="content-view" class="order-content">
+                <h2>Xem và nhận đơn hàng</h2>
+                <!-- Add content for viewing and accepting orders -->
+                <center>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                        <tr style="text-align: center;">
+                            <th>ID</th>
+                            <th>Người đặt</th>
+                            <th>Địa chỉ</th>
+                            <th>Ghi chú</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th colspan="2">Action</th>
+                        </tr>
+                        </thead>
+                        <tr style="text-align: center; vertical-align: middle;" th:each="order : ${ordersPending}">
+                            <form th:action="@{/manager/processingorder}" method="post">
+                                <td th:text="${order.orderId}"></td>
+                                <td th:text="${order.user.fullName}"></td>
+                                <td th:text="${order.address.fullAddress}"></td>
+                                <td th:text="${order.orderNote}"></td>
+                                <td th:text="${order.orderDate}"></td>
+                                <td th:text="${order.orderTotalPrice}"></td>
+                                <td th:text="${order.orderStatus}"></td>
+                                <td>
+                                    <input type="hidden" name="orderId" th:value="${order.orderId}">
+                                    <input type="hidden" name="status" value="processing">
+                                    <button type="submit" class="btn btn-info btn-sm me-1"
+                                            style="float:left; margin-left: 13px; color: #fff;">
+                                        Nhận đơn
+                                    </button>
+                                </td>
+                            </form>
+                            <form th:action="@{/manager/processingorder}" method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this todo?');">
+                                <input type="hidden" name="orderId" th:value="${order.orderId}">
+                                <input type="hidden" name="status" value="cancelled">
+                                <td>
+                                    <button type="submit" class="btn btn-danger btn-sm beo1"
+                                            style="background-color: #ff2033">
+                                        Xóa đơn
+                                    </button>
+                                </td>
+                            </form>
+                        </tr>
+                    </table>
+                </center>
+            </div>
+            <div id="content-delivery-request" class="order-content" style="display: none;">
+                <h2>Gửi yêu cầu giao hàng</h2>
+                <!-- Add content for sending delivery requests -->
+                <center>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                        <tr style="text-align: center;">
+                            <th>Label</th>
+                            <th>Input</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="recipientName"
+                                                                                          class="form-label">ID</label></td>
+                            <td style="text-align: center; vertical-align: middle">1</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="address"
+                                                                                          class="form-label">Người đặt</label></td>
+                            <td style="text-align: center; vertical-align: middle">kHÁNH CÁ</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="phone"
+                                                                                          class="form-label">Địa chỉ</label></td>
+                            <td style="text-align: center; vertical-align: middle">Hà nội</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="email"
+                                                                                          class="form-label">Email</label>
+                            </td>
+                            <td style="text-align: center; vertical-align: middle">KhanhCapro123@gmail.com</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="orderDetails"
+                                                                                          class="form-label">Ghi chú</label>
+                            </td>
+                            <td style="text-align: center; vertical-align: middle">ok ô ơi</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="notes"
+                                                                                          class="form-label">Shipper</label></td>
+                            <td>
+                                <nav class="navbar navbar-expand-lg">
+                                    <div class="container-fluid">
+                                        <div class="navbar-nav">
+                                            <div class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                   role="button" data-bs-toggle="dropdown"
+                                                   aria-expanded="false">
+                                                    Chọn
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                    <li><a class="dropdown-item" href="#"
+                                                           onclick="updateCell(this)">Khánh cá</a></li>
+                                                    <li><a class="dropdown-item" href="#"
+                                                           onclick="updateCell(this)">Tùng lọ</a></li>
+                                                    <li><a class="dropdown-item" href="#"
+                                                           onclick="updateCell(this)">Khánh cá 2</a></li>
+                                                    <li><a class="dropdown-item" href="#"
+                                                           onclick="updateCell(this)">Tùng ổi</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="deliveryDate"
+                                                                                          class="form-label">Ngày giao
+                                hàng</label></td>
+                            <td><input type="date" class="form-control" id="deliveryDate" required
+                                       style="text-align: center; vertical-align: middle"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle"><label for="orderDetails"
+                                                                                          class="form-label">Tổng tiền</label>
+                            </td>
+                            <td style="text-align: center; vertical-align: middle">2.000đ</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button type="submit" class="btn btn-primary">Gửi yêu cầu</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </center>
+            </div>
+            <div id="content-change-status" class="order-content" style="display: none;">
+                <h2>Thay đổi trạng thái đơn</h2>
+                <!-- Add content for changing order status -->
+                <center>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                        <tr style="text-align: center;">
+                            <th>ID</th>
+                            <th>Tên đơn hàng</th>
+                            <th>Trạng thái hiện tại</th>
+                            <th>Chọn trạng thái mới</th>
+                            <th>Ghi chú</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr style="text-align: center; vertical-align: middle">
+                            <td>1</td>
+                            <td>Đơn hàng A</td>
+                            <td>Đang xử lý</td>
+                            <td>
+                                <select class="form-select">
+                                    <option value="1">Chờ xác nhận</option>
+                                    <option value="2">Đang giao hàng</option>
+                                    <option value="3">Hoàn thành</option>
+                                    <option value="4">Đã hủy</option>
+                                </select>
+                            </td>
+                            <td><textarea class="form-control" rows="2"></textarea></td>
+                            <td>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </td>
+                        </tr>
+
+                        <!-- Add more rows as needed -->
+                        </tbody>
+                    </table>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const orderList = document.getElementById('orderList');
+        const orderContents = document.querySelectorAll('.order-content');
+
+        // Add click event listener to order list items
+        orderList.addEventListener('click', function (e) {
+            const order = e.target.dataset.order;
+
+            // Hide all order content divs
+            orderContents.forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Show the content of the selected order
+            document.getElementById(`content-${order}`).style.display = 'block';
+
+            // Set the active class to the clicked list item
+            const listItems = orderList.querySelectorAll('.list-group-item');
+            listItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            e.target.classList.add('active');
+        });
+    });
+</script>
+<script>
+    function updateCell(element) {
+        // Update the cell with the selected option's text
+        const selectedText = element.textContent;
+        const navLink = element.closest('.dropdown').querySelector('.nav-link');
+        navLink.textContent = selectedText;
+
+        // Reopen the dropdown
+        const dropdown = new bootstrap.Dropdown(navLink);
+        dropdown.show();
+    }
+</script>
+</body>
+</html>
