@@ -26,6 +26,11 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/menu")
+    public String menu(Model model) {
+        return "home/menu";
+    }
+
     @GetMapping("/faqs")
     public String faqs(Model model) {
         return "home/faqs";
