@@ -280,7 +280,7 @@
                         <tr>
                             <td style="text-align: center; vertical-align: middle"><label for="notes"
                                                                                           class="form-label">Shipper</label></td>
-                            <td style="text-align: center; vertical-align: middle;">
+                            <td>
                                 <nav class="navbar navbar-expand-lg">
                                     <div class="container-fluid">
                                         <div class="navbar-nav">
@@ -405,14 +405,14 @@
 </script>
 <script>
     function updateCell(element) {
-        // Get the text content of the clicked dropdown item
-        var selectedText = element.textContent;
+        // Update the cell with the selected option's text
+        const selectedText = element.textContent;
+        const navLink = element.closest('.dropdown').querySelector('.nav-link');
+        navLink.textContent = selectedText;
 
-        // Find the parent <td> element
-        var tdElement = element.closest('td');
-
-        // Update the <td> content with the selected text
-        tdElement.innerHTML = selectedText;
+        // Reopen the dropdown
+        const dropdown = new bootstrap.Dropdown(navLink);
+        dropdown.show();
     }
 </script>
 </body>
