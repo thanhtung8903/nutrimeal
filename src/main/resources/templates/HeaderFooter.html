@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NutriMeal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <style>
+        /* Custom CSS for NutriMeal */
+        .header_footer{
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-header {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header nav {
+            background-color: #f8f9fa;
+            padding: 22px 0;
+        }
+
+        .navbar-brand-header {
+            text-decoration: none;
+        }
+
+        .navbar-brand-header h1 {
+            margin: 0;
+            font-size: 40px;
+            color: #212428;
+            font-weight: 500;
+        }
+
+        .navbar-nav-header {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-item-header {
+            margin-right: 15px;
+        }
+
+        .nav-link-header {
+            text-decoration: none;
+            color: #000;
+            transition: color 0.3s ease;
+            font-size: 18px;
+        }
+
+        .nav-link-header:hover {
+            color: #000;
+            font-weight: bold;
+            border-bottom: 5px solid #ff2033;
+        }
+
+        footer {
+            background-color: #212428;
+            color: #fff;
+            padding: 40px 0;
+        }
+
+        footer h5 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        .btn-footer {
+            margin-right: 2px;
+        }
+
+        .row-footer{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .col-md-4-footer {
+            flex: 1;
+            max-width: 30%; /* Ensures the columns don't exceed 30% width */
+            min-width: 200px; /* Ensures a minimum width for smaller screens */
+        }
+
+        .btn-footer-primary {
+            color: #fff;
+            background-color: #007bff;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        .btn-footer-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-footer-info {
+            color: #000;
+            background-color: #36c4da;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        .btn-footer-info:hover {
+            background-color: #117a8b;
+        }
+
+        .btn-footer-danger {
+            color: #fff;
+            background-color: #dc3545;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        .btn-footer-danger:hover {
+            background-color: #bb2d3b;
+        }
+
+        .btn-footer-secondary {
+            color: #fff;
+            background-color: #6c757d;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        .btn-footer-secondary:hover {
+            background-color: #545b62;
+        }
+    </style>
+</head>
+<body class="header_footer">
+<header>
+    <nav>
+        <div class="container-header">
+            <div class="navbar-brand-container">
+                <a class="navbar-brand-header" href="/">
+                    <h1>NutriMeal</h1>
+                </a>
+            </div>
+            <div class="navbar-nav-container">
+                <ul class="navbar-nav-header" id="navbar-nav-header">
+                    <li class="nav-item-header">
+                        <a class="nav-link-header" href="#" onclick="setActiveTab(this, 'home')">Trang chủ</a>
+                    </li>
+                    <li class="nav-item-header">
+                        <a class="nav-link-header" href="#" onclick="setActiveTab(this, 'menu')">Thực đơn</a>
+                    </li>
+                    <li class="nav-item-header">
+                        <a class="nav-link-header" href="#" onclick="setActiveTab(this, 'consult')">Tư vấn</a>
+                    </li>
+                    <li class="nav-item-header">
+                        <a class="nav-link-header" href="#" onclick="setActiveTab(this, 'order')">Đặt hàng</a>
+                    </li>
+                    <li class="nav-item-header">
+                        <a class="nav-link-header" href="#" onclick="setActiveTab(this, 'news')">Tin tức</a>
+                    </li>
+                    <li class="nav-item-header">
+                        <a class="nav-link-header" href="#" onclick="setActiveTab(this, 'faq')">FAQ</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-auth-container">
+                <ul class="navbar-nav-header">
+                    <li class="nav-item-header">
+                        <a class="nav-link-header" href="#">Đăng ký</a>
+                    </li>
+                    <li class="nav-item-header">
+                        <a class="nav-link-header" href="#">Đăng nhập</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Your content here -->
+
+<footer>
+    <div class="container-header">
+        <div class="row-footer mt-5-footer">
+            <div class="col-md-4-footer">
+                <h5>About Us</h5>
+                <p class="text-justify">We are a team of NutriMeal enthusiasts who believe that a healthy lifestyle
+                    can
+                    be achieved through healthy meals. We are committed to providing the best quality meals to our
+                    customers.</p>
+            </div>
+            <div class="col-md-4-footer">
+                <h5>Contact Us</h5>
+                <p class="text-justify">Address: 1234 Main St, HCM City, Vietnam</p>
+                <p class="text-justify">Phone: 0123 456 789</p>
+                <p class="text-justify">Email: info@nutrimeal.com</p>
+            </div>
+            <div class="col-md-4-footer">
+                <h5>Follow Us</h5>
+                <a href="#" class="btn-footer btn-footer-primary"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="btn-footer btn-footer-info"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="btn-footer btn-footer-danger"><i class="fab fa-google-plus"></i></a>
+                <a href="#" class="btn-footer btn-footer-secondary"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function setActiveTab(element, tabName) {
+        // Loại bỏ border-bottom ở tất cả các liên kết
+        var allLinks = document.querySelectorAll(".nav-link-header");
+        allLinks.forEach(function (link) {
+            link.style.borderBottom = "none";
+        });
+
+        // Thêm border-bottom cho mục được click
+        element.style.borderBottom = "5px solid #ff2033";
+    }
+</script>
+</body>
+</html>
