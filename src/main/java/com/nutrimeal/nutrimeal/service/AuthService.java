@@ -35,7 +35,9 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public void signupUser(SignupRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (!request.getUsername().matches("^\\S{6,}$")) {
+            throw new RuntimeException("Username không hợp lệ");
+        } else if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username đã được sử dụng");
         } else if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email đã được sử dụng");
