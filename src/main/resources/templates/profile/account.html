@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments :: head('Thông tin tài khoản', 'none')}"></head>
 <style>
     body {
@@ -47,7 +47,9 @@
 </style>
 
 <body>
-<header th:replace="~{fragments :: header-fragment}"></header>
+<header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
+<header th:replace="~{fragments :: header_manager}" sec:authorize="hasAuthority('ROLE_MANAGER')"></header>
+<header th:replace="~{fragments :: header_admin}" sec:authorize="hasAuthority('ROLE_ADMIN')"></header>
 <div class="profile__account container mt-3 mb-3">
 
     <div class="container-fluid">
@@ -65,9 +67,9 @@
                 <p th:text="*{getFullName()}"></p>
                 <a href="#" th:href="@{/profile/account}" class="active">Thông tin tài khoản</a>
                 <a href="#" th:href="@{/profile/password}">Đổi mật khẩu</a>
-                <a href="#" th:href="@{/profile/point}">Point</a>
-                <a href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
-                <a href="#" th:href="@{/profile/order}">Đơn hàng hiện tại</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">Point</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">Đơn hàng hiện tại</a>
             </nav>
 
             <!-- Main content -->
@@ -164,8 +166,6 @@
     </div>
 </div>
 
-
-</div>
 
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>

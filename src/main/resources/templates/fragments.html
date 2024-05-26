@@ -131,9 +131,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/ordermanager" th:href="@{/manager/ordermanager}">Quản lý đơn hàng</a>
                     </li>
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" href="/faq" th:href="@{/faqs}">Quản lý chi tiêu</a>-->
-<!--                    </li>-->
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -149,13 +147,6 @@
                 </ul>
             </div>
 
-            <div sec:authorize="hasAuthority('ROLE_MANAGER')" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">Back to home page<span class="bold" ></span></a>
-                    </li>
-                </ul>
-            </div>
 
             <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">

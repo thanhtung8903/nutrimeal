@@ -2,6 +2,8 @@ package com.nutrimeal.nutrimeal.controller;
 
 import com.nutrimeal.nutrimeal.model.Address;
 import com.nutrimeal.nutrimeal.model.Combo;
+import com.nutrimeal.nutrimeal.model.User;
+import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.ComboService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +20,26 @@ import java.util.Map;
 public class HomeController {
 
     private final ComboService comboService;
+    private final UserRepository userRepository;
 
     @GetMapping(value = {"/", "/home"})
-    public String home(Model model) {
-        List<Combo> comboList = comboService.getAllCombos();
-        model.addAttribute("comboList", comboList);
-        return "home";
+    public String home(Model model, Principal principal) {
+        boolean isManager = false;
+        boolean isAdmin = false;
+        if (principal != null) {
+            User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+            isManager = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_MANAGER"));
+            isAdmin = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_ADMIN"));
+        }
+        if (isManager) {
+            return "manager/managerpage";
+        } else if (isAdmin) {
+            return "admin/adminpage";
+        } else {
+            List<Combo> comboList = comboService.getAllCombos();
+            model.addAttribute("comboList", comboList);
+            return "home";
+        }
     }
 
     @GetMapping("/menu")
