@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sửa đơn giao</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .order-content {
+            border-radius: 5px;
+        }
+
+        .order-content table {
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .order-content thead {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .order-content tbody tr:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .btn-primary {
+            background-color: #343a40 !important;
+            border-color: #343a40 !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .dropdown-toggle {
+            display: block;
+            width: 100%;
+            /* text-align: center; */
+        }
+
+        .dropdown-menu {
+            width: 100%;
+            text-align: center;
+            display: none;
+            position: absolute;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .navbar-nav {
+            justify-content: center;
+            width: 100%;
+        }
+
+        select:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        .form-select option {
+            text-align: center;
+        }
+
+        .form-control:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div id="content-delivery-request" class="order-content">
+            <h2 style="text-align: center;">Sửa đơn giao</h2>
+            <!-- Add content for sending delivery requests -->
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                <tr style="text-align: center;">
+                    <th>Label</th>
+                    <th>Input</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="text-align: center; vertical-align: middle"><label for="recipientName"
+                                                                                  class="form-label">Trạng thái vận chuyển</label></td>
+                    <td>
+                        <select class="form-select">
+                            <option value="1">Chờ xác nhận</option>
+                            <option value="2">Đang giao hàng</option>
+                            <option value="3">Hoàn thành</option>
+                            <option value="4">Đã hủy</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; vertical-align: middle"><label for="address"
+                                                                                  class="form-label">Ngày vận chuyển</label></td>
+                    <td><input type="date" class="form-control" id="deliveryDate" required
+                               style="text-align: center; vertical-align: middle">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; vertical-align: middle"><label for="phone"
+                                                                                  class="form-label">Mô tả</label></td>
+                    <td><textarea type="text" class="form-control"
+                                  style="text-align: center; vertical-align: middle"></textarea></td>
+
+                </tr>
+                <tr>
+                    <td style="text-align: center; vertical-align: middle"><label for="email"
+                                                                                  class="form-label">Ngày đặt</label>
+                    </td>
+                    <td><input type="date" class="form-control" id="deliveryDate" required
+                               style="text-align: center; vertical-align: middle">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; vertical-align: middle"><label for="notes"
+                                                                                  class="form-label">Shipper</label></td>
+                    <td>
+                        <nav class="navbar navbar-expand-lg">
+                            <div class="container-fluid">
+                                <div class="navbar-nav">
+                                    <div class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Chọn
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <li><a class="dropdown-item" href="#"
+                                                   onclick="updateCell(this)">Khánh
+                                                cá</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                   onclick="updateCell(this)">Tùng
+                                                lọ</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                   onclick="updateCell(this)">Khánh
+                                                cá 2</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                   onclick="updateCell(this)">Tùng
+                                                ổi</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; vertical-align: middle"><label for="orderDetails"
+                                                                                  class="form-label">Thời gian cập nhật</label>
+                    </td>
+                    <td><input type="date" class="form-control" id="deliveryDate" required
+                               style="text-align: center; vertical-align: middle">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; vertical-align: middle"><label for="orderDetails"
+                                                                                  class="form-label">Tổng tiền</label>
+                    </td>
+                    <td><input type="number" class="form-control"
+                               style="text-align: center; vertical-align: middle" min=0></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit" class="btn btn-primary">Sửa đơn</button>
+                        <a href="delivery_manager.html" class="btn btn-primary">Trở về trang Quản lý</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script>
+    function updateCell(element) {
+        // Update the cell with the selected option's text
+        const selectedText = element.textContent;
+        const navLink = element.closest('.dropdown').querySelector('.nav-link');
+        navLink.textContent = selectedText;
+
+        // Reopen the dropdown
+        const dropdown = new bootstrap.Dropdown(navLink);
+        dropdown.show();
+    }
+</script>
+</body>
+</html>
