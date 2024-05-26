@@ -1,7 +1,6 @@
-package com.nutrimeal.nutrimeal.controller;
+package com.nutrimeal.nutrimeal.controller.manager;
 
 import com.nutrimeal.nutrimeal.model.Order;
-import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.service.OrderService;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
