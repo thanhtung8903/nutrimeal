@@ -1,180 +1,176 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Quản lý đơn hàng', 'none')}">
-    <meta charset="UTF-8">
-    <title>Quản lý đơn hàng - NutriMeal</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Your custom styles -->
-    <style>
-        body {
-            background-color: #e5e5e5;
+<head th:replace="~{fragments :: head('Quản lý đơn hàng', 'none')}"></head>
+
+
+<style>
+    body {
+        background-color: #e5e5e5;
+    }
+
+    .list-group-item {
+        background-color: #fff !important;
+        color: #343a40 !important;
+        cursor: pointer;
+    }
+
+    .list-group-item.active {
+        background-color: #fff !important;
+        /*border-color: none;*/
+        border: 1px solid #343a40;
+        font-weight: bold;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    input[type="tel"]:focus,
+    input[type="number"]:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    input[type="email"]:focus,
+    input[type="number"]:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    input[type="date"]:focus,
+    input[type="number"]:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    textarea:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    select:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .btn-primary {
+        background-color: #343a40 !important;
+        border-color: #343a40 !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #000000 !important;
+        font-weight: 600;
+    }
+
+    .btn-danger:hover {
+        background-color: red !important;
+        font-weight: 600;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .beo1 {
+        border: 1px solid rgb(255, 2, 2);
+    }
+
+    .beo1:hover {
+        background-color: rgb(255, 2, 2);
+        border: 1px solid rgb(255, 2, 2);
+    }
+
+    .beo1 a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .me-1 {
+        background-color: #343a40;
+        border: 1px solid #343a40;
+    }
+
+    .me-1:hover {
+        background-color: #000000;
+        font-weight: 600;
+        border: 1px solid #343a40;
+    }
+
+    .me-1 a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .order-content {
+        border-radius: 5px;
+    }
+
+    .order-content table {
+        border-radius: 7px;
+        overflow: hidden;
+    }
+
+    .order-content thead {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .order-content tbody tr:last-child {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .img-fluid {
+        border-radius: 5px;
+    }
+
+    .image-cell {
+        text-align: center;
+    }
+
+    .dropdown-toggle {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+        text-align: center;
+        display: none;
+        position: absolute;
+        z-index: 1000;
+    }
+
+    .dropdown-menu.show {
+        display: block;
+        animation: slideDown 0.5s ease;
+    }
+
+    @keyframes slideDown {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px);
         }
 
-        .list-group-item {
-            background-color: #fff !important;
-            color: #343a40 !important;
-            cursor: pointer;
+        100% {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-        .list-group-item.active {
-            background-color: #fff !important;
-            border-color: none;
-            border: 1px solid #343a40;
-            font-weight: bold;
-        }
+    .navbar-nav {
+        justify-content: center;
+        width: 100%;
+    }
+</style>
 
-        input[type="text"]:focus,
-        input[type="number"]:focus {
-            border-color: #343a40 !important;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
-        }
 
-        input[type="tel"]:focus,
-        input[type="number"]:focus {
-            border-color: #343a40 !important;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
-        }
-
-        input[type="email"]:focus,
-        input[type="number"]:focus {
-            border-color: #343a40 !important;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
-        }
-
-        input[type="date"]:focus,
-        input[type="number"]:focus {
-            border-color: #343a40 !important;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
-        }
-
-        textarea:focus {
-            border-color: #343a40 !important;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
-        }
-
-        select:focus {
-            border-color: #343a40 !important;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
-        }
-
-        .btn-primary {
-            background-color: #343a40 !important;
-            border-color: #343a40 !important;
-        }
-
-        .btn-primary:hover {
-            background-color: #000000 !important;
-            font-weight: 600;
-        }
-
-        .btn-danger:hover {
-            background-color: red !important;
-            font-weight: 600;
-        }
-
-        h2 {
-            text-align: center;
-        }
-
-        .beo1 {
-            border: 1px solid rgb(255, 2, 2);
-        }
-
-        .beo1:hover {
-            background-color: rgb(255, 2, 2);
-            border: 1px solid rgb(255, 2, 2);
-        }
-
-        .beo1 a {
-            text-decoration: none;
-            color: #fff;
-        }
-
-        .me-1 {
-            background-color: #343a40;
-            border: 1px solid #343a40;
-        }
-
-        .me-1:hover {
-            background-color: #000000;
-            font-weight: 600;
-            border: 1px solid #343a40;
-        }
-
-        .me-1 a {
-            text-decoration: none;
-            color: #fff;
-        }
-
-        .order-content {
-            border-radius: 5px;
-        }
-
-        .order-content table {
-            border-radius: 7px;
-            overflow: hidden;
-        }
-
-        .order-content thead {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-        .order-content tbody tr:last-child {
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
-
-        .img-fluid {
-            border-radius: 5px;
-        }
-
-        .image-cell {
-            text-align: center;
-        }
-
-        .dropdown-toggle {
-            display: block;
-            width: 100%;
-            text-align: center;
-        }
-
-        .dropdown-menu {
-            width: 100%;
-            text-align: center;
-            display: none;
-            position: absolute;
-            z-index: 1000;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-            animation: slideDown 0.5s ease;
-        }
-
-        @keyframes slideDown {
-            0% {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .navbar-nav {
-            justify-content: center;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
 <header th:replace="~{fragments :: header_manager}"></header>
+<body>
 <div class="container">
     <div class="row">
         <!-- Left column -->
@@ -253,17 +249,20 @@
                         <tbody>
                         <tr>
                             <td style="text-align: center; vertical-align: middle"><label for="recipientName"
-                                                                                          class="form-label">ID</label></td>
+                                                                                          class="form-label">ID</label>
+                            </td>
                             <td style="text-align: center; vertical-align: middle">1</td>
                         </tr>
                         <tr>
                             <td style="text-align: center; vertical-align: middle"><label for="address"
-                                                                                          class="form-label">Người đặt</label></td>
+                                                                                          class="form-label">Người
+                                đặt</label></td>
                             <td style="text-align: center; vertical-align: middle">kHÁNH CÁ</td>
                         </tr>
                         <tr>
                             <td style="text-align: center; vertical-align: middle"><label for="phone"
-                                                                                          class="form-label">Địa chỉ</label></td>
+                                                                                          class="form-label">Địa
+                                chỉ</label></td>
                             <td style="text-align: center; vertical-align: middle">Hà nội</td>
                         </tr>
                         <tr>
@@ -274,13 +273,15 @@
                         </tr>
                         <tr>
                             <td style="text-align: center; vertical-align: middle"><label for="orderDetails"
-                                                                                          class="form-label">Ghi chú</label>
+                                                                                          class="form-label">Ghi
+                                chú</label>
                             </td>
                             <td style="text-align: center; vertical-align: middle">ok ô ơi</td>
                         </tr>
                         <tr>
                             <td style="text-align: center; vertical-align: middle"><label for="notes"
-                                                                                          class="form-label">Shipper</label></td>
+                                                                                          class="form-label">Shipper</label>
+                            </td>
                             <td>
                                 <nav class="navbar navbar-expand-lg">
                                     <div class="container-fluid">
@@ -316,7 +317,8 @@
                         </tr>
                         <tr>
                             <td style="text-align: center; vertical-align: middle"><label for="orderDetails"
-                                                                                          class="form-label">Tổng tiền</label>
+                                                                                          class="form-label">Tổng
+                                tiền</label>
                             </td>
                             <td style="text-align: center; vertical-align: middle">2.000đ</td>
                         </tr>

@@ -34,4 +34,7 @@ public class Combo {
     @ManyToOne
     @JoinColumn(name = "combo_type_id")
     private ComboType comboType;
+
+    @Column(name = "combo_time")
+    private String comboTime;
 }

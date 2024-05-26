@@ -17,4 +17,7 @@ public class DailyMenuDish {
     @ManyToOne
     @JoinColumn(name = "dish_id")
     private Dish dish;
+
+    @Column(name = "menu_type")
+    private String menuType;
 }
