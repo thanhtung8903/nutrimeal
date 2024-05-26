@@ -28,14 +28,17 @@ public class Dish {
     private String dishImage;
 
     @Column(name = "dish_proteins")
-    private float dishProteins;
+    private int dishProteins;
 
     @Column(name = "dish_fats")
-    private float dishFats;
+    private int dishFats;
 
     @Column(name = "dish_carb")
-    private float dishCarb;
+    private int dishCarbs;
 
     @Column(name = "dish_calories")
-    private float dishCalories;
+    private int dishCalories;
+
+    @Column(name = "dish_type")
+    private String dishType;
 }
