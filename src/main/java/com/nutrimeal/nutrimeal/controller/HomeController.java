@@ -20,7 +20,8 @@ public class HomeController {
     private final ComboService comboService;
 
     @GetMapping(value = {"/", "/home"})
-    public String home(Model model) {
+    public String home(Model model, Principal principal) {
+
         List<Combo> comboList = comboService.getAllCombos();
         model.addAttribute("comboList", comboList);
         return "home";
