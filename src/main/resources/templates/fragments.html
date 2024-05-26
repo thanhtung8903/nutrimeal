@@ -58,13 +58,13 @@
                 </ul>
             </div>
 
-<!--            <div sec:authorize="hasAuthority('ROLE_MANAGER')" class="collapse navbar-collapse">-->
-<!--                <ul class="navbar-nav ms-auto">-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" th:href="@{/manager/}">Manager management<span class="bold" ></span></a>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </div>-->
+            <div sec:authorize="hasAuthority('ROLE_MANAGER')" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/manager/}">Manager management<span class="bold" ></span></a>
+                    </li>
+                </ul>
+            </div>
 
             <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
@@ -107,7 +107,7 @@
     </div>
 </footer>
 
-<header th:fragment="manager-header">
+<header th:fragment="header_manager">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
 
