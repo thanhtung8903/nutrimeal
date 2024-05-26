@@ -16,7 +16,7 @@
 
 </head>
 
-<header th:fragment="header-fragment">
+<div th:fragment="header-fragment">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
 
@@ -58,13 +58,13 @@
                 </ul>
             </div>
 
-            <div sec:authorize="hasAuthority('ROLE_MANAGER')" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/manager/}">Manager management<span class="bold" ></span></a>
-                    </li>
-                </ul>
-            </div>
+<!--            <div sec:authorize="hasAuthority('ROLE_MANAGER')" class="collapse navbar-collapse">-->
+<!--                <ul class="navbar-nav ms-auto">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" th:href="@{/manager/}">Manager management<span class="bold" ></span></a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
 
             <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
@@ -79,7 +79,7 @@
 
         </div>
     </nav>
-</header>
+</div>
 
 <footer th:fragment="footer" class="bg-dark text-white p-4">
     <div class="container">
@@ -111,13 +111,13 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
 
-            <a class="navbar-brand" href="/manager/"><h1>Manager</h1></a>
+            <a class="navbar-brand" href="/manager/"><h1>NutriMeal</h1></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="">
+            <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/manager/">Trang chủ</a>
@@ -138,10 +138,8 @@
                             Khác
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="expenses.html">Quản lý chi tiêu</a>
-                            <a class="dropdown-item" href="statistic.html">Thống kê</a>
-                            <a class="dropdown-item" href="/discount">Khuyến mãi</a>
-                            <!-- You can add more dropdown items here -->
+                            <a class="dropdown-item" th:href="@{/manager/expenses}">Quản lý chi tiêu</a>
+                            <a class="dropdown-item" th:href="@{/manager/discount}">Khuyến mãi</a>
                         </div>
                     </li>
                 </ul>
