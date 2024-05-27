@@ -32,6 +32,21 @@ public class ComboService {
         return comboRepository.save(combo);
     }
 
+    public void updateCombo(int id, Combo combo) {
+        Combo oldCombo = comboRepository.findById(id).orElse(null);
+        if (oldCombo != null) {
+            oldCombo.setComboName(combo.getComboName());
+            oldCombo.setComboDescription(combo.getComboDescription());
+            oldCombo.setComboImage(combo.getComboImage());
+            oldCombo.setComboCalories(combo.getComboCalories());
+            oldCombo.setComboType(combo.getComboType());
+            oldCombo.setComboPrice7Days(combo.getComboPrice7Days());
+            oldCombo.setComboPrice30Days(combo.getComboPrice30Days());
+            oldCombo.setComboTime(combo.getComboTime());
+            comboRepository.save(oldCombo);
+        }
+    }
+
     public ComboType addComboType(ComboType comboType) {
         return comboTypeRepository.save(comboType);
     }
