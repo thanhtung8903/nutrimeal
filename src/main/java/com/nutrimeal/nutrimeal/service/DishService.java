@@ -3,6 +3,8 @@ package com.nutrimeal.nutrimeal.service;
 import com.nutrimeal.nutrimeal.model.Dish;
 import com.nutrimeal.nutrimeal.repository.DishRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,10 @@ public class DishService {
 
     public List<Dish> findAllDish() {
         return dishRepository.findAll();
+    }
+
+    public Page<Dish> findAllDish(Pageable pageable) {
+        return dishRepository.findAll(pageable);
     }
 
     public void save(Dish dish) {

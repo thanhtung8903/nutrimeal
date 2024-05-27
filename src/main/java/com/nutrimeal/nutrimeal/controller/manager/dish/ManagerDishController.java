@@ -4,6 +4,9 @@ import com.nutrimeal.nutrimeal.model.Dish;
 import com.nutrimeal.nutrimeal.service.DishService;
 import com.nutrimeal.nutrimeal.service.ImageUploadService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +20,16 @@ public class ManagerDishController {
     private final DishService dishService;
     private final ImageUploadService imageUploadService;
 
+//    @GetMapping("/dish")
+//    public String dish(Model model) {
+//        model.addAttribute("listDish", dishService.findAllDish());
+//        return "manager/dish/dish";
+//    }
+
     @GetMapping("/dish")
-    public String dish(Model model) {
-        model.addAttribute("listDish", dishService.findAllDish());
+    public String dish(Model model, @RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 6);
+        model.addAttribute("listDish", dishService.findAllDish(pageable));
         return "manager/dish/dish";
     }
 
