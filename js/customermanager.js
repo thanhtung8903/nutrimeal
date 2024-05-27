@@ -9,10 +9,10 @@ function searchtable() {
     row.classList.toggle("hide", table_data.indexOf(search_data) < 0);
     row.style.setProperty("--delay", i / 25 + "s");
   });
-  document.querySelectorAll("tbody tr:not(.hide)").forEach((visible_row, i) => {
-    visible_row.style.backgroundColor =
-      i % 2 == 0 ? "transparent" : "#0000000b";
-  });
+  // document.querySelectorAll("tbody tr:not(.hide)").forEach((visible_row, i) => {
+  //   visible_row.style.backgroundColor =
+  //     i % 2 == 0 ? "transparent" : "#0000000b";
+  // });
 }
 
 table_headings.forEach((head, i) => {
