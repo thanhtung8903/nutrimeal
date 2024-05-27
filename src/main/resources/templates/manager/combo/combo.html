@@ -136,8 +136,19 @@
                     <td><img th:src="${combo.getComboImage()}" alt="" class="img-thumbnail" style="max-width: 100px;"></td>
                     <td th:text="${combo.getComboDescription()}"></td>
                     <td th:text="${combo.getComboCalories()}"></td>
-                    <td th:text="${combo.getComboType().getComboTypeName()}"></td>
-                    <td th:text="${combo.getComboTime()}"></td>
+                    <td>
+                        <span th:if="${combo.getComboType().getComboTypeName() == 'V'}">Combo chay</span>
+                        <span th:if="${combo.getComboType().getComboTypeName() == 'N'}">Combo mặn</span>
+                    </td>
+<!--                    <td th:text="${combo.getComboTime()}"></td>-->
+
+                    <td>
+                        <span th:if="${combo.getComboTime() == 'L'}">Ăn trưa</span>
+                        <span th:if="${combo.getComboTime() == 'BLD'}">Ăn cả ngày</span>
+                        <span th:if="${combo.getComboTime() == 'D'}">Ăn tối</span>
+
+                    </td>
+
                     <td th:text="${combo.getComboPrice7Days()}"></td>
                     <td th:text="${combo.getComboPrice30Days()}"></td>
 

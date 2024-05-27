@@ -48,10 +48,12 @@
 <div class="container mb-5">
     <div class="form-container">
         <h2 style="margin-bottom: 40px; text-align: center;">Cập nhật Món Ăn</h2>
-        <form id="updateDishForm" th:object="${dish}" method="post" th:action="@{/manager/dish/update/{dishId}(dishId=${dish.dishId})}" enctype="multipart/form-data">
+        <form id="updateDishForm" th:object="${dish}" method="post"
+              th:action="@{/manager/dish/update/{dishId}(dishId=${dish.dishId})}" enctype="multipart/form-data">
             <div class="mb-3">
                 <label hidden="hidden" for="dishId" class="form-label">ID</label>
-                <input hidden="hidden" type="text" class="form-control" id="dishId" name="dishId" readonly th:value="${dish.dishId}">
+                <input hidden="hidden" type="text" class="form-control" id="dishId" name="dishId" readonly
+                       th:value="${dish.dishId}">
             </div>
             <div class="mb-3">
                 <label for="dishName" class="form-label">Tên Món Ăn</label>
@@ -59,7 +61,8 @@
             </div>
             <div class="mb-3">
                 <label for="dishDescription" class="form-label">Mô tả Món Ăn</label>
-                <textarea class="form-control" id="dishDescription" name="dishDescription" rows="3" th:text="${dish.dishDescription}" required></textarea>
+                <textarea class="form-control" id="dishDescription" name="dishDescription" rows="3"
+                          th:text="${dish.dishDescription}" required></textarea>
             </div>
             <div class="mb-3">
                 <label for="dishType" class="form-label">Phân loại</label>
@@ -76,28 +79,32 @@
             <div class="row mb-3">
                 <div class="col">
                     <label for="dishCalories" class="form-label">Lượng Calo</label>
-                    <input type="number" class="form-control" id="dishCalories" name="dishCalories" min="0" th:value="${dish.dishCalories}" required>
+                    <input type="number" class="form-control" id="dishCalories" name="dishCalories" min="0"
+                           th:value="${dish.dishCalories}" required>
                 </div>
                 <div class="col">
                     <label for="dishProtein" class="form-label">Lượng Protein</label>
-                    <input type="number" class="form-control" id="dishProtein" name="dishProteins" min="0" th:value="${dish.dishProteins}" required>
+                    <input type="number" class="form-control" id="dishProtein" name="dishProteins" min="0"
+                           th:value="${dish.dishProteins}" required>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label for="dishFat" class="form-label">Lượng Chất Béo</label>
-                    <input type="number" class="form-control" id="dishFat" name="dishFats" min="0" th:value="${dish.dishFats}" required>
+                    <input type="number" class="form-control" id="dishFat" name="dishFats" min="0"
+                           th:value="${dish.dishFats}" required>
                 </div>
                 <div class="col">
                     <label for="dishCarb" class="form-label">Lượng Carbohydrate</label>
-                    <input type="number" class="form-control" id="dishCarb" name="dishCarbs" min="0" th:value="${dish.dishCarbs}" required>
+                    <input type="number" class="form-control" id="dishCarb" name="dishCarbs" min="0"
+                           th:value="${dish.dishCarbs}" required>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Cập nhật Món Ăn</button>
-            <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/dish\''">Quay lại</button>        </form>
-
-
-        <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
+            <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/dish\''">Quay
+                lại
+            </button>
+            <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
                 <strong>Đã có lỗi xảy ra!</strong> Vui lòng kiểm tra lại thông tin.
             </div>
             <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
@@ -113,12 +120,12 @@
         crossorigin="anonymous"></script>
 
 <script>
-    document.getElementById('dishImage').addEventListener('change', function(event) {
+    document.getElementById('dishImage').addEventListener('change', function (event) {
         const preview = document.getElementById('preview');
         const file = event.target.files[0];
         const reader = new FileReader();
 
-        reader.onloadend = function() {
+        reader.onloadend = function () {
             preview.src = reader.result;
             preview.style.display = 'block';
         }
