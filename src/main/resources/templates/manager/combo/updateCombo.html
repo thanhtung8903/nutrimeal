@@ -93,9 +93,12 @@
             <div class="mb-3">
                 <label for="comboTime" class="form-label">Thời gian</label>
                 <select name="comboTime" id="comboTime" class="form-select">
-                    <option value="L" th:selected="${combo.getComboTime().equals('L')}">Full trưa</option>
-                    <option value="BLD" th:selected="${combo.getComboTime().equals('BLD')}">Full ngày</option>
-                    <option value="D" th:selected="${combo.getComboTime().equals('D')}">Full Tối</option>
+                    <option value="B" th:selected="${combo.getComboTime().equals('B')}">Ăn sáng</option>
+                    <option value="L" th:selected="${combo.getComboTime().equals('L')}">Ăn trưa</option>
+                    <option value="D" th:selected="${combo.getComboTime().equals('D')}">Ăn tối</option>
+                    <option value="BL" th:selected="${combo.getComboTime().equals('BL')}">Ăn sáng, trưa</option>
+                    <option value="LD" th:selected="${combo.getComboTime().equals('LD')}">Ăn trưa, tối</option>
+                    <option value="BLD" th:selected="${combo.getComboTime().equals('BLD')}">Cả ngày</option>
                 </select>
             </div>
 

@@ -103,20 +103,6 @@
 
         <div class="col-md-10">
             <h2 style="margin-bottom: 40px; text-align: center;">QUẢN LÍ MÓN ĂN</h2>
-<!--            <div class="radio-group">-->
-<!--                <div class="form-check">-->
-<!--                    <input class="form-check-input" type="radio" name="foodType" id="foodTypeVegetarian" value="vegetarian" checked>-->
-<!--                    <label class="form-check-label" for="foodTypeVegetarian">-->
-<!--                        Món chay-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div class="form-check">-->
-<!--                    <input class="form-check-input" type="radio" name="foodType" id="foodTypeNonVegetarian" value="non-vegetarian">-->
-<!--                    <label class="form-check-label" for="foodTypeNonVegetarian">-->
-<!--                        Món mặn-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--            </div>-->
             <form th:action="@{/manager/dish/search}" method="get" class="mb-3">
                 <div class="row g-2">
                     <div class="col-auto">
@@ -138,10 +124,8 @@
             <table class="table food-table" id="foodTable">
                 <thead>
                 <tr>
-<!--                    <th>ID</th>-->
                     <th>Tên món ăn</th>
                     <th>Hình ảnh</th>
-<!--                    <th>Mô tả món ăn</th>-->
                     <th>KCal</th>
                     <th>Proteins</th>
                     <th>Fats</th>
@@ -152,7 +136,6 @@
                 </thead>
                 <tbody id="foodTableBody">
                 <tr th:each="dish : ${listDish}">
-<!--                    <td th:text="${dish.dishId}"></td>-->
                     <td th:text="${dish.dishName}"></td>
                     <td><img th:src="${dish.dishImage}" alt="" class="img-thumbnail" style="max-width: 100px;"></td>
                     <td th:text="${dish.dishCalories}"></td>
