@@ -86,18 +86,21 @@
         <div class="col-md-2">
             <h6 style="margin-bottom: 20px;">DANH MỤC</h6>
             <ul class="list-group" id="categoryList">
-                <li class="list-group-item active" data-category="food">
+                <li id="view-food" class="list-group-item active" data-category="food">
                     <a th:href="@{dish}" style="text-decoration: none; color: inherit;">Món ăn</a>
                 </li>
-                <li class="list-group-item " data-category="combo">
+                <li id="view-combo" class="list-group-item " data-category="combo">
                     <a th:href="@{combo}" style="text-decoration: none; color: inherit;">Combo</a>
                 </li>
-                <li class="list-group-item" data-category="daily-menu">
+                <li id="view-daily" class="list-group-item" data-category="daily-menu">
                     <a href="../dailymenu/dailyMan.html" style="text-decoration: none; color: inherit;">Daily Menu</a>
                 </li>
             </ul>
 
         </div>
+
+
+
         <div class="col-md-10">
             <h2 style="margin-bottom: 40px; text-align: center;">QUẢN LÍ MÓN ĂN</h2>
 <!--            <div class="radio-group">-->
@@ -114,10 +117,28 @@
 <!--                    </label>-->
 <!--                </div>-->
 <!--            </div>-->
+            <form th:action="@{/manager/dish/search}" method="get" class="mb-3">
+                <div class="row g-2">
+                    <div class="col-auto">
+                        <input type="text" class="form-control" name="name" placeholder="Tên món ăn" th:value="${name}">
+                    </div>
+                    <div class="col-auto">
+                        <select class="form-control" name="type">
+                            <option value="">Loại món ăn</option>
+                            <option value="V" th:selected="${type == 'V'}">Món chay</option>
+                            <option value="N" th:selected="${type == 'N'}">Món mặn</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                    </div>
+                </div>
+            </form>
+
             <table class="table food-table" id="foodTable">
                 <thead>
                 <tr>
-                    <th>ID</th>
+<!--                    <th>ID</th>-->
                     <th>Tên món ăn</th>
                     <th>Hình ảnh</th>
 <!--                    <th>Mô tả món ăn</th>-->
@@ -131,7 +152,7 @@
                 </thead>
                 <tbody id="foodTableBody">
                 <tr th:each="dish : ${listDish}">
-                    <td th:text="${dish.dishId}"></td>
+<!--                    <td th:text="${dish.dishId}"></td>-->
                     <td th:text="${dish.dishName}"></td>
                     <td><img th:src="${dish.dishImage}" alt="" class="img-thumbnail" style="max-width: 100px;"></td>
                     <td th:text="${dish.dishCalories}"></td>
@@ -151,7 +172,8 @@
             </table>
             <button class="add-menu mb-2"><a href="addDish.html"  th:href="@{/manager/dish/add}">ADD MÓN ĂN</a></button>
 
-            <nav aria-label="Page navigation">
+            <!-- Pagination for normal list -->
+            <nav aria-label="Page navigation" th:if="${param.name == null && param.type == null}">
                 <ul class="pagination">
                     <li class="page-item" th:if="${listDish.number > 0}">
                         <a class="page-link" th:href="@{/manager/dish(page=${listDish.number - 1})}" aria-label="Previous">
@@ -168,6 +190,25 @@
                     </li>
                 </ul>
             </nav>
+
+            <!-- Pagination for search list -->
+            <nav aria-label="Page navigation" th:if="${param.name != null || param.type != null}">
+                <ul class="pagination">
+                    <li class="page-item" th:if="${listDish.number > 0}">
+                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.number - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, listDish.totalPages - 1)}" th:class="${i == listDish.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
+                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.number + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -178,6 +219,21 @@
         crossorigin="anonymous"></script>
 
 </body>
+
+<script>
+
+    document.getElementById('view-food').addEventListener('click', function () {
+        window.location.href = this.querySelector('a').href;
+    });
+
+    document.getElementById('view-combo').addEventListener('click', function () {
+        window.location.href = this.querySelector('a').href;
+    });
+
+    document.getElementById('view-daily').addEventListener('click', function () {
+        window.location.href = this.querySelector('a').href;
+    });
+</script>
 
 <footer th:replace="~{fragments :: footer}"></footer>
 </html>

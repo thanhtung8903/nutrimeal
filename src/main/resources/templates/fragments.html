@@ -50,6 +50,9 @@
             <div sec:authorize="isAnonymous()" class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/signup">Đăng ký</a>
                     </li>
                     <li class="nav-item">
@@ -58,16 +61,11 @@
                 </ul>
             </div>
 
-<!--            <div sec:authorize="hasAuthority('ROLE_MANAGER')" class="collapse navbar-collapse">-->
-<!--                <ul class="navbar-nav ms-auto">-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" th:href="@{/manager/}">Manager management<span class="bold" ></span></a>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </div>-->
-
             <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/profile/account}">Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span></a>
                     </li>

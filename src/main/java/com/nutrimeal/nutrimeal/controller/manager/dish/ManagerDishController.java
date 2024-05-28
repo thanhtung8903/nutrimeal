@@ -38,6 +38,20 @@ public class ManagerDishController {
         return "manager/dish/addDish";
     }
 
+    @GetMapping("/dish/search")
+    public String searchDish(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(defaultValue = "0") int page,
+            Model model
+    ) {
+        Pageable pageable = PageRequest.of(page, 6);
+        model.addAttribute("name", name.trim());
+        model.addAttribute("type", type);
+        model.addAttribute("listDish", dishService.searchDish(name.trim(), type, pageable));
+        return "manager/dish/dish";
+    }
+
     @PostMapping("/dish/add")
     public String addDish(@ModelAttribute Dish dish, @RequestParam(value = "image", required = false) MultipartFile image) {
         try {

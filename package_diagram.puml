@@ -1,0 +1,18 @@
+@startuml
+package "com.nutrimeal.nutrimeal" {
+    package "controller" {
+        package "manager"
+    }
+    package "service" {
+    }
+    package "model" {
+    }
+    package "config" {
+        package "security" {
+        }
+    }
+
+    package "repository" {
+    }
+}
+@enduml

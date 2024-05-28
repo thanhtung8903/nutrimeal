@@ -47,4 +47,8 @@ public class DishService {
     public void deleteDish(Integer id) {
         dishRepository.deleteById(id);
     }
+
+    public Page<Dish> searchDish(String name, String type, Pageable pageable) {
+        return dishRepository.findByDishNameContainingAndDishType_TypeNameContaining(name, type, pageable);
+    }
 }
