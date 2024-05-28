@@ -6,15 +6,6 @@
   xmlns:sec="http://www.w3.org/1999/xhtml"
 >
   <head th:replace="~{fragments :: head('NutriMeal', 'none')}"></head>
-<<<<<<< Updated upstream
-  <body>
-    <div style="text-align: center">
-      <header th:replace="~{fragments :: header}"></header>
-
-      <footer th:replace="~{fragments :: footer}"></footer>
-    </div>
-  </body>
-=======
 
   <link
     rel="stylesheet"
@@ -57,11 +48,13 @@
       justify-content: center;
       align-items: center;
     }
-
     .text-overlay {
       color: white;
-      font-size: 24px;
-      background: rgba(0, 0, 0, 0.5);
+      font-size: 60px;
+      /* background: rgba(0, 0, 0, 0.5); */
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 4px;
       padding: 10px;
     }
     .btn:hover {
@@ -200,7 +193,7 @@
     }
   </style>
 
-  <header th:replace="~{fragments :: header}"></header>
+  <header th:replace="~{fragments :: header-fragment}"></header>
 
   <body>
     <!-- banner -->
@@ -210,34 +203,34 @@
           <div
             class="image-with-text"
             style="
-              background-image: url('https://www.pos365.vn/storage/app/media/uploaded-files/1652070833659.jpeg');
+              background-image: url('https://fitfood.vn/img/1920x800/images/nen-final-2-16947528537416.webp?f=jpg');
             "
           >
-            <div class="text-overlay">Text for Image 1</div>
+            <div class="text-overlay">Một lối sống lành mạnh</div>
           </div>
           <div
             class="image-with-text"
             style="
-              background-image: url('https://cdn.tgdd.vn/Files/2021/10/19/1391669/che-do-an-healthy-la-gi-co-cong-dung-gi-cho-suc-khoe-202110191938125150.jpg');
+              background-image: url('https://fitfood.vn/img/1920x800/images/nen-web-16950958311174.webp?f=jpg');
             "
           >
-            <div class="text-overlay">Text for Image 2</div>
+            <div class="text-overlay">TRẢI NGHỆM BỮA ĂN SẠCH</div>
           </div>
           <div
             class="image-with-text"
             style="
-              background-image: url('https://www.huongnghiepaau.com/wp-content/uploads/2020/08/kinh-doanh-do-an-eat-clean.jpg');
+              background-image: url('https://fitfood.vn/img/1920x800/images/nen-final-3-16947527108499.webp?f=jpg');
             "
           >
-            <div class="text-overlay">Text for Image 3</div>
+            <div class="text-overlay">NHÀ CUNG CẤP LỚN NHẤT HÀ NỘI</div>
           </div>
           <div
             class="image-with-text"
             style="
-              background-image: url('https://toplist.vn/images/800px/fitfood-vn-816220.jpg');
+              background-image: url('https://fitfood.vn/img/2160x900/uploads/menu-16952880378313.jpg');
             "
           >
-            <div class="text-overlay">Text for Image 4</div>
+            <div class="text-overlay">GIẢI PHÁP HEALTHY FOOD</div>
           </div>
         </div>
         <div class="btns">
@@ -419,5 +412,4 @@
     </script>
   </body>
   <footer th:replace="~{fragments :: footer}"></footer>
->>>>>>> Stashed changes
 </html>
