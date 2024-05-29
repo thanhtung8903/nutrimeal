@@ -39,6 +39,9 @@ public class Address {
     @Column(name = "default_address")
     private Boolean defaultAddress;
 
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore

@@ -37,5 +37,6 @@ public class DailyMenu {
     @JoinColumn(name = "dish_id_dinner")
     private Dish dishDinner;
 
-
+    @Column(name = "is_active")
+    private Boolean isActive;
 }

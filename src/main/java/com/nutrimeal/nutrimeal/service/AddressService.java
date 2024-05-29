@@ -66,4 +66,15 @@ public class AddressService {
         address.setDefaultAddress(address.getDefaultAddress());
         addressRepository.save(address);
     }
+
+    public void setDefaultAddress(Integer addressId, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        Address address = addressRepository.findByAddressIdAndUser(addressId, user).orElseThrow(() -> new RuntimeException("Address not found"));
+        for (Address address1 :addressRepository.findAllByUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"))) {
+            address1.setDefaultAddress(false);
+            addressRepository.save(address1);
+        }
+        address.setDefaultAddress(true);
+        addressRepository.save(address);
+    }
 }

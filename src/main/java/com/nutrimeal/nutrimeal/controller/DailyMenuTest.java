@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -23,14 +24,15 @@ public class DailyMenuTest {
 
     @GetMapping("/daily/menu")
     public List<DailyMenu> getDailyMenuByDate() {
+
         // Lấy ngày hiện tại
-        LocalDate startDate = LocalDate.now();
-        // Lấy ngày hiện tại cộng thêm 2 ngày (tổng cộng là 3 ngày)
-        LocalDate endDate = startDate.plusDays(3);
-        // Chuyển đổi LocalDate sang java.sql.Date
-        Date sqlStartDate = Date.valueOf(startDate);
-        Date sqlEndDate = Date.valueOf(endDate);
-        // Truy vấn cơ sở dữ liệu với khoảng thời gian
-        return dailyMenuRepository.findByDailyMenuDateBetween(sqlStartDate, sqlEndDate);
+        Calendar calendar = Calendar.getInstance();
+        Date startDate = (Date) calendar.getTime();
+
+        // Tăng ngày lên 3 ngày
+        calendar.add(Calendar.DAY_OF_YEAR, 7);
+        Date endDate = (Date) calendar.getTime();
+
+        return dailyMenuRepository.findByDailyMenuDateBetween(startDate, endDate);
     }
 }

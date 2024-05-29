@@ -37,4 +37,7 @@ public class Combo {
 
     @Column(name = "combo_time")
     private String comboTime;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
 }

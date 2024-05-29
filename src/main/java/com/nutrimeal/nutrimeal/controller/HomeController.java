@@ -2,9 +2,12 @@ package com.nutrimeal.nutrimeal.controller;
 
 import com.nutrimeal.nutrimeal.model.Address;
 import com.nutrimeal.nutrimeal.model.Combo;
+import com.nutrimeal.nutrimeal.model.DailyMenu;
 import com.nutrimeal.nutrimeal.model.User;
+import com.nutrimeal.nutrimeal.repository.DailyMenuRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.ComboService;
+import com.nutrimeal.nutrimeal.service.DailyMenuService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +29,7 @@ public class HomeController {
 
     private final ComboService comboService;
     private final UserRepository userRepository;
+    private final DailyMenuService dailyMenuService;
 
     @GetMapping(value = {"/", "/home"})
     public String home(Model model, Principal principal) {
@@ -44,6 +53,27 @@ public class HomeController {
 
     @GetMapping("/menu")
     public String menu(Model model) {
+        // Lấy ngày hiện tại
+        Date today = new Date();
+
+        // Tạo đối tượng Calendar để tính toán ngày sau 7 ngày
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        Date todayPlus7 = calendar.getTime();
+
+        // Định dạng ngày tháng theo kiểu YYYY-MM-DD
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM");
+        String SToday = formatter.format(today);
+        String future = formatter.format(todayPlus7);
+
+        model.addAttribute("today", SToday);
+        model.addAttribute("future", future);
+
+        // Gọi phương thức service để lấy danh sách DailyMenu
+        List<DailyMenu> listDailyMenu = dailyMenuService.findByDailyMenuDateBetween(today, todayPlus7);
+        model.addAttribute("listDailyMenu", listDailyMenu);
+
         return "home/menu";
     }
 
