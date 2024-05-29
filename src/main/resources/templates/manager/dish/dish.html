@@ -87,13 +87,13 @@
             <h6 style="margin-bottom: 20px;">DANH MỤC</h6>
             <ul class="list-group" id="categoryList">
                 <li id="view-food" class="list-group-item active" data-category="food">
-                    <a th:href="@{dish}" style="text-decoration: none; color: inherit;">Món ăn</a>
+                    <a th:href="@{/manager/dish}" style="text-decoration: none; color: inherit;">Món ăn</a>
                 </li>
-                <li id="view-combo" class="list-group-item " data-category="combo">
-                    <a th:href="@{combo}" style="text-decoration: none; color: inherit;">Combo</a>
+                <li id="view-combo" class="list-group-item" data-category="combo">
+                    <a th:href="@{/manager/combo}" style="text-decoration: none; color: inherit;">Combo</a>
                 </li>
                 <li id="view-daily" class="list-group-item" data-category="daily-menu">
-                    <a href="../dailymenu/dailyMan.html" style="text-decoration: none; color: inherit;">Daily Menu</a>
+                    <a th:href="@{/manager/dailymenu}" style="text-decoration: none; color: inherit;">Thực đơn hàng ngày</a>
                 </li>
             </ul>
 

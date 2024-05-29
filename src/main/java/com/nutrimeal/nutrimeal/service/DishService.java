@@ -51,4 +51,8 @@ public class DishService {
     public Page<Dish> searchDish(String name, String type, Pageable pageable) {
         return dishRepository.findByDishNameContainingAndDishType_TypeNameContaining(name, type, pageable);
     }
+
+    public Dish getDishById(Integer id) {
+        return dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
+    }
 }

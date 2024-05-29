@@ -2,7 +2,10 @@ package com.nutrimeal.nutrimeal.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -14,13 +17,25 @@ public class DailyMenu {
     @Column(name = "daily_menu_id")
     private int dailyMenuId;
 
-    @Column(name = "daily_menu_day")
     @Temporal(TemporalType.DATE)
-    private Date dailyMenuDay;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "daily_menu_date")
+    private Date dailyMenuDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "daily_menu_meal_time")
-    private MealTime dailyMenuMealTime;
+    @Column(name = "daily_menu_type")
+    private String dailyMenuType;
+
+    @ManyToOne
+    @JoinColumn(name = "dish_id_breakfast")
+    private Dish dishBreakfast;
+
+    @ManyToOne
+    @JoinColumn(name = "dish_id_lunch")
+    private Dish dishLunch;
+
+    @ManyToOne
+    @JoinColumn(name = "dish_id_dinner")
+    private Dish dishDinner;
 
 
 }
