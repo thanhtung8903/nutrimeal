@@ -37,4 +37,24 @@ public class DailyMenuService {
         return dailyMenuRepository.existsDailyMenuByDailyMenuDateAndDailyMenuType(date, type);
     }
 
+    public DailyMenu getDailyMenuById(Integer id) {
+        return dailyMenuRepository.findById(id).orElse(null);
+    }
+
+    public void deleteDailyMenu(Integer id) {
+        dailyMenuRepository.deleteById(id);
+    }
+
+    public void updateDailyMenu(Integer id, DailyMenu dailyMenu) {
+        DailyMenu oldDailyMenu = dailyMenuRepository.findById(id).orElse(null);
+        if (oldDailyMenu != null) {
+            oldDailyMenu.setDailyMenuDate(dailyMenu.getDailyMenuDate());
+            oldDailyMenu.setDailyMenuType(dailyMenu.getDailyMenuType());
+            oldDailyMenu.setDishBreakfast(dailyMenu.getDishBreakfast());
+            oldDailyMenu.setDishLunch(dailyMenu.getDishLunch());
+            oldDailyMenu.setDishDinner(dailyMenu.getDishDinner());
+            dailyMenuRepository.save(oldDailyMenu);
+        }
+    }
+
 }

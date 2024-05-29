@@ -139,8 +139,8 @@
                     </td>
 
                     <td>
-                        <button class="btn btn-primary" th:onclick="'window.location.href = \'/manager/dailymenu/update/\' + ${dailyMenu.id}'">Sửa</button>
-                        <button class="btn btn-danger" th:onclick="'window.location.href = \'/manager/dailymenu/delete/\' + ${dailyMenu.id}'">Xóa</button>
+                        <a href="#" class="btn btn-warning btn-sm update-btn" th:href="@{/manager/dailymenu/update/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}">Update</a>
+                        <a href="#" class="btn btn-danger btn-sm delete-btn" th:href="@{/manager/dailymenu/delete/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}" onclick="return confirm('Are you sure you want to delete this dish?')">Delete</a>
                     </td>
                 </tr>
                 </tbody>
