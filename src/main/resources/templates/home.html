@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+>
 <head th:replace="~{fragments :: head('NutriMeal', 'none')}"></head>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+<link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+/>
 <link rel="stylesheet" href="assets/css/home.css" />
 <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"
+<link
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        rel="stylesheet"
 />
 
 <style>
@@ -39,17 +48,20 @@
         justify-content: center;
         align-items: center;
     }
-
     .text-overlay {
         color: white;
-        font-size: 24px;
-        background: rgba(0, 0, 0, 0.5);
+        font-size: 60px;
+        /* background: rgba(0, 0, 0, 0.5); */
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 4px;
         padding: 10px;
     }
-    .btn:hover {
+    .gp:hover {
         color: whitesmoke;
     }
-    .btn {
+    .gp
+    {
         font-size: 40px;
         color: #999;
         position: absolute;
@@ -109,14 +121,13 @@
         Verdana, sans-serif;
     }
 
-    .how-do-work-title {
-        font-family: "Courier New", Courier, monospace;
+    .how-do-work-title h1{
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: 700;
         text-align: center;
-        margin: 50px;
-        text-decoration: underline;
-        text-decoration-color: red;
-        text-decoration-thickness: 2px;
-        text-underline-offset: 10px;
+        margin: 20px ;
+
+
     }
 
     .how-do-work-content .col-md-2 {
@@ -126,8 +137,9 @@
         border: 1px solid #ccc; /* Viền 1px với màu xám nhạt */
         box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
         margin: 10px;
+        margin-bottom: 50px;
     }
-    .how-do-work-content .col-md-3 i {
+    .how-do-work-content .col-md-2 i {
         font-size: 50px;
     }
     .featured-product {
@@ -166,19 +178,23 @@
         text-align: center;
     }
     .featured-product-title h1 {
-        font-family: "Courier New", Courier, monospace;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: 700;
         text-align: center;
-        margin: 20px;
-        padding-top: 20px;
-        text-decoration: underline;
-        text-decoration-color: red;
-        text-decoration-thickness: 2px;
-        text-underline-offset: 10px;
+        margin: 20px ;
+        margin-top: 30px;
     }
     .featured-product-title p {
         font-size: 20px;
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-        sans-serif;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    .icon-large {
+        font-size: 3rem; /* Bạn có thể thay đổi giá trị này để điều chỉnh kích thước */
+    }
+    .gachchan_icon{
+        margin-top: -30px;
+        text-align: center;
+        color: red;
     }
 </style>
 
@@ -223,8 +239,8 @@
             </div>
         </div>
         <div class="btns">
-            <div class="btn-left btn"><i class="bi bi-arrow-left"></i></div>
-            <div class="btn-right btn"><i class="bi bi-arrow-right"></i></div>
+            <div class="btn-left btn gp"><i class="bi bi-arrow-left"></i></div>
+            <div class="btn-right btn gp"><i class="bi bi-arrow-right"></i></div>
         </div>
         <div class="index-images">
             <div class="index-items index-items-0 active"></div>
@@ -278,6 +294,9 @@
     <div class="how-do-work-title">
         <h1>Cách Đặt Hàng</h1>
     </div>
+    <div class="gachchan_icon">
+        <svg style="width: 80px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+    </div>
     <div class="how-do-work-content">
         <div class="row justify-content-center">
             <div class="col-md-2 text-left">
@@ -286,7 +305,7 @@
                 <p>Chọn gói ăn phù hợp và điền đầy đủ thông tin</p>
             </div>
             <div class="col-md-2 text-left">
-                <i class="bi bi-fire"></i>
+                <i class="bi bi-fire icon-large"></i>
                 <h4>Nutrimeal nấu</h4>
                 <p>
                     Chúng tôi chọn nhưng nguyên liệu tốt nhất và nấu trong bếp công
@@ -294,7 +313,7 @@
                 </p>
             </div>
             <div class="col-md-2 text-left">
-                <i class="bi bi-truck"></i>
+                <i class="bi bi-truck icon-large"></i>
                 <h4>Giao hàng</h4>
                 <p>
                     Đội ngũ giao hang Nutrimeal sẽ giao tận nơi phần ăn của bạn mỗi
@@ -302,7 +321,7 @@
                 </p>
             </div>
             <div class="col-md-2 text-left">
-                <i class="bi bi-check2-circle"></i>
+                <i class="bi bi-check2-circle icon-large"></i>
                 <h4>Thưởng thức</h4>
                 <p>
                     Không cần suy nghĩ, shopping hay nấu nướng dầu mỡ, chỉ cần hâm lại
@@ -314,7 +333,10 @@
 </section>
 <section class="featured-product">
     <div class="featured-product-title">
-        <h1>Sản Phẩm Nổi Bật</h1>
+        <h1 >Sản Phẩm Nổi Bật</h1>
+        <div class="gachchan_icon">
+            <svg style="width: 80px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+        </div>
         <p>
             NutriMeal cung cấp nhiều gói ăn đa dạng phù hợp với mọi nhu cầu của
             bạn
@@ -323,9 +345,7 @@
     <div class="featured-product-list">
         <div class="product" th:each="combo : ${comboList}">
             <div class="product-image">
-                <img
-                        th:src="${combo.comboImage}"
-                />
+                <img th:src="${combo.comboImage}" />
             </div>
             <div class="product-content">
                 <h3 th:text="${combo.comboName}">Product Name</h3>

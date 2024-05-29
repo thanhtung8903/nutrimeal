@@ -15,33 +15,27 @@
         padding: 0;
         font-family: sans-serif;
     }
-    body {
-        background-image: url(https://media.istockphoto.com/id/530581630/vector/rainbow-of-fruit-and-vegetables.jpg?s=612x612&w=0&k=20&c=pCu9Hr0KfgFsBFm9Vw_t0f42Lo8feyYREsIAIjLbz_A=);
-        background-size: cover; /* Hiển thị hình ảnh sao cho che phủ toàn bộ nền */
-        background-position: center; /* Hiển thị ảnh ở vị trí trung tâm */
-        background-attachment: fixed; /* Giữ ảnh ở cố định khi cuộn trang */
-        background-repeat: no-repeat; /* Ngăn ảnh lặp lại */
-    }
+
     .order-content-title {
         margin: 30px;
         text-align: center;
         color: rgba(11, 8, 8, 0.854);
     }
     .order-content-title h1 {
-        font-weight: 10;
+        font-weight: 500;
         letter-spacing: 5px;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-        "Lucida Sans", Arial, sans-serif;
-        font-size: 50px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 40px;
     }
     .order-content-title span {
         font-weight: 1000;
     }
 
     .order-content-title h5 {
-        letter-spacing: 3px;
-        font-weight: 10;
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+        /*letter-spacing: 3px;*/
+        font-size: 17px;
+
+        font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
     .order-combo-list {
         display: flex;
@@ -108,7 +102,11 @@
     .order-combo:hover img {
         transform: scale(1.1) rotate(-3deg);
     }
-
+    .combongang_icon{
+        margin-top: -30px;
+        text-align: center;
+        color: red;
+    }
 </style>
 
 <header th:replace="~{fragments :: header-fragment}"></header>
@@ -116,6 +114,9 @@
 <section class="order-content">
     <div class="order-content-title">
         <h1>Chọn <span>Gói Ăn</span></h1>
+        <div class="combongang_icon">
+            <svg style="width: 80px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+        </div>
         <h5>
             NUTRIMEAL cung cấp nhiều gói ăn đa dạng phù hợp với mọi nhu cầu của
             bạn
@@ -124,8 +125,8 @@
     <div class="order-combo-list" >
         <div class="order-combo" onclick="redirectToOrderComboDetail()" th:each="combo : ${comboList}">
             <img
-                  th:src="${combo.comboImage}"
-             alt=""/>
+                    th:src="${combo.comboImage}"
+                    alt=""/>
             <div class="order-combo-content">
                 <h3 th:text="${combo.comboName}"></h3>
                 <div class="order-combo-description">
