@@ -56,6 +56,13 @@
                 <input type="date" class="form-control" id="menuDate" name="dailyMenuDate" required>
             </div>
             <div class="mb-3">
+                <label for="menuType" class="form-label">Loại Menu</label>
+                <select class="form-select" id="menuType" name="dailyMenuType" required>
+                    <option value="V">Menu chay</option>
+                    <option value="N">Menu mặn</option>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label class="form-label">Bữa ăn</label>
                 <div class="d-flex justify-content-between">
                     <div class="me-2 flex-grow-1">
@@ -80,13 +87,6 @@
                         </select>
                     </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="menuType" class="form-label">Loại Menu</label>
-                <select class="form-select" id="menuType" name="dailyMenuType" required>
-                    <option value="V">Menu chay</option>
-                    <option value="N">Menu mặn</option>
-                </select>
             </div>
 
             <button type="submit" class="btn btn-primary">Thêm Daily Menu</button>

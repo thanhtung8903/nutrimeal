@@ -20,11 +20,6 @@ public class ManagerMenuController {
     private final DishService dishService;
     private final DailyMenuService dailyMenuService;
 
-//    @GetMapping("/dailymenu")
-//    public String getDailyMenu(Model model) {
-//        model.addAttribute("listDailyMenu", dailyMenuService.getAllDailyMenu());
-//        return "manager/dailymenu/dailyMenu";
-//    }
 
     @GetMapping("/dailymenu")
     public String dish(Model model, @RequestParam(defaultValue = "0") int page) {
@@ -46,7 +41,7 @@ public class ManagerMenuController {
                                @RequestParam(value = "menuDinner", required = true) String menuDinner) {
 
         try {
-            if(dailyMenuService.existsDailyMenuByDailyMenuDateAndDailyMenuType(dailyMenu.getDailyMenuDate(), dailyMenu.getDailyMenuType())) {
+            if (dailyMenuService.existsDailyMenuByDailyMenuDateAndDailyMenuType(dailyMenu.getDailyMenuDate(), dailyMenu.getDailyMenuType())) {
                 return "redirect:/manager/dailymenu/add?errorduplicate=true";
             }
             Dish dishBreakfast = dishService.getDishById(Integer.parseInt(menuBreakfast));
@@ -62,4 +57,50 @@ public class ManagerMenuController {
         }
     }
 
+    @GetMapping("/dailymenu/update/{id}")
+    public String updateDailyMenu(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("dailyMenu", dailyMenuService.getDailyMenuById(id));
+        model.addAttribute("listDish", dishService.findAllDish());
+        return "manager/dailymenu/updateDailyMenu";
+    }
+
+    @PostMapping("/dailymenu/update/{id}")
+    public String updateDailyMenu(@PathVariable("id") Integer id, @ModelAttribute DailyMenu dailyMenu,
+                                  @RequestParam(value = "menuBreakfast", required = true) String menuBreakfast,
+                                  @RequestParam(value = "menuLunch", required = true) String menuLunch,
+                                  @RequestParam(value = "menuDinner", required = true) String menuDinner) {
+        try {
+            DailyMenu existingDailyMenu = dailyMenuService.getDailyMenuById(id);
+            if (existingDailyMenu == null) {
+                return "redirect:/manager/dailymenu/update/" + id + "?error=true";
+            }
+
+            boolean isDateChanged = !existingDailyMenu.getDailyMenuDate().equals(dailyMenu.getDailyMenuDate());
+            boolean isTypeChanged = !existingDailyMenu.getDailyMenuType().equals(dailyMenu.getDailyMenuType());
+
+            if (isDateChanged && dailyMenuService.existsDailyMenuByDailyMenuDateAndDailyMenuType(dailyMenu.getDailyMenuDate(), dailyMenu.getDailyMenuType())) {
+                return "redirect:/manager/dailymenu/update/" + id + "?errorduplicate=true";
+            } else if (!isDateChanged && isTypeChanged && dailyMenuService.existsDailyMenuByDailyMenuDateAndDailyMenuType(dailyMenu.getDailyMenuDate(), dailyMenu.getDailyMenuType())) {
+                return "redirect:/manager/dailymenu/update/" + id + "?errorduplicate=true";
+            }
+            Dish dishBreakfast = dishService.getDishById(Integer.parseInt(menuBreakfast));
+            Dish dishLunch = dishService.getDishById(Integer.parseInt(menuLunch));
+            Dish dishDinner = dishService.getDishById(Integer.parseInt(menuDinner));
+
+            dailyMenu.setDishBreakfast(dishBreakfast);
+            dailyMenu.setDishLunch(dishLunch);
+            dailyMenu.setDishDinner(dishDinner);
+
+            dailyMenuService.updateDailyMenu(id, dailyMenu);
+            return "redirect:/manager/dailymenu/update/" + id + "?success=true";
+        } catch (Exception e) {
+            return "redirect:/manager/dailymenu/update/" + id + "?error=true";
+        }
+    }
+
+    @GetMapping("/dailymenu/delete/{id}")
+    public String deleteCombo(@PathVariable int id) {
+        dailyMenuService.deleteDailyMenu(id);
+        return "redirect:/manager/dailymenu";
+    }
 }
