@@ -16,8 +16,8 @@ public class ComboService {
     private final ComboRepository comboRepository;
     private final ComboTypeRepository comboTypeRepository;
 
-    public List<Combo> getAllCombos() {
-        return comboRepository.findAll();
+    public List<Combo> getAllComboActive() {
+        return comboRepository.findAllByIsActiveTrue();
     }
 
     public Combo getComboById(int id) {
@@ -52,7 +52,11 @@ public class ComboService {
     }
 
     public void deleteCombo(int id) {
-        comboRepository.deleteById(id);
+        Combo combo = comboRepository.findById(id).orElse(null);
+        if (combo != null) {
+            combo.setIsActive(false);
+            comboRepository.save(combo);
+        }
     }
 
     public void deleteComboType(int id) {
@@ -60,6 +64,6 @@ public class ComboService {
     }
 
     public List<Combo> getCombosByCalories(float min, float max) {
-        return comboRepository.findAllByComboCaloriesBetween(min, max);
+        return comboRepository.findAllByComboCaloriesBetweenAndIsActiveTrue(min, max);
     }
 }

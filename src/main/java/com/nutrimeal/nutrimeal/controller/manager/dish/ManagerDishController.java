@@ -60,6 +60,7 @@ public class ManagerDishController {
             } else {
                 dish.setDishImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNk7lxboBaTCE78SGmXH8pM4Gx3uXLf8m_gZUtpEPdTA&s"); // or set to a default image URL
             }
+            dish.setIsActive(true);
             dishService.save(dish);
             return "redirect:/manager/dish/add?success=true";
         } catch (Exception e) {

@@ -23,4 +23,7 @@ public class ComboType {
 
     @Column(name = "combo_type_description")
     private String comboTypeDescription;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
 }

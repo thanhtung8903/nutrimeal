@@ -37,4 +37,7 @@ public class Dish {
     @Column(name = "dish_type")
     private String dishType;
 
+    @Column(name = "is_active")
+    private Boolean isActive;
+
 }

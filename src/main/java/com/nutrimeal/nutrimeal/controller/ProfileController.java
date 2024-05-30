@@ -106,6 +106,12 @@ public class ProfileController {
         addressService.updateAddress(address, user.getUsername());
         return "redirect:/profile/address";
     }
+    @GetMapping("/profile/address/setdefault/{addressId}")
+    public String profileAddressSetDefault(@PathVariable Integer addressId, Model model, Principal principal) {
+        User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        addressService.setDefaultAddress(addressId, user.getUsername());
+        return "redirect:/profile/address";
+    }
 
 
 

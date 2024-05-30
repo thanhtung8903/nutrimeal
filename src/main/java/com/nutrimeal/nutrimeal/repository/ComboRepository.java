@@ -9,5 +9,8 @@ import java.util.List;
 @Repository
 public interface ComboRepository extends JpaRepository<Combo, Integer> {
 
-    List<Combo> findAllByComboCaloriesBetween(Float min, Float max);
+    List<Combo> findAllByComboCaloriesBetweenAndIsActiveTrue(Float min, Float max);
+
+
+    List<Combo> findAllByIsActiveTrue();
 }
