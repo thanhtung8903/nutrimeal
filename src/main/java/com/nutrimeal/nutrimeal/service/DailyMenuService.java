@@ -18,7 +18,7 @@ public class DailyMenuService {
     private final DailyMenuRepository dailyMenuRepository;
 
     public List<DailyMenu> findByDailyMenuDateBetween(Date startDate, Date endDate) {
-        return dailyMenuRepository.findByDailyMenuDateBetween(startDate, endDate);
+        return dailyMenuRepository.findAllByIsActiveTrueAndDailyMenuDateBetweenOrderByDailyMenuDateAsc(startDate, endDate);
     }
 
     public List<DailyMenu> getAllDailyMenu() {
@@ -26,7 +26,7 @@ public class DailyMenuService {
     }
 
     public Page<DailyMenu> getAllDailyMenu(Pageable pageable) {
-        return dailyMenuRepository.findAllByOrderByDailyMenuDateDesc(pageable);
+        return dailyMenuRepository.findAllByIsActiveTrueOrderByDailyMenuDateDesc(pageable);
     }
 
     public void addDailyMenu(DailyMenu dailyMenu) {
@@ -34,7 +34,7 @@ public class DailyMenuService {
     }
 
     public boolean existsDailyMenuByDailyMenuDateAndDailyMenuType(Date date, String type) {
-        return dailyMenuRepository.existsDailyMenuByDailyMenuDateAndDailyMenuType(date, type);
+        return dailyMenuRepository.existsDailyMenuByDailyMenuDateAndDailyMenuTypeAndIsActiveTrue(date, type);
     }
 
     public DailyMenu getDailyMenuById(Integer id) {
@@ -42,7 +42,9 @@ public class DailyMenuService {
     }
 
     public void deleteDailyMenu(Integer id) {
-        dailyMenuRepository.deleteById(id);
+        DailyMenu dailyMenu = dailyMenuRepository.findById(id).orElse(null);
+        dailyMenu.setIsActive(false);
+        dailyMenuRepository.save(dailyMenu);
     }
 
     public void updateDailyMenu(Integer id, DailyMenu dailyMenu) {

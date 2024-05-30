@@ -20,7 +20,7 @@ public class ManagerComboController {
 
     @GetMapping("/combo")
     public String combo(Model model) {
-        model.addAttribute("listCombos", comboService.getAllCombos());
+        model.addAttribute("listCombos", comboService.getAllComboActive());
         return "manager/combo/combo";
     }
 
@@ -40,6 +40,7 @@ public class ManagerComboController {
             } else {
                 combo.setComboImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNk7lxboBaTCE78SGmXH8pM4Gx3uXLf8m_gZUtpEPdTA&s"); // or set to a default image URL
             }
+            combo.setIsActive(true);
             combo.setComboType(comboType);
             comboService.addCombo(combo);
             return "redirect:/manager/combo/add?success=true";

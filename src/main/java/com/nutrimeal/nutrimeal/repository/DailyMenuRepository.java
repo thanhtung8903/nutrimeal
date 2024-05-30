@@ -14,11 +14,13 @@ import java.util.List;
 public interface DailyMenuRepository extends JpaRepository<DailyMenu, Integer> {
 
     //    get 3 day menu
-    public List<DailyMenu> findByDailyMenuDateBetween(Date startDate, Date endDate);
+    // get 3 day menu with isActive=true
+    List<DailyMenu> findAllByIsActiveTrueAndDailyMenuDateBetweenOrderByDailyMenuDateAsc(Date startDate, Date endDate);
 
-    //    paging
-    public Page<DailyMenu> findAllByOrderByDailyMenuDateDesc(Pageable pageable);
+    // paging with isActive=true
+    Page<DailyMenu> findAllByIsActiveTrueOrderByDailyMenuDateDesc(Pageable pageable);
 
-    boolean existsDailyMenuByDailyMenuDateAndDailyMenuType(Date date, String type);
+    // check existence with isActive=true
+    boolean existsDailyMenuByDailyMenuDateAndDailyMenuTypeAndIsActiveTrue(Date date, String type);
 
 }

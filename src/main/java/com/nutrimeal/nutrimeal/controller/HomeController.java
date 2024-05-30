@@ -45,7 +45,7 @@ public class HomeController {
         } else if (isAdmin) {
             return "admin/adminpage";
         } else {
-            List<Combo> comboList = comboService.getAllCombos();
+            List<Combo> comboList = comboService.getAllComboActive();
             model.addAttribute("comboList", comboList);
             return "home";
         }
@@ -123,7 +123,7 @@ public class HomeController {
 
     @GetMapping("/combo")
     public String combo(Model model) {
-        List<Combo> comboList = comboService.getAllCombos();
+        List<Combo> comboList = comboService.getAllComboActive();
         model.addAttribute("comboList", comboList);
         return "home/combo";
     }

@@ -30,7 +30,9 @@ public class ManagerMenuController {
 
     @GetMapping("/dailymenu/add")
     public String addDailyMenu(Model model) {
-        model.addAttribute("listDish", dishService.findAllDish());
+        model.addAttribute("listDishV", dishService.findAllByDishType("V"));
+        model.addAttribute("listDishN", dishService.findAllByDishType("N"));
+
         return "manager/dailymenu/addDailyMenu";
     }
 
@@ -50,6 +52,7 @@ public class ManagerMenuController {
             dailyMenu.setDishBreakfast(dishBreakfast);
             dailyMenu.setDishLunch(dishLunch);
             dailyMenu.setDishDinner(dishDinner);
+            dailyMenu.setIsActive(true);
             dailyMenuService.addDailyMenu(dailyMenu);
             return "redirect:/manager/dailymenu/add?success=true";
         } catch (Exception e) {
@@ -60,7 +63,7 @@ public class ManagerMenuController {
     @GetMapping("/dailymenu/update/{id}")
     public String updateDailyMenu(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("dailyMenu", dailyMenuService.getDailyMenuById(id));
-        model.addAttribute("listDish", dishService.findAllDish());
+        model.addAttribute("listDish", dishService.findAllActiveDish());
         return "manager/dailymenu/updateDailyMenu";
     }
 

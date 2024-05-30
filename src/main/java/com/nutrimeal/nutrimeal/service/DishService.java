@@ -15,8 +15,12 @@ public class DishService {
 
     private final DishRepository dishRepository;
 
-    public List<Dish> findAllDish() {
-        return dishRepository.findAll();
+    public List<Dish> findAllActiveDish() {
+        return dishRepository.findAllActiveDish();
+    }
+
+    public List<Dish> findAllByDishType(String type) {
+        return dishRepository.findAllByDishType(type);
     }
 
     public Page<Dish> findAllDish(Pageable pageable) {
@@ -45,7 +49,9 @@ public class DishService {
     }
 
     public void deleteDish(Integer id) {
-        dishRepository.deleteById(id);
+        Dish dish = dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
+        dish.setIsActive(false);
+        dishRepository.save(dish);
     }
 
     public Page<Dish> searchDish(String name, String type, Pageable pageable) {
