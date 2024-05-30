@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments :: head('Đơn hàng hiện tại', 'none')}"></head>
+<style>
+    body {
+        background-color: #EAEAEA;
+    }
+
+    .sidebar {
+        height: 100vh;
+        background-color: #343a40;
+        padding-top: 20px;
+        color: #ffffff;
+    }
+
+    .sidebar a {
+        color: #ffffff;
+        font-size: 18px;
+        margin: 10px 0;
+        display: block;
+        text-decoration: none;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+        color: #F8B934; /* For Highlight */
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .btn-change {
+        font-size: 14px;
+        padding: 0.25rem 0.5rem;
+        color: #ffffff;
+        background-color: #F8B934;
+        border-color: #F8B934;
+    }
+
+    .btn-danger {
+        background-color: #F8B934;
+        border-color: #F8B934;
+    }
+
+
+</style>
+
+<header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
+<header th:replace="~{fragments :: header_manager}" sec:authorize="hasAuthority('ROLE_MANAGER')"></header>
+<header th:replace="~{fragments :: header_admin}" sec:authorize="hasAuthority('ROLE_ADMIN')"></header>
+<body>
+<div class="profile__account container mt-3 mb-3">
+
+    <div class="container-fluid">
+        <div class="row" th:object="${user}">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column align-items-center">
+                <img
+                        th:src="*{getImage()}"
+                        class="rounded-circle mb-3"
+                        alt="Avatar"
+                        width="80"
+                />
+                <p th:text="*{getFullName()}"></p>
+                <a href="#" th:href="@{/profile/account}">Thông tin tài khoản</a>
+                <a href="#" th:href="@{/profile/password}" >Đổi mật khẩu</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">Point</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">Đơn hàng hiện tại</a>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
+                <h2 class="my-4">Đơn hàng hiện tại</h2>
+
+            </main>
+        </div>
+    </div>
+</div>
+
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+</html>

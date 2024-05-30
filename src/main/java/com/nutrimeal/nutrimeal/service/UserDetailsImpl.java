@@ -19,8 +19,9 @@ import java.util.stream.Collectors;
 public class UserDetailsImpl implements UserDetails {
 
     private String id;
-    private String email;
+    private String username;
     private String password;
+    private String fullName;
     private List<GrantedAuthority> authorities;
     private boolean enable;
 
@@ -31,8 +32,9 @@ public class UserDetailsImpl implements UserDetails {
 
         return new UserDetailsImpl(
                 user.getUserId(),
-                user.getEmail(),
+                user.getUsername(),
                 user.getPassword(),
+                user.getFullName(),
                 authorities,
                 user.isActive());
     }
@@ -49,7 +51,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Quản lý combo', 'none')}"></head>
+
+<style>
+    body {
+        background-color: #e5e5e5;
+    }
+
+    .list-group-item {
+        background-color: #fff !important;
+        color: #343a40 !important;
+        cursor: pointer;
+
+    }
+
+    .list-group-item.active {
+        background-color: #fff !important;
+        border-color: none;
+        border: 1px solid #343a40;
+        font-weight: bold;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .btn-primary {
+        background-color: #343a40 !important;
+        border-color: #343a40 !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #000000 !important;
+        font-weight: 600;
+    }
+
+    .btn-danger:hover {
+        background-color: red !important;
+        font-weight: 600;
+    }
+
+    .radio-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .table td, .table th {
+        border-right: 2px solid #dee2e6;
+    }
+
+    .add-menu {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #343a40;
+        color: #ffffff;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        border: none;
+    }
+
+    .add-menu:hover {
+        background-color: #000000;
+    }
+
+    .add-menu a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .add-menu a:hover {
+        text-decoration: none;
+    }
+</style>
+
+<header th:replace="~{fragments :: header_manager}"></header>
+
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+        <h6 style="margin-bottom: 20px;">DANH MỤC</h6>
+        <ul class="list-group" id="categoryList">
+            <li id="view-food" class="list-group-item" data-category="food">
+                <a th:href="@{dish}" style="text-decoration: none; color: inherit;">Món ăn</a>
+            </li>
+            <li id="view-combo" class="list-group-item active" data-category="combo">
+                <a th:href="@{combo}" style="text-decoration: none; color: inherit;">Combo</a>
+            </li>
+            <li id="view-daily" class="list-group-item" data-category="daily-menu">
+                <a href="../dailymenu/dailyMan.html" style="text-decoration: none; color: inherit;">Daily Menu</a>
+            </li>
+        </ul>
+    </div>
+        <div class="col-md-10">
+            <h2 style="margin-bottom: 40px; text-align: center;">QUẢN LÍ COMBO</h2>
+<!--            <div class="radio-group">-->
+<!--                <div class="form-check">-->
+<!--                    <input class="form-check-input" type="radio" name="comboType" id="comboTypeVegetarian" value="combovegetarian" checked>-->
+<!--                    <label class="form-check-label" for="comboTypeVegetarian">-->
+<!--                        Combo chay-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div class="form-check">-->
+<!--                    <input class="form-check-input" type="radio" name="comboType" id="comboTypeNonVegetarian" value="combonon-vegetarian">-->
+<!--                    <label class="form-check-label" for="comboTypeNonVegetarian">-->
+<!--                        Combo mặn-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--            </div>-->
+            <table class="table combo-table" id="comboTable">
+                <thead>
+                <tr>
+<!--                    <th>ID</th>-->
+                    <th>Tên combo</th>
+                    <th>Ảnh</th>
+                    <th>Mô tả combo</th>
+                    <th>Lượng kCal trung bình</th>
+                    <th>Loại combo</th>
+                    <th>Bữa ăn</th>
+                    <th>Giá 7 ngày</th>
+                    <th>Giá 30 ngày</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="comboTableBody">
+                <tr th:each="combo : ${listCombos}">
+                    <td th:text="${combo.getComboName()}"></td>
+                    <td><img th:src="${combo.getComboImage()}" alt="" class="img-thumbnail" style="max-width: 100px;"></td>
+                    <td th:text="${combo.getComboDescription()}"></td>
+                    <td th:text="${combo.getComboCalories()}"></td>
+                    <td>
+                        <span th:if="${combo.getComboType().getComboTypeName() == 'V'}">Combo chay</span>
+                        <span th:if="${combo.getComboType().getComboTypeName() == 'N'}">Combo mặn</span>
+                    </td>
+<!--                    <td th:text="${combo.getComboTime()}"></td>-->
+
+                    <td>
+                        <span th:if="${combo.getComboTime() == 'L'}">Ăn trưa</span>
+                        <span th:if="${combo.getComboTime() == 'BLD'}">Ăn cả ngày</span>
+                        <span th:if="${combo.getComboTime() == 'D'}">Ăn tối</span>
+
+                    </td>
+
+                    <td th:text="${combo.getComboPrice7Days()}"></td>
+                    <td th:text="${combo.getComboPrice30Days()}"></td>
+
+
+                    <td>
+                        <a href="#" class="btn btn-warning btn-sm update-btn" th:href="@{/manager/combo/update/{comboId}(comboId=${combo.comboId})}">Update</a>
+                        <a href="#" class="btn btn-danger btn-sm delete-btn" th:href="@{/manager/combo/delete/{comboId}(comboId=${combo.comboId})}" onclick="return confirm('Are you sure you want to delete this combo?')">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button class="add-menu mb-2"><a th:href="@{/manager/combo/add}">ADD COMBO</a></button>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+<script>
+
+    document.getElementById('view-food').addEventListener('click', function () {
+        window.location.href = this.querySelector('a').href;
+    });
+
+    document.getElementById('view-combo').addEventListener('click', function () {
+        window.location.href = this.querySelector('a').href;
+    });
+
+    document.getElementById('view-daily').addEventListener('click', function () {
+        window.location.href = this.querySelector('a').href;
+    });
+</script>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Tư vấn', 'none')}"></head>
+
+<style>
+    .tuvan_body{
+        background-color: #E5E5E5;
+    }
+
+    .tuvan_header{
+        font-size: 40px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0;
+        padding-bottom: 0;
+
+    }
+    .tuvan_icon{
+        margin-top: -50px;
+        text-align: center;
+        color: red;
+    }
+    .tuvan_text{
+        text-align: left;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        padding: 0 15px;
+        line-height: 25px;
+        color: #686868;
+        margin: 0px 120px 0px 120px;
+
+    }
+    .bmr-form{
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 5px;
+        margin-top: 70px;
+    }
+
+    .bmr-form label{
+        font-size: 14px;
+        font-weight: 700;
+        color: #686868;
+    }
+    .bmr-form option {
+        font-size: 12px;
+        font-weight: 500;
+        color: #686868;
+    }
+
+    .form-group{
+        margin-bottom: 15px;
+
+    }
+    .tuvan-submit button{
+        background-color: red;
+        border-color: red;
+    }
+
+</style>
+
+<header th:replace="~{fragments :: header-fragment}"></header>
+<body class="tuvan_body">
+<div class="tuvan_header mt-3">
+    <p>TƯ VẤN</p>
+
+</div>
+<div class="tuvan_icon">
+    <svg style="width: 70px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+</div>
+<div class="tuvan_text text-center">
+    <p>Nutrimeal sử dụng Công Cụ Tính Chỉ Số BMR (Basal Metabolic Rate) để tính toán tỷ lệ
+        trao đổi chất cơ bản trong cơ thể bạn, lượng năng lượng mà bạn tiêu tốn dựa trên
+        tần suất vận động trong một ngày.</p>
+    <p>Bạn chỉ cần nhập thông tin theo yêu cầu bên dưới và lựa chọn mục tiêu mong muốn,
+        hệ thống tư vấn của Nutrimeal sẽ gợi ý cho bạn Gói Ăn cũng như combo
+        các sản phẩm dùng kèm phù hợp. </p>
+</div>
+
+<div class="container">
+    <div class="box-info mb-5 brm">
+        <form class="bmr-form" th:action="@{/home/consult}" method="get">
+            <div class="row d-flex">
+                <div class="col-md-6">
+                    <div class="form-group row d-flex align-items-center">
+                        <label class="col-sm-4">Giới tính</label>
+                        <div class="col-sm-4">
+                            <input type="radio" name="gender" id="genderRadio1" value="1" th:checked="${gender == '1' || gender == null}">
+                            <span>Nam</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="radio" name="gender" id="genderRadio2" value="0" th:checked="${gender == '0'}">
+                            <span>Nữ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row d-flex align-items-center">
+                        <label for="inputAge" class="col-sm-4 col-form-label">Tuổi</label>
+                        <div class="col-sm-8">
+                            <select id="inputAge" name="inputAge" class="form-control w-100 short-select">
+                                <!-- Các tùy chọn -->
+                                <option th:value="${age}" th:text="${age}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row d-flex align-items-center">
+                        <label for="inputWeight" class="col-sm-4 col-form-label">Cân Nặng</label>
+                        <div class="col-sm-8">
+                            <select id="inputWeight" name="inputWeight" class="form-control w-100">
+                                <!-- Các tùy chọn -->
+                                <option th:value="${weight}" th:text="${weight}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row d-flex align-items-center">
+                        <label for="inputHeight" class="col-sm-4 col-form-label">Chiều cao</label>
+                        <div class="col-sm-8">
+                            <select id="inputHeight" name="inputHeight" class="form-control w-100">
+                                <!-- Các tùy chọn -->
+                                <option th:value="${height}" th:text="${height}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row d-flex align-items-center">
+                        <label for="inputActivities" class="col-sm-4 col-form-label">Hoạt động</label>
+                        <div class="col-sm-8">
+                            <select id="inputActivities" name="inputActivities" class="form-control w-100">
+                                <option value="1.2" th:selected="${activityMultiplier == '1.2'}">Không tập thể dục, chỉ thở</option>
+                                <option value="1.375" th:selected="${activityMultiplier == '1.375'}">Vận động nhẹ nhàng (1-3 buổi/tuần)</option>
+                                <option value="1.55" th:selected="${activityMultiplier == '1.55'}">Vận động thường xuyên (3-5 buổi/tuần)</option>
+                                <option value="1.725" th:selected="${activityMultiplier == '1.725'}">Vận động tích cực (6-7 buổi/tuần)</option>
+                                <option value="1.9"  th:selected="${activityMultiplier == '1.9'}">Thể dục là đam mê (2 buổi/ngày - 7 ngày/tuần)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row d-flex align-items-center">
+                        <label for="inputTarget" class="col-sm-4 col-form-label">Hoạt động</label>
+                        <div class="col-sm-8">
+                            <select id="inputTarget" name="inputTarget" class="form-control w-100">
+                                <option value="0" th:selected="${weightGoal == '0'}">Giảm cân, giảm mỡ bụng</option>
+                                <option value="1" th:selected="${weightGoal == '1'}">Giữ cân sống lành mạnh</option>
+                                <option value="3" th:selected="${weightGoal == '3'}">Tăng cân, tăng cơ</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 tuvan-submit">
+                    <div class="form-group row ">
+                        <div class="col-sm-12 text-center mt-3">
+                            <button type="button" id="calculateCalories"  class="btn btn-primary mr-3" style="font-weight: 500;">Tư vấn sản phẩm</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row mt-3">
+                    <div class="col-sm-12 text-center">
+                        <label>
+                            <!-- <span id="calorieResult">   </span>   -->
+                            <span id="calorieResult" th:text="${calorieResult}" style="color: #686868;"></span>
+                            <span id="calorieValue"  th:text="${calorieValue}" style="color: red; font-size: 20px;"></span>
+                            <span   th:if="${calorieValue != null }" th:text="Kcal" style="color: red; font-size: 20px;"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="featured-packages">
+            <h2 class="title title-center pb-4 mb-4" th:text="${comboSuggest}"></h2>
+            <div class="products mb-4" id="list-both-items">
+                <div class="row product-listing">
+                    <div class="col-md-3" th:each="combo : ${comboList}">
+                        <a th:href="@{https://fitfood.vn/san-pham/full}" class="link">
+                            <span class="icon"><i class="fa fa-check" aria-hidden="true"></i></span>
+                            <div class="card">
+                                <img th:src="${combo.comboImage}" class="card-img-top" alt="">
+                                <div class="card-body">
+                                    <h5 class="card-title d-flex justify-content-between" th:text="${combo.comboName}">
+                                        <span th:text="${combo.comboPrice7Days}"></span>
+                                    </h5>
+                                    <p class="card-text" th:text="${combo.comboDescription}"></p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+
+// bat dau tu day
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        function populateSelect(selectElement, minValue, maxValue) {
+            for (let value = minValue; value <= maxValue; value++) {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                selectElement.appendChild(option);
+            }
+        }
+
+        const selectAge = document.getElementById('inputAge');
+        const selectWeight = document.getElementById('inputWeight');
+        const selectHeight = document.getElementById('inputHeight');
+
+        populateSelect(selectAge, 18, 80);
+        populateSelect(selectWeight, 30, 150);
+        populateSelect(selectHeight, 110, 220);
+    });
+    document.addEventListener("DOMContentLoaded", function(){
+        function calculateCalories() {
+            const age = parseInt(document.getElementById('inputAge').value);
+            const weight = parseInt(document.getElementById('inputWeight').value);
+            const height = parseInt(document.getElementById('inputHeight').value);
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const activityMultiplier = parseFloat(document.getElementById('inputActivities').value);
+            const weightGoal = parseInt(document.getElementById('inputTarget').value);
+
+            // BMR calculation based on gender
+            let bmr;
+            if (gender === '1') { // Assuming '1' is for male
+                bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            } else { // Assuming '0' is for female
+                bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            }
+
+            // Adjusting BMR based on activity level
+            let dailyCalories = bmr * activityMultiplier;
+
+            // Adjusting further based on weight goals
+            if (weightGoal == '0') { // Goal to lose weight
+                dailyCalories -= 170; // Create a caloric deficit
+            } else if (weightGoal == '3') { // Goal to gain weight
+                dailyCalories += 200; // Create a caloric surplus
+            }
+
+            // Displaying the result
+            // document.getElementById('calorieResult').textContent = Math.round(dailyCalories);
+            let calorieResult;
+            let calorieValueResult;
+            if ((gender == '1' && dailyCalories < 1600) || (gender == '0' && dailyCalories < 1200)
+                || (gender == '1' && dailyCalories > 4000) || (gender == '0' && dailyCalories > 3500)) {
+                calorieResult = "* Xin lỗi bạn! Chúng tôi không thể phục vụ theo chỉ số trên.";
+                calorieValueResult = 0;
+                document.getElementById('calorieResult').textContent = calorieResult;
+                document.getElementById('calorieValue').textContent = calorieValueResult;
+            } else {
+                calorieResult = "* Lượng năng lượng bạn cần tiêu thụ hàng ngày ~";
+                calorieValueResult = Math.round(dailyCalories);
+                document.getElementById('calorieResult').textContent = calorieResult;
+                document.getElementById('calorieValue').textContent = calorieValueResult;
+            }
+
+
+
+            // Send the calorie value to the server using AJAX
+            sendCalorieValue(calorieValueResult, calorieResult, age, weight, height, gender, activityMultiplier, weightGoal);
+        }
+        function sendCalorieValue(calorieValue, calorieResult, age, weight, height, gender, activityMultiplier, weightGoal) {
+
+            fetch('/consult?calorieValue=' + encodeURIComponent(calorieValue) + '&calorieResult=' + encodeURIComponent(calorieResult)
+                + '&age=' + encodeURIComponent(age) + '&weight=' + encodeURIComponent(weight) +'&height=' + encodeURIComponent(height)
+                +'&gender=' + encodeURIComponent(gender) +'&activityMultiplier=' + encodeURIComponent(activityMultiplier) +'&weightGoal=' + encodeURIComponent(weightGoal), {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.open();
+                    document.write(data);
+                    document.close();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        document.getElementById('calculateCalories').addEventListener('click', calculateCalories);
+    });
+</script>
+
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+</html>

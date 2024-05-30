@@ -33,9 +33,18 @@ public class Address {
     @Column(name = "ward")
     private String ward;
 
+    @Column(name = "apartment_number")
+    private String apartmentNumber;
+
+    @Column(name = "default_address")
+    private Boolean defaultAddress;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
+    public String getFullAddress() {
+        return district + " " + ward + " " + apartmentNumber;
+    }
 }
