@@ -7,10 +7,13 @@ import com.nutrimeal.nutrimeal.service.DishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/manager")
@@ -28,9 +31,20 @@ public class ManagerMenuController {
         return "manager/dailymenu/dailyMenu";
     }
 
+    @GetMapping("/api/dishes")
+    @ResponseBody
+    public ResponseEntity<List<Dish>> getDishes(@RequestParam String type) {
+        List<Dish> dishes = dishService.findAllByDishType(type);
+        return ResponseEntity.ok(dishes);
+    }
+
     @GetMapping("/dailymenu/add")
-    public String addDailyMenu(Model model) {
-        model.addAttribute("listDish", dishService.findAllDish());
+    public String addDailyMenu(Model model, @RequestParam(value = "dailyMenuType", required = false) String type) {
+        if (type == null) {
+            model.addAttribute("listDish", dishService.findAllDish());
+        }else{
+            model.addAttribute("listDish", dishService.findAllByDishType(type));
+        }
         return "manager/dailymenu/addDailyMenu";
     }
 

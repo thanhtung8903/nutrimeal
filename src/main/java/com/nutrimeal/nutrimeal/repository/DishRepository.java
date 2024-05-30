@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface DishRepository extends JpaRepository<Dish, Integer> {
     Page<Dish> findAll(Pageable pageable);
@@ -18,4 +20,6 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
             @Param("type") String type,
             Pageable pageable
     );
+
+    List<Dish> findAllByDishType(String type);
 }

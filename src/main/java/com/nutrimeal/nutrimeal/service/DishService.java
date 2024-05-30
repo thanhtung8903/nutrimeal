@@ -55,4 +55,8 @@ public class DishService {
     public Dish getDishById(Integer id) {
         return dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
     }
+
+    public List<Dish> findAllByDishType(String type) {
+        return dishRepository.findAllByDishType(type);
+    }
 }
