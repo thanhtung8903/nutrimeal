@@ -10,6 +10,8 @@ import com.nutrimeal.nutrimeal.service.ComboService;
 import com.nutrimeal.nutrimeal.service.DailyMenuService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,19 +37,39 @@ public class HomeController {
     public String home(Model model, Principal principal) {
         boolean isManager = false;
         boolean isAdmin = false;
-        if (principal != null) {
-            User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (principal instanceof OAuth2AuthenticationToken && principal != null){
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauthUser = token.getPrincipal();
+            User user = userRepository.findByUsername(oauthUser.getAttribute("email")).orElse(null);
             isManager = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_MANAGER"));
             isAdmin = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_ADMIN"));
-        }
-        if (isManager) {
-            return "manager/managerpage";
-        } else if (isAdmin) {
-            return "admin/adminpage";
+            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
+            model.addAttribute("isOauth2User", isOauth2User);
+            if (isManager) {
+                return "manager/managerpage";
+            } else if (isAdmin) {
+                return "admin/adminpage";
+            } else {
+                List<Combo> comboList = comboService.getAllComboActive();
+                model.addAttribute("comboList", comboList);
+                return "home";
+            }
         } else {
-            List<Combo> comboList = comboService.getAllComboActive();
-            model.addAttribute("comboList", comboList);
-            return "home";
+            if (principal != null) {
+                User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+                isManager = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_MANAGER"));
+                isAdmin = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_ADMIN"));
+            }
+            if (isManager) {
+                return "manager/managerpage";
+            } else if (isAdmin) {
+                return "admin/adminpage";
+            } else {
+                List<Combo> comboList = comboService.getAllComboActive();
+                model.addAttribute("comboList", comboList);
+                return "home";
+            }
         }
     }
 
@@ -93,7 +115,7 @@ public class HomeController {
                           @RequestParam(value = "weightGoal", required = false) String weightGoal,
                           Model model) {
         if (calorieValue != null) {
-            float calorieValueResult = Float.parseFloat(calorieValue);
+            int calorieValueResult = Integer.parseInt(calorieValue);
             if (calorieValueResult > 0) {
                 List<Combo> comboList = comboService.getCombosByCalories(calorieValueResult - 400, calorieValueResult + 400);
                 model.addAttribute("comboList", comboList);
@@ -127,4 +149,6 @@ public class HomeController {
         model.addAttribute("comboList", comboList);
         return "home/combo";
     }
+
+
 }

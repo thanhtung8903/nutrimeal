@@ -19,10 +19,6 @@ public class DishService {
         return dishRepository.findAllActiveDish();
     }
 
-    public List<Dish> findAllByDishType(String type) {
-        return dishRepository.findAllByDishType(type);
-    }
-
     public Page<Dish> findAllDish(Pageable pageable) {
         return dishRepository.findAll(pageable);
     }

@@ -27,6 +27,8 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
 
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -56,7 +58,11 @@ public class SecurityConfig {
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(false)
                         .expiredUrl("/login?expired=true")
-                );
+                )
+                .oauth2Login(oauth2 -> {
+                    oauth2.loginPage("/login").permitAll();
+                    oauth2.successHandler(oAuth2LoginSuccessHandler);
+                });
 
 
         httpSecurity.authenticationProvider(authenticationProvider());

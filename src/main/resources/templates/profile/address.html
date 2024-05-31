@@ -92,7 +92,7 @@
                 />
                 <p th:text="*{getFullName()}"></p>
                 <a href="#" th:href="@{/profile/account}">Thông tin tài khoản</a>
-                <a href="#" th:href="@{/profile/password}">Đổi mật khẩu</a>
+                <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">Đổi mật khẩu</a>
                 <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">Point</a>
                 <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
                 <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">Đơn hàng hiện tại</a>
