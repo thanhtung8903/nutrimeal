@@ -35,6 +35,8 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
 
+
+
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
         if ("google".equals(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())) {
             DefaultOAuth2User principal = (DefaultOAuth2User) authentication.getPrincipal();
@@ -43,7 +45,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             String name = attributes.getOrDefault("name", "").toString();
             String picture = attributes.getOrDefault("picture", "").toString();
 
-             userRepository.findByUsername(email)
+             userRepository.findByEmail(email)
                     .ifPresentOrElse(user -> {
                         List<GrantedAuthority> authorities = user.getRoles().stream()
                                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
