@@ -1,25 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments :: head('Signup', 'none')}">
+<head th:replace="~{fragments :: head('Signup', 'none')}"></head>
 
-
-    <style>
-        body {
-            height: 100px;
-        }
-
-        .form-signup {
-            margin-top: 100px;
-            /*margin-bottom: 500px;*/
-        }
-    </style>
-
-</head>
-
-
-<body>
 <header th:replace="~{fragments :: header-fragment}"></header>
+<body>
 
 <form action="#" th:action="@{/signup}" th:object="${SignupRequest}" method="post">
     <div class="container form-signup">
@@ -72,7 +57,7 @@
     </div>
 </form>
 
-<footer th:replace="~{fragments :: footer}"></footer>
 </body>
+<footer th:replace="~{fragments :: footer}"></footer>
 
 </html>
