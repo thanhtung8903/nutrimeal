@@ -41,7 +41,7 @@ public class HomeController {
         if (principal instanceof OAuth2AuthenticationToken && principal != null){
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
-            User user = userRepository.findByUsername(oauthUser.getAttribute("email")).orElse(null);
+            User user = userRepository.findByEmail(oauthUser.getAttribute("email")).orElse(null);
             isManager = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_MANAGER"));
             isAdmin = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_ADMIN"));
             boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;

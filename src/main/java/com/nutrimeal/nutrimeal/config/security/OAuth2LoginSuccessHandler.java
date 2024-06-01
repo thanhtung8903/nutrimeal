@@ -14,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -44,6 +46,13 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             String email = attributes.getOrDefault("email", "").toString();
             String name = attributes.getOrDefault("name", "").toString();
             String picture = attributes.getOrDefault("picture", "").toString();
+
+            User checkUser = userRepository.findByEmail(email).orElse(null);
+            if(checkUser != null && checkUser.getPassword() != null){
+                SecurityContextHolder.getContext().setAuthentication(null);
+                response.sendRedirect("/login?oauth2_error=true");
+                return;
+            }
 
              userRepository.findByEmail(email)
                     .ifPresentOrElse(user -> {

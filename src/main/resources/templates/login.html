@@ -31,6 +31,10 @@
                             <span>Tên tài khoản hoặc mật khẩu không chính xác!</span>
                         </div>
 
+                        <div th:if="${param.oauth2_error}" class="alert alert-danger mt-2" role="alert">
+                            <span>Email đã được sử dụng !</span>
+                        </div>
+
                         <div class="text-center mt-2 mb-3">
                             <button type="submit" class="btn btn-primary">Đăng nhập</button>
                         </div>

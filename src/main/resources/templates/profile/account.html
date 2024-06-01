@@ -82,6 +82,7 @@
                             <input
                                     type="email"
                                     class="form-control"
+                                    th:attr="readonly=${isOauth2User} ? 'readonly' : null"
                                     th:value="*{getEmail()}"
                                     name="email"
                             />
