@@ -59,7 +59,6 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                         User user = new User();
                         Set<Role> roles = new HashSet<>();
                         roles.add(roleRepository.findByRoleName(RoleName.ROLE_CUSTOMER).orElseThrow(() -> new RuntimeException("Error: Role is not found")));
-                        user.setUsername(email);
                         user.setFullName(name);
                         user.setPoint(0);
                         user.setRoles(roles);
