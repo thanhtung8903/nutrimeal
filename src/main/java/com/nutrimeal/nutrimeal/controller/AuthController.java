@@ -66,4 +66,10 @@ public class AuthController {
             return "signup";
         }
     }
+
+    @GetMapping("forget")
+    public String forgotPassword() {
+        return "forget";
+    }
+
 }

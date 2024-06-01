@@ -3,59 +3,72 @@
 
 <head th:replace="~{fragments :: head('Signup', 'none')}"></head>
 
+<style>
+    .signup-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #ffffff;
+    }
+    .signup-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .signup-header h3 {
+        margin-bottom: 10px;
+    }
+    .form-text {
+        color: #ff0000;
+    }
+</style>
+
 <header th:replace="~{fragments :: header-fragment}"></header>
 <body>
 
-<form action="#" th:action="@{/signup}" th:object="${SignupRequest}" method="post">
-    <div class="container form-signup">
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-                <div class="text-center">
-                    <h1>ĐĂNG KÝ</h1>
-                </div>
-                <div th:if="${errorMessage}" class="alert alert-danger" role="alert"><span
-                        th:text="${errorMessage}"></span></div>
-                <div th:if="${successMessage}" class="alert alert-success" role="alert"><span
-                        th:text="${successMessage}"></span></div>
-
-                <div class="form-group">
-                    <label for="email">Tên tài khoản</label>
-                    <input type="text" class="form-control" id="username" aria-describedby="emailHelp"
-                           placeholder="Tên tài khoản" th:field="*{username}" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
-                           placeholder="Email" th:field="*{email}" required>
-
-                </div>
-                <div class="form-group">
-                    <label for="fullname">Họ và tên</label>
-                    <input type="text" class="form-control" id="fullname" placeholder="Họ và tên" th:field="*{fullName}"
-                           required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Mật khẩu</label>
-                    <input type="password" class="form-control" id="password" placeholder="Mật khẩu"
-                           th:field="*{password}" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Nhập lại mật khẩu</label>
-                    <input type="password" class="form-control" id="repassword" placeholder="Xác nhận mật khẩu"
-                           th:field="*{confirmPassword}"
-                           required>
-                </div>
-
-                <div class="text-center mb-5">
-                    <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
-                </div>
+<div class="container">
+    <div class="signup-container">
+        <div class="signup-header">
+            <h3>Đăng ký</h3>
+            <p>Bạn đã có tài khoản? Vui lòng <a style="text-decoration: none" href="#" th:href="@{/login}">Đăng nhập</a></p>
+        </div>
+        <form action="#" th:action="@{/signup}" th:object="${SignupRequest}" method="post">
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                <span th:text="${successMessage}"></span>
             </div>
 
-        </div>
+            <div class="form-group">
+                <label for="username">Tên tài khoản</label>
+                <input type="text" class="form-control" id="username" placeholder="Tên tài khoản" th:field="*{username}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" th:field="*{email}" required>
+            </div>
+            <div class="form-group">
+                <label for="fullname">Họ và tên</label>
+                <input type="text" class="form-control" id="fullname" placeholder="Họ và tên" th:field="*{fullName}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" placeholder="Mật khẩu" th:field="*{password}" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Nhập lại mật khẩu</label>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Xác nhận mật khẩu" th:field="*{confirmPassword}" required>
+            </div>
+
+            <div class="text-center mb-2">
+                <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
+            </div>
+        </form>
     </div>
-</form>
+</div>
 
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>

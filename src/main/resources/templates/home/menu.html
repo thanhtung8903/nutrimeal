@@ -306,7 +306,7 @@
         <div class="container">
             <div class="title" style="margin-bottom: 5px;">WEEKLY MEAL PLAN</div>
             <p class="time" style="margin-bottom: 15px;" th:text="${today} + ' - ' + ${future}"></p>
-            <a href="order.html" class="btn-order btn-primary">Đặt Ngay</a>
+            <a th:href="@{/combo}" href="order.html" class="btn-order btn-primary">Đặt Ngay</a>
         </div>
     </div>
 </section>
@@ -327,7 +327,7 @@
                 <p class="time1 20240520 active" data-id="20240520" style="font-size: 30px; font-weight: 700;"
                    th:text="${today} + ' - ' + ${future}"></p>
             </div>
-            <a href="order.html" class="btn btn-primary order-now">Đặt Ngay</a>
+            <a th:href="@{/combo}" href="order.html" class="btn btn-primary order-now">Đặt Ngay</a>
         </div>
         <div class="thead-menu d-none mb-3 d-md-flex flex-fill justify-content-between text-center day">
             <div class="col-menu text-danger col-md-2">Ngày</div>
@@ -340,24 +340,24 @@
             <div>
                 <div class="tab-item active">
                     <div class="tab-pane fade active show" role="tabpanel">
-                        <div th:each="daily : ${listDailyMenu}" class="day-menu mb-3">
+                        <div th:each="daily : ${listDailyMenu}" class="day-menu mb-3" th:if="${daily.dailyMenuType == 'N'}">
                             <div class="col-menu d-none d-md-block col-md-2">
-                                <div class="date" th:text="${#dates.format(daily.dailyMenuDate, 'E')} + ${#dates.format(daily.dailyMenuDate, 'dd.MM')}"></div>
+                                <div class="date" th:utext="${#dates.format(daily.dailyMenuDate, 'E') + '<br>' + #dates.format(daily.dailyMenuDate, 'dd.MM')}"></div>
                             </div>
                             <div class="col-menu col-md-3">
                                 <!-- <p class="d-md-none">breakfast</p> -->
                                 <h3 th:text="${daily.dishBreakfast.dishName}"></h3>
-                                <span class="text-danger">437 Kcal | 42, 17, 26</span>
+                                <span class="text-danger" th:text="${daily.dishBreakfast.dishCalories} + ' Kcal | ' + ${daily.dishBreakfast.dishCarbs} + ', ' + ${daily.dishBreakfast.dishFats} + ', ' + ${daily.dishBreakfast.dishProteins}"></span>
                             </div>
                             <div class="col-menu col-md-3">
                                 <!-- <p class="d-md-none">lunch</p> -->
                                 <h3 th:text="${daily.dishLunch.dishName}"></h3>
-                                <span class="text-danger">600 Kcal | 43, 24, 40</span>
+                                <span class="text-danger" th:text="${daily.dishLunch.dishCalories} + ' Kcal | ' + ${daily.dishLunch.dishCarbs} + ', ' + ${daily.dishLunch.dishFats} + ', ' + ${daily.dishLunch.dishProteins}"></span>
                             </div>
                             <div class="col-menu col-md-3">
                                 <!-- <p class="d-md-none">dinner</p> -->
                                 <h3 th:text="${daily.dishDinner.dishName}"></h3>
-                                <span class="text-danger">506 Kcal | 48, 8, 50</span>
+                                <span class="text-danger" th:text="${daily.dishDinner.dishCalories} + ' Kcal | ' + ${daily.dishDinner.dishCarbs} + ', ' + ${daily.dishDinner.dishFats} + ', ' + ${daily.dishDinner.dishProteins}"></span>
                             </div>
                         </div>
                     </div>
@@ -378,7 +378,7 @@
                                 27.05
                                 &ndash; 02.06</p>
                         </div>
-                        <a href="#" class="btn btn-success order-now">Đặt Ngay</a>
+                        <a th:href="@{/combo}" href="#" class="btn btn-success order-now">Đặt Ngay</a>
                     </div>
                     <div class="thead-menu d-none mb-3 d-md-flex flex-fill justify-content-between text-center">
                         <div class="col-menu text-success col-md-2">Ngày</div>
@@ -391,21 +391,23 @@
                         <div id="menu-content">
                             <div class="tab-item active">
                                 <div class="tab-pane fade active show" role="tabpanel">
-                                    <div class="day-menu mb-2">
+                                    <div th:each="daily : ${listDailyMenu}"  class="day-menu mb-2" th:if="${daily.dailyMenuType == 'V'}">
+
                                         <div class="col-menu d-none d-md-block col-md-2">
-                                            <div class="date_vegetarian">T2<br>20.05</div>
+                                            <div class="date_vegetarian" th:utext="${#dates.format(daily.dailyMenuDate, 'E') + '<br>' + #dates.format(daily.dailyMenuDate, 'dd.MM')}"></div>
+
                                         </div>
                                         <div class="col-menu col-md-3">
-                                            <h3>CHẢ ĐẬU XANH</h3>
-                                            MUNG BEAN W VEGGIES
+                                            <h3 th:text="${daily.dishBreakfast.dishName}"></h3>
+                                            <span class="text-dark" th:text="${daily.dishBreakfast.dishCalories} + ' Kcal | ' + ${daily.dishBreakfast.dishCarbs} + ', ' + ${daily.dishBreakfast.dishFats} + ', ' + ${daily.dishBreakfast.dishProteins}"></span>
                                         </div>
                                         <div class="col-menu col-md-3">
-                                            <h3>ĐẬU HỦ SỐT NƯỚC TƯƠNG</h3>
-                                            Soybean Sauce Tofu w Magenta Noodles
+                                            <h3 th:text="${daily.dishLunch.dishName}"></h3>
+                                            <span class="text-dark" th:text="${daily.dishLunch.dishCalories} + ' Kcal | ' + ${daily.dishLunch.dishCarbs} + ', ' + ${daily.dishLunch.dishFats} + ', ' + ${daily.dishLunch.dishProteins}"></span>
                                         </div>
                                         <div class="col-menu col-md-3">
-                                            <h3>BÒ NƯỚNG XÌ DẦU</h3>
-                                            Vegetarian beef pasta with pepper sauce
+                                            <h3 th:text="${daily.dishDinner.dishName}"></h3>
+                                            <span class="text-dark" th:text="${daily.dishDinner.dishCalories} + ' Kcal | ' + ${daily.dishDinner.dishCarbs} + ', ' + ${daily.dishDinner.dishFats} + ', ' + ${daily.dishDinner.dishProteins}"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -416,7 +418,7 @@
 
                 </div>
 
-                <div class="mb-5 pb-5">
+                <div class="">
                     <h4 class="text-danger text-danger1">Note</h4>
                     <p></p>
                     <p>Các phần ăn được tính toán calories cẩn thận. Chỉ số dinh dưỡng dưới tên phần ăn được liệt kê
@@ -427,7 +429,7 @@
                         lòng bảo quản lạnh sau khi nhận hàng và hâm nóng từ 2-3 phút trước khi dùng.</p>
                     <p> Phần ăn bình thường chỉ bao gồm thịt và rau củ, Tinh bột phức (gạo lức, gạo nâu, mì rau củ, bún,
                         bánh mì
-                        nâu) sẽ được gửi kèm trong phần ăn có ghi chú dấu (+) </p>.<p></p>
+                        nâu) sẽ được gửi kèm trong phần ăn có ghi chú dấu (+) </p>
                 </div>
             </div>
 
@@ -440,5 +442,5 @@
 </div>
 </body>
 
-
+<footer th:replace="~{fragments :: footer}"></footer>
 </html>
