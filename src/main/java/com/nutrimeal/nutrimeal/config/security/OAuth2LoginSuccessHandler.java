@@ -43,7 +43,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             String name = attributes.getOrDefault("name", "").toString();
             String picture = attributes.getOrDefault("picture", "").toString();
 
-             userRepository.findByUsername(email)
+             userRepository.findByEmail(email)
                     .ifPresentOrElse(user -> {
                         List<GrantedAuthority> authorities = user.getRoles().stream()
                                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
@@ -57,7 +57,6 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                         User user = new User();
                         Set<Role> roles = new HashSet<>();
                         roles.add(roleRepository.findByRoleName(RoleName.ROLE_CUSTOMER).orElseThrow(() -> new RuntimeException("Error: Role is not found")));
-                        user.setUsername(email);
                         user.setFullName(name);
                         user.setPoint(0);
                         user.setRoles(roles);

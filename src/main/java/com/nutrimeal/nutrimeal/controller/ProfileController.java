@@ -44,6 +44,7 @@ public class ProfileController {
             return "profile/account";
         }else{
             User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+            model.addAttribute("isOauth2User", false);
             model.addAttribute("user", user);
             return "profile/account";
         }
@@ -89,6 +90,7 @@ public class ProfileController {
             OAuth2User oauthUser = token.getPrincipal();
             user = userRepository.findByUsername(oauthUser.getAttribute("email")).orElse(null);
         } else {
+            model.addAttribute("isOauth2User", false);
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         model.addAttribute("user", user);
@@ -123,6 +125,7 @@ public class ProfileController {
             OAuth2User oauthUser = token.getPrincipal();
             user = userRepository.findByUsername(oauthUser.getAttribute("email")).orElse(null);
         } else {
+            model.addAttribute("isOauth2User", false);
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         model.addAttribute("user", user);
@@ -139,6 +142,7 @@ public class ProfileController {
             OAuth2User oauthUser = token.getPrincipal();
             user = userRepository.findByUsername(oauthUser.getAttribute("email")).orElse(null);
         } else {
+            model.addAttribute("isOauth2User", false);
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         List<Address> addressList = addressService.findAllAddressByUsername(user.getUsername());
@@ -183,6 +187,7 @@ public class ProfileController {
             OAuth2User oauthUser = token.getPrincipal();
             user = userRepository.findByUsername(oauthUser.getAttribute("email")).orElse(null);
         } else {
+            model.addAttribute("isOauth2User", false);
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         addressService.setDefaultAddress(addressId, user.getUsername());
@@ -213,6 +218,7 @@ public class ProfileController {
             OAuth2User oauthUser = token.getPrincipal();
             user = userRepository.findByUsername(oauthUser.getAttribute("email")).orElse(null);
         } else {
+            model.addAttribute("isOauth2User", false);
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         model.addAttribute("user", user);
