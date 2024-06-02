@@ -24,7 +24,7 @@ public class AddressService {
         }
 
         if (address.getDefaultAddress()) {
-            for (Address address1 :addressRepository.findAllByUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"))) {
+            for (Address address1 :addressRepository.findAllByIsActiveTrueAndUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"))) {
                 address1.setDefaultAddress(false);
                 addressRepository.save(address1);
             }
@@ -34,13 +34,14 @@ public class AddressService {
 
     public void deleteAddress(Integer addressId, String name) {
         User user = userRepository.findByUsername(name).orElseThrow(() -> new RuntimeException("User not found"));
-        Address address = addressRepository.findByAddressIdAndUser(addressId, user).orElseThrow(() -> new RuntimeException("Address not found"));
-        addressRepository.delete(address);
+        Address address = addressRepository.findByAddressIdAndUserAndIsActiveTrue(addressId, user).orElseThrow(() -> new RuntimeException("Address not found"));
+        address.setIsActive(false);
+        addressRepository.save(address);
     }
 
     public List<Address> findAllAddressByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
-        return addressRepository.findAllByUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"));
+        return addressRepository.findAllByIsActiveTrueAndUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"));
     }
 
     public void updateAddress(Address address, String username) {
@@ -58,7 +59,7 @@ public class AddressService {
         }
 
         if (address.getDefaultAddress()) {
-            for (Address address2 :addressRepository.findAllByUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"))) {
+            for (Address address2 :addressRepository.findAllByIsActiveTrueAndUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"))) {
                 address2.setDefaultAddress(false);
                 addressRepository.save(address2);
             }
@@ -69,8 +70,8 @@ public class AddressService {
 
     public void setDefaultAddress(Integer addressId, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
-        Address address = addressRepository.findByAddressIdAndUser(addressId, user).orElseThrow(() -> new RuntimeException("Address not found"));
-        for (Address address1 :addressRepository.findAllByUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"))) {
+        Address address = addressRepository.findByAddressIdAndUserAndIsActiveTrue(addressId, user).orElseThrow(() -> new RuntimeException("Address not found"));
+        for (Address address1 :addressRepository.findAllByIsActiveTrueAndUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"))) {
             address1.setDefaultAddress(false);
             addressRepository.save(address1);
         }

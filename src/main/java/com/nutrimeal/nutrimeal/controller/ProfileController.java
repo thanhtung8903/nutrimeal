@@ -160,6 +160,7 @@ public class ProfileController {
         } else {
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
+        address.setIsActive(true);
         addressService.saveAddress(address, user.getUsername());
         return "redirect:/profile/address";
     }
