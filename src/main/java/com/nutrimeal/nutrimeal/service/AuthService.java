@@ -95,4 +95,7 @@ public class AuthService {
                 .build();
 
     }
+
+    public void handleForgetPassword(String usernameOrEmail) {
+    }
 }

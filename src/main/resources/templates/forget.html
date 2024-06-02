@@ -42,8 +42,8 @@
             </div>
 
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Tên người dùng" required/>
+                <label for="usernameOrEmail">Tên người dùng hoặc Email</label>
+                <input th:value="${usernameOrEmail}" type="text" class="form-control mt-1" id="usernameOrEmail" name="usernameOrEmail" placeholder="Tên người dùng hoặc Email"/>
                 <div id="usernameOrEmailError" class="form-text"></div>
             </div>
 
