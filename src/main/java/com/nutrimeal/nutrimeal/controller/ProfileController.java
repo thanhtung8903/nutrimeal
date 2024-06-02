@@ -70,7 +70,7 @@ public class ProfileController {
             } else {
                 updateUserRequest.setImage(user.getImage()); // keep the old image if no new file is uploaded
             }
-            userService.updateUser(updateUserRequest, user.getUsername());
+            userService.updateUser(updateUserRequest, user.getEmail());
             return "redirect:/profile/account?success=true";
         } catch (RuntimeException e) {
             return "redirect:/profile/account?error=true";
@@ -107,7 +107,7 @@ public class ProfileController {
             } else {
                 user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
             }
-            userService.changePassword(changePasswordRequest, user.getUsername());
+            userService.changePassword(changePasswordRequest, user.getEmail());
             return "redirect:/profile/password?success=true";
         } catch (RuntimeException e) {
             return "redirect:/profile/password?error=true";
@@ -134,6 +134,7 @@ public class ProfileController {
     @GetMapping("/profile/address")
     public String profileAddress(Model model, Principal principal) {
         User user;
+        List<Address> addressList;
         if (principal instanceof OAuth2AuthenticationToken && principal != null) {
             boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
             model.addAttribute("isOauth2User", isOauth2User);
@@ -144,7 +145,7 @@ public class ProfileController {
             model.addAttribute("isOauth2User", false);
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
-        List<Address> addressList = addressService.findAllAddressByUsername(user.getUsername());
+        addressList= addressService.findAllAddressByEmail(user.getEmail());
         model.addAttribute("user", user);
         model.addAttribute("addressList", addressList);
         return "profile/address";
@@ -161,7 +162,7 @@ public class ProfileController {
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         address.setIsActive(true);
-        addressService.saveAddress(address, user.getUsername());
+        addressService.saveAddress(address, user.getEmail());
         return "redirect:/profile/address";
     }
 
@@ -175,7 +176,7 @@ public class ProfileController {
         } else {
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
-        addressService.updateAddress(address, user.getUsername());
+        addressService.updateAddress(address, user.getEmail());
         return "redirect:/profile/address";
     }
 
@@ -190,7 +191,7 @@ public class ProfileController {
             model.addAttribute("isOauth2User", false);
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
-        addressService.setDefaultAddress(addressId, user.getUsername());
+        addressService.setDefaultAddress(addressId, user.getEmail());
         return "redirect:/profile/address";
     }
 
@@ -204,7 +205,7 @@ public class ProfileController {
         } else {
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
-        addressService.deleteAddress(addressId, user.getUsername());
+        addressService.deleteAddress(addressId, user.getEmail());
         return "redirect:/profile/address";
     }
 
