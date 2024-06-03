@@ -81,19 +81,19 @@ public class HomeController {
         // Tạo đối tượng Calendar để tính toán ngày sau 7 ngày
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(today);
-        calendar.add(Calendar.DAY_OF_MONTH, 7);
-        Date todayPlus7 = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_MONTH, 6);
+        Date todayPlus6 = calendar.getTime();
 
         // Định dạng ngày tháng theo kiểu YYYY-MM-DD
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM");
         String SToday = formatter.format(today);
-        String future = formatter.format(todayPlus7);
+        String future = formatter.format(todayPlus6);
 
         model.addAttribute("today", SToday);
         model.addAttribute("future", future);
 
         // Gọi phương thức service để lấy danh sách DailyMenu
-        List<DailyMenu> listDailyMenu = dailyMenuService.findByDailyMenuDateBetween(today, todayPlus7);
+        List<DailyMenu> listDailyMenu = dailyMenuService.findByDailyMenuDateBetween(today, todayPlus6);
         model.addAttribute("listDailyMenu", listDailyMenu);
 
         return "home/menu";
