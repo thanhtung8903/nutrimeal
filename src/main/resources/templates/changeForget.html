@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head('Change Password', 'none')}"></head>
+
+<style>
+    .change-password-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #ffffff;
+    }
+    .change-password-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .change-password-header h3 {
+        margin-bottom: 10px;
+    }
+    .form-text {
+        color: #ff0000;
+    }
+</style>
+
+<header th:replace="~{fragments :: header-fragment}"></header>
+<body>
+
+<div class="container">
+    <div class="change-password-container">
+        <div class="change-password-header">
+            <h3>Thay Đổi Mật Khẩu</h3>
+        </div>
+        <form th:action="@{/forget/change}" method="post" onsubmit="return validateChangePassword()">
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                <span th:text="${successMessage}"></span>
+            </div>
+
+
+            <input type="hidden" name="userId" value="" th:value="${userId}"/>
+            <input type="hidden" name="token" value="" th:value="${token}"/>
+
+
+
+            <div class="form-group">
+                <label for="newPassword">Mật khẩu mới</label>
+                <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Mật khẩu mới" required/>
+                <div id="newPasswordError" class="form-text"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Xác nhận mật khẩu mới</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Xác nhận mật khẩu mới" required/>
+                <div id="confirmPasswordError" class="form-text"></div>
+            </div>
+
+            <div class="text-center mb-2">
+                <button type="submit" class="btn btn-primary mt-3">Đổi mật khẩu</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function validateChangePassword() {
+        var newPassword = document.getElementById("newPassword").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+        var newPasswordError = document.getElementById("newPasswordError");
+        var confirmPasswordError = document.getElementById("confirmPasswordError");
+
+        // Reset error messages
+        newPasswordError.textContent = "";
+        confirmPasswordError.textContent = "";
+
+        var isValid = true;
+
+        if (newPassword.length < 8) {
+            newPasswordError.textContent = "* Mật khẩu phải có ít nhất 8 ký tự.";
+            isValid = false;
+        }
+
+        if (newPassword !== confirmPassword) {
+            confirmPasswordError.textContent = "* Mật khẩu xác nhận không khớp.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>
+
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</html>

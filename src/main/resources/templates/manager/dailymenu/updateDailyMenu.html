@@ -119,6 +119,48 @@
             placeholder: "Chọn món ăn cho bữa tối",
             allowClear: true
         });
+
+        function updateSelectOptions() {
+            var selectedDishes = [
+                $('#menuBreakfast').val(),
+                $('#menuLunch').val(),
+                $('#menuDinner').val()
+            ];
+
+            $('#menuBreakfast option, #menuLunch option, #menuDinner option').each(function() {
+                var value = $(this).val();
+                if (value && selectedDishes.includes(value)) {
+                    if ($(this).parent().attr('id') === 'menuBreakfast' && value === $('#menuBreakfast').val() ||
+                        $(this).parent().attr('id') === 'menuLunch' && value === $('#menuLunch').val() ||
+                        $(this).parent().attr('id') === 'menuDinner' && value === $('#menuDinner').val()) {
+                        $(this).removeAttr('disabled');
+                    } else {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                } else {
+                    $(this).removeAttr('disabled');
+                }
+            });
+
+            $('#menuBreakfast').select2('destroy').select2({
+                placeholder: "Chọn món ăn cho bữa sáng",
+                allowClear: true
+            });
+            $('#menuLunch').select2('destroy').select2({
+                placeholder: "Chọn món ăn cho bữa trưa",
+                allowClear: true
+            });
+            $('#menuDinner').select2('destroy').select2({
+                placeholder: "Chọn món ăn cho bữa tối",
+                allowClear: true
+            });
+        }
+
+        $('#menuBreakfast, #menuLunch, #menuDinner').on('change', function() {
+            updateSelectOptions();
+        });
+
+        updateSelectOptions();
     });
 </script>
 

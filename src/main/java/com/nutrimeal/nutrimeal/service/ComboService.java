@@ -63,7 +63,7 @@ public class ComboService {
         comboTypeRepository.deleteById(id);
     }
 
-    public List<Combo> getCombosByCalories(float min, float max) {
+    public List<Combo> getCombosByCalories(int min, int max) {
         return comboRepository.findAllByComboCaloriesBetweenAndIsActiveTrue(min, max);
     }
 }

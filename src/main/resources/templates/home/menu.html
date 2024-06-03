@@ -306,7 +306,7 @@
         <div class="container">
             <div class="title" style="margin-bottom: 5px;">WEEKLY MEAL PLAN</div>
             <p class="time" style="margin-bottom: 15px;" th:text="${today} + ' - ' + ${future}"></p>
-            <a href="order.html" class="btn-order btn-primary">Đặt Ngay</a>
+            <a th:href="@{/combo}" href="order.html" class="btn-order btn-primary">Đặt Ngay</a>
         </div>
     </div>
 </section>
@@ -327,7 +327,7 @@
                 <p class="time1 20240520 active" data-id="20240520" style="font-size: 30px; font-weight: 700;"
                    th:text="${today} + ' - ' + ${future}"></p>
             </div>
-            <a href="order.html" class="btn btn-primary order-now">Đặt Ngay</a>
+            <a th:href="@{/combo}" href="order.html" class="btn btn-primary order-now">Đặt Ngay</a>
         </div>
         <div class="thead-menu d-none mb-3 d-md-flex flex-fill justify-content-between text-center day">
             <div class="col-menu text-danger col-md-2">Ngày</div>
@@ -378,7 +378,7 @@
                                 27.05
                                 &ndash; 02.06</p>
                         </div>
-                        <a href="#" class="btn btn-success order-now">Đặt Ngay</a>
+                        <a th:href="@{/combo}" href="#" class="btn btn-success order-now">Đặt Ngay</a>
                     </div>
                     <div class="thead-menu d-none mb-3 d-md-flex flex-fill justify-content-between text-center">
                         <div class="col-menu text-success col-md-2">Ngày</div>
@@ -429,7 +429,7 @@
                         lòng bảo quản lạnh sau khi nhận hàng và hâm nóng từ 2-3 phút trước khi dùng.</p>
                     <p> Phần ăn bình thường chỉ bao gồm thịt và rau củ, Tinh bột phức (gạo lức, gạo nâu, mì rau củ, bún,
                         bánh mì
-                        nâu) sẽ được gửi kèm trong phần ăn có ghi chú dấu (+) </p>.<p></p>
+                        nâu) sẽ được gửi kèm trong phần ăn có ghi chú dấu (+) </p>
                 </div>
             </div>
 

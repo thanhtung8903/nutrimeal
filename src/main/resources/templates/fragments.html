@@ -67,7 +67,9 @@
                         <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/profile/account}">Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span></a>
+                        <a class="nav-link" th:href="@{/profile/account}">
+                            Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
@@ -148,7 +150,9 @@
             <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/profile/account}">Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span></a>
+                        <a class="nav-link" th:href="@{/profile/account}">
+                            Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
