@@ -48,13 +48,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("LoginRequest") LoginRequest request, Model model) {
+    public String login(@ModelAttribute LoginRequest request, Model model) {
         try {
             authService.handleAuthenticateUser(request);
             return "home";
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "redirect:login";
+            return "login";
         }
     }
 
@@ -69,7 +69,7 @@ public class AuthController {
     @PostMapping("/signup")
     public String signupUser(@ModelAttribute("SignupRequest") SignupRequest request, BindingResult result, Model model) {
         try {
-
+            authService.signupUser(request);
             model.addAttribute("successMessage", "Đăng ký thành công!");
             return "signup";
         } catch (RuntimeException e) {

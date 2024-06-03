@@ -35,16 +35,10 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public void signupUser(SignupRequest request) {
-        if (!request.getUsername().matches("^\\S{6,}$")) {
-            throw new RuntimeException("Username không hợp lệ");
-        } else if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username đã được sử dụng");
         } else if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email đã được sử dụng");
-        } else if (!request.getPassword().matches("^.{8,}$")) {
-            throw new RuntimeException("Mật khẩu phải dài ít nhất 8 ký tự");
-        } else if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new RuntimeException("Mật khẩu không khớp");
         } else {
             User user = new User();
             user.setUsername(request.getUsername());
@@ -94,8 +88,5 @@ public class AuthService {
                 .point(user.getPoint())
                 .build();
 
-    }
-
-    public void handleForgetPassword(String usernameOrEmail) {
     }
 }

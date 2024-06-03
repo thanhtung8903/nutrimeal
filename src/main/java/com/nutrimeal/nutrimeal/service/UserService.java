@@ -52,8 +52,8 @@ public class UserService {
         return userRepository.findByEmailOrUsername(email, username).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public User updateUser(UpdateUserRequest updateUserRequest, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+    public User updateUser(UpdateUserRequest updateUserRequest, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
         if (updateUserRequest.getEmail().equals(user.getEmail())) {
             user.setEmail(updateUserRequest.getEmail());
