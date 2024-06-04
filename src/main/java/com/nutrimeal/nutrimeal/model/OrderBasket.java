@@ -26,4 +26,14 @@ public class OrderBasket {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Transient
+    public int getSubTotal7Days() {
+        return this.quantity * this.combo.getComboPrice7Days();
+    }
+
+    @Transient
+    public int getSubTotal30Days() {
+        return this.quantity * this.combo.getComboPrice30Days();
+    }
 }

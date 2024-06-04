@@ -18,5 +18,5 @@ public interface OrderBasketRepository extends JpaRepository<OrderBasket, Intege
     @Query("UPDATE OrderBasket orderBasket SET orderBasket.quantity = ?1 WHERE orderBasket.combo.comboId = ?2 " +
             "AND orderBasket.user.userId = ?3")
     @Modifying
-    void updateQuantity(Integer quantity, Integer userId, Integer comboId);
+    void updateQuantity(Integer quantity, Integer comboId, String userId);
 }
