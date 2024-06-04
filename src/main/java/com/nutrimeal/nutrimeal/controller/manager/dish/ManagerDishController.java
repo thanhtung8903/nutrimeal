@@ -20,12 +20,6 @@ public class ManagerDishController {
     private final DishService dishService;
     private final ImageUploadService imageUploadService;
 
-//    @GetMapping("/dish")
-//    public String dish(Model model) {
-//        model.addAttribute("listDish", dishService.findAllDish());
-//        return "manager/dish/dish";
-//    }
-
     @GetMapping("/dish")
     public String dish(Model model, @RequestParam(defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 6);
