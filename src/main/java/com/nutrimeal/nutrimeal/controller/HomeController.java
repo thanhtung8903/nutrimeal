@@ -1,14 +1,11 @@
 package com.nutrimeal.nutrimeal.controller;
 
-import com.nutrimeal.nutrimeal.model.Address;
 import com.nutrimeal.nutrimeal.model.Combo;
 import com.nutrimeal.nutrimeal.model.DailyMenu;
 import com.nutrimeal.nutrimeal.model.User;
-import com.nutrimeal.nutrimeal.repository.DailyMenuRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.ComboService;
 import com.nutrimeal.nutrimeal.service.DailyMenuService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -18,12 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,7 +32,7 @@ public class HomeController {
         boolean isManager = false;
         boolean isAdmin = false;
 
-        if (principal instanceof OAuth2AuthenticationToken && principal != null){
+        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
             User user = userRepository.findByEmail(oauthUser.getAttribute("email")).orElse(null);
@@ -138,7 +132,6 @@ public class HomeController {
             model.addAttribute("weight", 50);
             model.addAttribute("height", 160);
         }
-
         return "home/consult";
     }
 
@@ -148,6 +141,16 @@ public class HomeController {
         List<Combo> comboList = comboService.getAllComboActive();
         model.addAttribute("comboList", comboList);
         return "home/combo";
+    }
+
+    @GetMapping("/combo/{id}")
+    public String comboDetail(@PathVariable("id") Integer id, Model model) {
+        Combo combo = comboService.getComboById(id);
+        model.addAttribute("combo", combo);
+        String[] descriptionItems = combo.getComboDescription().split("\n");
+        model.addAttribute("descriptionItems", descriptionItems);
+        model.addAttribute("comboList", comboService.getAllComboActive());
+        return "home/comboDetail";
     }
 
 

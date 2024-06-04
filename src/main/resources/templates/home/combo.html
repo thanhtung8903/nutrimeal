@@ -162,11 +162,11 @@
             <div class="col-md-3 order-combo" th:each="combo : ${comboList}">
                 <div class="listing-item" data-id="lunch-eatclean" data-type="package">
                     <div class="card">
-                        <a class="link">
+                        <a class="link" th:href="@{/combo/{id}(id=${combo.comboId})}">
                             <img th:src="${combo.comboImage}" class="card-img-top" alt="">
                         </a>
                         <div class="card-body">
-                            <a style="text-decoration: none; color: black" class="link-text">
+                            <a style="text-decoration: none; color: black" class="link-text" th:href="@{/combo/{id}(id=${combo.comboId})}">
                                 <h3 class="card-title d-flex justify-content-between">
                                     <span th:text="${combo.comboName}"></span>
                                 </h3>
