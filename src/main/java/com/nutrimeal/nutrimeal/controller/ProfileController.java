@@ -41,7 +41,7 @@ public class ProfileController {
             User user = userRepository.findByEmail(oauthUser.getAttribute("email")).orElse(null);
             model.addAttribute("user", user);
             return "profile/account";
-        }else{
+        } else {
             User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
             model.addAttribute("isOauth2User", false);
             model.addAttribute("user", user);
@@ -145,7 +145,7 @@ public class ProfileController {
             model.addAttribute("isOauth2User", false);
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
-        addressList= addressService.findAllAddressByEmail(user.getEmail());
+        addressList = addressService.findAllAddressByEmail(user.getEmail());
         model.addAttribute("user", user);
         model.addAttribute("addressList", addressList);
         return "profile/address";
