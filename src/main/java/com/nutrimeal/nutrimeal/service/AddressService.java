@@ -44,7 +44,6 @@ public class AddressService {
         return addressRepository.findAllByIsActiveTrueAndUserOrderByDefaultAddressDesc(user).orElseThrow(() -> new RuntimeException("Address not found"));
     }
 
-
     public void updateAddress(Address address, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         address.setUser(user);
@@ -54,6 +53,7 @@ public class AddressService {
         address.setDistrict(address.getDistrict());
         address.setWard(address.getWard());
         address.setApartmentNumber(address.getApartmentNumber());
+        address.setIsActive(true);
 
         if (address.getDefaultAddress() == null) {
             address.setDefaultAddress(false);
