@@ -146,6 +146,11 @@
                         <span th:if="${combo.getComboTime() == 'L'}">Ăn trưa</span>
                         <span th:if="${combo.getComboTime() == 'BLD'}">Ăn cả ngày</span>
                         <span th:if="${combo.getComboTime() == 'D'}">Ăn tối</span>
+                        <span th:if="${combo.getComboTime() == 'BL'}">Ăn sáng, trưa</span>
+                        <span th:if="${combo.getComboTime() == 'BD'}">Ăn sáng, tối</span>
+                        <span th:if="${combo.getComboTime() == 'LD'}">Ăn trưa, tối</span>
+                        <span th:if="${combo.getComboTime() == 'B'}">Ăn sáng</span>
+
 
                     </td>
 

@@ -92,12 +92,13 @@
                     <option value="D">Ăn tối</option>
                     <option value="BL">Ăn sáng, trưa</option>
                     <option value="LD">Ăn trưa, tối</option>
+                    <option value="BD">Ăn sáng, tối</option>
                     <option value="BLD">Cả ngày</option>
                 </select>
             </div>
 
 
-            <button type="submit" class="btn btn-primary">Cập nhật </button>
+            <button type="submit" class="btn btn-primary">Thêm Combo</button>
             <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/combo\''">Quay lại</button>
 
             <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">

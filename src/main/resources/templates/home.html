@@ -261,7 +261,7 @@
             NUTRIMEAL
         </h1>
         <p data-aos="fade-right" data-aos-duration="1400" data-aos-delay="200">
-            NUTRIMEAL VN cung cấp các phần ăn lành mạnh hàng tuần giúp bạn duy trì
+            NUTRIMEAL cung cấp các phần ăn lành mạnh hàng tuần giúp bạn duy trì
             một lối sống khỏe. Chúng tôi tập trung vào chế độ ăn cân bằng được
             thiết kế chuyên biệt để hỗ trợ bạn kiểm soát cân nặng một cách hiệu
             quả nhất.
@@ -269,7 +269,7 @@
 
         <p data-aos="fade-right" data-aos-duration="1400" data-aos-delay="200">
             Nếu bạn đang tìm kiếm những bữa ăn ngon và tốt cho sức khỏe được chuẩn
-            bị sẵn ở Saigon thì NUTRIMEAL là một lựa chọn tối ưu. Thực đơn đa dạng
+            bị sẵn ở Hà Nội thì NUTRIMEAL là một lựa chọn tối ưu. Thực đơn đa dạng
             với hơn 100 món của chúng tôi có thể giúp bạn thưởng thức mà không
             ngán trong hơn 1 tháng.
         </p>
@@ -332,7 +332,7 @@
     </div>
 </section>
 <section class="featured-product">
-    <div class="featured-product-title">
+    <div class="featured-product-title pt-1">
         <h1 >Sản Phẩm Nổi Bật</h1>
         <div class="gachchan_icon">
             <svg style="width: 80px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
@@ -343,16 +343,40 @@
         </p>
     </div>
     <div class="featured-product-list">
-        <div class="product" th:each="combo : ${comboList}">
-            <div class="product-image">
-                <img th:src="${combo.comboImage}" />
-            </div>
-            <div class="product-content">
-                <h3 th:text="${combo.comboName}">Product Name</h3>
-                <p th:text="${combo.comboDescription}">Product Description</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 order-combo" th:each="combo : ${comboList}">
+                    <div class="listing-item" data-id="lunch-eatclean" data-type="package">
+                        <div class="card">
+                            <a class="link">
+                                <img th:src="${combo.comboImage}" class="card-img-top" alt="">
+                            </a>
+                            <div class="card-body">
+                                <a style="text-decoration: none; color: black" class="link-text">
+                                    <h3 class="card-title d-flex justify-content-between">
+                                        <span th:text="${combo.comboName}"></span>
+                                    </h3>
+                                </a>
+                                <div class="price-cart">
+                                    <span class="card-price" th:text="${combo.comboPrice7Days}"></span>
+                                    <span class="icon"><i class="fas fa-shopping-cart add-to-cart" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var priceElements = document.querySelectorAll('.card-price');
+            priceElements.forEach(function(priceElement) {
+                var price = parseInt(priceElement.textContent, 10);
+                priceElement.textContent = price.toLocaleString('vi-VN') + 'đ';
+            });
+        });
+    </script>
 </section>
 <section class="feedback"></section>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

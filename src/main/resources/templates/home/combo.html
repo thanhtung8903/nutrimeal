@@ -10,10 +10,14 @@
 />
 <style>
     * {
-        box-sizing: border-box; /* Giữ cho padding và border không làm tăng kích thước của phần tử */
+        box-sizing: border-box;
         margin: 0;
         padding: 0;
         font-family: sans-serif;
+    }
+
+    body {
+        background-color: #ececec;
     }
 
     .order-content-title {
@@ -21,56 +25,32 @@
         text-align: center;
         color: rgba(11, 8, 8, 0.854);
     }
+
     .order-content-title h1 {
         font-weight: 500;
         letter-spacing: 5px;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-size: 40px;
     }
+
     .order-content-title span {
         font-weight: 1000;
     }
 
     .order-content-title h5 {
-        /*letter-spacing: 3px;*/
         font-size: 17px;
-
-        font-family:Verdana, Geneva, Tahoma, sans-serif;
-    }
-    .order-combo-list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around; /*Cho phép các phần tử trong order-content xuống dòng khi không đủ không gian */
-        margin: 60px;
-        margin-top: 0;
-    }
-
-    .order-combo {
-        height: 200px;
-        width: 250px;
-        margin: 20px;
-        box-shadow: 5px 5px 20px black;
-        border-radius: 5px;
-        overflow: hidden;
-        position: relative;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
     .order-combo img {
         width: 100%;
-        height: 100%;
-        object-fit: cover; /* Giữ cho hình ảnh không bị méo khi thay đổi kích thước */
+        height: 200px;
+        object-fit: cover;
         transition: 0.5s;
     }
 
-    .order-combo-content {
-        height: 30px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        box-sizing: border-box;
-        background: rgba(255, 255, 255, 0.8);
-        transition: 0.5s;
+    .order-combo img:hover {
+        transform: scale(1.05);
     }
 
     .order-combo-content h3 {
@@ -78,34 +58,86 @@
         text-align: center;
     }
 
-    .order-combo-description {
-        display: flex;
-        justify-content: space-between; /* Canh về hai phía */
-        align-items: center;
-        margin: 20px;
-        font-size: 18px;
-        margin-top: 5px;
-        visibility: hidden;
-        opacity: 0;
-    }
     .order-combo {
         cursor: pointer;
+        margin-bottom: 30px;
     }
-    .order-combo:hover .order-combo-content {
-        height: 70px;
-        bottom: 0;
+
+    .card {
+        border: none;
+        transition: box-shadow 0.3s;
     }
-    .order-combo-description {
-        opacity: 1;
-        visibility: visible;
+
+    .card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    .order-combo:hover img {
-        transform: scale(1.1) rotate(-3deg);
-    }
-    .combongang_icon{
-        margin-top: -30px;
+
+    .card-body {
         text-align: center;
-        color: red;
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .card-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .card-price {
+        font-size: 18px;
+        color: black;
+        font-weight: bold;
+    }
+
+    .icon {
+        display: inline-block;
+        margin-top: 10px;
+        cursor: pointer;
+        color: black;
+        transition: color 0.3s;
+    }
+
+    .icon:hover {
+        color: black;
+    }
+
+    .listing-item {
+        background-color: #f8f8f8;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .listing-item .card {
+        border: none;
+    }
+
+    .listing-item .card img {
+        border-bottom: 2px solid black;
+    }
+
+    .price-cart {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-price {
+        font-size: 18px;
+        color: black;
+        font-weight: bold;
+    }
+
+    .icon {
+        display: inline-block;
+        cursor: pointer;
+        color: black;
+        transition: color 0.3s;
+    }
+
+    .icon:hover {
+        color: black;
     }
 </style>
 
@@ -113,39 +145,51 @@
 <body>
 <section class="order-content">
     <div class="order-content-title">
-        <h1>Chọn <span>Gói Ăn</span></h1>
+        <h1>CHỌN <span> GÓI ĂN</span></h1>
         <div class="combongang_icon">
-            <svg style="width: 80px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+            <svg style="width: 80px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path fill="#e02606"
+                      d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
+            </svg>
         </div>
         <h5>
             NUTRIMEAL cung cấp nhiều gói ăn đa dạng phù hợp với mọi nhu cầu của
             bạn
         </h5>
     </div>
-    <div class="order-combo-list" >
-        <div class="order-combo" onclick="redirectToOrderComboDetail()" th:each="combo : ${comboList}">
-            <img
-                    th:src="${combo.comboImage}"
-                    alt=""/>
-            <div class="order-combo-content">
-                <h3 th:text="${combo.comboName}"></h3>
-                <div class="order-combo-description">
-                    <h4 th:text="${combo.comboPrice7Days}"></h4>
-                    <a href="#" style="color: black"
-                    ><i
-                            class="fa-solid fa-cart-shopping"
-                            style="font-size: 20px"
-                    ></i
-                    ></a>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 order-combo" th:each="combo : ${comboList}">
+                <div class="listing-item" data-id="lunch-eatclean" data-type="package">
+                    <div class="card">
+                        <a class="link">
+                            <img th:src="${combo.comboImage}" class="card-img-top" alt="">
+                        </a>
+                        <div class="card-body">
+                            <a style="text-decoration: none; color: black" class="link-text">
+                                <h3 class="card-title d-flex justify-content-between">
+                                    <span th:text="${combo.comboName}"></span>
+                                </h3>
+                            </a>
+                            <div class="price-cart">
+                                <span class="card-price" th:text="${combo.comboPrice7Days}"></span>
+                                <span class="icon"><i class="fas fa-shopping-cart add-to-cart" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 <script>
-    function redirectToOrderComboDetail() {
-        window.location.href = "order-combo-detail.html";
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+        var priceElements = document.querySelectorAll('.card-price');
+        priceElements.forEach(function(priceElement) {
+            var price = parseInt(priceElement.textContent, 10);
+            priceElement.textContent = price.toLocaleString('vi-VN') + 'đ';
+        });
+    });
 </script>
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>
