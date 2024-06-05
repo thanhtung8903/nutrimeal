@@ -90,7 +90,7 @@ public class AuthController {
                 model.addAttribute("successMessage", "Vui lòng kiểm tra email để đặt lại mật khẩu!");
             } else {
                 LOGGER.warn("User not found or username is null for: {}", usernameOrEmail);
-                model.addAttribute("errorMessage", "Lỗi xảy ra, vui lòng thử lại.");
+                model.addAttribute("errorMessage", "Không tìm thấy tài khoản");
             }
             model.addAttribute("usernameOrEmail", usernameOrEmail);
             return "forget";
