@@ -59,4 +59,10 @@ public class DailyMenuService {
         }
     }
 
+    public Page<DailyMenu> searchDailyMenu(Date date, String type, String name, Pageable pageable) {
+        if (date == null && type == null && name == null) {
+            return dailyMenuRepository.findAllByIsActiveTrueOrderByDailyMenuDateDesc(pageable);
+        }
+        return dailyMenuRepository.searchDailyMenu(date, type, name, pageable);
+    }
 }

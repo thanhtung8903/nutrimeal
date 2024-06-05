@@ -12,6 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Controller
 @RequestMapping("/manager")
 @RequiredArgsConstructor
@@ -105,5 +109,34 @@ public class ManagerMenuController {
     public String deleteCombo(@PathVariable int id) {
         dailyMenuService.deleteDailyMenu(id);
         return "redirect:/manager/dailymenu";
+    }
+
+    @GetMapping("/dailymenu/search")
+    public String searchDailyMenu(
+            @RequestParam(value = "date", required = false) String date,
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "dishName", required = false) String dishName,
+            @RequestParam(defaultValue = "0") int page,
+            Model model
+    ) {
+
+        if (date.isEmpty() && type.isEmpty() && dishName.isEmpty()) {
+            return "redirect:/manager/dailymenu";
+        }
+
+        Date dailyMenuDate = null;
+        if (date != null && !date.isEmpty()) {
+            try {
+                dailyMenuDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Pageable pageable = PageRequest.of(page, 6);
+        model.addAttribute("date", date);
+        model.addAttribute("type", type);
+        model.addAttribute("dishName", dishName != null ? dishName.trim() : null);
+        model.addAttribute("listDailyMenu", dailyMenuService.searchDailyMenu(dailyMenuDate, type, dishName != null ? dishName.trim() : null, pageable));
+        return "manager/dailymenu/dailyMenu";
     }
 }
