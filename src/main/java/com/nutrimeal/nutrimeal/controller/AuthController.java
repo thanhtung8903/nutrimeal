@@ -5,20 +5,12 @@ import com.nutrimeal.nutrimeal.dto.request.SignupRequest;
 import com.nutrimeal.nutrimeal.email.EmailService;
 import com.nutrimeal.nutrimeal.model.ForgetToken;
 import com.nutrimeal.nutrimeal.model.User;
-import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.AuthService;
 import com.nutrimeal.nutrimeal.service.ForgetTokenService;
 import com.nutrimeal.nutrimeal.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.boot.Banner;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -85,21 +77,27 @@ public class AuthController {
 
     @PostMapping("forget")
     public String forget(@RequestParam("usernameOrEmail") String usernameOrEmail, Model model) {
+        LOGGER.info("Received forget password request for: {}", usernameOrEmail);
         try {
             User user = userService.getUserByEmailOrUsername(usernameOrEmail, usernameOrEmail);
             if (user != null && user.getUsername() != null) {
+                LOGGER.info("User found: {}", user.getUsername());
                 forgetTokenService.createOrUpdateForgetToken(user);
                 String token = forgetTokenService.getForgetTokenByUser(user);
+                LOGGER.info("Generated token for user {}: {}", user.getUsername(), token);
                 emailService.forgetPassword(user.getEmail(), user.getUserId(), token);
+                LOGGER.info("Sent forget password email to: {}", user.getEmail());
                 model.addAttribute("successMessage", "Vui lòng kiểm tra email để đặt lại mật khẩu!");
             } else {
-                model.addAttribute("errorMessage", "Không tìm thấy tài khoản!");
+                LOGGER.warn("User not found or username is null for: {}", usernameOrEmail);
+                model.addAttribute("errorMessage", "Lỗi xảy ra, vui lòng thử lại.");
             }
             model.addAttribute("usernameOrEmail", usernameOrEmail);
             return "forget";
         } catch (RuntimeException e) {
+            LOGGER.error("Exception occurred while processing forget password request for: {}", usernameOrEmail, e);
             model.addAttribute("usernameOrEmail", usernameOrEmail);
-            model.addAttribute("errorMessage", "Không tìm thấy tài khoản!");
+            model.addAttribute("errorMessage", "Lỗi phát sinh, vui lòng thử lại.");
             return "forget";
         }
     }
