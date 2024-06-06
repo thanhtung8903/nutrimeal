@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head('Cart', 'none')}"></head>
+
+
+<header th:replace="~{fragments :: header-fragment}"></header>
+
+<body>
+<div class="container ">
+
+    <h1>Your Cart</h1>
+
+    <div>
+        <p>Your cart is empty.</p>
+    </div>
+
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>Combo</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Combo Name 1</td>
+                <td>1</td>
+                <td>100</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td>Combo Name 2</td>
+                <td>2</td>
+                <td>150</td>
+                <td>300</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <form action="/cart/checkout" method="post">
+            <input type="hidden" name="userId" value="user123"/>
+            <button type="submit">Checkout</button>
+        </form>
+    </div>
+</div>
+
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+</html>

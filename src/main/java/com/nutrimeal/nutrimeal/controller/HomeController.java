@@ -47,7 +47,7 @@ public class HomeController {
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList);
-                return "home";
+                return "common/home";
             }
         } else {
             if (principal != null) {
@@ -62,7 +62,7 @@ public class HomeController {
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList);
-                return "home";
+                return "common/home";
             }
         }
     }
