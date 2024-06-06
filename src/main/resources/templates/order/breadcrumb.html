@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        .breadcrumb {
+            text-align: center;
+        }
+        .breadcrumb ul {
+            list-style: none;
+            display: inline-block;
+        }
+        .breadcrumb ul li {
+            display: inline;
+        }
+        .breadcrumb ul li a {
+            display: block;
+            float: left;
+            height: 50px;
+            width: 200px;
+            background-color: #f3f5fa;
+            text-align: center;
+            padding: 30px 20px 0 60px;
+            position: relative;
+            margin: 0 10px 0 0;
+            font-size: 20px;
+            text-decoration: none;
+            color: #8093a7;
+        }
+        .breadcrumb ul li a:after {
+            content: "";
+            border-top: 40px solid transparent;
+            border-bottom: 40px solid transparent;
+            border-left: 40px solid #f5f3fa;
+            position: absolute;
+            right: -40px;
+            top: 0;
+            z-index: 1;
+        }
+        .breadcrumb ul li a:before {
+            content: "";
+            border-top: 40px solid transparent;
+            border-bottom: 40px solid transparent;
+            border-left: 40px solid #fff;
+            position: absolute;
+            left: 0px;
+            top: 0;
+        }
+        .breadcrumb ul li:first-child a {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+        .breadcrumb ul li:first-child a::before {
+            display: none;
+        }
+        .breadcrumb ul li:last-child a {
+            padding-right: 40px;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .breadcrumb ul li:last-child a:after {
+            display: none;
+        }
+        .breadcrumb ul li a:hover {
+            background: #333;
+        }
+        .breadcrumb ul li a:hover:after {
+            border-left-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="breadcrumb">
+    <ul>
+        <li><a>Đặt hàng</a></li>
+        <li><a>Chỉnh sửa</a></li>
+        <li><a>Thanh toán</a></li>
+        <li><a>Xác nhận</a></li>
+    </ul>
+</div>
+</body>
+</html>

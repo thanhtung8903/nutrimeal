@@ -16,6 +16,9 @@ public class OrderBasket {
     @Column(name = "order_basket_quantity")
     private int quantity;
 
+    @Column(name = "order_basket_day")
+    private int day;
+
     @Column(name = "is_active")
     private Boolean isActive;
 

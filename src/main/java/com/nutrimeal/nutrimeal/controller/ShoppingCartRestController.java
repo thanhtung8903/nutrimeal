@@ -6,24 +6,20 @@ import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/shopping-cart")
-public class ShoppingCartController {
+public class ShoppingCartRestController {
 
     private final UserService userService;
     private final OrderBasketService orderBasketService;
 
     @PostMapping("/basket/add/{cid}")
     public String addProductToBasket(@PathVariable("cid") Integer comboId,
+                                     @RequestParam("day") String day,
                                      Principal principal) {
         if (principal == null) {
             return "Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng";
@@ -39,7 +35,9 @@ public class ShoppingCartController {
 
         if (user == null) return "Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng";
 
-        Integer addedQuantity = orderBasketService.addComboToBasket(comboId, user);
+        int dayByCombo = Integer.parseInt(day);
+
+        Integer addedQuantity = orderBasketService.addComboToBasket(comboId, user, dayByCombo);
 
         return addedQuantity > 1 ? addedQuantity + "sản phẩm đã được thêm trong giỏ hàng của bạn, vui lòng kiểm tra giỏ hàng"
                 : addedQuantity + "sản phẩm này đã được thêm mới vào giỏ hàng của bạn";

@@ -9,6 +9,8 @@ import com.nutrimeal.nutrimeal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OrderBasketService {
@@ -16,10 +18,15 @@ public class OrderBasketService {
     private final ComboRepository comboRepository;
     private final OrderBasketRepository orderBasketRepository;
 
-    public int addComboToBasket(int comboId, User user) {
+    public List<OrderBasket> findAllByUser(User user) {
+        return orderBasketRepository.findAllByUser(user);
+    }
+
+
+    public int addComboToBasket(int comboId, User user, int day) {
         Combo combo = comboRepository.findById(comboId).orElseThrow();
 
-        OrderBasket orderBasket = orderBasketRepository.findByUserAndCombo(user, combo);
+        OrderBasket orderBasket = orderBasketRepository.findByUserAndComboAndDay(user, combo, day);
 
         if (orderBasket != null) {
             orderBasket.setQuantity(orderBasket.getQuantity() + 1);
@@ -28,6 +35,7 @@ public class OrderBasketService {
             orderBasket.setCombo(combo);
             orderBasket.setUser(user);
             orderBasket.setQuantity(1);
+            orderBasket.setDay(day);
         }
         orderBasketRepository.save(orderBasket);
         return orderBasket.getQuantity();
@@ -42,4 +50,6 @@ public class OrderBasketService {
     public void removeComboFromBasket(int comboId, User user) {
         orderBasketRepository.deleteByUserAndCombo(user, comboRepository.findById(comboId).orElseThrow());
     }
+
+
 }

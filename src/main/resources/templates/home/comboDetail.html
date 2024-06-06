@@ -249,25 +249,25 @@
                     <p th:text="'- ' + ${item}"></p>
                 </div>
 
-                <form id="form-package" method="post" data-show-cart="0">
+                <form id="form-package" method="post" data-show-cart="0" th:action="@{/basket/add/{cid}(cid=${combo.comboId})}" >
                     <div class="form-group_comboDetail">
                         <div class="form-check input-radio">
-                            <input class="form-check-input" type="radio" name="order_type" id="orderRadios1"
-                                   value="week" checked="">
+                            <input class="form-check-input" type="radio" name="day" id="orderRadios1"
+                                   value="7" checked="">
                             <label class="form-check-label" for="orderRadios1">Gói Tuần - 7 ngày</label>
                         </div>
                         <div class="form-check input-radio">
-                            <input class="form-check-input" type="radio" name="order_type" id="orderRadios2"
-                                   value="month">
+                            <input class="form-check-input" type="radio" name="day" id="orderRadios2"
+                                   value="30">
                             <label class="form-check-label" for="orderRadios2">Gói Tháng - 30 ngày</label>
                         </div>
                     </div>
 
-                    <input type="hidden" name="package" value="slim">
-                    <button type="button" href="javascript:void(0)" id="add-to-cart"
+<!--                    <input type="hidden" name="package" value="slim">-->
+                    <button type="submit" href="javascript:void(0)" id="add-to-cart"
                             class="btn_comboDetail btn-primary_comboDetail submit">Thêm vào giỏ
                     </button>
-                    <input type="hidden" name="_token" value="G5ksWtJ1DTIXQftqfingH4gnOWdL6btHJzE9zy14">
+<!--                    <input type="hidden" name="_token" value="G5ksWtJ1DTIXQftqfingH4gnOWdL6btHJzE9zy14">-->
                 </form>
 
                 <script>
