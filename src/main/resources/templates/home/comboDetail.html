@@ -196,6 +196,103 @@
     .card-img-top:hover {
         transform: scale(1.2);
     }
+
+    /*--Meal list--*/
+    .meal-container {
+        display: flex;
+        max-width: 1100px;
+        margin: 0 auto;
+        overflow: hidden;
+        border: 2px double #333;
+        border-radius: 10px;
+    }
+
+    .title_meal-h3 {
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .meal-title-container {
+        flex: 0.5;
+        padding: 20px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+
+    .meal-title-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 1px;
+        background: repeating-linear-gradient(
+                to bottom,
+                #333,
+                #333 10px,
+                transparent 5px,
+                transparent 9px
+        );
+    }
+
+    .meal-list-container {
+        flex: 3.5;
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 20px;
+    }
+
+    .meal-list {
+        display: inline-flex;
+        animation: scroll 60s linear infinite;
+    }
+
+    .meal-item {
+        display: inline-block;
+        margin-right: 30px;
+    }
+
+    .meal-img img {
+        max-width: 200px;
+        margin-right: 15px;
+        border-radius: 10px;
+        transition: transform 0.6s;
+    }
+
+    .meal-img img:hover {
+        transform: scale(1.2);
+    }
+
+    .meal-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .meal-number {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .meal-title {
+        font-size: 1.2em;
+        font-weight: 500;
+        color: #333;
+    }
+
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
 </style>
 
 <header th:replace="~{fragments :: header-fragment}"></header>
@@ -249,26 +346,66 @@
                     <p th:text="'- ' + ${item}"></p>
                 </div>
 
-                <form id="form-package" method="post" data-show-cart="0" th:action="@{/basket/add/{cid}(cid=${combo.comboId})}" >
+                <form id="form-package" method="post" data-show-cart="0"
+                      th:action="@{/basket/add/{cid}(cid=${combo.comboId})}">
                     <div class="form-group_comboDetail">
                         <div class="form-check input-radio">
-                            <input class="form-check-input" type="radio" name="day" id="orderRadios1"
-                                   value="7" checked="">
+                            <input class="form-check-input" type="radio" name="day" id="orderRadios1" value="7" checked="">
                             <label class="form-check-label" for="orderRadios1">Gói Tuần - 7 ngày</label>
                         </div>
                         <div class="form-check input-radio">
-                            <input class="form-check-input" type="radio" name="day" id="orderRadios2"
-                                   value="30">
+                            <input class="form-check-input" type="radio" name="day" id="orderRadios2" value="30">
                             <label class="form-check-label" for="orderRadios2">Gói Tháng - 30 ngày</label>
                         </div>
                     </div>
 
-<!--                    <input type="hidden" name="package" value="slim">-->
-                    <button type="submit" href="javascript:void(0)" id="add-to-cart"
-                            class="btn_comboDetail btn-primary_comboDetail submit">Thêm vào giỏ
-                    </button>
-<!--                    <input type="hidden" name="_token" value="G5ksWtJ1DTIXQftqfingH4gnOWdL6btHJzE9zy14">-->
+                    <button type="submit" id="add-to-cart" class="btn_comboDetail btn-primary_comboDetail submit">Thêm vào giỏ</button>
+
+                    <div id="notification" class="alert mt-2" role="alert" style="display: none; width: 450px"></div>
                 </form>
+
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        $('#form-package').on('submit', function(event) {
+                            event.preventDefault();
+
+                            var form = $(this);
+                            var url = form.attr('action');
+
+                            $.ajax({
+                                type: "POST",
+                                url: url,
+                                data: form.serialize(),
+                                success: function(response) {
+                                    $('#notification').removeClass('alert-danger').addClass('alert-success').text(response).fadeIn().delay(3000).fadeOut();
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#notification').removeClass('alert-success').addClass('alert-danger').text('Đã có lỗi xảy ra, vui lòng thử lại.').fadeIn().delay(3000).fadeOut();
+                                }
+                            });
+                        });
+                    });
+                </script>
+
+
+                <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        const mealList = $(".meal-list");
+                        const mealItems = $(".meal-item").clone();
+                        mealList.append(mealItems);
+
+                        $(".meal-list-container").hover(
+                            function () {
+                                mealList.css("animation-play-state", "paused");
+                            },
+                            function () {
+                                mealList.css("animation-play-state", "running");
+                            }
+                        );
+                    });
+                </script>
 
                 <script>
                     function formatCurrency(value) {
@@ -284,10 +421,10 @@
 
                         function updatePrice() {
                             const selectedValue = document.querySelector('input[name="order_type"]:checked').value;
-                            if (selectedValue === 'week') {
+                            if (selectedValue === '7') {
                                 priceElement.style.display = 'block';
                                 price2Element.style.display = 'none';
-                            } else if (selectedValue === 'month') {
+                            } else if (selectedValue === '30') {
                                 priceElement.style.display = 'none';
                                 price2Element.style.display = 'block';
                             }
@@ -311,26 +448,50 @@
         </div>
     </div>
 
-    <div class="suggest-combo">
-        <h2 class="suggest-combo_h2">Gói ăn
-            <hr class="underline_suggest-combo_h2">
-        </h2>
+    <div class="meal-box" style="margin-top: 30px;">
+        <div class="meal-container">
+            <div class="meal-title-container">
+                <h3 class="title_meal-h3 title--pri">THỰC ĐƠN 7 NGÀY TỚI</h3>
+            </div>
+            <div class="meal-list-container">
+                <div class="meal-list">
+                    <div class="meal-item" th:each="dish, stat : ${dishList}">
+                        <div class="meal-img">
+                            <img th:src="${dish.dishImage}" alt="" style="width: 120px">
+                        </div>
+                        <div class="meal-content">
+                            <span class="meal-number" th:text="${stat.index + 1}"></span>
+                            <h4 class="meal-title" th:text="${dish.dishName}"></h4>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="suggest-combo">
+    <h2 class="suggest-combo_h2">Gói ăn
+        <hr class="underline_suggest-combo_h2">
+    </h2>
+    <div class="products">
         <div class="products">
-            <div class="products">
-                <div class="row product-listing">
-                    <div class="col-md-3" th:each="combo : ${comboList}">
-                        <div class="listing-item">
-                            <div class="card">
-                                <a th:href="@{/combo/{id}(id=${combo.comboId})}" class="link">
-                                    <img th:src="${combo.comboImage}" class="card-img-top" alt="Gói LUNCH">
+            <div class="row product-listing">
+                <div class="col-md-3" th:each="combo : ${comboList}">
+                    <div class="listing-item">
+                        <div class="card">
+                            <a th:href="@{/combo/{id}(id=${combo.comboId})}" class="link">
+                                <img th:src="${combo.comboImage}" class="card-img-top" alt="Gói LUNCH">
+                            </a>
+                            <div class="card-body">
+                                <a href="#" class="link-text">
+                                    <h3 class="card-title d-flex justify-content-between"
+                                        th:text="${combo.comboName}"></h3>
                                 </a>
-                                <div class="card-body">
-                                    <a href="#" class="link-text">
-                                        <h3 class="card-title d-flex justify-content-between"
-                                            th:text="${combo.comboName}"></h3>
-                                    </a>
-                                    <span class="card-price bold" th:text="${combo.comboPrice7Days}"></span>
-                                </div>
+                                <span class="card-price bold" th:text="${combo.comboPrice7Days}"></span>
                             </div>
                         </div>
                     </div>
@@ -338,25 +499,28 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function formatCurrency(value) {
-            return new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }).format(value).replace('₫', 'đ');
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const cardPriceElements = document.querySelectorAll('.card-price');
-
-            cardPriceElements.forEach(function (cardPriceElement) {
-                const cardPriceValue = parseFloat(cardPriceElement.textContent);
-                cardPriceElement.textContent = formatCurrency(cardPriceValue);
-            });
-        });
-    </script>
 </div>
+
+
+<!--</div>-->
+
+<script>
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(value).replace('₫', 'đ');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const cardPriceElements = document.querySelectorAll('.card-price');
+
+        cardPriceElements.forEach(function (cardPriceElement) {
+            const cardPriceValue = parseFloat(cardPriceElement.textContent);
+            cardPriceElement.textContent = formatCurrency(cardPriceValue);
+        });
+    });
+</script>
 
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>

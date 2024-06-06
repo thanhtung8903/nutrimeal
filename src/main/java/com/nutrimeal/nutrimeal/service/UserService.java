@@ -73,8 +73,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void changePassword(ChangePasswordRequest changePasswordRequest, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    public void changePassword(ChangePasswordRequest changePasswordRequest, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
         if (!passwordEncoder.matches(changePasswordRequest.getPassword(), user.getPassword())) {
             throw new RuntimeException("Password not match");
         } else if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
@@ -101,6 +101,5 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
-
 }
 

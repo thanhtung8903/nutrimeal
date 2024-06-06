@@ -145,7 +145,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row d-flex align-items-center">
-                        <label for="inputTarget" class="col-sm-4 col-form-label">Hoạt động</label>
+                        <label for="inputTarget" class="col-sm-4 col-form-label">Mục tiêu</label>
                         <div class="col-sm-8">
                             <select id="inputTarget" name="inputTarget" class="form-control w-100">
                                 <option value="0" th:selected="${weightGoal == '0'}">Giảm cân, giảm mỡ bụng</option>
@@ -177,11 +177,11 @@
             </div>
         </form>
         <div class="featured-packages">
-            <h2 class="title title-center pb-4 mb-4" th:text="${comboSuggest}"></h2>
+            <h2 class="title title-center mb-2 mt-2" th:text="${comboSuggest}"></h2>
             <div class="products mb-4" id="list-both-items">
                 <div class="row product-listing">
                     <div class="col-md-3" th:each="combo : ${comboList}">
-                        <a th:href="@{https://fitfood.vn/san-pham/full}" class="link">
+                        <a style="text-decoration: none" th:href="@{/combo/{id}(id=${combo.comboId})}" class="link">
                             <span class="icon"><i class="fa fa-check" aria-hidden="true"></i></span>
                             <div class="card">
                                 <img th:src="${combo.comboImage}" class="card-img-top" alt="">
@@ -189,7 +189,7 @@
                                     <h5 class="card-title d-flex justify-content-between" th:text="${combo.comboName}">
                                         <span th:text="${combo.comboPrice7Days}"></span>
                                     </h5>
-                                    <p class="card-text" th:text="${combo.comboDescription}"></p>
+
                                 </div>
                             </div>
                         </a>
