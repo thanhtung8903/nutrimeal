@@ -17,6 +17,7 @@ public class OrderBasketService {
 
     private final ComboRepository comboRepository;
     private final OrderBasketRepository orderBasketRepository;
+    private final ComboService comboService;
 
     public List<OrderBasket> findAllByUser(User user) {
         return orderBasketRepository.findAllByUser(user);
@@ -46,7 +47,6 @@ public class OrderBasketService {
         Combo combo = comboRepository.findById(comboId).orElseThrow();
         return combo.getComboPrice30Days() * quantity;
     }
-
 
 
 

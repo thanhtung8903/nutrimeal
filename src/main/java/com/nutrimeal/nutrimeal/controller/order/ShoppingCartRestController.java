@@ -39,7 +39,7 @@ public class ShoppingCartRestController {
 
         Integer addedQuantity = orderBasketService.addComboToBasket(comboId, user, dayByCombo);
 
-        return addedQuantity > 1 ? addedQuantity + " sản phẩm đã được thêm trong giỏ hàng của bạn"
+        return addedQuantity > 1 ? addedQuantity + " sản phẩm đã được thêm trong giỏ hàng của bạn, vui lòng kiểm tra giỏ hàng"
                 : addedQuantity + " sản phẩm này đã được thêm mới vào giỏ hàng của bạn";
     }
 

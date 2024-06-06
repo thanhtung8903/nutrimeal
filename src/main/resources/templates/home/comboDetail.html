@@ -247,7 +247,7 @@
 
     .meal-list {
         display: inline-flex;
-        animation: scroll 60s linear infinite;
+        animation: scroll 120s linear infinite;
     }
 
     .meal-item {
@@ -303,7 +303,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item active">
                 <a href="javascript:void(0);">
-                    <span><i class="fas fa-shopping-cart" aria-hidden="true"></i></span>Đặt hàng
+                    <span><i class="fas fa-shopping-cart active" aria-hidden="true"></i></span>Đặt hàng
                 </a>
             </li>
             <li class="breadcrumb-item">
@@ -455,9 +455,9 @@
             </div>
             <div class="meal-list-container">
                 <div class="meal-list">
-                    <div class="meal-item" th:each="dish, stat : ${dishList}">
+                    <div class="meal-item" style="margin-right: 100px" th:each="dish, stat : ${dishList}">
                         <div class="meal-img">
-                            <img th:src="${dish.dishImage}" alt="" style="width: 120px">
+                            <img th:src="${dish.dishImage}" alt="" style="width:200px">
                         </div>
                         <div class="meal-content">
                             <span class="meal-number" th:text="${stat.index + 1}"></span>
