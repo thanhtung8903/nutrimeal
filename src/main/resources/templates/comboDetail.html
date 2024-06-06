@@ -201,6 +201,103 @@
         .card-img-top:hover {
             transform: scale(1.2);
         }
+
+        /*--Meal list--*/
+        .meal-container {
+            display: flex;
+            max-width: 1100px;
+            margin: 0 auto;
+            overflow: hidden;
+            border: 2px dashed #333;
+            border-radius: 10px;
+        }
+
+        .title_meal-h3 {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .meal-title-container {
+            flex: 0.5;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+
+        .meal-title-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0px;
+            bottom: 0;
+            width: 1px;
+            background: repeating-linear-gradient(
+                    to bottom,
+                    #333,
+                    #333 5px,
+                    transparent 5px,
+                    transparent 9px
+            );
+        }
+
+        .meal-list-container {
+            flex: 3.5;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 20px;
+        }
+
+        .meal-list {
+            display: inline-flex;
+            animation: scroll 40s linear infinite;
+        }
+
+        .meal-item {
+            display: inline-block;
+            margin-right: 30px;
+        }
+
+        .meal-img img {
+            max-width: 200px;
+            margin-right: 15px;
+            border-radius: 10px;
+            transition: transform 0.6s;
+        }
+
+        .meal-img img:hover {
+            transform: scale(1.2);
+        }
+
+        .meal-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .meal-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .meal-title {
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #333;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
     </style>
 </head>
 <body class="comboDetail">
@@ -293,6 +390,87 @@
                 </form>
                 <!-- <img style="max-width: 100%" class="menu-photo"
                     src="https://fitfood.vn/img/original/menus/menu-7-3-17168918085733.png" alt="Gói SLIM (*new)"> -->
+            </div>
+            <div class="meal-box" style="margin-top: 30px;">
+                <div class="meal-container">
+                    <div class="meal-title-container">
+                        <h3 class="title_meal-h3 title--pri">MÓN CƠM NGON</h3>
+                    </div>
+                    <div class="meal-list-container">
+                        <div class="meal-list">
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/burger-trung-muoi.png" alt="" title="">
+                                </div>
+                                <div class="meal-content"><span class="meal-number">01.</span>
+                                    <h4 class="meal-title">Burger Trứng Muối</h4>
+                                </div>
+                            </div>
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/ca-ngu-sot-me.png" alt="" title=""></div>
+                                <div class="meal-content"><span class="meal-number">02.</span>
+                                    <h4 class="meal-title">Cá Ngừ Sốt Mè</h4>
+                                </div>
+                            </div>
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/ga-ap-chao-ca-ri.png" alt="" title="">
+                                </div>
+                                <div class="meal-content"><span class="meal-number">03.</span>
+                                    <h4 class="meal-title">Gà Áp Chảo Cà Ri</h4>
+                                </div>
+                            </div>
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/mi-tom-hoang-kim.png" alt="" title="">
+                                </div>
+                                <div class="meal-content"><span class="meal-number">04.</span>
+                                    <h4 class="meal-title">Mì Tôm Hoàng Kim</h4>
+                                </div>
+                            </div>
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/mi-y-pesto-hai-san.png" alt="" title="">
+                                </div>
+                                <div class="meal-content"><span class="meal-number">05.</span>
+                                    <h4 class="meal-title">Mì Ý Pesto Hải Sản</h4>
+                                </div>
+                            </div>
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/salad-ga-trai-cay.png" alt="" title="">
+                                </div>
+                                <div class="meal-content"><span class="meal-number">06.</span>
+                                    <h4 class="meal-title">Salad Gà Trái Cây</h4>
+                                </div>
+                            </div>
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/mi-y-ca-sot-tom.png" alt="" title="">
+                                </div>
+                                <div class="meal-content"><span class="meal-number">07.</span>
+                                    <h4 class="meal-title">Mì Ý Cá Sốt Tôm</h4>
+                                </div>
+                            </div>
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/mi-y-pesto-hai-san.png" alt="" title="">
+                                </div>
+                                <div class="meal-content"><span class="meal-number">08.</span>
+                                    <h4 class="meal-title">Mì Ý Pesto Hải Sản</h4>
+                                </div>
+                            </div>
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/mi-tom-hoang-kim.png" alt="" title="">
+                                </div>
+                                <div class="meal-content"><span class="meal-number">09.</span>
+                                    <h4 class="meal-title">Mì Tôm Hoàng Kim</h4>
+                                </div>
+                            </div>
+                            <div class="meal-item">
+                                <div class="meal-img"><img src="https://fitfood.vn/assets/b2b/images/meal/ga-ap-chao-ca-ri.png" alt="" title="">
+                                </div>
+                                <div class="meal-content"><span class="meal-number">10.</span>
+                                    <h4 class="meal-title">Gà Áp Chảo Cà Ri</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -441,6 +619,24 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const mealList = $(".meal-list");
+        const mealItems = $(".meal-item").clone();
+        mealList.append(mealItems);
+
+        $(".meal-list-container").hover(
+            function () {
+                mealList.css("animation-play-state", "paused");
+            },
+            function () {
+                mealList.css("animation-play-state", "running");
+            }
+        );
+    });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
