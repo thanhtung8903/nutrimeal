@@ -46,6 +46,7 @@ public class ShoppingCartController {
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         List<OrderBasket> orderBaskets = orderBasketService.findAllByUser(user);
+        model.addAttribute("point", user.getPoint());
         model.addAttribute("orderBaskets", orderBaskets);
         return "order/cart";
     }
