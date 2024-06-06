@@ -9,26 +9,28 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
     <style>
-      .card-contain {
-        padding: 30px;
+      main.cart-contain {
         display: flex;
-        flex-direction: column;
-        width: 100%;
-      }
-      .card-contain-header,
-      .card-contain-list-product {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-radius: 3px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        min-height: 100vh;
         padding: 20px;
-        margin: 20px;
-        width: 100%;
+        background: rgb(248, 247, 247);
       }
-      .card-contain-header div,
-      .card-contain-list-product div {
-        flex-grow: 1 1 auto;
+
+      table {
+        width: 60%;
+        border-spacing: 0 20px;
+      }
+      table thead,
+      tbody {
+        background-color: rgb(255, 255, 255);
+      }
+      table tr {
+        border-radius: 3px;
+        box-shadow: 0 0 1px rgba(175, 174, 174, 0.5);
+      }
+      table th,
+      td {
+        padding: 15px;
       }
       .card-contain-button {
         display: flex;
@@ -37,7 +39,8 @@
         width: 30px; /* Kích thước chiều rộng của ô vuông */
         height: 30px; /* Kích thước chiều cao của ô vuông */
       }
-      .card-contain-button input {
+      .card-contain-button input,
+      .card-total-price-button input {
         width: 20px; /* Kích thước chiều rộng của checkbox */
         height: 20px; /* Kích thước chiều cao của checkbox */
         border: 2px solid #333; /* Đường viền của checkbox */
@@ -47,6 +50,7 @@
       }
       .card-product {
         display: flex;
+        align-items: center;
         width: 30%;
       }
       .card-product img {
@@ -71,45 +75,129 @@
         height: 20px;
         outline: none;
         background: none;
-        border: 1px solid #ececec;
+        border: 1px solid #cbc0c0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+      .card-quantity button:hover {
+        background-color: #ececec;
+      }
+      #amount {
+        width: 40px;
+        text-align: center;
+        border: 1px solid #cbc0c0;
+      }
+      .card-summary {
+        display: inline-block;
+        width: 30%;
+        border: 1px solid black;
+        border-radius: 5px;
+        font-size: 20px;
+      }
+      .card-summary h2 {
+        background-color: black;
+        text-align: center;
+        font-size: 50px;
+        margin-top: 0;
+        color: #ececec;
+      }
+      .cart-total-price button {
+        height: auto; /* Set height of the button to auto */
       }
     </style>
   </head>
   <body>
-    <section class="card-contain">
-      <section class="card-contain-header">
-        <div class="card-contain-button">
-          <label for="all">
-            <input type="checkbox" id="all" name="all" value="" />
-          </label>
+    <main class="cart-contain">
+      <div class="cart-list items">
+        <div class="card-table-body">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  <div class="card-contain-button">
+                    <label for="all">
+                      <input
+                        type="checkbox"
+                        id="all"
+                        name="all"
+                        value=""
+                        onclick="checkAll()"
+                      />
+                    </label>
+                  </div>
+                </th>
+                <th><div class="card-product">Sản phẩm</div></th>
+                <th><div class="card-price">Đơn giá</div></th>
+                <th><div class="card-quantity">Số lượng</div></th>
+                <th><div class="card-totalmoney">Số tiền</div></th>
+                <th><div class="card-activity">Thao tác</div></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="card-contain-button">
+                    <label for="product">
+                      <input
+                        type="checkbox"
+                        id="product"
+                        name="product"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="card-product">
+                    <img
+                      src="https://lavenderstudio.com.vn/wp-content/uploads/2017/03/chup-san-pham.jpg"
+                    />
+                    <div class="card-product-name">card-product-name</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="card-price">
+                    5000000000000000000000000000000000
+                  </div>
+                </td>
+                <td>
+                  <div class="card-quantity">
+                    <button class="minus-btn" onclick="handleMinus(event)">
+                      <i class="bi bi-dash-lg"></i>
+                    </button>
+                    <input type="text" name="amount" id="amount" value="1" />
+                    <button class="plus-btn" onclick="handlePlus(event)">
+                      <i class="bi bi-plus-lg"></i>
+                    </button>
+                  </div>
+                </td>
+                <td><div class="card-totalmoney">Số tiền</div></td>
+                <td><div class="card-activity">Thao tác</div></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="card-product">Sản phẩm</div>
-        <div class="card-price">Đơn giá</div>
-        <div class="card-quantity">Số lượng</div>
-        <div class="card-totalmoney">Số tiền</div>
-        <div class="card-activity">Thao tác</div>
-      </section>
-      <section class="card-contain-list-product">
-        <div class="card-contain-button">
-          <label for="all">
-            <input type="checkbox" id="all" name="all" value="" />
-          </label>
+      </div>
+      <div class="card-summary">
+        <h2>Cart Summary</h2>
+        <div class="cart-total-price">
+          <h1>0VND</h1>
+          <button
+            style="
+              height: 40px;
+              background-color: rgb(249, 0, 21);
+              border: none;
+              border-radius: 3px;
+              color: #ececec;
+              font-size: 20px;
+            "
+          >
+            Thanh Toán
+          </button>
         </div>
-        <div class="card-product">
-          <img
-            src="https://lavenderstudio.com.vn/wp-content/uploads/2017/03/chup-san-pham.jpg"
-          />
-          <div class="card-product-name">card-product-name</div>
-        </div>
-        <div class="card-price">5000000000000000000</div>
-        <div class="card-quantity">
-          <button><i class="bi bi-dash-lg"></i></button>
-          <input type="text" name="amount" id="amount" />
-          <button><i class="bi bi-plus-lg"></i></button>
-        </div>
-        <div class="card-totalmoney">Số tiền</div>
-        <div class="card-activity">Thao tác</div>
-      </section>
-    </section>
+      </div>
+    </main>
   </body>
 </html>
