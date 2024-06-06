@@ -1,6 +1,6 @@
 package com.nutrimeal.nutrimeal.controller;
 
-import com.nutrimeal.nutrimeal.model.Combo;
+import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.model.OrderBasket;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.ComboRepository;
@@ -16,17 +16,14 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class ShoppingCardController {
+public class ShoppingCartController {
 
     private final OrderBasketService orderBasketService;
     private final UserService userService;
@@ -73,5 +70,28 @@ public class ShoppingCardController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product not found in order basket");
         }
+    }
+
+    @GetMapping("/basket/remove/{oid}")
+    public String removeProductFromBasket(@PathVariable("oid") Integer orderBasketId,
+                                          Principal principal) {
+        if (principal == null) {
+            throw new RuntimeException("Bạn cần đăng nhập để xóa sản phẩm");
+        }
+        User user;
+        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauthUser = token.getPrincipal();
+            user = userService.findByEmail(oauthUser.getAttribute("email"));
+        } else {
+            user = userService.findByUsername(principal.getName());
+        }
+
+        if (user == null) {
+            throw new RuntimeException("Bạn cần đăng nhập để xóa sản phẩm");
+        }
+        OrderBasket orderBasket = orderBasketRepository.findByOrderBasketIdAndUser(orderBasketId, user);
+        orderBasketRepository.delete(orderBasket);
+        return "redirect:/cart";
     }
 }

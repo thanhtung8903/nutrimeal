@@ -47,9 +47,7 @@ public class OrderBasketService {
         return combo.getComboPrice30Days() * quantity;
     }
 
-    public void removeComboFromBasket(int comboId, User user) {
-        orderBasketRepository.deleteByUserAndCombo(user, comboRepository.findById(comboId).orElseThrow());
-    }
+
 
 
 }

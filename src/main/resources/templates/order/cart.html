@@ -169,8 +169,12 @@
                     <div class="card-totalmoney" th:if="${orderBasket.day} == 7" th:text="${orderBasket.subTotal7Days}"></div>
                     <div class="card-totalmoney"  th:if="${orderBasket.day} == 30" th:text="${orderBasket.subTotal30Days}"></div>
                 </td>
-
-                <td><div class="card-activity">Xóa sản phẩm</div></td>
+                <td>
+                <a th:href="@{'/basket/remove/' + ${orderBasket.orderBasketId}}"
+                   href="#"
+                   onclick="if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')) return false;"
+                   class="text-danger mr-2 text-decoration-none">Xóa</a>
+                </td>
             </tr>
             </tbody>
         </table>

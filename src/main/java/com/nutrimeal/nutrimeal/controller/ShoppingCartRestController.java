@@ -39,8 +39,8 @@ public class ShoppingCartRestController {
 
         Integer addedQuantity = orderBasketService.addComboToBasket(comboId, user, dayByCombo);
 
-        return addedQuantity > 1 ? addedQuantity + "sản phẩm đã được thêm trong giỏ hàng của bạn, vui lòng kiểm tra giỏ hàng"
-                : addedQuantity + "sản phẩm này đã được thêm mới vào giỏ hàng của bạn";
+        return addedQuantity > 1 ? addedQuantity + " sản phẩm đã được thêm trong giỏ hàng của bạn, vui lòng kiểm tra giỏ hàng"
+                : addedQuantity + " sản phẩm này đã được thêm mới vào giỏ hàng của bạn";
     }
 
     @PostMapping("/basket/update/{cid}/{qty}")
@@ -66,25 +66,4 @@ public class ShoppingCartRestController {
         return String.valueOf(subtotal);
     }
 
-    @PostMapping("/basket/remove/{cid}")
-    public String removeProductFromBasket(@PathVariable("cid") Integer comboId,
-                                          Principal principal) {
-        if (principal == null) {
-            return "Bạn cần đăng nhập để xóa sản phẩm";
-        }
-        User user;
-        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
-            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
-            OAuth2User oauthUser = token.getPrincipal();
-            user = userService.findByEmail(oauthUser.getAttribute("email"));
-        } else {
-            user = userService.findByUsername(principal.getName());
-        }
-
-        if (user == null) return "Bạn cần đăng nhập để xóa sản phẩm";
-
-        orderBasketService.removeComboFromBasket(comboId, user);
-
-        return "Sản phẩm đã được xóa khỏi giỏ hàng của bạn.";
-    }
 }

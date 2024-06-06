@@ -15,8 +15,6 @@ public interface OrderBasketRepository extends JpaRepository<OrderBasket, Intege
 
     OrderBasket findByUserAndComboAndDay(User user, Combo combo, int day);
 
-    void deleteByUserAndCombo(User user, Combo combo);
-
     @Query("UPDATE OrderBasket orderBasket SET orderBasket.quantity = ?1 WHERE orderBasket.combo.comboId = ?2 " +
             "AND orderBasket.user.userId = ?3")
     @Modifying
