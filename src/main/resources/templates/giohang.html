@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gio hang</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <style>
+      main.card-table {
+        min-height: 100vh;
+        padding: 20px;
+        background: rgb(248, 247, 247);
+      }
+
+      table {
+        width: 100%;
+        border-spacing: 0 20px;
+      }
+      table thead,
+      tbody {
+        background-color: rgb(255, 255, 255);
+      }
+      table tr {
+        border-radius: 3px;
+        box-shadow: 0 0 1px rgba(175, 174, 174, 0.5);
+      }
+      table th,
+      td {
+        padding: 15px;
+      }
+      .card-contain-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px; /* Kích thước chiều rộng của ô vuông */
+        height: 30px; /* Kích thước chiều cao của ô vuông */
+      }
+      .card-contain-button input,
+      .card-total-price-button input {
+        width: 20px; /* Kích thước chiều rộng của checkbox */
+        height: 20px; /* Kích thước chiều cao của checkbox */
+        border: 2px solid #333; /* Đường viền của checkbox */
+        border-radius: 4px; /* Đường cong viền của checkbox */
+        outline: none; /* Loại bỏ đường viền xung quanh checkbox khi focus */
+        accent-color: red;
+      }
+      .card-product {
+        display: flex;
+        align-items: center;
+        width: 30%;
+      }
+      .card-product img {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+      }
+      .card-product-name {
+        font-size: 20px;
+        padding: 20px;
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+      }
+      .card-quantity {
+        display: flex;
+      }
+      .card-quantity input {
+        width: 20px;
+      }
+      .card-quantity button {
+        width: 20px;
+        height: 20px;
+        outline: none;
+        background: none;
+        border: 1px solid #cbc0c0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+      .card-quantity button:hover {
+        background-color: #ececec;
+      }
+      #amount {
+        width: 40px;
+        text-align: center;
+        border: 1px solid #cbc0c0;
+      }
+      .card-total-price table {
+        border-spacing: 0 0;
+      }
+      .card-total-price table td {
+        text-align: justify;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card-table">
+      <section class="card-table-header">Giỏ hàng</section>
+      <section class="card-table-body">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <div class="card-contain-button">
+                  <label for="all">
+                    <input
+                      type="checkbox"
+                      id="all"
+                      name="all"
+                      value=""
+                      onclick="checkAll()"
+                    />
+                  </label>
+                </div>
+              </th>
+              <th><div class="card-product">Sản phẩm</div></th>
+              <th><div class="card-price">Đơn giá</div></th>
+              <th><div class="card-quantity">Số lượng</div></th>
+              <th><div class="card-totalmoney">Số tiền</div></th>
+              <th><div class="card-activity">Thao tác</div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="card-contain-button">
+                  <label for="product">
+                    <input
+                      type="checkbox"
+                      id="product"
+                      name="product"
+                      value=""
+                    />
+                  </label>
+                </div>
+              </td>
+              <td>
+                <div class="card-product">
+                  <img
+                    src="https://lavenderstudio.com.vn/wp-content/uploads/2017/03/chup-san-pham.jpg"
+                  />
+                  <div class="card-product-name">card-product-name</div>
+                </div>
+              </td>
+              <td>
+                <div class="card-price">5000000000000000000000000000000000</div>
+              </td>
+              <td>
+                <div class="card-quantity">
+                  <button class="minus-btn" onclick="handleMinus(event)">
+                    <i class="bi bi-dash-lg"></i>
+                  </button>
+                  <input type="text" name="amount" id="amount" value="1" />
+                  <button class="plus-btn" onclick="handlePlus(event)">
+                    <i class="bi bi-plus-lg"></i>
+                  </button>
+                </div>
+              </td>
+              <td><div class="card-totalmoney">Số tiền</div></td>
+              <td><div class="card-activity">Thao tác</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="card-total-price">
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td style="width: 20%">
+              <i class="bi bi-ticket-perforated"> NutriMeal Voucher</i>
+            </td>
+            <td style="width: 20%">
+              <buton>Chọn hoặc nhập mã giảm giá</buton>
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 20%"></td>
+            <td></td>
+            <td style="width: 20%">
+              <label for="xu">
+                <input type="checkbox" id="xu" name="xu" value=""
+              /></label>
+              <i class="bi bi-coin"> NutriMeal Xu</i>
+            </td>
+            <td style="width: 20%">-0</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="card-total-price-button">
+                <label for="all">
+                  <input
+                    type="checkbox"
+                    id="all"
+                    name="all"
+                    value=""
+                    onclick="checkAll()"
+                  />
+                  Chọn tất cả
+                </label>
+              </div>
+            </td>
+            <td><div class="card-delete">Xóa</div></td>
+            <td style="width: 20%">
+              <p>Tổng thanh toán ():<span>0đ</span></p>
+            </td>
+            <td style="width: 20%">
+              <button
+                style="
+                  width: 100%;
+                  height: 40px;
+                  background-color: rgb(249, 0, 21);
+                  border: none;
+                  border-radius: 3px;
+                  color: #ececec;
+                  font-size: 20px;
+                "
+              >
+                Thanh Toán
+              </button>
+            </td>
+          </tr>
+        </table>
+      </section>
+    </main>
+    <script>
+      let amountElement = document.getElementById("amount");
+      let amount = parseInt(amountElement.value, 10);
+      let maxQuantity = 100; // Lấy số lượng tối đa có sẵn từ cơ sở dữ liệu
+
+      let render = (amount) => {
+        amountElement.value = amount;
+      };
+
+      let handlePlus = (event) => {
+        event.preventDefault();
+        if (amount < maxQuantity) {
+          amount++;
+          render(amount);
+        }
+      };
+
+      let handleMinus = (event) => {
+        event.preventDefault();
+        if (amount > 1) {
+          amount--;
+          render(amount);
+        }
+      };
+
+      amountElement.addEventListener("input", () => {
+        amount = parseInt(amountElement.value, 10);
+        amount =
+          isNaN(amount) || amount < 1 ? 1 : Math.min(amount, maxQuantity); // Đảm bảo amount không vượt quá maxQuantity
+        render(amount);
+      });
+
+      function buy(id) {
+        amount = parseInt(amountElement.value, 10);
+
+        if (maxQuantity === 0) {
+          alert(
+            "Xin lỗi, sản phẩm này đã hết hàng. Vui lòng chọn sản phẩm khác."
+          );
+          return;
+        }
+
+        if (amount > maxQuantity) {
+          alert(
+            "Số lượng sản phẩm vượt quá số lượng có sẵn. Vui lòng chọn số lượng hợp lý."
+          );
+          return;
+        }
+
+        // document.f.action = "buy?id=" + id + "&num=" + amount;
+        // document.f.submit();
+      }
+      function toggleCheckbox() {
+        var allCheckbox = document.getElementById("all");
+        allCheckbox.checked = !allCheckbox.checked;
+
+        var checkboxes = document.querySelectorAll(
+          'input[type="checkbox"][name="product"]'
+        );
+        checkboxes.forEach(function (checkbox) {
+          checkbox.checked = allCheckbox.checked;
+        });
+      }
+
+      function checkAll() {
+        var allCheckbox = document.getElementById("all");
+        var checkboxes = document.querySelectorAll(
+          'input[type="checkbox"]:not(#xu)'
+        );
+        checkboxes.forEach(function (checkbox) {
+          checkbox.checked = allCheckbox.checked;
+        });
+      }
+    </script>
+  </body>
+</html>
