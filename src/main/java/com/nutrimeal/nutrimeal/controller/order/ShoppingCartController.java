@@ -1,6 +1,5 @@
-package com.nutrimeal.nutrimeal.controller;
+package com.nutrimeal.nutrimeal.controller.order;
 
-import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.model.OrderBasket;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.ComboRepository;

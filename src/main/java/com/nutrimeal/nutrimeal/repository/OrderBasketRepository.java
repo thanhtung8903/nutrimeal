@@ -23,4 +23,6 @@ public interface OrderBasketRepository extends JpaRepository<OrderBasket, Intege
     List<OrderBasket> findAllByUser(User user);
 
     OrderBasket findByOrderBasketIdAndUser(int orderBasketId, User user);
+
+    int countByOrderBasketId(int orderBasketId);
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Giỏ hàng', 'none')}"></head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Giỏ hàng</title>
 <link
         rel="stylesheet"
@@ -19,19 +19,23 @@
         width: 100%;
         border-spacing: 0 20px;
     }
+
     table thead,
     tbody {
         background-color: rgb(255, 255, 255);
     }
+
     table tr {
         border-radius: 3px;
         box-shadow: 0 0 1px rgba(175, 174, 174, 0.5);
     }
+
     table th,
     td {
         padding: 15px;
         text-align: center;
     }
+
     .card-contain-button {
         display: flex;
         align-items: center;
@@ -39,6 +43,7 @@
         width: 30px;
         height: 30px;
     }
+
     .card-contain-button input,
     .card-total-price-button input {
         width: 20px;
@@ -48,34 +53,40 @@
         outline: none;
         accent-color: red;
     }
+
     .card-product {
         display: flex;
         align-items: center;
         justify-content: start;
     }
+
     .card-product img {
         width: 80px;
         height: 80px;
         border-radius: 5px;
         margin-right: 10px;
     }
+
     .card-product-name {
         font-size: 20px;
         padding: 10px;
         font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
         "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
     }
+
     .card-quantity {
         display: flex;
         align-items: center;
         justify-content: center;
     }
+
     .card-quantity input {
         width: 40px;
         text-align: center;
         border: 1px solid #cbc0c0;
         margin: 0 5px;
     }
+
     .card-quantity button {
         width: 30px;
         height: 30px;
@@ -87,33 +98,41 @@
         align-items: center;
         cursor: pointer;
     }
+
     .card-quantity button:hover {
         background-color: #ececec;
     }
+
     .card-total-price table {
         border-spacing: 0 0;
         width: 100%;
     }
+
     .card-total-price table td {
         text-align: center;
     }
+
     .card-total-price-button {
         display: flex;
         align-items: center;
         justify-content: center;
     }
+
     .card-delete {
         cursor: pointer;
         color: #d9534f;
     }
+
     .card-delete:hover {
         text-decoration: underline;
     }
+
     .card-total-price-button label {
         cursor: pointer;
         display: flex;
         align-items: center;
     }
+
     .card-total-price-button input {
         margin-right: 5px;
     }
@@ -129,6 +148,7 @@
             <thead>
             <tr>
                 <th>Sản phẩm</th>
+                <th>Loại</th>
                 <th>Đơn giá</th>
                 <th>Số lượng</th>
                 <th>Số tiền</th>
@@ -138,30 +158,42 @@
             <tbody>
             <tr th:each="orderBasket : ${orderBaskets}">
                 <td>
-                    <div class="card-product">
-                        <img th:src="${orderBasket.combo.comboImage}"/>
+                    <div class="card-product" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <img th:src="${orderBasket.combo.comboImage}" alt="Combo Image" style="width: auto;"/>
                         <div class="card-product-name" th:text="${orderBasket.combo.comboName}"></div>
                     </div>
                 </td>
+
                 <td>
-                    <div class="card-price" th:if="${orderBasket.day} == 7" th:text="${orderBasket.combo.comboPrice7Days}"></div>
-                    <div class="card-price" th:if="${orderBasket.day} == 30" th:text="${orderBasket.combo.comboPrice30Days}"></div>
+                    <div class="" th:if="${orderBasket.day} == 7">Gói tuần</div>
+                    <div class="" th:if="${orderBasket.day} == 30">Gói tháng</div>
                 </td>
+
+                <td>
+                    <div class="card-price" th:if="${orderBasket.day} == 7"
+                         th:text="${orderBasket.combo.comboPrice7Days}"></div>
+                    <div class="card-price" th:if="${orderBasket.day} == 30"
+                         th:text="${orderBasket.combo.comboPrice30Days}"></div>
+                </td>
+
 
                 <td>
                     <div class="card-quantity">
                         <button class="minus-btn">
                             <i class="bi bi-dash-lg"></i>
                         </button>
-                        <input type="text" id="amount" th:value="${orderBasket.quantity}" th:data-product-id="${orderBasket.orderBasketId}" />
+                        <input type="text" id="amount" th:value="${orderBasket.quantity}"
+                               th:data-product-id="${orderBasket.orderBasketId}"/>
                         <button class="plus-btn">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                     </div>
                 </td>
                 <td>
-                    <div class="card-totalmoney" th:if="${orderBasket.day} == 7" th:text="${orderBasket.subTotal7Days}"></div>
-                    <div class="card-totalmoney"  th:if="${orderBasket.day} == 30" th:text="${orderBasket.subTotal30Days}"></div>
+                    <div class="card-totalmoney" th:if="${orderBasket.day} == 7"
+                         th:text="${orderBasket.subTotal7Days}"></div>
+                    <div class="card-totalmoney" th:if="${orderBasket.day} == 30"
+                         th:text="${orderBasket.subTotal30Days}"></div>
                 </td>
                 <td>
                     <a th:href="@{'/basket/remove/' + ${orderBasket.orderBasketId}}"
@@ -173,58 +205,49 @@
             </tbody>
         </table>
     </section>
-    <section class="card-total-price">
-        <table>
+    <section class="card-total-price" style="text-align: right;">
+        <table style="width: 100%;">
             <tr>
                 <td colspan="2"></td>
-                <td><i class="bi bi-ticket-perforated"> NutriMeal Voucher</i></td>
-                <td><button>Chọn hoặc nhập mã giảm giá</button></td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td>
-                    <label for="xu">
-                        <input type="checkbox" id="xu" name="xu" value="" />
-                        <i class="bi bi-coin"> NutriMeal Xu</i>
-                    </label>
+                <td style="text-align: right; white-space: nowrap;">
+                    <i class="bi bi-ticket-perforated"> NutriMeal Voucher</i>
+                    <button style="margin-left: 10px;">Chọn hoặc nhập mã giảm giá</button>
                 </td>
-                <td>-0 VND</td>
             </tr>
             <tr>
-<!--                <td>-->
-<!--                    <div class="card-total-price-button">-->
-<!--                        <label for="all">-->
-<!--                            <input-->
-<!--                                    type="checkbox"-->
-<!--                                    id="all"-->
-<!--                                    name="all"-->
-<!--                                    value=""-->
-<!--                                    onclick="checkAll()"-->
-<!--                            />-->
-<!--                            Chọn tất cả-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                </td>-->
-                <td><div class="card-delete">Xóa</div></td>
-                <td>Tổng thanh toán ():</td>
-                <td><span>0 VND</span></td>
-                <td>
-                    <button
-                            style="
-                            width: 100%;
-                            height: 40px;
-                            background-color: rgb(249, 0, 21);
-                            border: none;
-                            border-radius: 3px;
-                            color: #ececec;
-                            font-size: 20px;
-                        "
-                    >
-                        Thanh Toán
-                    </button>
+                <td colspan="2"></td>
+                <td style="text-align: right; white-space: nowrap;">
+                    <label for="xu">
+                        <input type="checkbox" id="xu" name="xu" value=""/>
+                        <i class="bi bi-coin"> NutriMeal Point: <span th:text="${point}">10</span></i>
+                    </label>
+                    <span style="margin-left: 10px;">-0 VND</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td style="text-align: right; white-space: nowrap;">
+                    Tổng thanh toán :
+                    <span id="totalAmount" style="margin-left: 10px;">0 VND</span>
                 </td>
             </tr>
         </table>
+        <div style="text-align: right;">
+            <button
+                    style="
+                width: 35%;
+                height: 40px;
+                background-color: rgb(249, 0, 21);
+                border: none;
+                border-radius: 3px;
+                color: #ececec;
+                font-size: 20px;
+                margin-top: 10px;
+            "
+            >
+                Thanh Toán
+            </button>
+        </div>
     </section>
 </main>
 
@@ -233,14 +256,32 @@
         const minusButtons = document.querySelectorAll('.minus-btn');
         const plusButtons = document.querySelectorAll('.plus-btn');
         const inputs = document.querySelectorAll('.card-quantity input');
+        const priceElements = document.querySelectorAll('.card-price');
+        const totalElements = document.querySelectorAll('.card-totalmoney');
+
+        function formatCurrency(amount) {
+            return amount.toLocaleString('vi-VN') + 'đ';
+        }
+
+        // Format initial prices and totals
+        priceElements.forEach(priceElement => {
+            const price = parseInt(priceElement.innerText.replace(/[^0-9]/g, ''), 10);
+            priceElement.innerText = formatCurrency(price);
+        });
+
+        totalElements.forEach(totalElement => {
+            const total = parseInt(totalElement.innerText.replace(/[^0-9]/g, ''), 10);
+            totalElement.innerText = formatCurrency(total);
+        });
 
         function updateTotal(input) {
             const tr = input.closest('tr');
             const priceElement = tr.querySelector('.card-price').innerText;
-            const price = parseFloat(priceElement.replace(/[^0-9.-]+/g, ""));
-            const quantity = parseInt(input.value);
+            const price = parseInt(priceElement.replace(/[^0-9]/g, ''), 10);
+            const quantity = parseInt(input.value, 10);
             const totalElement = tr.querySelector('.card-totalmoney');
-            totalElement.innerText = (price * quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+            const total = price * quantity;
+            totalElement.innerText = formatCurrency(total);
         }
 
         function updateQuantityInDB(productId, quantity) {
@@ -261,15 +302,26 @@
             });
         }
 
+        function updateTotalAmount() {
+            let totalAmount = 0;
+            const totalElements = document.querySelectorAll('.card-totalmoney');
+            totalElements.forEach(totalElement => {
+                const total = parseInt(totalElement.innerText.replace(/[^0-9]/g, ''), 10);
+                totalAmount += total;
+            });
+            document.getElementById('totalAmount').innerText = formatCurrency(totalAmount);
+        }
+
         minusButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const input = this.nextElementSibling;
-                let value = parseInt(input.value);
+                let value = parseInt(input.value, 10);
                 const productId = input.dataset.productId;
                 if (!isNaN(value) && value > 1) {
                     value--;
                     input.value = value;
                     updateTotal(input);
+                    updateTotalAmount();
                     updateQuantityInDB(productId, value);
                 }
             });
@@ -278,12 +330,13 @@
         plusButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const input = this.previousElementSibling;
-                let value = parseInt(input.value);
+                let value = parseInt(input.value, 10);
                 const productId = input.dataset.productId;
-                if (!isNaN(value) && value < 100) {
+                if (!isNaN(value) && value < 10) {
                     value++;
                     input.value = value;
                     updateTotal(input);
+                    updateTotalAmount();
                     updateQuantityInDB(productId, value);
                 }
             });
@@ -291,17 +344,21 @@
 
         inputs.forEach(input => {
             input.addEventListener('input', function () {
-                let value = parseInt(this.value);
+                let value = parseInt(this.value, 10);
                 const productId = this.dataset.productId;
                 if (isNaN(value) || value < 1) {
                     this.value = 1;
-                } else if (value > 100) {
-                    this.value = 100;
+                } else if (value > 10) {
+                    this.value = 10;
                 }
                 updateTotal(this);
+                updateTotalAmount();
                 updateQuantityInDB(productId, this.value);
             });
         });
+
+        // Calculate and update total amount on page load
+        updateTotalAmount();
     });
 </script>
 
