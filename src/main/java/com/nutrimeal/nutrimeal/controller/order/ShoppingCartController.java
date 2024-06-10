@@ -4,6 +4,7 @@ import com.nutrimeal.nutrimeal.model.OrderBasket;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.ComboRepository;
 import com.nutrimeal.nutrimeal.repository.OrderBasketRepository;
+import com.nutrimeal.nutrimeal.repository.PromotionRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.AddressService;
 import com.nutrimeal.nutrimeal.service.ComboService;
@@ -32,6 +33,7 @@ public class ShoppingCartController {
     private final ComboService comboService;
     private final ComboRepository comboRepository;
     private final AddressService addressService;
+
 
     @GetMapping("/cart")
     public String showShoppingCart(Model model, Principal principal) {
@@ -111,9 +113,18 @@ public class ShoppingCartController {
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         List<OrderBasket> orderBaskets = orderBasketService.findAllByUser(user);
-        model.addAttribute("point", user.getPoint());
-        model.addAttribute("orderBaskets", orderBaskets);
-        model.addAttribute("address", addressService.findAllAddressByEmail(user.getEmail()));
-        return "order/checkout";
+        int userPoints = user.getPoint();
+        for (OrderBasket orderBasket : orderBaskets) {
+            if (orderBasket.getDay() == 7) {
+                model.addAttribute("shippingFee", 35);
+            } else {
+                model.addAttribute("shippingFee", 150);
+                break;
+            }
+        }
+            model.addAttribute("point", userPoints);
+            model.addAttribute("orderBaskets", orderBaskets);
+            model.addAttribute("address", addressService.findAllAddressByEmail(user.getEmail()));
+            return "order/checkout";
     }
 }

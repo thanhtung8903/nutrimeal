@@ -322,7 +322,7 @@
                 <td colspan="2"></td>
                 <td style="text-align: right; white-space: nowrap; padding-right: 80px">
                     Tạm tính :
-                    <span id="totalAmount" style="margin-left: 10px; font-weight: bold">0 VND</span>
+                    <span id="totalAmountTemp" style="margin-left: 10px; font-weight: bold">0 VND</span>
                 </td>
             </tr>
 
@@ -330,7 +330,6 @@
         </table>
 
     </section>
-
     <section class="container mt-3 p-4" style="background-color: white">
         <div class="row">
             <div class="col-md-1"></div>
@@ -340,8 +339,9 @@
                     <div class="form-group row">
                         <div class="col-sm-12 mb-2">
                             <label for="xu" class="d-flex align-items-center">
-                                <input type="checkbox" id="xu" name="xu" value="" style="margin-right: 10px;">
-                                <span> Nutrimeal point</span>
+                                <input type="checkbox" id="xu" name="xu" th:value="${point}" style="margin-right: 10px;">
+                                <span> Nutrimeal point: </span>
+                                <span th:text="${point}"></span>
                             </label>
                         </div>
                     </div>
@@ -352,7 +352,7 @@
                             <input id="promoCode" class="form-control" placeholder="Nhập mã giảm giá">
                         </div>
                         <div class="col-sm-3">
-                            <button type="button" class="btn btn-danger btn-block">Áp dụng</button>
+                            <button type="button" class="btn btn-danger btn-block" id="applyPromoCode">Áp dụng</button>
                         </div>
                     </div>
 
@@ -379,12 +379,10 @@
                     <div class="form-group row mb-2">
                         <label for="note1" class="col-sm-3 col-form-label"><i class="bi bi-card-list"></i>Note</label>
                         <div class="col-sm-9">
-                            <textarea class="form-control" id="note1" rows="3"
-                                      placeholder="Ghi chú về các thành phần bị dị ứng (nếu có)"></textarea>
+                        <textarea class="form-control" id="note1" rows="3"
+                                  placeholder="Ghi chú về các thành phần bị dị ứng (nếu có)"></textarea>
                         </div>
                     </div>
-
-
                 </form>
             </div>
 
@@ -392,23 +390,23 @@
                 <ul class="list-group" style="width: 350px">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         Phí giao hàng
-                        <span>100,000đ</span>
+                        <span id="shippingFee" th:text="${shippingFee}"></span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         Giảm giá
-                        <span>0đ</span>
+                        <span id="discount">0đ</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Tổng đơn hàng:</strong>
-                        <strong class="text-danger">3,190,000đ</strong>
+                        <strong id="totalAmount" class="text-danger">3,190,000đ</strong>
                     </li>
                 </ul>
                 <button type="button" class="btn btn-danger btn-lg btn-block mt-3">Đặt hàng</button>
                 <button type="button" class="btn btn-secondary btn-block mt-2">Trở về</button>
             </div>
         </div>
-
     </section>
+
 
 
 </main>
@@ -418,6 +416,15 @@
         const inputs = document.querySelectorAll('.card-quantity input');
         const priceElements = document.querySelectorAll('.card-price');
         const totalElements = document.querySelectorAll('.card-totalmoney');
+        const totalAmountElement = document.getElementById('totalAmount');
+        const shippingFeeElement = document.getElementById('shippingFee');
+        const discountElement = document.getElementById('discount');
+        const promoCodeInput = document.getElementById('promoCode');
+        const applyPromoCodeButton = document.getElementById('applyPromoCode');
+        const xuCheckbox = document.getElementById('xu');
+
+        let discount = 0;
+        let pointsDiscount = 0;
 
         function formatCurrency(amount) {
             return amount.toLocaleString('vi-VN') + 'đ';
@@ -442,21 +449,89 @@
             const totalElement = tr.querySelector('.card-totalmoney');
             const total = price * quantity;
             totalElement.innerText = formatCurrency(total);
+            updateTotalAmount();
         }
-
 
         function updateTotalAmount() {
             let totalAmount = 0;
-            const totalElements = document.querySelectorAll('.card-totalmoney');
             totalElements.forEach(totalElement => {
                 const total = parseInt(totalElement.innerText.replace(/[^0-9]/g, ''), 10);
                 totalAmount += total;
             });
-            document.getElementById('totalAmount').innerText = formatCurrency(totalAmount);
+
+            const shippingFeeElement = document.getElementById('shippingFee');
+            const shippingFee = parseInt(shippingFeeElement.innerText, 10) * 1000;
+
+            if (xuCheckbox.checked) {
+                pointsDiscount = parseInt(xuCheckbox.value, 10) * 1000;
+            } else {
+                pointsDiscount = 0;
+            }
+
+            const discountAmount = (totalAmount * discount) / 100;
+
+            totalAmount += shippingFee;
+            totalAmount -= discountAmount;
+            totalAmount -= pointsDiscount;
+
+            shippingFeeElement.innerText = formatCurrency(shippingFee);
+            discountElement.innerText = formatCurrency(discountAmount + pointsDiscount);
+            totalAmountElement.innerText = formatCurrency(totalAmount);
         }
 
+        applyPromoCodeButton.addEventListener('click', function () {
+            const promoCode = promoCodeInput.value.trim();
+            if (promoCode) {
+                fetch('/validate-discount-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code: promoCode })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data && !isNaN(data)) {
+                            discount = parseInt(data, 10);
+                            updateTotalAmount();
+                        } else {
+                            alert("Mã giảm giá không hợp lệ");
+                            discount = 0;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("Mã giảm giá không hợp lệ");
+                        discount = 0;
+                    });
+            } else {
+                discount = 0;
+                updateTotalAmount();
+            }
+        });
 
+        xuCheckbox.addEventListener('change', function () {
+            updateTotalAmount();
+        });
+
+        // Update total amounts initially
         updateTotalAmount();
+        function updateTotalAmountTemp() {
+            let totalAmountTemp = 0;
+            const totalElements = document.querySelectorAll('.card-totalmoney');
+            totalElements.forEach(totalElement => {
+                const total = parseInt(totalElement.innerText.replace(/[^0-9]/g, ''), 10);
+                totalAmountTemp += total;
+            });
+            document.getElementById('totalAmountTemp').innerText = formatCurrency(totalAmountTemp);
+        }
+        updateTotalAmountTemp();
+
     });
 </script>
 

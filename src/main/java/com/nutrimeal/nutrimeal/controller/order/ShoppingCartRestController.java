@@ -1,15 +1,21 @@
 package com.nutrimeal.nutrimeal.controller.order;
 
+import com.nutrimeal.nutrimeal.model.Promotion;
 import com.nutrimeal.nutrimeal.model.User;
+import com.nutrimeal.nutrimeal.repository.PromotionRepository;
 import com.nutrimeal.nutrimeal.service.OrderBasketService;
 import com.nutrimeal.nutrimeal.service.OrderService;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +24,7 @@ public class ShoppingCartRestController {
     private final UserService userService;
     private final OrderBasketService orderBasketService;
     private final OrderService orderService;
-
+    private final PromotionRepository promotionRepository;
     @PostMapping("/basket/add/{cid}")
     public String addProductToBasket(@PathVariable("cid") Integer comboId,
                                      @RequestParam("day") String day,
@@ -38,10 +44,8 @@ public class ShoppingCartRestController {
 
         int dayByCombo = Integer.parseInt(day);
 
-        orderBasketService.addComboToBasket(comboId, user, dayByCombo);
-
         int addedQuantity = orderBasketService.addComboToBasket(comboId, user, dayByCombo);
-        if(addedQuantity >= 5) return "Chỉ được thêm tối đa 5 sản phẩm cùng loại vào giỏ hàng";
+        if(addedQuantity >= 5) return "Bạn đã thêm tối đa 5 sản phẩm cùng loại vào giỏ hàng";
 
         return  "Đã thêm sản phẩm vào giỏ hàng";
     }
@@ -87,5 +91,28 @@ public class ShoppingCartRestController {
 
         return "Đơn hàng của bạn đã được tạo thành công";
     }
+
+//
+//    @PostMapping("/validate-discount-code")
+//    public ResponseEntity<?> validateDiscountCode(@RequestBody String code) {
+//        Optional<Promotion> discountCode = promotionRepository.findByPromotionCode(code);
+//        if (discountCode.isPresent()) {
+//            return ResponseEntity.ok(discountCode.get().getPromotionDiscount()); // Assuming getDiscountAmount() returns the discount amount
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid discount code");
+//        }
+//    }
+
+    @PostMapping("/validate-discount-code")
+    public ResponseEntity<?> validateDiscountCode(@RequestBody Map<String, String> payload) {
+        String code = payload.get("code");
+        Optional<Promotion> discountCode = promotionRepository.findByPromotionCode(code);
+        if (discountCode.isPresent()) {
+            return ResponseEntity.ok(discountCode.get().getPromotionDiscount());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid discount code");
+        }
+    }
+
 
 }
