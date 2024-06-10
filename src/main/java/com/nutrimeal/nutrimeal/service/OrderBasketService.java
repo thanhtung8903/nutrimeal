@@ -26,20 +26,24 @@ public class OrderBasketService {
 
     public int addComboToBasket(int comboId, User user, int day) {
         Combo combo = comboRepository.findById(comboId).orElseThrow();
-
         OrderBasket orderBasket = orderBasketRepository.findByUserAndComboAndDay(user, combo, day);
-
-        if (orderBasket != null) {
-            orderBasket.setQuantity(orderBasket.getQuantity() + 1);
+        if (orderBasket != null && orderBasket.getQuantity() >= 5) {
+            return 5;
         } else {
-            orderBasket = new OrderBasket();
-            orderBasket.setCombo(combo);
-            orderBasket.setUser(user);
-            orderBasket.setQuantity(1);
-            orderBasket.setDay(day);
+            orderBasket = orderBasketRepository.findByUserAndComboAndDay(user, combo, day);
+
+            if (orderBasket != null) {
+                orderBasket.setQuantity(orderBasket.getQuantity() + 1);
+            } else {
+                orderBasket = new OrderBasket();
+                orderBasket.setCombo(combo);
+                orderBasket.setUser(user);
+                orderBasket.setQuantity(1);
+                orderBasket.setDay(day);
+            }
+            orderBasketRepository.save(orderBasket);
+            return orderBasket.getQuantity();
         }
-        orderBasketRepository.save(orderBasket);
-        return orderBasket.getQuantity();
     }
 
     public int updateQuantity(int quantity, int comboId, User user) {
@@ -47,7 +51,6 @@ public class OrderBasketService {
         Combo combo = comboRepository.findById(comboId).orElseThrow();
         return combo.getComboPrice30Days() * quantity;
     }
-
 
 
 }
