@@ -36,9 +36,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/signup", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/", "/home", "/faqs", "/consult", "/combo", "/menu").permitAll()
-                        .requestMatchers("/profile/point", "/profile/order", "profile/address", "/cart").hasAnyRole("CUSTOMER")
-                        .requestMatchers("/manager/**").hasAnyRole("MANAGER")
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/profile/point", "/profile/order", "profile/address", "/cart", "/checkout").hasRole("CUSTOMER")
+                        .requestMatchers("/manager/**").hasRole("MANAGER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll())
                 .formLogin(form -> form
                         .loginPage("/login")

@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Giỏ hàng', 'none')}"></head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+<head th:replace="~{fragments :: head('Mua hàng', 'none')}"></head>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+
+<link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+/>
 <style>
     body {
         background-color: #f8f7f7;
@@ -178,27 +184,33 @@
         font-weight: bold;
         color: #FF2033; /* Màu đỏ hoặc màu bạn muốn sử dụng để làm nổi bật */
     }
+
+
+    /*section payment*/
+
 </style>
 
 <header th:replace="~{fragments :: header-fragment}"></header>
 
 <body>
+
+
 <main class="card-table container mb-3">
 
-    <nav aria-label="breadcrumb" class="breadcrumb-container">
-        <ol class="breadcrumb">
+    <nav aria-label="breadcrumb" class="breadcrumb-container container">
+        <ol class="breadcrumb ">
             <li class="breadcrumb-item">
                 <a href="javascript:void(0);">
                     <span><i class="fas fa-shopping-cart" aria-hidden="true"></i></span>Đặt hàng
                 </a>
             </li>
             <li class="breadcrumb-item active">
-                <a href="javascript:void(0);" class="active">
+                <a href="javascript:void(0);">
                     <span><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>Chỉnh sửa
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="javascript:void(0);">
+                <a href="javascript:void(0);" class="active">
                     <span><i class="bi bi-coin"></i></span>Thanh toán
                 </a>
             </li>
@@ -210,6 +222,47 @@
         </ol>
     </nav>
 
+
+    <section class="order_address mb-4">
+        <div class="card">
+            <div class="card-header">
+                Địa chỉ giao hàng
+            </div>
+            <input type="hidden" th:value="${address.get(0).addressId}">
+            <div class="card-body" th:object="${address.get(0)}">
+                <div class="form-group row">
+                    <label for="accountName" class="col-sm-2 col-form-label">Họ và tên:</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="accountName"
+                               th:value="${address.get(0).fullName}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="mobile" class="col-sm-2 col-form-label">Số điện thoại:</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="mobile"
+                               th:value="${address.get(0).phone}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="address" class="col-sm-2 col-form-label">Địa chỉ:</label>
+                    <div class="col-sm-8">
+                        <input type="text" readonly class="form-control-plaintext" id="address"
+                               th:value="|${address.get(0).apartmentNumber}, ${address.get(0).ward}, ${address.get(0).district}|">
+                    </div>
+                    <div class="col-sm-2">
+                        <span class="" disabled>Mặc định</span>
+                        <a class="btn btn-custom btn-sm" th:href="@{/profile/address}" data-toggle="modal"
+                           data-target="#addressModal">Đổi</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!--    --------------->
+
     <section class="card-table-body">
         <table>
             <thead>
@@ -219,7 +272,6 @@
                 <th>Đơn giá</th>
                 <th>Số lượng</th>
                 <th>Số tiền</th>
-                <th>Thao tác</th>
             </tr>
             </thead>
             <tbody>
@@ -247,14 +299,10 @@
 
                 <td>
                     <div class="card-quantity">
-                        <button class="minus-btn">
-                            <i class="bi bi-dash-lg"></i>
-                        </button>
-                        <input type="text" id="amount" th:value="${orderBasket.quantity}"
-                               th:data-product-id="${orderBasket.orderBasketId}"/>
-                        <button class="plus-btn">
-                            <i class="bi bi-plus-lg"></i>
-                        </button>
+                        <span th:text="${orderBasket.quantity}"></span>
+                        <!--                        <span type="text" id="amount" th:value="${orderBasket.quantity}"-->
+                        <!--                              th:data-product-id="${orderBasket.orderBasketId}"></span>-->
+
                     </div>
                 </td>
                 <td>
@@ -263,72 +311,110 @@
                     <div class="card-totalmoney" th:if="${orderBasket.day} == 30"
                          th:text="${orderBasket.subTotal30Days}"></div>
                 </td>
-                <td>
-                    <a th:href="@{'/basket/remove/' + ${orderBasket.orderBasketId}}"
-                       href="#"
-                       onclick="if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')) return false;"
-                       class="text-danger mr-2 text-decoration-none">Xóa</a>
-                </td>
+
             </tr>
             </tbody>
         </table>
     </section>
     <section class="card-total-price" style="text-align: right;">
         <table style="width: 100%;">
-            <!--            <tr>-->
-            <!--                <td colspan="2"></td>-->
-            <!--                <td style="text-align: right; white-space: nowrap;">-->
-            <!--                    <i class="bi bi-ticket-perforated"> NutriMeal Voucher</i>-->
-            <!--                    <button style="margin-left: 10px;">Chọn hoặc nhập mã giảm giá</button>-->
-            <!--                </td>-->
-            <!--            </tr>-->
-            <!--            <tr>-->
-            <!--                <td colspan="2"></td>-->
-            <!--                <td style="text-align: right; white-space: nowrap;">-->
-            <!--                    <label for="xu">-->
-            <!--                        <input type="checkbox" id="xu" name="xu" value=""/>-->
-            <!--                        <i class="bi bi-coin"> NutriMeal Point: <span th:text="${point}">10</span></i>-->
-            <!--                    </label>-->
-            <!--                    <span style="margin-left: 10px;">-0 VND</span>-->
-            <!--                </td>-->
-            <!--            </tr>-->
             <tr>
                 <td colspan="2"></td>
-                <td style="text-align: right; white-space: nowrap; padding-right: 220px">
-                    Tổng tiền hàng :
+                <td style="text-align: right; white-space: nowrap; padding-right: 80px">
+                    Tạm tính :
                     <span id="totalAmount" style="margin-left: 10px; font-weight: bold">0 VND</span>
                 </td>
             </tr>
+
+
         </table>
-        <div style="text-align: right;">
-            <button id="btnCheckout"
-                    style="
-                width: 35%;
-                height: 40px;
-                background-color: rgb(249, 0, 21);
-                border: none;
-                border-radius: 3px;
-                color: #ececec;
-                font-size: 20px;
-                margin-top: 10px;
-            "
-            >
-                Mua hàng
-            </button>
-        </div>
+
     </section>
+
+    <section class="container mt-3 p-4" style="background-color: white">
+        <div class="row">
+            <div class="col-md-1"></div>
+
+            <div class="col-md-7">
+                <form>
+                    <div class="form-group row">
+                        <div class="col-sm-12 mb-2">
+                            <label for="xu" class="d-flex align-items-center">
+                                <input type="checkbox" id="xu" name="xu" value="" style="margin-right: 10px;">
+                                <span> Nutrimeal point</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group row align-items-center mb-2">
+                        <label class="col-sm-3 col-form-label"><i class="bi bi-ticket-perforated"></i> NutriMeal Voucher</label>
+                        <div class="col-sm-3">
+                            <input id="promoCode" class="form-control" placeholder="Nhập mã giảm giá">
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="button" class="btn btn-danger btn-block">Áp dụng</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-2">
+                        <label for="deliveryTime" class="col-sm-3 col-form-label"><i class="bi bi-truck"></i>Thời gian giao hàng</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="deliveryTime">
+                                <option>Thời gian giao hàng</option>
+                                <!-- Add other options here -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-2">
+                        <label for="paymentMethod" class="col-sm-3 col-form-label"><i class="bi bi-credit-card"></i>Thanh toán</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="paymentMethod">
+                                <option>Thanh toán tiền mặt</option>
+                                <option>Thanh toán bằng thẻ</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-2">
+                        <label for="note1" class="col-sm-3 col-form-label"><i class="bi bi-card-list"></i>Note</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="note1" rows="3"
+                                      placeholder="Ghi chú về các thành phần bị dị ứng (nếu có)"></textarea>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+
+            <div class="col-md-4">
+                <ul class="list-group" style="width: 350px">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Phí giao hàng
+                        <span>100,000đ</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Giảm giá
+                        <span>0đ</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Tổng đơn hàng:</strong>
+                        <strong class="text-danger">3,190,000đ</strong>
+                    </li>
+                </ul>
+                <button type="button" class="btn btn-danger btn-lg btn-block mt-3">Đặt hàng</button>
+                <button type="button" class="btn btn-secondary btn-block mt-2">Trở về</button>
+            </div>
+        </div>
+
+    </section>
+
+
 </main>
 
 <script>
-    $(document).ready(function () {
-        $('#btnCheckout').click(function () {
-            window.location.href = '/checkout';
-        });
-    });
-
     document.addEventListener('DOMContentLoaded', function () {
-        const minusButtons = document.querySelectorAll('.minus-btn');
-        const plusButtons = document.querySelectorAll('.plus-btn');
         const inputs = document.querySelectorAll('.card-quantity input');
         const priceElements = document.querySelectorAll('.card-price');
         const totalElements = document.querySelectorAll('.card-totalmoney');
@@ -358,23 +444,6 @@
             totalElement.innerText = formatCurrency(total);
         }
 
-        function updateQuantityInDB(productId, quantity) {
-            $.ajax({
-                url: '/update-quantity',
-                method: 'POST',
-                data: {
-                    productId: productId,
-                    quantity: quantity,
-                    _csrf: $('input[name="_csrf"]').val()  // Nếu bạn sử dụng CSRF protection
-                },
-                success: function (response) {
-                    console.log('Quantity updated successfully');
-                },
-                error: function (xhr) {
-                    console.error('Error updating quantity');
-                }
-            });
-        }
 
         function updateTotalAmount() {
             let totalAmount = 0;
@@ -386,52 +455,7 @@
             document.getElementById('totalAmount').innerText = formatCurrency(totalAmount);
         }
 
-        minusButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const input = this.nextElementSibling;
-                let value = parseInt(input.value, 10);
-                const productId = input.dataset.productId;
-                if (!isNaN(value) && value > 1) {
-                    value--;
-                    input.value = value;
-                    updateTotal(input);
-                    updateTotalAmount();
-                    updateQuantityInDB(productId, value);
-                }
-            });
-        });
 
-        plusButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const input = this.previousElementSibling;
-                let value = parseInt(input.value, 10);
-                const productId = input.dataset.productId;
-                if (!isNaN(value) && value < 5) { // Đã thay đổi từ 10 thành 5
-                    value++;
-                    input.value = value;
-                    updateTotal(input);
-                    updateTotalAmount();
-                    updateQuantityInDB(productId, value);
-                }
-            });
-        });
-
-        inputs.forEach(input => {
-            input.addEventListener('input', function () {
-                let value = parseInt(this.value, 10);
-                const productId = this.dataset.productId;
-                if (isNaN(value) || value < 1) {
-                    this.value = 1;
-                } else if (value > 5) { // Đã thay đổi từ 10 thành 5
-                    this.value = 5;
-                }
-                updateTotal(this);
-                updateTotalAmount();
-                updateQuantityInDB(productId, this.value);
-            });
-        });
-
-        // Calculate and update total amount on page load
         updateTotalAmount();
     });
 </script>

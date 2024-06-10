@@ -26,4 +26,7 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "combo_id")
     private Combo combo;
+
+    @Column(name = "combo_day")
+    private int comboDay;
 }
