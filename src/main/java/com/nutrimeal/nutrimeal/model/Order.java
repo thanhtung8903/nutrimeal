@@ -26,7 +26,7 @@ public class Order {
     private User user;
 
     @Column(name = "order_total_price")
-    private float orderTotalPrice;
+    private int orderTotalPrice;
 
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)

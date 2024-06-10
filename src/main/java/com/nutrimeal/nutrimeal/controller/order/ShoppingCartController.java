@@ -5,6 +5,7 @@ import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.ComboRepository;
 import com.nutrimeal.nutrimeal.repository.OrderBasketRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
+import com.nutrimeal.nutrimeal.service.AddressService;
 import com.nutrimeal.nutrimeal.service.ComboService;
 import com.nutrimeal.nutrimeal.service.OrderBasketService;
 import com.nutrimeal.nutrimeal.service.UserService;
@@ -30,6 +31,7 @@ public class ShoppingCartController {
     private final OrderBasketRepository orderBasketRepository;
     private final ComboService comboService;
     private final ComboRepository comboRepository;
+    private final AddressService addressService;
 
     @GetMapping("/cart")
     public String showShoppingCart(Model model, Principal principal) {
@@ -93,5 +95,25 @@ public class ShoppingCartController {
         OrderBasket orderBasket = orderBasketRepository.findByOrderBasketIdAndUser(orderBasketId, user);
         orderBasketRepository.delete(orderBasket);
         return "redirect:/cart";
+    }
+
+    @GetMapping("/checkout")
+    public String checkout(Model model, Principal principal) {
+        User user;
+        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
+            model.addAttribute("isOauth2User", isOauth2User);
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauthUser = token.getPrincipal();
+            user = userRepository.findByEmail(oauthUser.getAttribute("email")).orElse(null);
+        } else {
+            model.addAttribute("isOauth2User", false);
+            user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        }
+        List<OrderBasket> orderBaskets = orderBasketService.findAllByUser(user);
+        model.addAttribute("point", user.getPoint());
+        model.addAttribute("orderBaskets", orderBaskets);
+        model.addAttribute("address", addressService.findAllAddressByEmail(user.getEmail()));
+        return "order/checkout";
     }
 }
