@@ -1,14 +1,21 @@
-package com.nutrimeal.nutrimeal.controller;
+package com.nutrimeal.nutrimeal.controller.order;
 
+import com.nutrimeal.nutrimeal.model.Promotion;
 import com.nutrimeal.nutrimeal.model.User;
+import com.nutrimeal.nutrimeal.repository.PromotionRepository;
 import com.nutrimeal.nutrimeal.service.OrderBasketService;
+import com.nutrimeal.nutrimeal.service.OrderService;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +23,8 @@ public class ShoppingCartRestController {
 
     private final UserService userService;
     private final OrderBasketService orderBasketService;
-
+    private final OrderService orderService;
+    private final PromotionRepository promotionRepository;
     @PostMapping("/basket/add/{cid}")
     public String addProductToBasket(@PathVariable("cid") Integer comboId,
                                      @RequestParam("day") String day,
@@ -25,8 +33,7 @@ public class ShoppingCartRestController {
             return "Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng";
         }
         User user;
-        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
-            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+        if (principal instanceof OAuth2AuthenticationToken token) {
             OAuth2User oauthUser = token.getPrincipal();
             user = userService.findByEmail(oauthUser.getAttribute("email"));
         } else {
@@ -37,10 +44,10 @@ public class ShoppingCartRestController {
 
         int dayByCombo = Integer.parseInt(day);
 
-        Integer addedQuantity = orderBasketService.addComboToBasket(comboId, user, dayByCombo);
+        int addedQuantity = orderBasketService.addComboToBasket(comboId, user, dayByCombo);
+        if(addedQuantity >= 5) return "Bạn đã thêm tối đa 5 sản phẩm cùng loại vào giỏ hàng";
 
-        return addedQuantity > 1 ? addedQuantity + " sản phẩm đã được thêm trong giỏ hàng của bạn, vui lòng kiểm tra giỏ hàng"
-                : addedQuantity + " sản phẩm này đã được thêm mới vào giỏ hàng của bạn";
+        return  "Đã thêm sản phẩm vào giỏ hàng";
     }
 
     @PostMapping("/basket/update/{cid}/{qty}")
@@ -51,8 +58,7 @@ public class ShoppingCartRestController {
             return "Bạn cần đăng nhập để cập nhật số lượng";
         }
         User user;
-        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
-            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+        if (principal instanceof OAuth2AuthenticationToken token) {
             OAuth2User oauthUser = token.getPrincipal();
             user = userService.findByEmail(oauthUser.getAttribute("email"));
         } else {
@@ -65,5 +71,48 @@ public class ShoppingCartRestController {
 
         return String.valueOf(subtotal);
     }
+
+    @PostMapping("/order/create/{price}")
+    public String createOrder(@PathVariable("price") Integer price, Principal principal) {
+        if (principal == null) {
+            return "Bạn cần đăng nhập để tạo đơn hàng";
+        }
+        User user;
+        if (principal instanceof OAuth2AuthenticationToken token) {
+            OAuth2User oauthUser = token.getPrincipal();
+            user = userService.findByEmail(oauthUser.getAttribute("email"));
+        } else {
+            user = userService.findByUsername(principal.getName());
+        }
+
+        if (user == null) return "Bạn cần đăng nhập để tạo đơn hàng";
+
+        orderService.createOrder(user, price);
+
+        return "Đơn hàng của bạn đã được tạo thành công";
+    }
+
+//
+//    @PostMapping("/validate-discount-code")
+//    public ResponseEntity<?> validateDiscountCode(@RequestBody String code) {
+//        Optional<Promotion> discountCode = promotionRepository.findByPromotionCode(code);
+//        if (discountCode.isPresent()) {
+//            return ResponseEntity.ok(discountCode.get().getPromotionDiscount()); // Assuming getDiscountAmount() returns the discount amount
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid discount code");
+//        }
+//    }
+
+    @PostMapping("/validate-discount-code")
+    public ResponseEntity<?> validateDiscountCode(@RequestBody Map<String, String> payload) {
+        String code = payload.get("code");
+        Optional<Promotion> discountCode = promotionRepository.findByPromotionCode(code);
+        if (discountCode.isPresent()) {
+            return ResponseEntity.ok(discountCode.get().getPromotionDiscount());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid discount code");
+        }
+    }
+
 
 }
