@@ -40,6 +40,13 @@ public class OrderService {
     }
 
     public void createOrder(User user, Integer price) {
+        Order order = new Order();
+        order.setUser(user);
+        order.setOrderTotalPrice(price);
+        orderRepository.save(order);
+    }
 
+    public void save(Order order){
+        orderRepository.save(order);
     }
 }

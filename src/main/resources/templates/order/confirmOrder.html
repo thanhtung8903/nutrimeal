@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Xác nhận đơn hàng', 'none')}"></head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+<style>
+    body {
+        background-color: #f8f7f7;
+    }
+
+    main.card-table {
+        min-height: 100vh;
+        padding: 20px;
+        background: rgb(248, 247, 247);
+    }
+
+    .breadcrumb-container {
+        margin: 20px auto;
+        margin-top: 15px;
+        padding: 15px 10px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        list-style: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .breadcrumb-item a {
+        text-decoration: none;
+        color: black;
+        text-align: center;
+    }
+
+    .breadcrumb-item a:hover {
+        font-weight: bold;
+    }
+
+    .breadcrumb-item span {
+        margin-right: 10px;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "";
+    }
+
+    .breadcrumb-item a.active {
+        font-weight: bold;
+        color: #FF2033; /* Màu đỏ hoặc màu bạn muốn sử dụng để làm nổi bật */
+    }
+
+    .confirmation-container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .confirmation-header {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .confirmation-details {
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+    .confirmation-details p {
+        margin: 10px 0;
+    }
+
+    .order-details-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-details-table th, .order-details-table td {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .order-details-table th {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .order-details-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .card-product {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-product img {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .card-product-name {
+        font-size: 16px;
+        font-weight: bold;
+    }
+</style>
+
+<header th:replace="~{fragments :: header-fragment}"></header>
+
+<body>
+<main class="card-table container mb-3">
+
+    <nav aria-label="breadcrumb" class="breadcrumb-container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">
+                    <span><i class="fas fa-shopping-cart" aria-hidden="true"></i></span>Đặt hàng
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">
+                    <span><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>Chỉnh sửa
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">
+                    <span><i class="bi bi-coin"></i></span>Thanh toán
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="javascript:void(0);" class="active">
+                    <span><i class="fa fa-check" aria-hidden="true"></i></span>Xác nhận
+                </a>
+            </li>
+        </ol>
+    </nav>
+
+    <section class="confirmation-container" th:object="${order}">
+        <div class="confirmation-header">Xác nhận đơn hàng</div>
+        <div class="confirmation-details">
+            <p><strong>Tên người nhận:</strong> <span th:text="${order.address.fullName}"></span></p>
+            <p><strong>Địa chỉ giao hàng:</strong> <span th:text="${order.address.getFullAddress()}"></span></p>
+            <p><strong>Thời gian giao hàng:</strong> <span th:text="${order.deliveryTime.deliveryTime} + ' mỗi ngày'"></span></p>
+            <p><strong>Phương thức thanh toán:</strong> <span th:text="${order.paymentMethod.paymentMethodName}"></span></p>
+            <p><strong>Tổng tiền:</strong> <span id="totalPrice" th:text="${order.orderTotalPrice}"></span></p>
+            <p><strong>Ghi chú:</strong> <span th:text="${order.orderNote}"></span></p>
+        </div>
+    </section>
+
+    <section>
+        <table class="order-details-table">
+            <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Loại</th>
+                <th>Số lượng</th>
+                <th>Số tiền</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderDetail : ${order.orderDetails}">
+                <td>
+                    <div class="card-product">
+                        <img th:src="${orderDetail.combo.comboImage}" alt="Combo Image" style="width: auto;"/>
+                        <div class="card-product-name" th:text="${orderDetail.combo.comboName}"></div>
+                    </div>
+                </td>
+                <td>
+                    <div th:if="${orderDetail.comboDay == 7}" th:text="'Gói tuần'"></div>
+                    <div th:if="${orderDetail.comboDay == 30}" th:text="'Gói tháng'"></div>
+                </td>
+                <td>
+                    <div th:text="${orderDetail.orderDetailQuantity}"></div>
+                </td>
+                <td>
+                    <div class="priceOrderDetail" th:text="${orderDetail.orderDetailPrice}"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<script>
+    // Cast #totalPrice to local VND
+    document.addEventListener('DOMContentLoaded', function () {
+        var totalPriceElement = document.getElementById('totalPrice');
+        var totalPrice = parseInt(totalPriceElement.innerText.replace(/[^0-9.-]+/g,""));
+
+        //format priceOrderDetail
+        var priceOrderDetailElements = document.querySelectorAll('.priceOrderDetail');
+        priceOrderDetailElements.forEach(function (priceOrderDetailElement) {
+            var priceOrderDetail = parseInt(priceOrderDetailElement.innerText.replace(/[^0-9.-]+/g,""));
+            priceOrderDetailElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(priceOrderDetail);
+        });
+
+        totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
+    });
+</script>
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</html>
