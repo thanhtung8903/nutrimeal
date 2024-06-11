@@ -51,6 +51,11 @@ public class ShoppingCartController {
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         List<OrderBasket> orderBaskets = orderBasketService.findAllByUser(user);
+
+        if (orderBaskets.isEmpty()) {
+            return "redirect:/combo";
+        }
+
         model.addAttribute("point", user.getPoint());
         model.addAttribute("orderBaskets", orderBaskets);
         return "order/cart";
@@ -114,7 +119,13 @@ public class ShoppingCartController {
             model.addAttribute("isOauth2User", false);
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
+
         List<OrderBasket> orderBaskets = orderBasketService.findAllByUser(user);
+
+        if (orderBaskets.isEmpty()) {
+            return "redirect:/combo";
+        }
+
         int userPoints = user.getPoint();
         for (OrderBasket orderBasket : orderBaskets) {
             if (orderBasket.getDay() == 7) {
