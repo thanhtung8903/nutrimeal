@@ -136,7 +136,6 @@ public class ShoppingCartController {
             model.addAttribute("orderBaskets", orderBaskets);
             model.addAttribute("address", addressService.findAllAddressByEmail(user.getEmail()));
             model.addAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
-
             model.addAttribute("deliveryTimes", deliveryTimeService.getAllDeliveryTimes());
             return "order/checkout";
     }
