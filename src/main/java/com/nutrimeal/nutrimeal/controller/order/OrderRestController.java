@@ -3,17 +3,20 @@ package com.nutrimeal.nutrimeal.controller.order;
 import com.nutrimeal.nutrimeal.dto.request.OrderRequest;
 import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,6 +29,7 @@ public class OrderRestController {
     private final PaymentMethodService paymentMethodService;
     private final DeliveryTimeService deliveryTimeService;
     private final AddressService addressService;
+    private final VNPayService vnPayService;
 
     @PostMapping("/order/create")
     public String createOrder(@RequestBody OrderRequest orderRequest, Principal principal) {
@@ -54,7 +58,6 @@ public class OrderRestController {
         order.setAddress(addressService.findById(orderRequest.getAddressId()));
 
         List<OrderBasket> orderBaskets = orderBasketService.findAllByUser(user);
-        List<OrderDetail> orderDetails = new ArrayList<>();
 
         orderService.save(order);
 
@@ -63,10 +66,8 @@ public class OrderRestController {
             orderDetail.setOrder(order);
             orderDetailService.save(orderDetail);
             orderBasketService.delete(orderBasket);
-            orderDetails.add(orderDetail);
         }
 
-        order.setOrderDetails(orderDetails);
         return order.getOrderId() + "";
     }
 
@@ -82,5 +83,28 @@ public class OrderRestController {
             orderDetail.setComboDay(30);
         }
         return orderDetail;
+    }
+    @PostMapping("/order/createvnpay")
+    public ResponseEntity<?> submitOrder(@RequestBody OrderRequest orderRequest,
+                                         HttpServletRequest request, Principal principal, Model model) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+        User user;
+        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
+            model.addAttribute("isOauth2User", isOauth2User);
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauthUser = token.getPrincipal();
+            user = userService.findByEmail(oauthUser.getAttribute("email"));
+        } else {
+            model.addAttribute("isOauth2User", false);
+            user = userService.findByUsername(principal.getName());
+        }
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String vnpayUrl = vnPayService.createOrder(orderRequest, baseUrl, user);
+        Map<String, String> response = new HashMap<>();
+        response.put("vnPayUrl", vnpayUrl);
+        return ResponseEntity.ok(response);
     }
 }

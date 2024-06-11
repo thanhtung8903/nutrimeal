@@ -569,7 +569,16 @@
 
         function sendToApi() {
             const data = collectFormData();
-            fetch('/order/create', {
+            const paymentMethodId = data.paymentMethodId;
+
+            let url = '';
+            if (paymentMethodId === '1') {
+                url = '/order/create';
+            } else if (paymentMethodId === '2') {
+                url = '/order/createvnpay';
+            }
+
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -578,7 +587,11 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    window.location.href = '/order/confirm/' + data;
+                    if (paymentMethodId === '1') {
+                        window.location.href = '/order/confirm/' + data;
+                    } else if (paymentMethodId === '2' && data.vnPayUrl) {
+                        window.location.href = data.vnPayUrl;
+                    }
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -587,7 +600,6 @@
 
         const orderButton = document.querySelector('#createOrderButton');
 
-        // Thêm sự kiện click vào nút "Đặt hàng"
         orderButton.addEventListener('click', function () {
             sendToApi();
         });

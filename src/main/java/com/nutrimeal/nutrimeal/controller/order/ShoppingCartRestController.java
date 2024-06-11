@@ -92,16 +92,6 @@ public class ShoppingCartRestController {
         return "Đơn hàng của bạn đã được tạo thành công";
     }
 
-//
-//    @PostMapping("/validate-discount-code")
-//    public ResponseEntity<?> validateDiscountCode(@RequestBody String code) {
-//        Optional<Promotion> discountCode = promotionRepository.findByPromotionCode(code);
-//        if (discountCode.isPresent()) {
-//            return ResponseEntity.ok(discountCode.get().getPromotionDiscount()); // Assuming getDiscountAmount() returns the discount amount
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid discount code");
-//        }
-//    }
 
     @PostMapping("/validate-discount-code")
     public ResponseEntity<?> validateDiscountCode(@RequestBody Map<String, String> payload) {

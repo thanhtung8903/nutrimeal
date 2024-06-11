@@ -1,14 +1,12 @@
 package com.nutrimeal.nutrimeal.controller.order;
 
-import com.nutrimeal.nutrimeal.model.DeliveryTime;
-import com.nutrimeal.nutrimeal.model.OrderBasket;
-import com.nutrimeal.nutrimeal.model.PaymentMethod;
-import com.nutrimeal.nutrimeal.model.User;
+import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.repository.ComboRepository;
 import com.nutrimeal.nutrimeal.repository.OrderBasketRepository;
 import com.nutrimeal.nutrimeal.repository.PromotionRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -33,7 +31,6 @@ public class ShoppingCartController {
     private final AddressService addressService;
     private final PaymentMethodService paymentMethodService;
     private final DeliveryTimeService deliveryTimeService;
-
 
     private final Logger logger = org.slf4j.LoggerFactory.getLogger(ShoppingCartController.class);
 
@@ -143,4 +140,5 @@ public class ShoppingCartController {
             model.addAttribute("deliveryTimes", deliveryTimeService.getAllDeliveryTimes());
             return "order/checkout";
     }
+
 }
