@@ -53,4 +53,7 @@ public class OrderBasketService {
     }
 
 
+    public void delete(OrderBasket orderBasket) {
+        orderBasketRepository.delete(orderBasket);
+    }
 }

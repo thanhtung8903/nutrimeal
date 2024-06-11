@@ -1,17 +1,16 @@
 package com.nutrimeal.nutrimeal.controller.order;
 
-import com.nutrimeal.nutrimeal.model.Order;
+import com.nutrimeal.nutrimeal.model.DeliveryTime;
 import com.nutrimeal.nutrimeal.model.OrderBasket;
+import com.nutrimeal.nutrimeal.model.PaymentMethod;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.ComboRepository;
 import com.nutrimeal.nutrimeal.repository.OrderBasketRepository;
+import com.nutrimeal.nutrimeal.repository.PromotionRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
-import com.nutrimeal.nutrimeal.service.AddressService;
-import com.nutrimeal.nutrimeal.service.ComboService;
-import com.nutrimeal.nutrimeal.service.OrderBasketService;
-import com.nutrimeal.nutrimeal.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.nutrimeal.nutrimeal.service.*;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -31,10 +30,12 @@ public class ShoppingCartController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final OrderBasketRepository orderBasketRepository;
-    private final ComboService comboService;
-    private final ComboRepository comboRepository;
     private final AddressService addressService;
-    private  final VNPayService vnPayService;
+    private final PaymentMethodService paymentMethodService;
+    private final DeliveryTimeService deliveryTimeService;
+
+
+    private final Logger logger = org.slf4j.LoggerFactory.getLogger(ShoppingCartController.class);
 
     @GetMapping("/cart")
     public String showShoppingCart(Model model, Principal principal) {
@@ -126,53 +127,9 @@ public class ShoppingCartController {
             model.addAttribute("point", userPoints);
             model.addAttribute("orderBaskets", orderBaskets);
             model.addAttribute("address", addressService.findAllAddressByEmail(user.getEmail()));
+            model.addAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
+
+            model.addAttribute("deliveryTimes", deliveryTimeService.getAllDeliveryTimes());
             return "order/checkout";
     }
-
-    @GetMapping("/vnpay-payment")
-    public String GetMapping(HttpServletRequest request, Model model){
-        int paymentStatus =vnPayService.orderReturn(request);
-
-        String orderInfo = request.getParameter("vnp_OrderInfo");
-        String paymentTime = request.getParameter("vnp_PayDate");
-        String transactionId = request.getParameter("vnp_TransactionNo");
-        String totalPrice = request.getParameter("vnp_Amount");
-
-        model.addAttribute("orderId", orderInfo);
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("paymentTime", paymentTime);
-        model.addAttribute("transactionId", transactionId);
-
-        return paymentStatus == 1 ? "order/ordersuccess" : "order/orderfail";
-    }
-
-    @PostMapping("/submitOrder")
-    public String submitOrder(@RequestParam("totalPrice") int totalPrice,
-                              @RequestBody Order order,
-                              HttpServletRequest request, Principal principal, Model model){
-        if(principal == null) {
-            return "redirect:/login";
-        }
-        User user;
-        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
-            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
-            model.addAttribute("isOauth2User", isOauth2User);
-            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
-            OAuth2User oauthUser = token.getPrincipal();
-            user = userRepository.findByEmail(oauthUser.getAttribute("email")).orElse(null);
-        } else {
-            model.addAttribute("isOauth2User", false);
-            user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
-        }
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnPayService.createOrder(totalPrice, baseUrl, user);
-        return "redirect:" + vnpayUrl;
-    }
-
-    @GetMapping("/submitOrder")
-    public String home(){
-        return "order/createorder";
-    }
-
-
 }
