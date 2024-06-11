@@ -1,4 +1,4 @@
-package com.nutrimeal.nutrimeal.controller.order;
+package com.nutrimeal.nutrimeal.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.util.*;
 @Component
 public class VNPayConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_Returnurl = "/vnpay-payment";
+    public static String vnp_Returnurl = "/order/confirm/vnpay-payment";
     public static String vnp_TmnCode = "CUKZSUWD";
     public static String vnp_HashSecret = "S2X8LNUCG1N5P52PWZU2TIHVF9V22LAF";
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
