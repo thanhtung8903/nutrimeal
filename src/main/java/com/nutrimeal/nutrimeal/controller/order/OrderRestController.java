@@ -67,11 +67,7 @@ public class OrderRestController {
         }
 
         order.setOrderDetails(orderDetails);
-
-
-
-
-        return "Đặt hàng thành công";
+        return order.getOrderId() + "";
     }
 
     private static OrderDetail getOrderDetail(OrderBasket orderBasket) {

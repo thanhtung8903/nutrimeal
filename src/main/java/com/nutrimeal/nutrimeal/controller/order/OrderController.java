@@ -13,7 +13,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/confirm/{id}")
+    @GetMapping("/order/confirm/{id}")
     public String confirmOrder(Model model, @PathVariable Integer id) {
         model.addAttribute("order", orderService.getOrderById(id));
         model.addAttribute("orderDetailsList", orderService.getOrderById(id));
