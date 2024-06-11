@@ -5,6 +5,8 @@ import com.nutrimeal.nutrimeal.dto.request.AddressRequest;
 import com.nutrimeal.nutrimeal.dto.request.ChangePasswordRequest;
 import com.nutrimeal.nutrimeal.dto.request.SignupRequest;
 import com.nutrimeal.nutrimeal.dto.request.UpdateUserRequest;
+import com.nutrimeal.nutrimeal.dto.response.OrderResponse;
+import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.model.Role;
 import com.nutrimeal.nutrimeal.model.RoleName;
 import com.nutrimeal.nutrimeal.model.User;
@@ -100,6 +102,42 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public List<User> findAllCustomer() {
+        return userRepository.findAllCustomer();
+    }
+
+    public List<User> findAllManager() {
+        return userRepository.findAllManager();
+    }
+
+    public List<User> findAllAdmin() {
+        return userRepository.findAllAdmin();
+    }
+
+    public List<User> findAllShipper() {
+        return userRepository.findAllShipper();
+    }
+
+    public List<OrderResponse> findOrdersByCustomerId(String customerId) {
+        User user = userRepository.findById(customerId).orElseThrow(() -> new RuntimeException("User not found"));
+        List<Order> orders = user.getOrders();
+        return orders.stream().map(order -> {
+            OrderResponse response = new OrderResponse(
+                    order.getOrderId(),
+                    order.getOrderNote(),
+                    order.getAddress().getFullName(),
+                    order.getAddress().getPhone(),
+                    order.getAddress().getFullAddress(),
+                    order.getOrderStatus(),
+                    order.getOrderTotalPrice(),
+                    order.getPaymentMethod().getPaymentMethodName(),
+                    order.getDeliveryTime().getDeliveryTime(),
+                    order.getOrderDate().toString()
+            );
+            return response;
+        }).collect(Collectors.toList());
     }
 }
 
