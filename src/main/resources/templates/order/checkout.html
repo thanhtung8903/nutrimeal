@@ -228,7 +228,7 @@
             <div class="card-header">
                 Địa chỉ giao hàng
             </div>
-            <input type="hidden" th:value="${address.get(0).addressId}">
+            <input type="hidden" id="addressId" th:value="${address.get(0).addressId}">
             <div class="card-body" th:object="${address.get(0)}">
                 <div class="form-group row">
                     <label for="accountName" class="col-sm-2 col-form-label">Họ và tên:</label>
@@ -339,7 +339,8 @@
                     <div class="form-group row">
                         <div class="col-sm-12 mb-2">
                             <label for="xu" class="d-flex align-items-center">
-                                <input type="checkbox" id="xu" name="xu" th:value="${point}" style="margin-right: 10px;">
+                                <input type="checkbox" id="xu" name="xu" th:value="${point}"
+                                       style="margin-right: 10px;">
                                 <span> Nutrimeal point: </span>
                                 <span th:text="${point}"></span>
                             </label>
@@ -357,21 +358,31 @@
                     </div>
 
                     <div class="form-group row mb-2">
-                        <label for="deliveryTime" class="col-sm-3 col-form-label"><i class="bi bi-truck"></i>Thời gian giao hàng</label>
+                        <label for="deliveryTime" class="col-sm-3 col-form-label"><i class="bi bi-truck"></i>Thời gian
+                            giao hàng</label>
                         <div class="col-sm-9">
                             <select class="form-control" id="deliveryTime">
-                                <option>Thời gian giao hàng</option>
-                                <!-- Add other options here -->
+                                <option th:each="deliveryTime : ${deliveryTimes}"
+                                        th:value="${deliveryTime.deliveryTimeId}"
+                                        th:text="${deliveryTime.deliveryTime}"
+                                        th:attr="selected=${deliveryTime.deliveryTime == 1}">
+                                </option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row mb-2">
-                        <label for="paymentMethod" class="col-sm-3 col-form-label"><i class="bi bi-credit-card"></i>Thanh toán</label>
+                        <label for="paymentMethod" class="col-sm-3 col-form-label"><i class="bi bi-credit-card"></i>Thanh
+                            toán</label>
                         <div class="col-sm-9">
                             <select class="form-control" id="paymentMethod">
-                                <option>Thanh toán tiền mặt</option>
-                                <option>Thanh toán bằng thẻ</option>
+
+                                <option th:each="payment : ${paymentMethods}"
+                                        th:value="${payment.paymentMethodId}"
+                                        th:text="${payment.paymentMethodName}"
+                                        th:attr="selected=${payment.paymentMethodId == 1}"
+                                >
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -398,15 +409,15 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Tổng đơn hàng:</strong>
-                        <strong id="totalAmount" class="text-danger">3,190,000đ</strong>
+                        <strong id="totalAmount" class="text-danger"></strong>
                     </li>
                 </ul>
-                <button type="button" class="btn btn-danger btn-lg btn-block mt-3">Đặt hàng</button>
+                <button type="button" class="btn btn-danger btn-lg btn-block mt-3" id="createOrderButton">Đặt hàng</button>
+
                 <button type="button" class="btn btn-secondary btn-block mt-2">Trở về</button>
             </div>
         </div>
     </section>
-
 
 
 </main>
@@ -487,7 +498,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ code: promoCode })
+                    body: JSON.stringify({code: promoCode})
                 })
                     .then(response => {
                         if (!response.ok) {
@@ -521,6 +532,7 @@
 
         // Update total amounts initially
         updateTotalAmount();
+
         function updateTotalAmountTemp() {
             let totalAmountTemp = 0;
             const totalElements = document.querySelectorAll('.card-totalmoney');
@@ -530,9 +542,62 @@
             });
             document.getElementById('totalAmountTemp').innerText = formatCurrency(totalAmountTemp);
         }
+
         updateTotalAmountTemp();
 
+
+        // kkkkkkkkkkkkkkkk
+
+        function parseVND(value) {
+            return parseInt(value.replace(/[^\d]/g, ''));
+        }
+
+        function collectFormData() {
+            const formData = {
+                addressId: document.getElementById('addressId').value,
+                orderTempPrice: parseVND(document.getElementById('totalAmountTemp').innerText),
+                orderDeliveryPrice: parseVND(document.getElementById('shippingFee').innerText),
+                orderDiscount: parseVND(document.getElementById('discount').innerText),
+                deliveryTimeId: document.getElementById('deliveryTime').value,
+                paymentMethodId: document.getElementById('paymentMethod').value,
+                orderNote: document.getElementById('note1').value,
+                orderTotalPrice: parseVND(document.getElementById('totalAmount').innerText)
+            };
+
+            return formData;
+        }
+
+        function sendToApi() {
+            const data = collectFormData();
+            fetch('/order/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+        const orderButton = document.querySelector('#createOrderButton');
+
+        // Thêm sự kiện click vào nút "Đặt hàng"
+        orderButton.addEventListener('click', function () {
+            sendToApi();
+        });
+
+
     });
+
+
+
+
 </script>
 
 </body>

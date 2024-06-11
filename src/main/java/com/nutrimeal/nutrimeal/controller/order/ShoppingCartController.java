@@ -1,16 +1,16 @@
 package com.nutrimeal.nutrimeal.controller.order;
 
+import com.nutrimeal.nutrimeal.model.DeliveryTime;
 import com.nutrimeal.nutrimeal.model.OrderBasket;
+import com.nutrimeal.nutrimeal.model.PaymentMethod;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.ComboRepository;
 import com.nutrimeal.nutrimeal.repository.OrderBasketRepository;
 import com.nutrimeal.nutrimeal.repository.PromotionRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
-import com.nutrimeal.nutrimeal.service.AddressService;
-import com.nutrimeal.nutrimeal.service.ComboService;
-import com.nutrimeal.nutrimeal.service.OrderBasketService;
-import com.nutrimeal.nutrimeal.service.UserService;
+import com.nutrimeal.nutrimeal.service.*;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -30,10 +30,12 @@ public class ShoppingCartController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final OrderBasketRepository orderBasketRepository;
-    private final ComboService comboService;
-    private final ComboRepository comboRepository;
     private final AddressService addressService;
+    private final PaymentMethodService paymentMethodService;
+    private final DeliveryTimeService deliveryTimeService;
 
+
+    private final Logger logger = org.slf4j.LoggerFactory.getLogger(ShoppingCartController.class);
 
     @GetMapping("/cart")
     public String showShoppingCart(Model model, Principal principal) {
@@ -125,6 +127,9 @@ public class ShoppingCartController {
             model.addAttribute("point", userPoints);
             model.addAttribute("orderBaskets", orderBaskets);
             model.addAttribute("address", addressService.findAllAddressByEmail(user.getEmail()));
+            model.addAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
+
+            model.addAttribute("deliveryTimes", deliveryTimeService.getAllDeliveryTimes());
             return "order/checkout";
     }
 }
