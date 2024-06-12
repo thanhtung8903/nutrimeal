@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Quản lý mã khuyến mãi', 'none')}"></head>
+
+<style>
+    body {
+        background-color: #e5e5e5;
+    }
+
+    .list-group-item {
+        background-color: #fff !important;
+        color: #343a40 !important;
+        cursor: pointer;
+    }
+
+    .list-group-item.active {
+        background-color: #fff !important;
+        border-color: none;
+        border: 1px solid #343a40;
+        font-weight: bold;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .btn-primary {
+        background-color: #343a40 !important;
+        border-color: #343a40 !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #000000 !important;
+        font-weight: 600;
+    }
+
+    .btn-danger:hover {
+        background-color: red !important;
+        font-weight: 600;
+    }
+
+    .radio-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .table td, .table th {
+        border-right: 2px solid #dee2e6;
+    }
+
+    .add-menu {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #343a40;
+        color: #ffffff;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        border: none;
+    }
+
+    .add-menu:hover {
+        background-color: #000000;
+    }
+
+    .add-menu a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .add-menu a:hover {
+        text-decoration: none;
+    }
+</style>
+
+<header th:replace="~{fragments :: header_manager}"></header>
+
+<body>
+<div class="container mt-3">
+    <div class="row">
+
+        <div class="col-md-10">
+            <h2 style="margin-bottom: 40px; text-align: center;">QUẢN LÍ MÃ KHUYẾN MÃI</h2>
+            <form th:action="@{/manager/promotion/search}" method="get" class="mb-3">
+                <div class="row g-2">
+                    <div class="col-auto">
+                        <input type="text" class="form-control" name="name" placeholder="Tên mã khuyến mãi" th:value="${name}">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="table food-table" id="foodTable">
+                <thead>
+                <tr>
+                    <th>Mã khuyến mãi</th>
+                    <th>Số lượng</th>
+                    <th>Mô tả</th>
+                    <th>Phần trăm</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="foodTableBody">
+                <tr th:each="promotion : ${promotions}">
+                    <td th:text="${promotion.promotionCode}"></td>
+                    <td th:text="${promotion.promotionQuantity}"></td>
+                    <td th:text="${promotion.promotionDescription}"></td>
+                    <td th:text="${promotion.promotionDiscount}"></td>
+                    <td>
+                        <a href="#" class="btn btn-warning btn-sm update-btn" th:href="@{/manager/promotion/update/{promotionId}(promotionId=${promotion.promotionId})}">Update</a>
+                        <a href="#" class="btn btn-danger btn-sm delete-btn" th:href="@{/manager/promotion/delete/{promotionId}(promotionId=${promotion.promotionId})}" onclick="return confirm('Bạn có muốn xóa mã khuyến mãi này không ?')">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button class="add-menu mb-2"><a th:href="@{/manager/promotion/add}">THÊM MÃ KHUYẾN MÃI</a></button>
+
+            <!-- Pagination for normal list -->
+            <nav aria-label="Page navigation" th:if="${param.name == null}">
+                <ul class="pagination">
+                    <li class="page-item" th:if="${promotions.number > 0}">
+                        <a class="page-link" th:href="@{/manager/promotion(page=${promotions.number - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, promotions.totalPages - 1)}" th:class="${i == promotions.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/manager/promotion(page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:if="${promotions.number + 1 < promotions.totalPages}">
+                        <a class="page-link" th:href="@{/manager/promotion(page=${promotions.number + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Pagination for search list -->
+            <nav aria-label="Page navigation" th:if="${param.name != null}">
+                <ul class="pagination">
+                    <li class="page-item" th:if="${promotions.number > 0}">
+                        <a class="page-link" th:href="@{/manager/promotion/search(name=${param.name}, page=${promotions.number - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, promotions.totalPages - 1)}" th:class="${i == promotions.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/manager/promotion/search(name=${param.name}, page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:if="${promotions.number + 1 < promotions.totalPages}">
+                        <a class="page-link" th:href="@{/manager/promotion/search(name=${param.name}, page=${promotions.number + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+<!--<script>-->
+
+<!--    document.getElementById('view-food').addEventListener('click', function () {-->
+<!--        window.location.href = this.querySelector('a').href;-->
+<!--    });-->
+
+<!--    document.getElementById('view-combo').addEventListener('click', function () {-->
+<!--        window.location.href = this.querySelector('a').href;-->
+<!--    });-->
+
+<!--    document.getElementById('view-daily').addEventListener('click', function () {-->
+<!--        window.location.href = this.querySelector('a').href;-->
+<!--    });-->
+<!--</script>-->
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</html>

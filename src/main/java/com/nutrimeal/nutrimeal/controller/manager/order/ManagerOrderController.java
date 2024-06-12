@@ -1,4 +1,4 @@
-package com.nutrimeal.nutrimeal.controller.manager;
+package com.nutrimeal.nutrimeal.controller.manager.order;
 
 import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.service.OrderService;
@@ -18,7 +18,7 @@ import static com.nutrimeal.nutrimeal.model.OrderStatus.PENDING;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/manager")
-public class ManagerController {
+public class ManagerOrderController {
 
     private final OrderService orderService;
     private final UserService userService;
@@ -28,11 +28,11 @@ public class ManagerController {
         return "manager/managerpage";
     }
 
-    @GetMapping("/ordermanager")
+    @GetMapping("/order")
     public String dashboard(Model model) {
         List<Order> orders = orderService.getOrdersByStatus(PENDING);
         model.addAttribute("ordersPending", orders);
-        return "manager/ordermanager";
+        return "manager/order/order";
     }
 
 
@@ -40,7 +40,7 @@ public class ManagerController {
     public String processingOrder(@RequestParam("orderId") Integer orderId,
                               @RequestParam("status") String status) {
         orderService.updateStatusOrder(orderId, status);
-        return "redirect:/manager/ordermanager";
+        return "redirect:/manager/order";
     }
 
 }

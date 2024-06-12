@@ -213,7 +213,7 @@
                                 <td th:text="${order.orderStatus}"></td>
                                 <td>
                                     <input type="hidden" name="orderId" th:value="${order.orderId}">
-                                    <input type="hidden" name="status" value="processing">
+                                    <input type="hidden" name="status" value="PROCESSING">
                                     <button type="submit" class="btn btn-info btn-sm me-1"
                                             style="float:left; margin-left: 13px; color: #fff;">
                                         Nhận đơn
@@ -223,7 +223,7 @@
                             <form th:action="@{/manager/processingorder}" method="post"
                                   onsubmit="return confirm('Are you sure you want to delete this todo?');">
                                 <input type="hidden" name="orderId" th:value="${order.orderId}">
-                                <input type="hidden" name="status" value="cancelled">
+                                <input type="hidden" name="status" value="CANCELLED">
                                 <td>
                                     <button type="submit" class="btn btn-danger btn-sm beo1"
                                             style="background-color: #ff2033">
