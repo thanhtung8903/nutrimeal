@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserPromotionRepository extends JpaRepository<UserPromotion, Integer> {
 
-//    boolean existsByUserIdAndPromotionId(String userId, int promotionId);
 
+    public boolean existsByUserIdAndPromotionId(String userId, int promotionId);
 }

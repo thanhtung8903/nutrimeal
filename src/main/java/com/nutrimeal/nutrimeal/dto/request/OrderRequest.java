@@ -12,4 +12,5 @@ public class OrderRequest {
     private int paymentMethodId;
     private int deliveryTimeId;
     private String orderNote;
+    private String promotionCode;
 }

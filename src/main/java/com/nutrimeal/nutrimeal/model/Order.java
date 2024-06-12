@@ -1,5 +1,6 @@
 package com.nutrimeal.nutrimeal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.Date;
@@ -54,6 +55,7 @@ public class Order {
     private Date orderDate;
 
     @OneToMany(mappedBy = "order")
+    @JsonIgnore
     private List<OrderDetail> orderDetails;
 
 
