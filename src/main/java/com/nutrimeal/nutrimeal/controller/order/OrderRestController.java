@@ -30,6 +30,8 @@ public class OrderRestController {
     private final DeliveryTimeService deliveryTimeService;
     private final AddressService addressService;
     private final VNPayService vnPayService;
+    private final PromotionService promotionService;
+    private final UserPromotionService userPromotionService;
 
     @PostMapping("/order/create")
     public String createOrder(@RequestBody OrderRequest orderRequest, Principal principal) {
@@ -56,6 +58,20 @@ public class OrderRestController {
         order.setOrderDate(new Date());
         order.setUser(user);
         order.setAddress(addressService.findById(orderRequest.getAddressId()));
+
+        // update quantity voucher and flag used
+        if (orderRequest.getPromotionCode() != null) {
+            Optional<Promotion> promotion = promotionService.findByPromotionCode(orderRequest.getPromotionCode());
+            if (promotion.isPresent()) {
+                UserPromotion userPromotion = new UserPromotion();
+                userPromotion.setUserId(user.getUserId());
+                userPromotion.setPromotionId(promotion.get().getPromotionId());
+                userPromotionService.save(userPromotion);
+                promotion.get().setPromotionQuantity(promotion.get().getPromotionQuantity() - 1);
+                promotionService.save(promotion.get());
+            }
+        }
+
 
         List<OrderBasket> orderBaskets = orderBasketService.findAllByUser(user);
 

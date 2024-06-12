@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
 
     Optional<Promotion> findByPromotionCode(String promotionCode);
+
+
 }

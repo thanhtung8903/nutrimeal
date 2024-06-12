@@ -27,6 +27,8 @@ public class VNPayService {
     private final DeliveryTimeService deliveryTimeService;
     private final OrderBasketService orderBasketService;
     private final OrderDetailService orderDetailService;
+    private final PromotionService promotionService;
+    private final UserPromotionService userPromotionService;
 
     public String createOrder(OrderRequest orderRequest, String urlReturn, User user) {
 
@@ -42,6 +44,18 @@ public class VNPayService {
         orders.setOrderDeliveryPrice(orderRequest.getOrderDeliveryPrice());
         orders.setOrderTempPrice(orderRequest.getOrderTempPrice());
         orders.setOrderStatus(OrderStatus.PENDING);
+
+        if (orderRequest.getPromotionCode() != null) {
+            Optional<Promotion> promotion = promotionService.findByPromotionCode(orderRequest.getPromotionCode());
+            if (promotion.isPresent()) {
+                UserPromotion userPromotion = new UserPromotion();
+                userPromotion.setUserId(user.getUserId());
+                userPromotion.setPromotionId(promotion.get().getPromotionId());
+                userPromotionService.save(userPromotion);
+                promotion.get().setPromotionQuantity(promotion.get().getPromotionQuantity() - 1);
+                promotionService.save(promotion.get());
+            }
+        }
 
         ordersRepository.save(orders);
 

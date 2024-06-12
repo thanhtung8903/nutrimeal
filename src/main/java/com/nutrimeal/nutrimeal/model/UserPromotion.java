@@ -1,11 +1,15 @@
 package com.nutrimeal.nutrimeal.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "user_promotion")
 @Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserPromotion {
 
     @Id

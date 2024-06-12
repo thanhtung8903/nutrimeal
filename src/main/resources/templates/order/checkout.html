@@ -502,7 +502,9 @@
                 })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                            return response.json().then(errorData => {
+                                throw new Error(errorData.message || 'Network response was not ok');
+                            });
                         }
                         return response.json();
                     })
@@ -517,7 +519,7 @@
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert("Mã giảm giá không hợp lệ");
+                        alert(error.message || "Mã giảm giá không hợp lệ");
                         discount = 0;
                     });
             } else {
@@ -561,7 +563,8 @@
                 deliveryTimeId: document.getElementById('deliveryTime').value,
                 paymentMethodId: document.getElementById('paymentMethod').value,
                 orderNote: document.getElementById('note1').value,
-                orderTotalPrice: parseVND(document.getElementById('totalAmount').innerText)
+                orderTotalPrice: parseVND(document.getElementById('totalAmount').innerText),
+                promotionCode: promoCodeInput.value.trim()
             };
 
             return formData;
