@@ -48,6 +48,6 @@ public class Address {
     private User user;
 
     public String getFullAddress() {
-        return district + " " + ward + " " + apartmentNumber;
+        return apartmentNumber + ", " + district + ", " + ward;
     }
 }

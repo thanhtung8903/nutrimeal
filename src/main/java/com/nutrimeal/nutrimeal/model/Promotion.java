@@ -31,5 +31,5 @@ public class Promotion {
     private String promotionDescription;
 
     @Column(name = "promotion_discount")
-    private float promotionDiscount;
+    private int promotionDiscount;
 }
