@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head('Signup', 'none')}"></head>
+
+<style>
+    .signup-container {
+        max-width: 450px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #ffffff;
+    }
+    .signup-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .signup-header h3 {
+        margin-bottom: 10px;
+    }
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid #ddd;
+    }
+    .divider::before {
+        margin-right: 0.25em;
+    }
+    .divider::after {
+        margin-left: 0.25em;
+    }
+    .btn-google {
+        background-color: #4285f4;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        border-radius: 5px;
+        display: block;
+        text-decoration: none;
+        margin-bottom: 20px;
+    }
+    .btn-google:hover {
+        background-color: #357ae8;
+        color: white;
+    }
+    .form-text {
+        color: #ff0000;
+    }
+</style>
+
+<header th:replace="~{fragments :: header-fragment}"></header>
+<body>
+
+<div class="container">
+    <div class="signup-container">
+        <div class="signup-header">
+            <h3>Đăng ký</h3>
+            <p>Bạn đã có tài khoản? Vui lòng <a style="text-decoration: none" href="#" th:href="@{/login}">Đăng nhập</a></p>
+        </div>
+
+        <form id="signupForm" action="#" th:action="@{/signup}" th:object="${SignupRequest}" method="post" class="form-horizontal" onsubmit="return validateForm()">
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Tên tài khoản</label>
+                <input type="text" class="form-control" id="username" placeholder="Tên tài khoản" name="username" th:field="*{username}" >
+                <small id="usernameHelp" class="form-text"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Email" name="email" th:field="*{email}" >
+                <small id="emailHelp" class="form-text"></small>
+            </div>
+            <div class="form-group">
+                <label for="fullname">Họ và tên</label>
+                <input type="text" class="form-control" id="fullname" placeholder="Họ và tên" name="fullName" th:field="*{fullName}" >
+                <small id="fullnameHelp" class="form-text"></small>
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" th:field="*{password}" >
+                <small id="passwordHelp" class="form-text"></small>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Nhập lại mật khẩu</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Xác nhận mật khẩu" >
+                <small id="confirmPasswordHelp" class="form-text"></small>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
+            </div>
+            <div class="divider">Hoặc</div>
+
+            <a class="btn-google bg-danger" th:href="@{/oauth2/authorization/google}">
+                <i class="fab fa-google"></i> Đăng nhập với Google
+            </a>
+        </form>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        let isValid = true;
+
+        // Validate username
+        const username = document.getElementById('username').value;
+        const usernameHelp = document.getElementById('usernameHelp');
+        if (username.length < 6 || !/[a-zA-Z]/.test(username)) {
+            usernameHelp.textContent = 'Tên tài khoản phải dài ít nhất 6 ký tự và chứa ít nhất một chữ cái.';
+            isValid = false;
+        } else {
+            usernameHelp.textContent = '';
+        }
+
+        // Validate email
+        const email = document.getElementById('email').value;
+        const emailHelp = document.getElementById('emailHelp');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            emailHelp.textContent = 'Email không hợp lệ.';
+            isValid = false;
+        } else {
+            emailHelp.textContent = '';
+        }
+
+        // Validate fullname
+        const fullname = document.getElementById('fullname').value;
+        const fullnameHelp = document.getElementById('fullnameHelp');
+        if (fullname.trim() === '') {
+            fullnameHelp.textContent = 'Họ và tên không được bỏ trống.';
+            isValid = false;
+        } else {
+            fullnameHelp.textContent = '';
+        }
+
+        // Validate password
+        const password = document.getElementById('password').value;
+        const passwordHelp = document.getElementById('passwordHelp');
+        if (password.length < 8) {
+            passwordHelp.textContent = 'Mật khẩu phải có ít nhất 8 ký tự.';
+            isValid = false;
+        } else {
+            passwordHelp.textContent = '';
+        }
+
+        // Validate confirm password
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const confirmPasswordHelp = document.getElementById('confirmPasswordHelp');
+        if (password !== confirmPassword) {
+            confirmPasswordHelp.textContent = 'Mật khẩu không khớp.';
+            isValid = false;
+        } else {
+            confirmPasswordHelp.textContent = '';
+        }
+
+        return isValid;
+    }
+</script>
+
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</html>

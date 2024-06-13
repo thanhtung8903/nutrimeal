@@ -33,17 +33,12 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final HttpSession session;
 
     public void signupUser(SignupRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username đã được sử dụng");
         } else if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email đã được sử dụng");
-        } else if (!request.getPassword().matches("^.{8,}$")) {
-            throw new RuntimeException("Mật khẩu phải dài ít nhất 8 ký tự");
-        } else if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new RuntimeException("Mật khẩu không khớp");
         } else {
             User user = new User();
             user.setUsername(request.getUsername());
@@ -52,7 +47,7 @@ public class AuthService {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setPoint(0);
             user.setActive(true);
-
+            user.setImage("https://img.freepik.com/premium-vector/avatar-icon0002_750950-43.jpg?size=338&ext=jpg&ga=GA1.1.1224184972.1715212800&semt=ais");
             Set<Role> roles = new HashSet<>();
             roles.add(roleRepository.findByRoleName(RoleName.ROLE_CUSTOMER).orElseThrow(() -> new RuntimeException("Error: Role is not found")));
             user.setRoles(roles);
@@ -89,7 +84,7 @@ public class AuthService {
                 .dob(user.getDob())
                 .gender(user.getGender())
                 .roles(roles)
-                .avatar(user.getAvatar())
+//                .image(user.getImage())
                 .point(user.getPoint())
                 .build();
 

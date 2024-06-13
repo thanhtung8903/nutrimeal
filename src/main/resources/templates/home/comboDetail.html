@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${combo.comboName}, 'none')}"></head>
+<link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+/>
+<style>
+    .comboDetail {
+        font-family: Montserrat, sans-serif;
+        color: #333;
+        background-color: #f5f5f5;
+    }
+
+    .breadcrumb-container {
+        max-width: 1100px;
+        margin: 20px auto;
+        margin-top: 15px;
+        padding: 15px 10px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        list-style: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .breadcrumb-item a {
+        text-decoration: none;
+        /* color: #686868; */
+        color: black;
+        text-align: center;
+    }
+
+    .breadcrumb-item a:hover {
+        font-weight: bold;
+    }
+
+    .breadcrumb-item span {
+        margin-right: 10px;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "";
+    }
+
+    .breadcrumb-item a.active {
+        font-weight: bold;
+        color: #FF2033; /* Màu đỏ hoặc màu bạn muốn sử dụng để làm nổi bật */
+    }
+
+    .box-info {
+        max-width: 1100px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .box-info.order {
+        padding: 20px;
+        border-radius: 5px;
+        background: #fff;
+    }
+
+    .thumb-product img {
+        max-width: 100%;
+        border-radius: 10px;
+    }
+
+    .title {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .price {
+        font-size: 22px;
+        color: #FF2033;
+        font-weight: bold;
+    }
+
+    .note {
+        font-size: 14px;
+        color: #FF2033;
+    }
+
+    .images-product a {
+        display: inline-block;
+        margin: 5px;
+    }
+
+    .images-product img {
+        max-width: 100px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .form-group_comboDetail {
+        margin-top: 20px;
+    }
+
+    .input-radio {
+        margin-bottom: 10px;
+    }
+
+    .form-check-input {
+        background-color: #fff;
+    }
+
+    .form-check-input:checked {
+        background-color: #FF2033;
+        border-color: #FF2033;
+    }
+
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.2rem rgba(228, 66, 48, 0.445);
+    }
+
+    .btn-primary_comboDetail {
+        background-color: #FF2033;
+        border: 1px solid #FF2033;
+        padding: 8px 30px;
+        font-size: 18px;
+        border-radius: 5px;
+        color: #fff;
+        font-weight: 500;
+        letter-spacing: 1px;
+    }
+
+    .btn-primary_comboDetail:hover {
+        background-color: #fa061b;
+        border-color: #fa061b;
+    }
+
+    .menu-photo {
+        max-width: 100%;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .meal-img img {
+        max-width: 70%;
+        height: auto;
+    }
+
+    .meal-title {
+        font-size: 15px;
+    }
+
+    .meal-row {
+        display: flex;
+    }
+
+    .suggest-combo {
+        max-width: 1100px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    .suggest-combo_h2 {
+        font-size: 40px;
+        letter-spacing: 4px;
+        font-weight: 700;
+        font-family: Montserrat, sans-serif;
+        text-transform: uppercase;
+        color: #000;
+    }
+
+    .underline_suggest-combo_h2 {
+        width: 55px;
+        height: 10px;
+        background-color: #ff2033;
+        margin-left: 0;
+        margin-bottom: 25px;
+    }
+
+    .col-md-3 {
+        margin-bottom: 20px;
+    }
+
+    .link-text {
+        text-decoration: none;
+    }
+
+    .link-text h3 {
+        font-size: 20px;
+        color: #000;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .card-img-top {
+        transition: transform 0.6s ease;
+    }
+
+    .card-img-top:hover {
+        transform: scale(1.2);
+    }
+
+    /*--Meal list--*/
+    .meal-container {
+        display: flex;
+        max-width: 1100px;
+        margin: 0 auto;
+        overflow: hidden;
+        border: 2px double #333;
+        border-radius: 10px;
+    }
+
+    .title_meal-h3 {
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .meal-title-container {
+        flex: 0.5;
+        padding: 20px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+
+    .meal-title-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 1px;
+        background: repeating-linear-gradient(
+                to bottom,
+                #333,
+                #333 10px,
+                transparent 5px,
+                transparent 9px
+        );
+    }
+
+    .meal-list-container {
+        flex: 3.5;
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 20px;
+    }
+
+    .meal-list {
+        display: inline-flex;
+        animation: scroll 120s linear infinite;
+    }
+
+    .meal-item {
+        display: inline-block;
+        margin-right: 30px;
+    }
+
+    .meal-img img {
+        max-width: 200px;
+        margin-right: 15px;
+        border-radius: 10px;
+        transition: transform 0.6s;
+    }
+
+    .meal-img img:hover {
+        transform: scale(1.2);
+    }
+
+    .meal-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .meal-number {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .meal-title {
+        font-size: 1.2em;
+        font-weight: 500;
+        color: #333;
+    }
+
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+</style>
+
+<header th:replace="~{fragments :: header-fragment}"></header>
+
+<body class="comboDetail">
+
+
+
+<div class="container_detailCombo ">
+
+    <nav aria-label="breadcrumb" class="breadcrumb-container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);" class="active">
+                    <span><i class="fas fa-shopping-cart" aria-hidden="true"></i></span>Đặt hàng
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="javascript:void(0);">
+                    <span><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>Chỉnh sửa
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">
+                    <span><i class="bi bi-coin"></i></span>Thanh toán
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">
+                    <span><i class="fa fa-check" aria-hidden="true"></i></span>Xác nhận
+                </a>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="box-info order mb-5" th:object="${combo}">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="thumb thumb-product">
+                    <div class="thumb-main">
+                        <img th:src="${combo.comboImage}" class="img-fluid"
+                             alt="Gói SLIM (*new)-0">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 mb-3">
+
+
+                <div class="d-flex flex-column flex-lg-row justify-content-between">
+                    <h1 class="title" th:text="${combo.comboName}"></h1>
+                    <p id="p-price" class="price" th:text="${combo.comboPrice7Days}"></p>
+                    <p id="p-price2" class="price" style="display: none;" th:text="${combo.comboPrice30Days}"></p>
+                </div>
+
+                <div th:each="item : ${descriptionItems}">
+                    <p th:text="'- ' + ${item}"></p>
+                </div>
+
+                <form id="form-package" method="post" data-show-cart="0"
+                      th:action="@{/basket/add/{cid}(cid=${combo.comboId})}">
+                    <div class="form-group_comboDetail">
+                        <div class="form-check input-radio">
+                            <input class="form-check-input" type="radio" name="day" id="orderRadios1" value="7"
+                                   checked="">
+                            <label class="form-check-label" for="orderRadios1">Gói Tuần - 7 ngày</label>
+                        </div>
+                        <div class="form-check input-radio">
+                            <input class="form-check-input" type="radio" name="day" id="orderRadios2" value="30">
+                            <label class="form-check-label" for="orderRadios2">Gói Tháng - 30 ngày</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="add-to-cart" class="btn_comboDetail btn-primary_comboDetail submit">Thêm
+                        vào giỏ
+                    </button>
+
+                    <div id="notification" class="alert mt-2" role="alert" style="display: none; width: 450px"></div>
+                </form>
+
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        $('#form-package').on('submit', function (event) {
+                            event.preventDefault();
+
+                            var form = $(this);
+                            var url = form.attr('action');
+
+                            $.ajax({
+                                type: "POST",
+                                url: url,
+                                data: form.serialize(),
+                                success: function (response) {
+                                    $('#notification').removeClass('alert-danger').addClass('alert-success').text(response).fadeIn().delay(3000).fadeOut();
+                                },
+                                error: function (xhr, status, error) {
+                                    $('#notification').removeClass('alert-success').addClass('alert-danger').text('Đã có lỗi xảy ra, vui lòng thử lại.').fadeIn().delay(3000).fadeOut();
+                                }
+                            });
+                        });
+                    });
+                </script>
+
+
+                <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        const mealList = $(".meal-list");
+                        const mealItems = $(".meal-item").clone();
+                        mealList.append(mealItems);
+
+                        $(".meal-list-container").hover(
+                            function () {
+                                mealList.css("animation-play-state", "paused");
+                            },
+                            function () {
+                                mealList.css("animation-play-state", "running");
+                            }
+                        );
+                    });
+                </script>
+
+                <script>
+                    function formatCurrency(value) {
+                        return new Intl.NumberFormat('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }).format(value).replace('₫', 'đ');
+                    }
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const priceElement = document.getElementById('p-price');
+                        const price2Element = document.getElementById('p-price2');
+
+                        function updatePrice() {
+                            const selectedValue = document.querySelector('input[name="day"]:checked').value;
+                            if (selectedValue === '7') {
+                                priceElement.style.display = 'block';
+                                price2Element.style.display = 'none';
+                            } else if (selectedValue === '30') {
+                                priceElement.style.display = 'none';
+                                price2Element.style.display = 'block';
+                            }
+                        }
+
+                        document.querySelectorAll('input[name="day"]').forEach(function (radio) {
+                            radio.addEventListener('change', updatePrice);
+                        });
+
+                        const priceValue = parseFloat(priceElement.textContent);
+                        priceElement.textContent = formatCurrency(priceValue);
+
+                        const price2Value = parseFloat(price2Element.textContent);
+                        price2Element.textContent = formatCurrency(price2Value);
+
+                        // Initialize the price display
+                        updatePrice();
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div class="meal-box" style="margin-top: 30px;">
+        <div class="meal-container">
+            <div class="meal-title-container">
+                <h3 class="title_meal-h3 title--pri">THỰC ĐƠN 7 NGÀY TỚI</h3>
+            </div>
+            <div class="meal-list-container">
+                <div class="meal-list">
+                    <div class="meal-item" style="margin-right: 100px" th:each="dish, stat : ${dishList}">
+                        <div class="meal-img">
+                            <img th:src="${dish.dishImage}" alt="" style="width:200px">
+                        </div>
+                        <div class="meal-content">
+                            <span class="meal-number" th:text="${stat.index + 1}"></span>
+                            <h4 class="meal-title" th:text="${dish.dishName}"></h4>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="suggest-combo">
+    <h2 class="suggest-combo_h2">Gói ăn
+        <hr class="underline_suggest-combo_h2">
+    </h2>
+    <div class="products">
+        <div class="products">
+            <div class="row product-listing">
+                <div class="col-md-3" th:each="combo : ${comboList}">
+                    <div class="listing-item">
+                        <div class="card">
+                            <a th:href="@{/combo/{id}(id=${combo.comboId})}" class="link">
+                                <img th:src="${combo.comboImage}" class="card-img-top" alt="Gói LUNCH">
+                            </a>
+                            <div class="card-body">
+                                <a href="#" class="link-text">
+                                    <h3 class="card-title d-flex justify-content-between"
+                                        th:text="${combo.comboName}"></h3>
+                                </a>
+                                <span class="card-price bold" th:text="${combo.comboPrice7Days}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--</div>-->
+
+<script>
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(value).replace('₫', 'đ');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const cardPriceElements = document.querySelectorAll('.card-price');
+
+        cardPriceElements.forEach(function (cardPriceElement) {
+            const cardPriceValue = parseFloat(cardPriceElement.textContent);
+            cardPriceElement.textContent = formatCurrency(cardPriceValue);
+        });
+    });
+</script>
+
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+</html>

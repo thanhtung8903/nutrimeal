@@ -1,11 +1,6 @@
 package com.nutrimeal.nutrimeal.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -28,14 +23,21 @@ public class Dish {
     private String dishImage;
 
     @Column(name = "dish_proteins")
-    private float dishProteins;
+    private int dishProteins;
 
     @Column(name = "dish_fats")
-    private float dishFats;
+    private int dishFats;
 
     @Column(name = "dish_carb")
-    private float dishCarb;
+    private int dishCarbs;
 
     @Column(name = "dish_calories")
-    private float dishCalories;
+    private int dishCalories;
+
+    @Column(name = "dish_type")
+    private String dishType;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
+
 }

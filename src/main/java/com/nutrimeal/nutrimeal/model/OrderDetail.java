@@ -17,17 +17,16 @@ public class OrderDetail {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "dish_id")
-    private Dish dish;
-
     @Column(name = "order_detail_quantity")
     private int orderDetailQuantity;
 
     @Column(name = "order_detail_price")
-    private float orderDetailPrice;
+    private int orderDetailPrice;
 
     @ManyToOne
     @JoinColumn(name = "combo_id")
     private Combo combo;
+
+    @Column(name = "combo_day")
+    private int comboDay;
 }

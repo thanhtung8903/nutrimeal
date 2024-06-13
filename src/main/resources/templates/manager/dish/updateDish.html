@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Chỉnh sửa món ăn', 'none')}"></head>
+
+<style>
+    body {
+        background-color: #e5e5e5;
+    }
+
+    .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+
+    .btn-primary {
+        background-color: #343a40 !important;
+        border-color: #343a40 !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #000000 !important;
+        font-weight: 600;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268 !important;
+        font-weight: 600;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+</style>
+<header th:replace="~{fragments :: header_manager}"></header>
+
+<body>
+<div class="container mb-5">
+    <div class="form-container">
+        <h2 style="margin-bottom: 40px; text-align: center;">Cập nhật Món Ăn</h2>
+        <form id="updateDishForm" th:object="${dish}" method="post"
+              th:action="@{/manager/dish/update/{dishId}(dishId=${dish.dishId})}" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label hidden="hidden" for="dishId" class="form-label">ID</label>
+                <input hidden="hidden" type="text" class="form-control" id="dishId" name="dishId" readonly
+                       th:value="${dish.dishId}">
+            </div>
+            <div class="mb-3">
+                <label for="dishName" class="form-label">Tên Món Ăn</label>
+                <input type="text" class="form-control" id="dishName" name="dishName" th:value="${dish.dishName}" required>
+            </div>
+            <div class="mb-3">
+                <label for="dishDescription" class="form-label">Mô tả Món Ăn</label>
+                <textarea class="form-control" id="dishDescription" name="dishDescription" rows="3"
+                          th:text="${dish.dishDescription}" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="dishType" class="form-label">Phân loại</label>
+                <select name="dishType" id="dishType">
+                    <option value="V">Món chay</option>
+                    <option value="N">Món mặn</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="dishImage" class="form-label">Hình ảnh Món Ăn</label>
+                <input type="file" class="form-control" id="dishImage" name="image" accept="image/*">
+                <img class="mt-2" id="preview" th:src="${dish.dishImage}" alt="your image" style="max-width: 200px;"/>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="dishCalories" class="form-label">Lượng Calo</label>
+                    <input type="number" class="form-control" id="dishCalories" name="dishCalories" min="0"
+                           th:value="${dish.dishCalories}" required>
+                </div>
+                <div class="col">
+                    <label for="dishProtein" class="form-label">Lượng Protein</label>
+                    <input type="number" class="form-control" id="dishProtein" name="dishProteins" min="0"
+                           th:value="${dish.dishProteins}" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="dishFat" class="form-label">Lượng Chất Béo</label>
+                    <input type="number" class="form-control" id="dishFat" name="dishFats" min="0"
+                           th:value="${dish.dishFats}" required>
+                </div>
+                <div class="col">
+                    <label for="dishCarb" class="form-label">Lượng Carbohydrate</label>
+                    <input type="number" class="form-control" id="dishCarb" name="dishCarbs" min="0"
+                           th:value="${dish.dishCarbs}" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Cập nhật Món Ăn</button>
+            <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/dish\''">Quay
+                lại
+            </button>
+            <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
+                <strong>Đã có lỗi xảy ra!</strong> Vui lòng kiểm tra lại thông tin.
+            </div>
+            <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
+                <strong>Cập nhật món ăn thành công!</strong>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+<script>
+    document.getElementById('dishImage').addEventListener('change', function (event) {
+        const preview = document.getElementById('preview');
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+            preview.style.display = 'block';
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+        }
+    });
+</script>
+
+</body>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</html>

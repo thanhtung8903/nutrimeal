@@ -1,6 +1,7 @@
 package com.nutrimeal.nutrimeal.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,9 +35,6 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "avatar")
-    private String avatar;
-
     @Column(name = "gender")
     private Boolean gender;
 
@@ -47,17 +45,23 @@ public class User {
     @Column(name = "point")
     private int point;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "is_active")
     private boolean isActive;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> addresses;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Order> orders;
 
 }

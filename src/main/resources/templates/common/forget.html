@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head('Forget Password', 'none')}"></head>
+
+<style>
+    .forget-password-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #ffffff;
+    }
+    .forget-password-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .forget-password-header h3 {
+        margin-bottom: 10px;
+    }
+    .form-text {
+        color: #ff0000;
+    }
+</style>
+
+<header th:replace="~{fragments :: header-fragment}"></header>
+<body>
+
+<div class="container">
+    <div class="forget-password-container">
+        <div class="forget-password-header">
+            <h3>Quên mật khẩu</h3>
+            <p>Bạn chưa có tài khoản? Vui lòng <a style="text-decoration: none" href="#" th:href="@{/signup}">Đăng ký</a></p>
+        </div>
+        <form th:action="@{/forget}" method="post" onsubmit="return validateForgetPassword()">
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="usernameOrEmail">Tên người dùng hoặc Email</label>
+                <input th:value="${usernameOrEmail}" type="text" class="form-control mt-1" id="usernameOrEmail" name="usernameOrEmail" placeholder="Tên người dùng hoặc Email"/>
+                <div id="usernameOrEmailError" class="form-text"></div>
+            </div>
+
+            <div class="text-center mb-2">
+                <button type="submit" class="btn btn-primary mt-3">Quên mật khẩu</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function validateForgetPassword() {
+        var usernameOrEmail = document.getElementById("usernameOrEmail").value;
+        var usernameOrEmailError = document.getElementById("usernameOrEmailError");
+
+        // Reset error messages
+        usernameOrEmailError.textContent = "";
+
+        var isValid = true;
+
+        if (usernameOrEmail.trim() === "") {
+            usernameOrEmailError.textContent = "* Vui lòng nhập tên người dùng hoặc email.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>
+
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</html>

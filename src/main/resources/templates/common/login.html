@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Login', 'none')}"></head>
+
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #ffffff;
+    }
+    .login-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .login-header h3 {
+        margin-bottom: 10px;
+    }
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid #ddd;
+    }
+    .divider::before {
+        margin-right: 0.25em;
+    }
+    .divider::after {
+        margin-left: 0.25em;
+    }
+    .btn-google {
+        background-color: #4285f4;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        border-radius: 5px;
+        display: block;
+        text-decoration: none;
+    }
+    .btn-google:hover {
+        background-color: #357ae8;
+        color: white;
+    }
+    .form-text {
+        color: #ff0000;
+    }
+</style>
+
+<header th:replace="~{fragments :: header-fragment}"></header>
+<body>
+
+<div class="container">
+    <div class="login-container">
+        <div class="login-header">
+            <h3>Đăng nhập</h3>
+            <p>Bạn chưa có tài khoản? Vui lòng <a th:href="@{/signup}" style="text-decoration: none">Đăng ký</a></p>
+        </div>
+        <a class="btn-google bg-danger" th:href="@{/oauth2/authorization/google}">
+            <i class="fab fa-google"></i> Đăng nhập với Google
+        </a>
+        <div class="divider">Hoặc</div>
+        <form action="#" th:action="@{/login}" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <div class="form-group form-check mt-1 d-flex justify-content-between align-items-center mt-2">
+                <div>
+                    <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
+                    <label class="form-check-label" for="remember-me">Remember me</label>
+                </div>
+                <a style="text-decoration: none" href="#" th:href="@{/forget}">Quên mật khẩu</a>
+            </div>
+
+            <div th:if="${param.error}" class="alert alert-danger mt-2" role="alert">
+                <span>Tên tài khoản hoặc mật khẩu không chính xác!</span>
+            </div>
+
+            <div th:if="${param.oauth2_error}" class="alert alert-danger mt-2" role="alert">
+                <span>Email đã được sử dụng !</span>
+            </div>
+
+            <div class="text-center mt-2 mb-3">
+                <button type="submit" class="btn btn-primary">Đăng nhập</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</html>

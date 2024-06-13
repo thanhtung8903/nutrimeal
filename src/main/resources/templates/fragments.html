@@ -13,10 +13,11 @@
     <script type="text/javascript" th:src="@{/webjars/jquery/3.7.1/dist/jquery.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+
 </head>
 
-<header th:fragment="header">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<div th:fragment="header-fragment">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" >
         <div class="container">
 
             <a class="navbar-brand" href="/"><h1>NutriMeal</h1></a>
@@ -31,19 +32,16 @@
                         <a class="nav-link" href="/">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/menu">Thực đơn</a>
+                        <a class="nav-link" href="/menu" th:href="@{/menu}">Thực đơn</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/consult">Tư vấn</a>
+                        <a class="nav-link" href="/consult" th:href="@{/consult}">Tư vấn</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/order">Đặt hàng</a>
+                        <a class="nav-link" href="/combo" th:href="@{/combo}">Đặt hàng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/news">Tin tức</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/faq" th:href="@{/faqs}">FAQ</a>
+                        <a class="nav-link" href="/faq" th:href="@{/faqs}">FAQS</a>
                     </li>
                 </ul>
             </div>
@@ -51,6 +49,9 @@
 
             <div sec:authorize="isAnonymous()" class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/signup">Đăng ký</a>
                     </li>
@@ -63,7 +64,12 @@
             <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/profile/account}">Hồ sơ</a>
+                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/profile/account}">
+                            Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
@@ -71,28 +77,28 @@
                 </ul>
             </div>
 
-
         </div>
     </nav>
-</header>
+</div>
 
 <footer th:fragment="footer" class="bg-dark text-white p-4">
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-4">
-                <h5>About Us</h5>
-                <p class="text-justify">We are a team of NutriMeal enthusiasts who believe that a healthy lifestyle can
-                    be achieved through healthy meals. We are committed to providing the best quality meals to our
-                    customers.</p>
+                <h5>Về chúng tôi</h5>
+                <p class="text-justify">Chúng tôi là NutriMeal team,
+                    tin tưởng rằng lối sống lành mạnh bắt đầu từ những bữa ăn bổ dưỡng.
+                    Với cam kết mang đến chất lượng cao nhất trong từng bữa ăn, chúng tôi luôn nỗ lực để
+                    cung cấp những trải nghiệm ẩm thực tuyệt vời cho mọi khách hàng.</p>
             </div>
             <div class="col-md-4">
-                <h5>Contact Us</h5>
-                <p class="text-justify">Address: 1234 Main St, HCM City, Vietnam</p>
-                <p class="text-justify">Phone: 0123 456 789</p>
-                <p class="text-justify">Email: </p>
+                <h5>Liên hệ: </h5>
+                <p class="text-justify">Địa chỉ: 66 Phố Hai Bà Trưng, quận Hoàn Kiếm, TP Hà Nội</p>
+                <p class="text-justify">Phone: 0123 666 888</p>
+                <p class="text-justify">Email: nutrimeal@gmail.com</p>
             </div>
             <div class="col-md-4">
-                <h5>Follow Us</h5>
+                <h5>Follow chúng tôi tại: </h5>
                 <a href="#" class="btn btn-primary"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="btn btn-info"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="btn btn-danger"><i class="fab fa-google-plus"></i></a>
@@ -102,5 +108,78 @@
     </div>
 </footer>
 
+<header th:fragment="header_manager">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+
+            <a class="navbar-brand" href="/manager/"><h1>NutriMeal</h1></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manager/">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manager/menu" th:href="@{/manager/dish}">Quản lý thực đơn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manager/customer" th:href="@{/manager/customer}">Quản lý khách hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manager/order" th:href="@{/manager/ordermanager}">Quản lý đơn hàng</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Khác
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" th:href="@{/manager/expenses}">Quản lý chi tiêu</a>
+                            <a class="dropdown-item" th:href="@{/manager/discount}">Khuyến mãi</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/profile/account}">
+                            Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <script>
+        // JavaScript to handle dropdown toggle
+        document.addEventListener("DOMContentLoaded", function () {
+            const moreDropdown = document.querySelector('.nav-item.dropdown');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            moreDropdown.addEventListener('click', function () {
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside of it
+            window.addEventListener('click', function (e) {
+                if (!moreDropdown.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</header>
 
 </html>

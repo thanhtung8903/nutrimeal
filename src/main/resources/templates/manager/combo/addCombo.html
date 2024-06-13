@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Thêm combo', 'none')}"></head>
+<style>
+    body {
+        background-color: #e5e5e5;
+    }
+
+    .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+
+    .btn-primary {
+        background-color: #343a40 !important;
+        border-color: #343a40 !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #000000 !important;
+        font-weight: 600;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268 !important;
+        font-weight: 600;
+    }
+</style>
+
+<header th:replace="~{fragments :: header_manager}"></header>
+
+
+<body>
+<div class="container mb-4">
+    <div class="form-container">
+        <h2 style="margin-bottom: 40px; text-align: center;">Thêm Combo</h2>
+        <form id="addComboForm" th:action="@{/manager/combo/add}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="comboName" class="form-label">Tên Combo</label>
+                <input type="text" class="form-control" id="comboName" name="comboName" required>
+            </div>
+            <div class="mb-3">
+                <label for="comboDescription" class="form-label">Mô tả Combo</label>
+                <textarea class="form-control" id="comboDescription" name="comboDescription" rows="3"
+                          required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="comboImage" class="form-label">Hình ảnh Combo</label>
+                <input type="file" class="form-control" id="comboImage" name="image" accept="image/*" required>
+                <img class="mt-2" id="preview" src="#" alt="your image" style="max-width: 200px; display: none;"/>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="comboAvgCalories" class="form-label">Lượng kCal trung bình</label>
+                    <input type="number" class="form-control" id="comboAvgCalories" name="comboCalories" min="0"
+                           required>
+                </div>
+                <div class="col">
+                    <label for="comboType" class="form-label">Loại Combo</label>
+                    <select class="form-select" id="comboType" name="combo_type_id" required>
+                        <option value="1">Combo chay</option>
+                        <option value="2">Combo mặn</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="combo7day" class="form-label">Giá 7 ngày</label>
+                    <input type="number" class="form-control" id="combo7day" name="comboPrice7Days" min="0"
+                           required>
+                </div>
+                <div class="col">
+                    <label for="combo30day" class="form-label">Giá 30 ngày</label>
+                    <input type="number" class="form-control" id="combo30day" name="comboPrice30Days" min="0"
+                           required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="comboTime" class="form-label">Thời gian</label>
+                <select name="comboTime" id="comboTime" class="form-select">
+                    <option value="B">Ăn sáng</option>
+                    <option value="L">Ăn trưa</option>
+                    <option value="D">Ăn tối</option>
+                    <option value="BL">Ăn sáng, trưa</option>
+                    <option value="LD">Ăn trưa, tối</option>
+                    <option value="BD">Ăn sáng, tối</option>
+                    <option value="BLD">Cả ngày</option>
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Thêm Combo</button>
+            <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/combo\''">Quay lại</button>
+
+            <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
+                <strong>Đã có lỗi xảy ra!</strong> Vui lòng kiểm tra lại thông tin.
+            </div>
+            <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
+                <strong>Thêm combo thành công!</strong>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+<script>
+    document.getElementById('comboImage').addEventListener('change', function (event) {
+        const preview = document.getElementById('preview');
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+            preview.style.display = 'block';
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+        }
+    });
+</script>
+
+</body>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</html>

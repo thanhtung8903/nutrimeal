@@ -1,8 +1,10 @@
 package com.nutrimeal.nutrimeal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -25,13 +27,36 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "order_temp_price")
+    private int orderTempPrice;
+
+    @Column(name = "order_delivery_price")
+    private int orderDeliveryPrice;
+
+    @Column(name = "order_discount")
+    private int orderDiscount;
+
     @Column(name = "order_total_price")
-    private float orderTotalPrice;
+    private int orderTotalPrice;
+
+    @Column(name = "order_status")
+    private String orderStatus;
+
+    @ManyToOne
+    @JoinColumn(name = "payment_method_id")
+    private PaymentMethod paymentMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "delivery_time_id")
+    private DeliveryTime deliveryTime;
 
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
 
-    @Column(name = "order_status")
-    private Boolean orderStatus;
+    @OneToMany(mappedBy = "order")
+    @JsonIgnore
+    private List<OrderDetail> orderDetails;
+
+
 }

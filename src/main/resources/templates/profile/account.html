@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments :: head('Thông tin tài khoản', 'none')}"></head>
 <style>
     body {
@@ -47,37 +47,42 @@
 </style>
 
 <body>
-<header th:replace="~{fragments :: header}"></header>
+<header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
+<header th:replace="~{fragments :: header_manager}" sec:authorize="hasAuthority('ROLE_MANAGER')"></header>
+<header th:replace="~{fragments :: header_admin}" sec:authorize="hasAuthority('ROLE_ADMIN')"></header>
 <div class="profile__account container mt-3 mb-3">
 
     <div class="container-fluid">
         <div class="row" th:object="${user}">
             <!-- Sidebar -->
+<!--            src="https://img.freepik.com/premium-vector/avatar-icon0002_750950-43.jpg?size=338&ext=jpg&ga=GA1.1.1224184972.1715212800&semt=ais"-->
+
             <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column align-items-center">
                 <img
-                        src="https://img.freepik.com/premium-vector/avatar-icon0002_750950-43.jpg?size=338&ext=jpg&ga=GA1.1.1224184972.1715212800&semt=ais"
+                        th:src="*{getImage()}"
                         class="rounded-circle mb-3"
                         alt="Avatar"
                         width="80"
                 />
                 <p th:text="*{getFullName()}"></p>
                 <a href="#" th:href="@{/profile/account}" class="active">Thông tin tài khoản</a>
-                <a href="#" th:href="@{/profile/password}">Đổi mật khẩu</a>
-                <a href="#" th:href="@{/profile/point}">Point</a>
-                <a href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
-                <a href="#" th:href="@{/profile/order}">Đơn hàng hiện tại</a>
+                <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">Đổi mật khẩu</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">Point</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">Đơn hàng hiện tại</a>
             </nav>
 
             <!-- Main content -->
             <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
                 <h2 class="my-4">Thông tin tài khoản</h2>
-                <form th:action="@{/profile/account}" method="post" th:object="${user}">
+                <form th:action="@{/profile/account}" method="post" th:object="${user}" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label>Email</label>
                             <input
                                     type="email"
                                     class="form-control"
+                                    th:attr="readonly=${isOauth2User} ? 'readonly' : null"
                                     th:value="*{getEmail()}"
                                     name="email"
                             />
@@ -128,17 +133,99 @@
                             </div>
                         </div>
                     </div>
-<!--                    <div class="form-row">-->
-<!--                        <div class="form-group col-md-6">-->
-<!--                            <label>Ngày sinh</label>-->
-<!--                            <input-->
-<!--                                    type="date"-->
-<!--                                    class="form-control"-->
-<!--                                    th:value="*{getDob()}"-->
-<!--                                    name="dob"-->
-<!--                            />-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Ngày sinh</label>
+                            <input
+                                    type="date"
+                                    class="form-control"
+                                    th:value="*{getDob()}"
+                                    name="dob"
+                            />
+                        </div>
+                    </div>
+
+                    <script>
+                        function validateForm() {
+                            var isValid = true;
+
+                            // Validate Ngày sinh
+                            var dobInput = document.querySelector('input[name="dob"]');
+                            var dob = new Date(dobInput.value);
+                            var today = new Date();
+                            var dobAlert = document.getElementById('dob-alert');
+                            if (dobAlert) dobAlert.remove();
+
+                            if (dob >= today || dob <= new Date('1924-01-01')) {
+                                var dobAlertDiv = document.createElement('div');
+                                dobAlertDiv.id = 'dob-alert';
+                                dobAlertDiv.className = 'alert alert-danger mt-2';
+                                dobAlertDiv.innerText = 'Ngày sinh không hợp lệ.';
+                                dobInput.parentNode.appendChild(dobAlertDiv);
+                                isValid = false;
+                            }
+
+                            // Validate Email
+                            var emailInput = document.querySelector('input[name="email"]');
+                            var email = emailInput.value;
+                            var emailAlert = document.getElementById('email-alert');
+                            if (emailAlert) emailAlert.remove();
+
+                            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                            if (!emailPattern.test(email)) {
+                                var emailAlertDiv = document.createElement('div');
+                                emailAlertDiv.id = 'email-alert';
+                                emailAlertDiv.className = 'alert alert-danger mt-2';
+                                emailAlertDiv.innerText = 'Email không hợp lệ.';
+                                emailInput.parentNode.appendChild(emailAlertDiv);
+                                isValid = false;
+                            }
+
+                            // Validate SDT
+                            var phoneInput = document.querySelector('input[name="phone"]');
+                            var phone = phoneInput.value;
+                            var phoneAlert = document.getElementById('phone-alert');
+                            if (phoneAlert) phoneAlert.remove();
+
+                            var phonePattern = /^0\d{9}$/;
+                            if (!phonePattern.test(phone)) {
+                                var phoneAlertDiv = document.createElement('div');
+                                phoneAlertDiv.id = 'phone-alert';
+                                phoneAlertDiv.className = 'alert alert-danger mt-2';
+                                phoneAlertDiv.innerText = 'Số điện thoại phải có 10 chữ số và bắt đầu bằng 0.';
+                                phoneInput.parentNode.appendChild(phoneAlertDiv);
+                                isValid = false;
+                            }
+
+                            return isValid;
+                        }
+
+                        function previewImage(event) {
+                            var input = event.target;
+                            var reader = new FileReader();
+                            reader.onload = function(){
+                                var dataURL = reader.result;
+                                var imagePreview = document.getElementById('image-preview');
+                                if (!imagePreview) {
+                                    imagePreview = document.createElement('img');
+                                    imagePreview.id = 'image-preview';
+                                    imagePreview.className = 'img-thumbnail mt-2';
+                                    imagePreview.style.width = '150px'; // Đặt chiều rộng cố định
+                                    imagePreview.style.height = '150px'; // Đặt chiều cao cố định
+                                    input.parentNode.appendChild(imagePreview);
+                                }
+                                imagePreview.src = dataURL;
+                            };
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    </script>
+<!--                    image-->
+                    <div class="form-group col-md-6">
+                        <label for="image">Ảnh đại diện</label>
+                        <input type="file" class="form-control" id="image" name="imageuser"
+                                 accept="image/png, image/jpeg, image/jpg" onchange="previewImage(event)">
+                    </div>
+
                     <button type="submit" class="btn btn-danger mt-2">Lưu</button>
 
                     <div th:if="${param.success}" class="alert alert-success mt-2 col-md-3" role="alert">
@@ -147,15 +234,11 @@
                     <div th:if="${param.error}" class="alert alert-danger mt-2 col-md-5" role="alert">
                         <span class="text-center">Cập nhật thông tin thất bại, vui lòng thử lại.</span>
                     </div>
+                </form>
+            </main>
         </div>
-        </form>
-        </main>
     </div>
 </div>
-
-
-</div>
-
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>
 </html>

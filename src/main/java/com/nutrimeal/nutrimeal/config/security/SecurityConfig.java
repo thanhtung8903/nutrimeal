@@ -27,25 +27,45 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
 
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/signup", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/", "/home", "/faqs", "/consult", "/combo", "/menu").permitAll()
+                        .requestMatchers("/profile/point", "/profile/order", "profile/address", "/cart/**", "/checkout/**", "/basket/**").hasRole("CUSTOMER")
+                        .requestMatchers("/manager/**").hasRole("MANAGER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().permitAll())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
                         .failureUrl("/login?error=true")
                         .permitAll())
+                .rememberMe(rememberMe -> rememberMe
+                        .key("remember-me-key")
+                        .tokenValiditySeconds(86400))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/home")
                         .invalidateHttpSession(true)
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
-                );
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                        .expiredUrl("/login?expired=true")
+                )
+                .oauth2Login(oauth2 -> {
+                    oauth2.loginPage("/login").permitAll();
+                    oauth2.successHandler(oAuth2LoginSuccessHandler);
+                });
 
-         httpSecurity.authenticationProvider(authenticationProvider());
+
+        httpSecurity.authenticationProvider(authenticationProvider());
         return httpSecurity.build();
     }
 
@@ -55,7 +75,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -68,5 +88,9 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
 
 }
