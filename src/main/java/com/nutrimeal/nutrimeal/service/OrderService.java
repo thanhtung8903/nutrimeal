@@ -1,6 +1,9 @@
 package com.nutrimeal.nutrimeal.service;
 
 import com.nutrimeal.nutrimeal.model.Order;
+import com.nutrimeal.nutrimeal.model.User;
+import com.nutrimeal.nutrimeal.repository.OrderBasketRepository;
+import com.nutrimeal.nutrimeal.repository.OrderDetailRepository;
 import com.nutrimeal.nutrimeal.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,8 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderBasketRepository orderBasketRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     public List<Order> getOrders() {
         return orderRepository.findAll();
@@ -34,6 +39,14 @@ public class OrderService {
         }
     }
 
+    public void createOrder(User user, Integer price) {
+        Order order = new Order();
+        order.setUser(user);
+        order.setOrderTotalPrice(price);
+        orderRepository.save(order);
+    }
 
-
+    public void save(Order order){
+        orderRepository.save(order);
+    }
 }

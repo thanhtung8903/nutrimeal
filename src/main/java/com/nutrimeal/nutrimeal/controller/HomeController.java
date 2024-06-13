@@ -2,6 +2,7 @@ package com.nutrimeal.nutrimeal.controller;
 
 import com.nutrimeal.nutrimeal.model.Combo;
 import com.nutrimeal.nutrimeal.model.DailyMenu;
+import com.nutrimeal.nutrimeal.model.Dish;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.ComboService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -47,7 +49,7 @@ public class HomeController {
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList);
-                return "home";
+                return "common/home";
             }
         } else {
             if (principal != null) {
@@ -62,7 +64,7 @@ public class HomeController {
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList);
-                return "home";
+                return "common/home";
             }
         }
     }
@@ -150,6 +152,42 @@ public class HomeController {
         String[] descriptionItems = combo.getComboDescription().split("\n");
         model.addAttribute("descriptionItems", descriptionItems);
         model.addAttribute("comboList", comboService.getAllComboActive());
+
+
+        Date today = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        Date todayPlus7 = calendar.getTime();
+        // Gọi phương thức service để lấy danh sách DailyMenu
+        List<DailyMenu> listDailyMenu = dailyMenuService.findByDailyMenuDateBetween(today, todayPlus7);
+        model.addAttribute("listDailyMenu", listDailyMenu);
+
+        List<Dish> dishList = new ArrayList<>();
+
+        if (combo.getComboType().getComboTypeId() == 1) {
+            for (DailyMenu dailyMenu : listDailyMenu) {
+                if (dailyMenu.getDailyMenuType().equals("V")) {
+                    dishList.add(dailyMenu.getDishBreakfast());
+                    dishList.add(dailyMenu.getDishLunch());
+                    dishList.add(dailyMenu.getDishDinner());
+
+                }
+            }
+        } else {
+            for (DailyMenu dailyMenu : listDailyMenu) {
+                if (dailyMenu.getDailyMenuType().equals("N")) {
+                    dishList.add(dailyMenu.getDishBreakfast());
+                    dishList.add(dailyMenu.getDishLunch());
+                    dishList.add(dailyMenu.getDishDinner());
+                }
+            }
+        }
+
+        model.addAttribute("dishList", dishList);
+
+
         return "home/comboDetail";
     }
 

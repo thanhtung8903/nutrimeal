@@ -21,9 +21,12 @@ public class OrderDetail {
     private int orderDetailQuantity;
 
     @Column(name = "order_detail_price")
-    private float orderDetailPrice;
+    private int orderDetailPrice;
 
     @ManyToOne
     @JoinColumn(name = "combo_id")
     private Combo combo;
+
+    @Column(name = "combo_day")
+    private int comboDay;
 }

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Giỏ hàng', 'none')}"></head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+<style>
+    body {
+        background-color: #f8f7f7;
+    }
+
+    main.card-table {
+        min-height: 100vh;
+        padding: 20px;
+        background: rgb(248, 247, 247);
+    }
+
+    table {
+        width: 100%;
+        border-spacing: 0 20px;
+    }
+
+    table thead,
+    tbody {
+        background-color: rgb(255, 255, 255);
+    }
+
+    table tr {
+        border-radius: 3px;
+        box-shadow: 0 0 1px rgba(175, 174, 174, 0.5);
+    }
+
+    table th,
+    td {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .card-contain-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+    }
+
+    .card-contain-button input,
+    .card-total-price-button input {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #333;
+        border-radius: 4px;
+        outline: none;
+        accent-color: red;
+    }
+
+    .card-product {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+    }
+
+    .card-product img {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    .card-product-name {
+        font-size: 20px;
+        padding: 10px;
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    }
+
+    .card-quantity {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-quantity input {
+        width: 40px;
+        text-align: center;
+        border: 1px solid #cbc0c0;
+        margin: 0 5px;
+    }
+
+    .card-quantity button {
+        width: 30px;
+        height: 30px;
+        outline: none;
+        background: none;
+        border: 1px solid #cbc0c0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .card-quantity button:hover {
+        background-color: #ececec;
+    }
+
+    .card-total-price table {
+        border-spacing: 0 0;
+        width: 100%;
+    }
+
+    .card-total-price table td {
+        text-align: center;
+    }
+
+    .card-total-price-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-delete {
+        cursor: pointer;
+        color: #d9534f;
+    }
+
+    .card-delete:hover {
+        text-decoration: underline;
+    }
+
+    .card-total-price-button label {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .card-total-price-button input {
+        margin-right: 5px;
+    }
+
+
+    .breadcrumb-container {
+        margin: 20px auto;
+        margin-top: 15px;
+        padding: 15px 10px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        list-style: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .breadcrumb-item a {
+        text-decoration: none;
+        /* color: #686868; */
+        color: black;
+        text-align: center;
+    }
+
+    .breadcrumb-item a:hover {
+        font-weight: bold;
+    }
+
+    .breadcrumb-item span {
+        margin-right: 10px;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "";
+    }
+
+    .breadcrumb-item a.active {
+        font-weight: bold;
+        color: #FF2033; /* Màu đỏ hoặc màu bạn muốn sử dụng để làm nổi bật */
+    }
+</style>
+
+<header th:replace="~{fragments :: header-fragment}"></header>
+
+<body>
+<main class="card-table container mb-3">
+
+    <nav aria-label="breadcrumb" class="breadcrumb-container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">
+                    <span><i class="fas fa-shopping-cart" aria-hidden="true"></i></span>Đặt hàng
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="javascript:void(0);" class="active">
+                    <span><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>Chỉnh sửa
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">
+                    <span><i class="bi bi-coin"></i></span>Thanh toán
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">
+                    <span><i class="fa fa-check" aria-hidden="true"></i></span>Xác nhận
+                </a>
+            </li>
+        </ol>
+    </nav>
+
+    <section class="card-table-body">
+        <table>
+            <thead>
+            <tr style="background-color: black; color: white">
+                <th style="color: red">Sản phẩm</th>
+                <th>Loại</th>
+                <th>Đơn giá</th>
+                <th>Số lượng</th>
+                <th>Số tiền</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderBasket : ${orderBaskets}">
+                <td>
+                    <div class="card-product"
+                         style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <img th:src="${orderBasket.combo.comboImage}" alt="Combo Image" style="width: auto;"/>
+                        <div class="card-product-name" th:text="${orderBasket.combo.comboName}"></div>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="" th:if="${orderBasket.day} == 7">Gói tuần</div>
+                    <div class="" th:if="${orderBasket.day} == 30">Gói tháng</div>
+                </td>
+
+                <td>
+                    <div class="card-price" th:if="${orderBasket.day} == 7"
+                         th:text="${orderBasket.combo.comboPrice7Days}"></div>
+                    <div class="card-price" th:if="${orderBasket.day} == 30"
+                         th:text="${orderBasket.combo.comboPrice30Days}"></div>
+                </td>
+
+
+                <td>
+                    <div class="card-quantity">
+                        <button class="minus-btn">
+                            <i class="bi bi-dash-lg"></i>
+                        </button>
+                        <input type="text" id="amount" th:value="${orderBasket.quantity}"
+                               th:data-product-id="${orderBasket.orderBasketId}"/>
+                        <button class="plus-btn">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                </td>
+                <td>
+                    <div class="card-totalmoney" th:if="${orderBasket.day} == 7"
+                         th:text="${orderBasket.subTotal7Days}"></div>
+                    <div class="card-totalmoney" th:if="${orderBasket.day} == 30"
+                         th:text="${orderBasket.subTotal30Days}"></div>
+                </td>
+                <td>
+                    <a th:href="@{'/basket/remove/' + ${orderBasket.orderBasketId}}"
+                       href="#"
+                       onclick="if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')) return false;"
+                       class="text-danger mr-2 text-decoration-none">Xóa</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    <section class="card-total-price" style="text-align: right;">
+        <table style="width: 100%;">
+            <!--            <tr>-->
+            <!--                <td colspan="2"></td>-->
+            <!--                <td style="text-align: right; white-space: nowrap;">-->
+            <!--                    <i class="bi bi-ticket-perforated"> NutriMeal Voucher</i>-->
+            <!--                    <button style="margin-left: 10px;">Chọn hoặc nhập mã giảm giá</button>-->
+            <!--                </td>-->
+            <!--            </tr>-->
+            <!--            <tr>-->
+            <!--                <td colspan="2"></td>-->
+            <!--                <td style="text-align: right; white-space: nowrap;">-->
+            <!--                    <label for="xu">-->
+            <!--                        <input type="checkbox" id="xu" name="xu" value=""/>-->
+            <!--                        <i class="bi bi-coin"> NutriMeal Point: <span th:text="${point}">10</span></i>-->
+            <!--                    </label>-->
+            <!--                    <span style="margin-left: 10px;">-0 VND</span>-->
+            <!--                </td>-->
+            <!--            </tr>-->
+            <tr>
+                <td colspan="2"></td>
+                <td style="text-align: right; white-space: nowrap; padding-right: 220px">
+                    Tổng tiền hàng :
+                    <span id="totalAmount" style="margin-left: 10px; font-weight: bold">0 VND</span>
+                </td>
+            </tr>
+        </table>
+        <div style="text-align: right;">
+            <button id="btnCheckout"
+                    style="
+                width: 35%;
+                height: 40px;
+                background-color: rgb(249, 0, 21);
+                border: none;
+                border-radius: 3px;
+                color: #ececec;
+                font-size: 20px;
+                margin-top: 10px;
+            "
+            >
+                Mua hàng
+            </button>
+        </div>
+    </section>
+</main>
+
+<script>
+    $(document).ready(function () {
+        $('#btnCheckout').click(function () {
+            window.location.href = '/checkout';
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const minusButtons = document.querySelectorAll('.minus-btn');
+        const plusButtons = document.querySelectorAll('.plus-btn');
+        const inputs = document.querySelectorAll('.card-quantity input');
+        const priceElements = document.querySelectorAll('.card-price');
+        const totalElements = document.querySelectorAll('.card-totalmoney');
+
+        function formatCurrency(amount) {
+            return amount.toLocaleString('vi-VN') + 'đ';
+        }
+
+        // Format initial prices and totals
+        priceElements.forEach(priceElement => {
+            const price = parseInt(priceElement.innerText.replace(/[^0-9]/g, ''), 10);
+            priceElement.innerText = formatCurrency(price);
+        });
+
+        totalElements.forEach(totalElement => {
+            const total = parseInt(totalElement.innerText.replace(/[^0-9]/g, ''), 10);
+            totalElement.innerText = formatCurrency(total);
+        });
+
+        function updateTotal(input) {
+            const tr = input.closest('tr');
+            const priceElement = tr.querySelector('.card-price').innerText;
+            const price = parseInt(priceElement.replace(/[^0-9]/g, ''), 10);
+            const quantity = parseInt(input.value, 10);
+            const totalElement = tr.querySelector('.card-totalmoney');
+            const total = price * quantity;
+            totalElement.innerText = formatCurrency(total);
+        }
+
+        function updateQuantityInDB(productId, quantity) {
+            $.ajax({
+                url: '/update-quantity',
+                method: 'POST',
+                data: {
+                    productId: productId,
+                    quantity: quantity,
+                    _csrf: $('input[name="_csrf"]').val()  // Nếu bạn sử dụng CSRF protection
+                },
+                success: function (response) {
+                    console.log('Quantity updated successfully');
+                },
+                error: function (xhr) {
+                    console.error('Error updating quantity');
+                }
+            });
+        }
+
+        function updateTotalAmount() {
+            let totalAmount = 0;
+            const totalElements = document.querySelectorAll('.card-totalmoney');
+            totalElements.forEach(totalElement => {
+                const total = parseInt(totalElement.innerText.replace(/[^0-9]/g, ''), 10);
+                totalAmount += total;
+            });
+            document.getElementById('totalAmount').innerText = formatCurrency(totalAmount);
+        }
+
+        minusButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const input = this.nextElementSibling;
+                let value = parseInt(input.value, 10);
+                const productId = input.dataset.productId;
+                if (!isNaN(value) && value > 1) {
+                    value--;
+                    input.value = value;
+                    updateTotal(input);
+                    updateTotalAmount();
+                    updateQuantityInDB(productId, value);
+                }
+            });
+        });
+
+        plusButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const input = this.previousElementSibling;
+                let value = parseInt(input.value, 10);
+                const productId = input.dataset.productId;
+                if (!isNaN(value) && value < 5) { // Đã thay đổi từ 10 thành 5
+                    value++;
+                    input.value = value;
+                    updateTotal(input);
+                    updateTotalAmount();
+                    updateQuantityInDB(productId, value);
+                }
+            });
+        });
+
+        inputs.forEach(input => {
+            input.addEventListener('input', function () {
+                let value = parseInt(this.value, 10);
+                const productId = this.dataset.productId;
+                if (isNaN(value) || value < 1) {
+                    this.value = 1;
+                } else if (value > 5) { // Đã thay đổi từ 10 thành 5
+                    this.value = 5;
+                }
+                updateTotal(this);
+                updateTotalAmount();
+                updateQuantityInDB(productId, this.value);
+            });
+        });
+
+        // Calculate and update total amount on page load
+        updateTotalAmount();
+    });
+</script>
+
+</body>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</html>

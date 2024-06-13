@@ -196,6 +196,64 @@
         text-align: center;
         color: red;
     }
+
+    .featured-product-list {
+        padding: 15px 0;
+    }
+
+    .order-combo {
+        margin-bottom: 20px;
+    }
+
+    .card {
+        border: none;
+        transition: transform 0.2s;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        width: 100%;
+        height: auto;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .price-cart {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-price {
+        font-size: 16px;
+        font-weight: bold;
+        color: black; /* Màu đỏ hoặc màu bạn muốn sử dụng để làm nổi bật */
+    }
+
+    .icon {
+        font-size: 20px;
+        
+    }
+
+    .icon i {
+        color: black; /* Màu đỏ hoặc màu bạn muốn sử dụng để làm nổi bật */
+    }
+
+
 </style>
 
 <header th:replace="~{fragments :: header-fragment}"></header>
@@ -348,7 +406,7 @@
                 <div class="col-md-3 order-combo" th:each="combo : ${comboList}">
                     <div class="listing-item" data-id="lunch-eatclean" data-type="package">
                         <div class="card">
-                            <a class="link">
+                            <a class="link" th:href="@{/combo/{id}(id=${combo.comboId})}">
                                 <img th:src="${combo.comboImage}" class="card-img-top" alt="">
                             </a>
                             <div class="card-body">

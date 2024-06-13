@@ -36,17 +36,17 @@ public class AuthController {
         if (!model.containsAttribute("LoginRequest")) {
             model.addAttribute("LoginRequest", new LoginRequest());
         }
-        return "login";
+        return "common/login";
     }
 
     @PostMapping("/login")
     public String login(@ModelAttribute LoginRequest request, Model model) {
         try {
             authService.handleAuthenticateUser(request);
-            return "home";
+            return "common/home";
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "login";
+            return "common/login";
         }
     }
 
@@ -55,7 +55,7 @@ public class AuthController {
         if (!model.containsAttribute("SignupRequest")) {
             model.addAttribute("SignupRequest", new SignupRequest());
         }
-        return "signup";
+        return "common/signup";
     }
 
     @PostMapping("/signup")
@@ -63,16 +63,16 @@ public class AuthController {
         try {
             authService.signupUser(request);
             model.addAttribute("successMessage", "Đăng ký thành công!");
-            return "signup";
+            return "common/signup";
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "signup";
+            return "common/signup";
         }
     }
 
     @GetMapping("forget")
     public String getForget() {
-        return "forget";
+        return "common/forget";
     }
 
     @PostMapping("forget")
@@ -93,12 +93,12 @@ public class AuthController {
                 model.addAttribute("errorMessage", "Không tìm thấy tài khoản");
             }
             model.addAttribute("usernameOrEmail", usernameOrEmail);
-            return "forget";
+            return "common/forget";
         } catch (RuntimeException e) {
             LOGGER.error("Exception occurred while processing forget password request for: {}", usernameOrEmail, e);
             model.addAttribute("usernameOrEmail", usernameOrEmail);
             model.addAttribute("errorMessage", "Lỗi phát sinh, vui lòng thử lại.");
-            return "forget";
+            return "common/forget";
         }
     }
 
@@ -113,7 +113,7 @@ public class AuthController {
                     if (now.isAfter(forgetToken.getForgetTokenCreated()) && now.isBefore(forgetToken.getForgetTokenExpired())) {
                         model.addAttribute("userId", userId);
                         model.addAttribute("token", token);
-                        return "changeForget";
+                        return "common/changeForget";
                     } else {
                         return "error/error";
                     }
@@ -140,7 +140,7 @@ public class AuthController {
                         userService.changePasswordForget(newPassword, userId);
                         forgetTokenService.deleteForgetToken(user);
                         model.addAttribute("successMessage", "Đổi mật khẩu thành công!");
-                        return "forget";
+                        return "common/forget";
                     } else {
                         return "error/error";
                     }

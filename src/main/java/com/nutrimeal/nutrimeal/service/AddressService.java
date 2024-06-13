@@ -79,4 +79,8 @@ public class AddressService {
         address.setDefaultAddress(true);
         addressRepository.save(address);
     }
+
+    public Address findById(Integer addressId) {
+        return addressRepository.findByAddressId(addressId).orElseThrow(() -> new RuntimeException("Address not found"));
+    }
 }
