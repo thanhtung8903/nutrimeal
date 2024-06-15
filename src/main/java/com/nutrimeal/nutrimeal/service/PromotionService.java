@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +44,9 @@ public class PromotionService {
         oldPromotion.setPromotionDescription(promotion.getPromotionDescription());
         oldPromotion.setPromotionDiscount(promotion.getPromotionDiscount());
         promotionRepository.save(oldPromotion);
+    }
+
+    public Optional<Promotion> findByPromotionCode(String code) {
+        return promotionRepository.findByPromotionCode(code);
     }
 }
