@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Quản lý mã khuyến mãi', 'none')}"></head>
 
 <style>
@@ -82,8 +82,7 @@
 
 <body>
 <div class="container mt-3">
-    <div class="row">
-
+    <div class="row justify-content-center">
         <div class="col-md-10">
             <h2 style="margin-bottom: 40px; text-align: center;">QUẢN LÍ MÃ KHUYẾN MÃI</h2>
             <form th:action="@{/manager/promotion/search}" method="get" class="mb-3">
@@ -97,29 +96,31 @@
                 </div>
             </form>
 
-            <table class="table food-table" id="foodTable">
-                <thead>
-                <tr>
-                    <th>Mã khuyến mãi</th>
-                    <th>Số lượng</th>
-                    <th>Mô tả</th>
-                    <th>Phần trăm</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody id="foodTableBody">
-                <tr th:each="promotion : ${promotions}">
-                    <td th:text="${promotion.promotionCode}"></td>
-                    <td th:text="${promotion.promotionQuantity}"></td>
-                    <td th:text="${promotion.promotionDescription}"></td>
-                    <td th:text="${promotion.promotionDiscount}"></td>
-                    <td>
-                        <a href="#" class="btn btn-warning btn-sm update-btn" th:href="@{/manager/promotion/update/{promotionId}(promotionId=${promotion.promotionId})}">Update</a>
-                        <a href="#" class="btn btn-danger btn-sm delete-btn" th:href="@{/manager/promotion/delete/{promotionId}(promotionId=${promotion.promotionId})}" onclick="return confirm('Bạn có muốn xóa mã khuyến mãi này không ?')">Delete</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="d-flex justify-content-center">
+                <table class="table food-table" id="foodTable">
+                    <thead>
+                    <tr>
+                        <th>Mã khuyến mãi</th>
+                        <th>Số lượng</th>
+                        <th>Mô tả</th>
+                        <th>Phần trăm</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="foodTableBody">
+                    <tr th:each="promotion : ${promotions}">
+                        <td th:text="${promotion.promotionCode}"></td>
+                        <td th:text="${promotion.promotionQuantity}"></td>
+                        <td th:text="${promotion.promotionDescription}"></td>
+                        <td th:text="${promotion.promotionDiscount}"></td>
+                        <td>
+                            <a href="#" class="btn btn-warning btn-sm update-btn" th:href="@{/manager/promotion/update/{promotionId}(promotionId=${promotion.promotionId})}">Update</a>
+                            <a href="#" class="btn btn-danger btn-sm delete-btn" th:href="@{/manager/promotion/delete/{promotionId}(promotionId=${promotion.promotionId})}" onclick="return confirm('Bạn có muốn xóa mã khuyến mãi này không ?')">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <button class="add-menu mb-2"><a th:href="@{/manager/promotion/add}">THÊM MÃ KHUYẾN MÃI</a></button>
 
             <!-- Pagination for normal list -->
@@ -169,7 +170,6 @@
         crossorigin="anonymous"></script>
 
 </body>
-
 
 <footer th:replace="~{fragments :: footer}"></footer>
 </html>

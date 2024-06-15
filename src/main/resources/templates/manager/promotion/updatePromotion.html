@@ -71,7 +71,7 @@
             </div>
             <div class="mb-3">
                 <label for="promotionDiscount" class="form-label">Giảm giá</label>
-                <input type="number" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0"
+                <input type="text" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0"
                        th:value="${promotion.promotionDiscount}" required>
             </div>
 
@@ -93,6 +93,24 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
+<!--<script>-->
+<!--    document.getElementById('dishImage').addEventListener('change', function (event) {-->
+<!--        const preview = document.getElementById('preview');-->
+<!--        const file = event.target.files[0];-->
+<!--        const reader = new FileReader();-->
+
+<!--        reader.onloadend = function () {-->
+<!--            preview.src = reader.result;-->
+<!--            preview.style.display = 'block';-->
+<!--        }-->
+
+<!--        if (file) {-->
+<!--            reader.readAsDataURL(file);-->
+<!--        } else {-->
+<!--            preview.src = "";-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
 
 </body>
 

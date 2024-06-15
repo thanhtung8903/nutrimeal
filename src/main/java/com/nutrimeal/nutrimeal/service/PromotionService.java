@@ -2,13 +2,12 @@ package com.nutrimeal.nutrimeal.service;
 
 import com.nutrimeal.nutrimeal.model.Promotion;
 import com.nutrimeal.nutrimeal.repository.PromotionRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,12 +16,16 @@ public class PromotionService {
 
     private final PromotionRepository promotionRepository;
 
-    public Page<Promotion> getAllPromotions(Pageable pageable) {
-        return promotionRepository.findAllPromotion(pageable);
+    public Optional<Promotion> findByPromotionCode(String promotionCode) {
+        return promotionRepository.findByPromotionCode(promotionCode);
     }
 
     public void save(Promotion promotion) {
         promotionRepository.save(promotion);
+    }
+
+    public Page<Promotion> getAllPromotions(Pageable pageable) {
+        return promotionRepository.findAllPromotion(pageable);
     }
 
     public Page<Promotion> findAllByPromotionCode(String promotionCode, Pageable pageable) {
@@ -44,9 +47,5 @@ public class PromotionService {
         oldPromotion.setPromotionDescription(promotion.getPromotionDescription());
         oldPromotion.setPromotionDiscount(promotion.getPromotionDiscount());
         promotionRepository.save(oldPromotion);
-    }
-
-    public Optional<Promotion> findByPromotionCode(String code) {
-        return promotionRepository.findByPromotionCode(code);
     }
 }

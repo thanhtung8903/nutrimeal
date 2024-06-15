@@ -1,6 +1,5 @@
 package com.nutrimeal.nutrimeal.repository;
 
-import com.nutrimeal.nutrimeal.model.Dish;
 import com.nutrimeal.nutrimeal.model.Promotion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,5 +26,4 @@ public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
     @Modifying
     @Query("UPDATE Promotion p SET p.promotionStatus = false WHERE p.promotionId = :id")
     void deletePromotionById(@Param("id") Integer id);
-
 }

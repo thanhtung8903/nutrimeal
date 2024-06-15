@@ -43,7 +43,11 @@
         border-color: #F8B934;
     }
 
-
+    .avatar {
+        width: 80px; /* Fixed width */
+        height: 80px; /* Fixed height */
+        object-fit: cover; /* Maintain aspect ratio and cover the box */
+    }
 </style>
 
 <header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
@@ -58,16 +62,15 @@
             <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column align-items-center">
                 <img
                         th:src="*{getImage()}"
-                        class="rounded-circle mb-3"
+                        class="rounded-circle mb-3 avatar"
                         alt="Avatar"
-                        width="80"
                 />
                 <p th:text="*{getFullName()}"></p>
                 <a href="#" th:href="@{/profile/account}">Thông tin tài khoản</a>
                 <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">Đổi mật khẩu</a>
                 <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">Point</a>
                 <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">Đơn hàng hiện tại</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">Đơn hàng của tôi</a>
             </nav>
 
             <!-- Main content -->

@@ -51,13 +51,13 @@
                 <label for="promotionQuantity" class="form-label">Số lượng</label>
                 <input type="number" class="form-control" id="promotionQuantity" name="promotionQuantity" min="0" required>
             </div>
-           <div class="mb-3">
-                    <label for="promotionDescription" class="form-label">Mô tả</label>
-                    <input type="text" class="form-control" id="promotionDescription" name="promotionDescription" required>
+            <div class="mb-3">
+                <label for="promotionDescription" class="form-label">Mô tả</label>
+                <input type="text" class="form-control" id="promotionDescription" name="promotionDescription" required>
             </div>
             <div class="mb-3">
                 <label for="promotionDiscount" class="form-label">Giảm giá</label>
-                <input type="number" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0" required>
+                <input type="text" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Thêm mã khuyến mãi</button>
@@ -78,6 +78,24 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
+<!--<script>-->
+<!--    document.getElementById('dishImage').addEventListener('change', function(event) {-->
+<!--        const preview = document.getElementById('preview');-->
+<!--        const file = event.target.files[0];-->
+<!--        const reader = new FileReader();-->
+
+<!--        reader.onloadend = function() {-->
+<!--            preview.src = reader.result;-->
+<!--            preview.style.display = 'block';-->
+<!--        }-->
+
+<!--        if (file) {-->
+<!--            reader.readAsDataURL(file);-->
+<!--        } else {-->
+<!--            preview.src = "";-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>
 
