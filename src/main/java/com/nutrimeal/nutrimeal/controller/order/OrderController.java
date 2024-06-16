@@ -78,6 +78,12 @@ public class OrderController {
             return "redirect:/order/confirm/" + orderId;
         }
         countMakeCall++;
+        if (countMakeCall > 3) {
+            countMakeCall = 0;
+            order.setOrderStatus(OrderStatus.CANCELLED);
+            orderService.saveOrder(order);
+            return "redirect:/order/confirm/" + orderId;
+        }
         CallRequest callRequest = new CallRequest();
 
         // Generate random text (OTP)
@@ -141,14 +147,12 @@ public class OrderController {
             orderService.saveOrder(order);
             countMakeCall = 0;
             return "order/confirmOrder";
-        }else if(countMakeCall == 3){
+        } else if (countMakeCall > 3) {
             countMakeCall = 0;
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderService.saveOrder(order);
             return "order/confirmOrder";
-        }
-
-        else {
+        } else {
             model.addAttribute("message", "Mã OTP không chính xác. Vui lòng thử lại.");
             model.addAttribute("countMakeCall", "Bạn còn " + (3 - countMakeCall) + " lần gửi mã OTP");
             model.addAttribute("orderId", orderId);

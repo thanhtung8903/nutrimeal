@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Xác nhận OTP đơn hàng', 'none')}">
+<head th:replace="~{fragments :: head('Xác nhận OTP đơn hàng', 'none')}"></head>
+
     <title>Confirm OTP</title>
     <style>
         body {
@@ -21,9 +22,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 320px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         .otp-form-container h1 {
             color: #4CAF50;
@@ -38,6 +36,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
+            text-align: left;
         }
         .otp-form-container input[type="text"] {
             width: 100%;
@@ -66,10 +65,8 @@
             font-weight: bold;
         }
     </style>
-</head>
-
-<body>
 <header th:replace="~{fragments :: header-fragment}"></header>
+<body>
 
 <div class="otp-form-container">
     <h1>Confirm OTP</h1>
@@ -91,6 +88,6 @@
     <p th:text="${countMakeCall}"></p>
 </div>
 
-<footer th:replace="~{fragments :: footer}"></footer>
 </body>
+<footer th:replace="~{fragments :: footer}"></footer>
 </html>

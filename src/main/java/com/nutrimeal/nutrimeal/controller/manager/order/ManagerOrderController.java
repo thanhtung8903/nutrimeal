@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 import static com.nutrimeal.nutrimeal.model.OrderStatus.PENDING;
+import static com.nutrimeal.nutrimeal.model.OrderStatus.PROCESSING;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class ManagerOrderController {
 
     @GetMapping("/order")
     public String dashboard(Model model) {
-        List<Order> orders = orderService.getOrdersByStatus(PENDING);
+        List<Order> orders = orderService.getOrdersByStatus(PROCESSING);
         model.addAttribute("ordersPending", orders);
         return "manager/order/order";
     }
