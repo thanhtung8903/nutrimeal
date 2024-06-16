@@ -60,18 +60,24 @@ public class OrderController {
 
 
     @GetMapping("/makeCall/{orderId}")
-    public String makeCall(HttpSession session, Principal principal, @PathVariable Integer orderId) {
+    public String makeCall(HttpSession session, Principal principal, @PathVariable Integer orderId, Model model) {
         if (principal == null) {
             return "redirect:/login";
         }
-
         User user;
-        if (principal instanceof OAuth2AuthenticationToken token) {
+        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken;
+            model.addAttribute("isOauth2User", isOauth2User);
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
             user = userService.findByEmail(oauthUser.getAttribute("email"));
-        } else {
+            model.addAttribute("user", user);
+        }else{
             user = userService.findByUsername(principal.getName());
+            model.addAttribute("isOauth2User", false);
+            model.addAttribute("user", user);
         }
+
         Order order = orderService.getOrderById(orderId);
 
         if (order.getOrderStatus().equals(OrderStatus.PROCESSING) || order.getOrderStatus().equals(OrderStatus.CANCELLED)) {
@@ -121,7 +127,24 @@ public class OrderController {
     }
 
     @GetMapping("/confirmOTP/{orderId}")
-    public String showConfirmOTPForm(Model model, @PathVariable Integer orderId) {
+    public String showConfirmOTPForm(Model model, @PathVariable Integer orderId, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        User user;
+        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken;
+            model.addAttribute("isOauth2User", isOauth2User);
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauthUser = token.getPrincipal();
+             user = userService.findByEmail(oauthUser.getAttribute("email"));
+            model.addAttribute("user", user);
+        }else{
+             user = userService.findByUsername(principal.getName());
+            model.addAttribute("isOauth2User", false);
+            model.addAttribute("user", user);
+        }
+
         Order order = orderService.getOrderById(orderId);
         if (order.getOrderStatus().equals(OrderStatus.PROCESSING) || order.getOrderStatus().equals(OrderStatus.CANCELLED)) {
             return "redirect:/order/confirm/" + orderId;
@@ -133,6 +156,7 @@ public class OrderController {
     @PostMapping("/confirmOTP")
     public String confirmOTP(@ModelAttribute("otp") String otp, HttpSession session,
                              Model model, @RequestParam("orderId") Integer orderId) {
+
         // Retrieve the generated OTP from session
         String generatedOtp = (String) session.getAttribute("generatedOtp");
 

@@ -35,9 +35,9 @@ public class OrderRestController {
     private final UserPromotionService userPromotionService;
 
     @PostMapping("/order/create")
-    public String createOrder(@RequestBody OrderRequest orderRequest, Principal principal) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest, Principal principal) {
         if (principal == null) {
-            return "Bạn cần đăng nhập để cập nhật số lượng";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bạn cần đăng nhập để cập nhật số lượng");
         }
         User user;
         if (principal instanceof OAuth2AuthenticationToken token) {
@@ -45,6 +45,9 @@ public class OrderRestController {
             user = userService.findByEmail(oauthUser.getAttribute("email"));
         } else {
             user = userService.findByUsername(principal.getName());
+        }
+        if(user.getPhone() == null || user.getPhone().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng cập nhật số điện thoại trước khi đặt hàng");
         }
 
         Order order = new Order();
@@ -85,7 +88,7 @@ public class OrderRestController {
             orderBasketService.delete(orderBasket);
         }
 
-        return order.getOrderId() + "";
+        return ResponseEntity.ok(order.getOrderId());
     }
 
     private static OrderDetail getOrderDetail(OrderBasket orderBasket) {
