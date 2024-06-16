@@ -35,4 +35,7 @@ public interface DailyMenuRepository extends JpaRepository<DailyMenu, Integer> {
                                     @Param("type") String type,
                                     @Param("name") String name,
                                     Pageable pageable);
+
+    DailyMenu findByDailyMenuDateAndDailyMenuTypeAndIsActiveTrue(Date date, String type);
+
 }
