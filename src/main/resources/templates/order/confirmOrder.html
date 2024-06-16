@@ -161,6 +161,10 @@
             <p><strong>Phương thức thanh toán:</strong> <span th:text="${order.paymentMethod.paymentMethodName}"></span></p>
             <p><strong>Tổng tiền:</strong> <span id="totalPrice" th:text="${order.orderTotalPrice}"></span></p>
             <p><strong>Ghi chú:</strong> <span th:text="${order.orderNote}"></span></p>
+            <p><strong>Trạng thái:</strong>
+                <span th:if="${order.orderStatus == 'PROCESSING'}">Thành công</span>
+                <span th:if="${order.orderStatus == 'CANCELLED'}">Thất bại</span>
+            </p>
         </div>
     </section>
 

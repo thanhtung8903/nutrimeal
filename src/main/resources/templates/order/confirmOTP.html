@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Xác nhận OTP đơn hàng', 'none')}">
+    <title>Confirm OTP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .otp-form-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .otp-form-container h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .otp-form-container form {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .otp-form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .otp-form-container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .otp-form-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .otp-form-container button:hover {
+            background-color: #45a049;
+        }
+        .otp-form-container p {
+            color: #ff0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+<header th:replace="~{fragments :: header-fragment}"></header>
+
+<div class="otp-form-container">
+    <h1>Confirm OTP</h1>
+    <form th:action="@{/confirmOTP}" method="post">
+        <div>
+            <label for="otp">OTP:</label>
+            <input type="text" id="otp" name="otp" />
+            <input type="hidden" th:value="${orderId}" name="orderId" />
+        </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+    <form th:action="@{'/makeCall/' + ${orderId}}" method="get">
+        <button type="submit">Gửi lại mã xác minh</button>
+    </form>
+    <p th:text="${message}"></p>
+    <p th:text="${countMakeCall}"></p>
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>
