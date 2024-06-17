@@ -3,9 +3,9 @@
 
 <head th:replace="~{fragments :: head('Thực đơn', 'none')}"></head>
 <style>
-    body {
+    .body-menu {
         background-color: #e5e5e5;
-        font-family: Montserrat, sans-serif;
+        /*font-family: Montserrat, sans-serif;*/
         font-weight: 500;
         font-size: .875rem;
         line-height: 1.5625rem;
@@ -31,7 +31,7 @@
         text-align: center !important;
     }
 
-    .title {
+    .title-banner {
         font-size: 40px;
         letter-spacing: 5px;
     }
@@ -41,7 +41,7 @@
         font-weight: 900;
     }
 
-    .btn-primary {
+    .order-now {
         display: inline-block;
         text-align: center;
         vertical-align: middle;
@@ -54,7 +54,7 @@
         font-weight: 400;
     }
 
-    .btn-primary:hover {
+    .order-now:hover {
         background-color: rgb(231, 16, 16);
         text-decoration: none;
     }
@@ -215,7 +215,7 @@
         font-size: 26px;
     }
 
-    .btn {
+    .order-now {
         background-color: #ff2033;
         color: white;
         padding: 0.75em 2em;
@@ -225,7 +225,7 @@
         transition: background-color 0.3s;
     }
 
-    .btn:hover {
+    .order-now:hover {
         background-color: rgb(231, 16, 16);
     }
 
@@ -297,23 +297,24 @@
 </style>
 
 
-<header th:replace="~{fragments :: header-fragment}"></header>
+<header th:replace="~{fragments :: header-fragment (page='menu')}"></header>
 
-<body>
+<body class="body-menu">
 <section class="banner"
          style="background-image: url(https://fitfood.vn/img/2160x900/uploads/menu-16952880378313.jpg)">
     <div class="align-self-center text-center">
         <div class="container">
-            <div class="title" style="margin-bottom: 5px;">WEEKLY MEAL PLAN</div>
+            <div class="title title-banner" style="margin-bottom: 5px;">WEEKLY MEAL PLAN</div>
             <p class="time" style="margin-bottom: 15px;" th:text="${today} + ' - ' + ${future}"></p>
-            <a th:href="@{/combo}" href="order.html" class="btn-order btn-primary">Đặt Ngay</a>
+            <a th:href="@{/combo}" href="order.html" class="btn-order btn-primary order-now">Đặt Ngay</a>
         </div>
     </div>
 </section>
 <div class="container1">
-    <h1 class="title1 pb-4 mb-4">Thực đơn
-        <hr class="underline">
-    </h1>
+    <h1 class="title1 pb-4 mb-4">Thực đơn</h1>
+    <div class="tuvan_icon">
+        <svg style="width: 70px; margin-top: -55px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+    </div>
     <div class="des">
         <p>Thực đơn Nutrimeal là sự kết hợp tinh tế của ẩm thực Đông Tây</p>
         <p>Từng bữa ăn được thiết kế bởi bếp trưởng nhà hàng cùng đội ngũ dinh dưỡng để đảm bảo được sự cân bằng
@@ -365,10 +366,8 @@
 
                 </div>
 
-                <h1 class="title1 green pb-4 mb-4">Thực đơn chay
-                    <hr class="underline1">
-                </h1>
-                <div class="table-menu green mb-5">
+                <h1 class="title1 green pb-4 mb-4">Thực đơn chay</h1>
+                <svg style="width: 70px; margin-top: -55px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#3ecc5a" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>                <div class="table-menu green mb-5">
                     <div class="d-md-flex align-items-center text-center justify-content-md-between mb-4">
                         <div class="time-week mb-3 mb-md-0 d-flex">
                             <p class="time2 20240520 active" data-id="20240520"
