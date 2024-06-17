@@ -35,6 +35,10 @@ public class Delivery {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "shipper_id")
+    private User shipper;
+
     @Column(name = "delivery_update_time")
     private LocalDateTime deliveryUpdateTime;
 

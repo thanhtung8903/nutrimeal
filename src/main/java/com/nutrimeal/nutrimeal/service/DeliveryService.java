@@ -4,6 +4,7 @@ import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.repository.DailyMenuRepository;
 import com.nutrimeal.nutrimeal.repository.DeliveryDetailRepository;
 import com.nutrimeal.nutrimeal.repository.DeliveryRepository;
+import com.nutrimeal.nutrimeal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ public class DeliveryService {
     private final DailyMenuRepository dailyMenuRepository;
     private final DeliveryRepository deliveryRepository;
     private final DeliveryDetailRepository deliveryDetailRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void createDelivery(Order order) {
@@ -54,6 +56,25 @@ public class DeliveryService {
             } else {
                 delivery.setDeliveryPrice(0);
             }
+
+            String district = order.getAddress().getDistrict();
+            switch (district) {
+                case "Quận Long Biên":
+                    delivery.setShipper(userRepository.findAllShipper().stream().filter(user -> user.getUsername().equals("shipper1")).findFirst().orElse(null));
+                    break;
+                case "Quận Hoàn Kiếm":
+                    delivery.setShipper(userRepository.findAllShipper().stream().filter(user -> user.getUsername().equals("shipper2")).findFirst().orElse(null));
+                    break;
+                case "Quận Hai Bà Trưng":
+                    delivery.setShipper(userRepository.findAllShipper().stream().filter(user -> user.getUsername().equals("shipper3")).findFirst().orElse(null));
+                    break;
+                case "Quận Đống Đa":
+                    delivery.setShipper(userRepository.findAllShipper().stream().filter(user -> user.getUsername().equals("shipper4")).findFirst().orElse(null));
+                    break;
+                default:
+                    delivery.setShipper(null);
+            }
+
             deliveryRepository.save(delivery);
 
             int countDay = i;
@@ -85,7 +106,6 @@ public class DeliveryService {
             }
 
             String comboTime = orderDetail.getCombo().getComboTime();
-//
             boolean isBreakfast = comboTime.contains("B");
             boolean isLunch = comboTime.contains("L");
             boolean isDinner = comboTime.contains("D");
