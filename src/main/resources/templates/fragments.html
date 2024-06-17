@@ -19,7 +19,6 @@
 <div th:fragment="header-fragment">
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #141414;">
         <div class="container-fluid">
-
             <a class="navbar-brand d-flex align-items-center" href="/" style="gap: 10px; margin-left: 50px">
                 <img th:src="@{/img/logo.png}" alt="NutriMeal" style="width: 60px; height: 60px">
                 <h1 class="text-white mb-0" style="font-size: 1.7rem; margin-top: 5px">NutriMeal</h1>
@@ -38,10 +37,10 @@
                     <li class="nav-item item-head" th:classappend="${page == 'menu' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
                         <a class="nav-link text-grey opt-head" href="/menu" th:href="@{/menu}" style="transition: color 0.3s;">THỰC ĐƠN</a>
                     </li>
-                    <li class="nav-item item-head " th:classappend="${page == 'consult' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                    <li class="nav-item item-head" th:classappend="${page == 'consult' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
                         <a class="nav-link text-grey opt-head" href="/consult" th:href="@{/consult}" style="transition: color 0.3s;">TƯ VẤN</a>
                     </li>
-                    <li class="nav-item item-head " th:classappend="${page == 'combo' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                    <li class="nav-item item-head" th:classappend="${page == 'combo' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
                         <a class="nav-link text-grey opt-head" href="/combo" th:href="@{/combo}" style="transition: color 0.3s;">ĐẶT HÀNG</a>
                     </li>
                     <li class="nav-item item-head" th:classappend="${page == 'faq' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
@@ -67,7 +66,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" th:href="@{/profile/account}">
-                            Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span>
+                            Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -132,7 +131,7 @@
                         <a class="nav-link text-grey opt-head" href="/manager/customer" th:href="@{/manager/customer}">Quản lý khách hàng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-grey opt-head" href="/manager/order" th:href="@{/manager/ordermanager}">Quản lý đơn hàng</a>
+                        <a class="nav-link text-grey opt-head" href="/manager/order" th:href="@{/manager/order}">Quản lý đơn hàng</a>
                     </li>
 
                     <li class="nav-item dropdown">

@@ -51,7 +51,7 @@ public class OrderRestController {
         order.setOrderDeliveryPrice(orderRequest.getOrderDeliveryPrice());
         order.setOrderDiscount(orderRequest.getOrderDiscount());
         order.setOrderTotalPrice(orderRequest.getOrderTotalPrice());
-        order.setOrderStatus(OrderStatus.PENDING);
+        order.setOrderStatus(OrderStatus.PROCESSING);
         order.setOrderNote(orderRequest.getOrderNote());
         order.setPaymentMethod(paymentMethodService.findById(orderRequest.getPaymentMethodId()));
         order.setDeliveryTime(deliveryTimeService.findById(orderRequest.getDeliveryTimeId()));
