@@ -3,11 +3,13 @@ package com.nutrimeal.nutrimeal.controller;
 import com.nutrimeal.nutrimeal.dto.request.ChangePasswordRequest;
 import com.nutrimeal.nutrimeal.dto.request.UpdateUserRequest;
 import com.nutrimeal.nutrimeal.model.Address;
+import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.AddressRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.AddressService;
 import com.nutrimeal.nutrimeal.service.ImageUploadService;
+import com.nutrimeal.nutrimeal.service.OrderService;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -30,6 +32,7 @@ public class ProfileController {
     private final UserRepository userRepository;
     private final ImageUploadService imageUploadService;
     private final AddressService addressService;
+    private final OrderService orderService;
 
     @GetMapping("/profile/account")
     public String profileAccount(Model model, Principal principal) {
@@ -222,6 +225,25 @@ public class ProfileController {
             user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         }
         model.addAttribute("user", user);
+        return "profile/order";
+    }
+
+    @GetMapping("/orders/status/{status}")
+    public String getOrdersByStatus(@PathVariable String status, Model model, Principal principal) {
+        User user;
+        if (principal instanceof OAuth2AuthenticationToken) {
+            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken;
+            model.addAttribute("isOauth2User", isOauth2User);
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauthUser = token.getPrincipal();
+            user = userService.findByEmail(oauthUser.getAttribute("email"));
+        } else {
+            model.addAttribute("isOauth2User", false);
+            user = userService.findByUsername(principal.getName());
+        }
+        List<Order> orders = orderService.getOrdersByStatusAndUser(status, user);
+        model.addAttribute("user", user);
+        model.addAttribute("orders", orders);
         return "profile/order";
     }
 }

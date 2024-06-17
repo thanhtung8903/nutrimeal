@@ -84,7 +84,7 @@
 <header th:replace="~{fragments :: header_manager}"></header>
 
 <body>
-<div class="container mt-3">
+<div class="container-fluid mt-3">
     <div class="row">
         <div class="col-md-2">
             <h6 style="margin-bottom: 20px">DANH MỤC</h6>
@@ -177,9 +177,19 @@
                 <tbody id="dailyTableBody">
                 <tr th:each="dailyMenu : ${listDailyMenu}">
                     <td th:text="${dailyMenu.dailyMenuDate}"></td>
-                    <td th:text="${dailyMenu.dishBreakfast.dishName}"></td>
-                    <td th:text="${dailyMenu.dishLunch.dishName}"></td>
-                    <td th:text="${dailyMenu.dishDinner.dishName}"></td>
+                    <td class="text-center">
+                        <img th:src="${dailyMenu.dishBreakfast.dishImage}" alt="" class="img-fluid" style="width: 120px; height: 90px">
+                        <p class="mt-2" th:text="${dailyMenu.dishBreakfast.dishName}"></p>
+                    </td>
+                    <td class="text-center">
+                        <img th:src="${dailyMenu.dishLunch.dishImage}" alt="" class="img-fluid" style="width: 120px; height: 90px">
+                        <p class="mt-2" th:text="${dailyMenu.dishLunch.dishName}"></p>
+                    </td>
+                    <td class="text-center">
+                        <img th:src="${dailyMenu.dishDinner.dishImage}" alt="" class="img-fluid" style="width: 120px; height: 90px">
+                        <p class="mt-2" th:text="${dailyMenu.dishDinner.dishName}"></p>
+                    </td>
+
                     <td>
                   <span th:if="${dailyMenu.dailyMenuType == 'V'}"
                   >Menu chay</span
