@@ -9,14 +9,14 @@
         referrerpolicy="no-referrer"
 />
 <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-    }
+    /** {*/
+    /*    box-sizing: border-box;*/
+    /*    margin: 0;*/
+    /*    padding: 0;*/
+    /*    font-family: sans-serif;*/
+    /*}*/
 
-    body {
+    .body-order {
         background-color: #ececec;
     }
 
@@ -90,30 +90,19 @@
         font-weight: bold;
     }
 
-    .icon {
-        display: inline-block;
-        margin-top: 10px;
-        cursor: pointer;
-        color: black;
-        transition: color 0.3s;
-    }
 
-    .icon:hover {
-        color: black;
-    }
-
-    .listing-item {
+    .list-combo-item {
         background-color: #f8f8f8;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .listing-item .card {
+    .list-combo-item .card {
         border: none;
     }
 
-    .listing-item .card img {
+    .list-combo-item .card img {
         border-bottom: 2px solid black;
     }
 
@@ -129,25 +118,25 @@
         font-weight: bold;
     }
 
-    .icon {
+    .icon-cart {
         display: inline-block;
         cursor: pointer;
         color: black;
         transition: color 0.3s;
     }
 
-    .icon:hover {
+    .icon-cart:hover {
         color: black;
     }
 </style>
 
-<header th:replace="~{fragments :: header-fragment}"></header>
-<body>
+<header th:replace="~{fragments :: header-fragment (page='combo')}"></header>
+<body class="body-order">
 <section class="order-content">
     <div class="order-content-title">
         <h1>CHỌN <span> GÓI ĂN</span></h1>
         <div class="combongang_icon">
-            <svg style="width: 80px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <svg style="width: 80px; margin-top: -30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path fill="#e02606"
                       d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
             </svg>
@@ -160,7 +149,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 order-combo" th:each="combo : ${comboList}">
-                <div class="listing-item" data-id="lunch-eatclean" data-type="package">
+                <div class="listing-item list-combo-item" data-id="lunch-eatclean" data-type="package">
                     <div class="card">
                         <a class="link" th:href="@{/combo/{id}(id=${combo.comboId})}">
                             <img th:src="${combo.comboImage}" class="card-img-top" alt="">
@@ -173,7 +162,7 @@
                             </a>
                             <div class="price-cart">
                                 <span class="card-price" th:text="${combo.comboPrice7Days}"></span>
-                                <span class="icon"><i class="fas fa-shopping-cart add-to-cart" aria-hidden="true"></i></span>
+                                <span class="icon icon-cart"><i class="fas fa-shopping-cart add-to-cart" aria-hidden="true"></i></span>
                             </div>
                         </div>
                     </div>

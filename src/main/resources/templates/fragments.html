@@ -15,13 +15,12 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 
 </head>
+<div th:fragment="header-fragment" >
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000;">
+        <div class="container frag-head">
 
-<div th:fragment="header-fragment">
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #141414;">
-        <div class="container-fluid">
-
-            <a class="navbar-brand d-flex align-items-center" href="/" style="gap: 10px; margin-left: 50px">
-                <img th:src="@{/img/logo.png}" alt="NutriMeal" style="width: 60px; height: 60px">
+            <a class="navbar-brand d-flex align-items-center" href="/" style="gap: 10px;">
+                <img src="/img/logo.png" alt="NutriMeal" style="height: 70px;">
                 <h1 class="text-white mb-0" style="font-size: 1.7rem; margin-top: 5px">NutriMeal</h1>
             </a>
 
@@ -30,8 +29,11 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNav" style="margin-left: -90px;">
                 <ul class="navbar-nav ms-auto">
+                    <!--                    <li class="nav-item item-head" th:classappend="${page == 'home' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">-->
+                    <!--                        <a class="nav-link text-grey opt-head" href="/" th:href="@{/}" style="transition: color 0.3s;">TRANG CHỦ</a>-->
+                    <!--                    </li>-->
                     <li class="nav-item item-head" th:classappend="${page == 'home' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
                         <a class="nav-link text-grey opt-head" href="/" th:href="@{/}" style="transition: color 0.3s;">TRANG CHỦ</a>
                     </li>
@@ -49,7 +51,7 @@
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto" sec:authorize="isAnonymous()" style="margin-right: 50px">
+                <ul class="navbar-nav ms-auto" sec:authorize="isAnonymous()">
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/cart"><i class="fas fa-shopping-cart"></i></a>
                     </li>
@@ -61,14 +63,12 @@
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto" sec:authorize="isAuthenticated()" style="margin-right: 50px">
+                <ul class="navbar-nav ms-auto" sec:authorize="isAuthenticated()">
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/cart"><i class="fas fa-shopping-cart"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" th:href="@{/profile/account}">
-                            Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span>
-                        </a>
+                        <a class="nav-link text-white" th:href="@{/profile/account}">Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" th:href="@{/logout}">Đăng xuất</a>
@@ -90,13 +90,13 @@
                     Với cam kết mang đến chất lượng cao nhất trong từng bữa ăn, chúng tôi luôn nỗ lực để
                     cung cấp những trải nghiệm ẩm thực tuyệt vời cho mọi khách hàng.</p>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <h5>Liên hệ: </h5>
                 <p class="text-justify">Địa chỉ: 66 Phố Hai Bà Trưng, quận Hoàn Kiếm, TP Hà Nội</p>
                 <p class="text-justify">Phone: 0123 666 888</p>
                 <p class="text-justify">Email: nutrimeal@gmail.com</p>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <h5>Follow chúng tôi tại: </h5>
                 <a href="#" class="btn btn-primary"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="btn btn-info"><i class="fab fa-twitter"></i></a>
