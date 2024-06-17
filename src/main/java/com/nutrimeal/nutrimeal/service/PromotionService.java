@@ -46,6 +46,7 @@ public class PromotionService {
         oldPromotion.setPromotionCode(promotion.getPromotionCode());
         oldPromotion.setPromotionDescription(promotion.getPromotionDescription());
         oldPromotion.setPromotionDiscount(promotion.getPromotionDiscount());
+        oldPromotion.setPromotionQuantity(promotion.getPromotionQuantity());
         promotionRepository.save(oldPromotion);
     }
 }

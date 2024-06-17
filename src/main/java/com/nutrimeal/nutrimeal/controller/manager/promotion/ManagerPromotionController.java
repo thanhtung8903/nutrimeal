@@ -59,8 +59,7 @@ public class ManagerPromotionController {
     @PostMapping("/promotion/update/{id}")
     public String updatePromotion(@PathVariable("id") Integer id, @ModelAttribute Promotion promotion) {
         try {
-            Promotion oldPromotion = promotionService.findPromotionById(id);
-            promotionService.updatePromotion(id, oldPromotion);
+            promotionService.updatePromotion(id, promotion);
             return "redirect:/manager/promotion/update/" + id + "?success=true";
         } catch (Exception e) {
             return "redirect:/manager/promotion/update/" + id + "?error=true";
