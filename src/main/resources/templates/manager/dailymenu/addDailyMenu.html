@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head
-        th:replace="~{fragments :: head('Thêm thực đơn hàng ngày', 'none')}"
-></head>
-<link
-        href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
-        rel="stylesheet"
-/>
+<head th:replace="~{fragments :: head('Thêm thực đơn hàng ngày', 'none')}"></head>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <style>
@@ -59,172 +54,92 @@
 <div class="container">
     <div class="form-container mb-4">
         <h2 style="margin-bottom: 40px; text-align: center">Thêm Daily Menu</h2>
-        <form
-                id="addDailyForm"
-                th:action="@{/manager/dailymenu/add}"
-                method="post"
-        >
+        <form id="addDailyForm" th:action="@{/manager/dailymenu/add}" method="post">
             <div class="mb-3">
                 <label for="menuDate" class="form-label">Ngày</label>
-                <input
-                        type="date"
-                        class="form-control"
-                        id="menuDate"
-                        name="dailyMenuDate"
-                        required
-                />
+                <input type="date" class="form-control" id="menuDate" name="dailyMenuDate" required/>
             </div>
+
             <div class="mb-3">
                 <label for="menuType" class="form-label">Loại Menu</label>
-                <select
-                        class="form-select"
-                        id="menuType"
-                        name="dailyMenuType"
-                        required
-                >
+                <select class="form-select" id="menuType" name="dailyMenuType" required>
                     <option value="">Chọn loại menu</option>
                     <option value="V">Menu chay</option>
                     <option value="N">Menu mặn</option>
                 </select>
             </div>
+
             <div class="mb-3 d-none" id="mealSelection">
                 <label class="form-label">Bữa ăn</label>
                 <div class="d-flex justify-content-between">
                     <div class="me-2 flex-grow-1">
                         <label for="menuBreakfast" class="form-label">Bữa sáng</label>
-                        <select
-                                class="form-select meal-select"
-                                id="menuBreakfast"
-                                name="menuBreakfast"
-                                required
-                        >
+                        <select class="form-select meal-select" id="menuBreakfast" name="menuBreakfast" style="width: 100%;" required>
                             <option value="">Chọn món ăn</option>
-                            <option
-                                    th:each="dish : ${listDishV}"
-                                    th:value="${dish.dishId}"
-                                    th:data-type="V"
-                                    th:text="${dish.dishName}"
-                            ></option>
-                            <option
-                                    th:each="dish : ${listDishN}"
-                                    th:value="${dish.dishId}"
-                                    th:data-type="N"
-                                    th:text="${dish.dishName}"
-                            ></option>
                         </select>
                     </div>
                     <div class="me-2 flex-grow-1">
                         <label for="menuLunch" class="form-label">Bữa trưa</label>
-                        <select
-                                class="form-select meal-select"
-                                id="menuLunch"
-                                name="menuLunch"
-                                required
-                        >
+                        <select class="form-select meal-select" id="menuLunch" name="menuLunch" style="width: 100%;" required>
                             <option value="">Chọn món ăn</option>
-                            <option
-                                    th:each="dish : ${listDishV}"
-                                    th:value="${dish.dishId}"
-                                    th:data-type="V"
-                                    th:text="${dish.dishName}"
-                            ></option>
-                            <option
-                                    th:each="dish : ${listDishN}"
-                                    th:value="${dish.dishId}"
-                                    th:data-type="N"
-                                    th:text="${dish.dishName}"
-                            ></option>
                         </select>
                     </div>
                     <div class="flex-grow-1">
                         <label for="menuDinner" class="form-label">Bữa tối</label>
-                        <select
-                                class="form-select meal-select"
-                                id="menuDinner"
-                                name="menuDinner"
-                                required
-                        >
+                        <select class="form-select meal-select" id="menuDinner" name="menuDinner" style="width: 100%;" required>
                             <option value="">Chọn món ăn</option>
-                            <option
-                                    th:each="dish : ${listDishV}"
-                                    th:value="${dish.dishId}"
-                                    th:data-type="V"
-                                    th:text="${dish.dishName}"
-                            ></option>
-                            <option
-                                    th:each="dish : ${listDishN}"
-                                    th:value="${dish.dishId}"
-                                    th:data-type="N"
-                                    th:text="${dish.dishName}"
-                            ></option>
                         </select>
                     </div>
                 </div>
             </div>
 
+
             <script>
-                document
-                    .getElementById("menuType")
-                    .addEventListener("change", function () {
-                        const selectedType = this.value;
-                        const mealSelection = document.getElementById("mealSelection");
-                        const mealSelects = document.querySelectorAll(".meal-select");
-
-                        if (selectedType) {
-                            mealSelection.classList.remove("d-none");
-                        } else {
-                            mealSelection.classList.add("d-none");
-                        }
-
-                        mealSelects.forEach((select) => {
-                            const options = select.querySelectorAll("option");
-                            options.forEach((option) => {
-                                if (
-                                    option.value === "" ||
-                                    option.getAttribute("data-type") === selectedType
-                                ) {
-                                    option.style.display = "block";
-                                } else {
-                                    option.style.display = "none";
-                                }
-                            });
-                            select.value = ""; // Reset the select box
-                        });
+                $(document).ready(function() {
+                    $('.meal-select').select2({
+                        width: 'resolve',
+                        height: 'resolve'
                     });
 
+                    $('#menuType').change(function() {
+                        const menuType = $(this).val();
+                        if (menuType) {
+                            fetch(`http://localhost:8080/api/dishes/${menuType}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    updateMealOptions(data);
+                                    $('#mealSelection').removeClass('d-none');
+                                })
+                                .catch(error => console.error('Error fetching data:', error));
+                        } else {
+                            $('#mealSelection').addClass('d-none');
+                        }
+                    });
+
+                    function updateMealOptions(dishes) {
+                        $('.meal-select').each(function() {
+                            $(this).empty().append('<option value="">Chọn món ăn</option>');
+                            dishes.forEach(dish => {
+                                $(this).append(new Option(dish.dishName, dish.dishId));
+                            });
+                        });
+                    }
+                });
             </script>
 
-            <button type="submit" class="btn btn-primary mt-3">
-                Thêm Daily Menu
-            </button>
-            <button
-                    type="button"
-                    class="btn btn-secondary mt-3"
-                    th:onclick="'window.location.href=\'/manager/dailymenu\''"
-            >
-                Quay lại
+            <button type="submit" class="btn btn-primary mt-3">Thêm Daily Menu</button>
+            <button type="button" class="btn btn-secondary mt-3"
+                    th:onclick="'window.location.href=\'/manager/dailymenu\''"> Quay lại
             </button>
         </form>
 
-        <div
-                th:if="${param.error}"
-                class="alert alert-danger mt-3"
-                role="alert"
-        >
+        <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
             <strong>Đã có lỗi xảy ra!</strong> Vui lòng kiểm tra lại thông tin.
         </div>
-        <div
-                th:if="${param.success}"
-                class="alert alert-success mt-3"
-                role="alert"
-        >
+        <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
             <strong>Thêm menu thành công!</strong>
         </div>
-        <div
-                th:if="${param.errorduplicate}"
-                class="alert alert-danger mt-3"
-                role="alert"
-        >
+        <div th:if="${param.errorduplicate}" class="alert alert-danger mt-3" role="alert">
             <strong>Đã tồn tại menu </strong> Vui lòng kiểm tra lại thông tin.
         </div>
     </div>

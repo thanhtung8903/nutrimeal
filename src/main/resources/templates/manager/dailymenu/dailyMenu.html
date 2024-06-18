@@ -165,54 +165,43 @@
             <table class="table daily-table" id="dailyTable">
                 <thead>
                 <tr>
-                    <th>Ngày</th>
-                    <th>Bữa sáng</th>
-                    <th>Bữa trưa</th>
-                    <th>Bữa tối</th>
-                    <th>Loại menu</th>
-
-                    <th>Action</th>
+                    <th class="text-center">Ngày</th>
+                    <th class="text-center">Bữa sáng</th>
+                    <th class="text-center">Bữa trưa</th>
+                    <th class="text-center">Bữa tối</th>
+                    <th class="text-center">Loại menu</th>
+                    <th class="text-center">Action</th>
                 </tr>
                 </thead>
                 <tbody id="dailyTableBody">
                 <tr th:each="dailyMenu : ${listDailyMenu}">
-                    <td th:text="${dailyMenu.dailyMenuDate}"></td>
+                    <td class="text-center" style="vertical-align: middle" th:text="${dailyMenu.dailyMenuDate}"></td>
                     <td class="text-center">
-                        <img th:src="${dailyMenu.dishBreakfast.dishImage}" alt="" class="img-fluid" style="width: 120px; height: 90px">
+                        <img th:src="${dailyMenu.dishBreakfast.dishImage}" alt="" class="img-fluid"
+                             style="width: 120px; height: 90px">
                         <p class="mt-2" th:text="${dailyMenu.dishBreakfast.dishName}"></p>
                     </td>
                     <td class="text-center">
-                        <img th:src="${dailyMenu.dishLunch.dishImage}" alt="" class="img-fluid" style="width: 120px; height: 90px">
+                        <img th:src="${dailyMenu.dishLunch.dishImage}" alt="" class="img-fluid"
+                             style="width: 120px; height: 90px">
                         <p class="mt-2" th:text="${dailyMenu.dishLunch.dishName}"></p>
                     </td>
                     <td class="text-center">
-                        <img th:src="${dailyMenu.dishDinner.dishImage}" alt="" class="img-fluid" style="width: 120px; height: 90px">
+                        <img th:src="${dailyMenu.dishDinner.dishImage}" alt="" class="img-fluid"
+                             style="width: 120px; height: 90px">
                         <p class="mt-2" th:text="${dailyMenu.dishDinner.dishName}"></p>
                     </td>
 
-                    <td>
-                  <span th:if="${dailyMenu.dailyMenuType == 'V'}"
-                  >Menu chay</span
-                  >
-                        <span th:if="${dailyMenu.dailyMenuType == 'N'}"
-                        >Menu mặn</span
-                        >
+                    <td class="text-center" style="vertical-align: middle;">
+                        <span th:if="${dailyMenu.dailyMenuType == 'V'}">Menu chay</span>
+                        <span th:if="${dailyMenu.dailyMenuType == 'N'}">Menu mặn</span>
                     </td>
-
-                    <td>
-                        <a
-                                href="#"
-                                class="btn btn-warning btn-sm update-btn"
-                                th:href="@{/manager/dailymenu/update/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}"
-                        >Update</a
-                        >
-                        <a
-                                href="#"
-                                class="btn btn-danger btn-sm delete-btn"
-                                th:href="@{/manager/dailymenu/delete/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}"
-                                onclick="return confirm('Are you sure you want to delete this dish?')"
-                        >Delete</a
-                        >
+                    <td class="text-center" style="vertical-align: middle;">
+                        <a href="#" class="btn btn-warning btn-sm update-btn"
+                           th:href="@{/manager/dailymenu/update/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}">Update</a>
+                        <a href="#" class="btn btn-danger btn-sm delete-btn"
+                           th:href="@{/manager/dailymenu/delete/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}"
+                           onclick="return confirm('Are you sure you want to delete this dish?')">Delete</a>
                     </td>
                 </tr>
                 </tbody>
