@@ -57,7 +57,7 @@
             </div>
             <div class="mb-3">
                 <label for="promotionDiscount" class="form-label">Giảm giá</label>
-                <input type="text" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0" required>
+                <input type="number" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0" max="100" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Thêm mã khuyến mãi</button>
@@ -96,6 +96,22 @@
 <!--        }-->
 <!--    });-->
 <!--</script>-->
+<script>
+    document.getElementById('promotionDiscount').addEventListener('input', function (event) {
+        const input = event.target;
+        if (input.value < 0) {
+            input.value = 0;
+        } else if (input.value > 100) {
+            input.value = 100;
+        }
+    });
+    document.getElementById('promotionQuantity').addEventListener('input', function (event) {
+        const input = event.target;
+        if (input.value < 0) {
+            input.value = 0;
+        }
+    });
+</script>
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>
 
