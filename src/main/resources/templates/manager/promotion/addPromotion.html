@@ -70,6 +70,9 @@
         <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
             <strong>Thêm mã khuyến mãi thành công!</strong>
         </div>
+        <div th:if="${param.duplicate}" class="alert alert-danger mt-3" role="alert">
+            <strong>Mã khuyến mãi đã tồn tại. Vui lòng kiểm tra lại thông tin.</strong>
+        </div>
     </div>
 </div>
 

@@ -43,6 +43,9 @@ public class ManagerPromotionController {
     @PostMapping("/promotion/add")
     public String addPromotion(@ModelAttribute Promotion promotion) {
         try {
+            if(promotionService.existsByPromotionCode(promotion.getPromotionCode())){
+                return "redirect:/manager/promotion/add?duplicate=true";
+            }
             promotion.setPromotionStatus(true);
             promotionService.save(promotion);
             return "redirect:/manager/promotion/add?success=true";
@@ -60,6 +63,9 @@ public class ManagerPromotionController {
     @PostMapping("/promotion/update/{id}")
     public String updatePromotion(@PathVariable("id") Integer id, @ModelAttribute Promotion promotion) {
         try {
+            if(promotionService.existsByPromotionCode(promotion.getPromotionCode())){
+                return "redirect:/manager/promotion/update/" + id + "?duplicate=true";
+            }
             promotionService.updatePromotion(id, promotion);
             return "redirect:/manager/promotion/update/" + id + "?success=true";
         } catch (Exception e) {
