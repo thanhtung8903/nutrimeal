@@ -49,4 +49,10 @@ public class PromotionService {
         oldPromotion.setPromotionQuantity(promotion.getPromotionQuantity());
         promotionRepository.save(oldPromotion);
     }
+
+    public boolean existsByPromotionCode(String promotionCode) {
+        return promotionRepository.existsByPromotionCode(promotionCode);
+    }
+
+
 }

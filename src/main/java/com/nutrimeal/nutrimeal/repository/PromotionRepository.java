@@ -26,4 +26,7 @@ public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
     @Modifying
     @Query("UPDATE Promotion p SET p.promotionStatus = false WHERE p.promotionId = :id")
     void deletePromotionById(@Param("id") Integer id);
+
+    // exists by promotion code
+    boolean existsByPromotionCode(String promotionCode);
 }
