@@ -32,8 +32,6 @@ public class ManagerOrderController {
         model.addAttribute("ordersProcessing", orders);
         return "manager/order/order";
     }
-
-
     @PostMapping("/processingorder")
     public String processingOrder(@RequestParam("orderId") Integer orderId,
                                   @RequestParam("status") String status) {
