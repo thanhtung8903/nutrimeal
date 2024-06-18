@@ -41,6 +41,12 @@
         border-color: #343a40 !important;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
     }
+
+    .error-message {
+        color: red;
+        font-size: 0.875em;
+        display: none;
+    }
 </style>
 <header th:replace="~{fragments :: header_manager}"></header>
 
@@ -73,6 +79,7 @@
                 <label for="promotionDiscount" class="form-label">Giảm giá</label>
                 <input type="text" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0"
                        th:value="${promotion.promotionDiscount}" required>
+                <span id="discountError" class="error-message">Phiếu giảm giá không được vượt quá 100%</span>
             </div>
 
             <button type="submit" class="btn btn-primary">Cập nhật mã khuyến mãi</button>
@@ -90,6 +97,33 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('promotionQuantity').addEventListener('input', function (event) {
+        const input = event.target;
+        if (input.value < 0) {
+            input.value = 0;
+        }
+    });
+
+    document.getElementById('promotionDiscount').addEventListener('input', function (event) {
+        const input = event.target;
+        if (input.value < 0) {
+            input.value = 0;
+        }
+    });
+
+    document.getElementById('updatePromotionForm').addEventListener('submit', function (event) {
+        const discountInput = document.getElementById('promotionDiscount');
+        const discountError = document.getElementById('discountError');
+        if (discountInput.value > 100) {
+            discountError.style.display = 'block';
+            event.preventDefault(); // Prevent form submission
+        } else {
+            discountError.style.display = 'none';
+        }
+    });
+</script>
 
 <!-- Bootstrap core JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
