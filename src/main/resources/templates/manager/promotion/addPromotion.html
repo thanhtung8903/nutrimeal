@@ -33,6 +33,12 @@
         background-color: #5a6268 !important;
         font-weight: 600;
     }
+
+    .error-message {
+        color: red;
+        font-size: 0.875em;
+        display: none;
+    }
 </style>
 
 <header th:replace="~{fragments :: header_manager}"></header>
@@ -57,7 +63,8 @@
             </div>
             <div class="mb-3">
                 <label for="promotionDiscount" class="form-label">Giảm giá</label>
-                <input type="number" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0" max="100" required>
+                <input type="number" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0" required>
+                <span id="discountError" class="error-message">Phiếu giảm giá không được vượt quá 100%</span>
             </div>
 
             <button type="submit" class="btn btn-primary">Thêm mã khuyến mãi</button>
@@ -97,18 +104,28 @@
 <!--    });-->
 <!--</script>-->
 <script>
-    document.getElementById('promotionDiscount').addEventListener('input', function (event) {
-        const input = event.target;
-        if (input.value < 0) {
-            input.value = 0;
-        } else if (input.value > 100) {
-            input.value = 100;
-        }
-    });
     document.getElementById('promotionQuantity').addEventListener('input', function (event) {
         const input = event.target;
         if (input.value < 0) {
             input.value = 0;
+        }
+    });
+
+    document.getElementById('promotionDiscount').addEventListener('input', function (event) {
+        const input = event.target;
+        if (input.value < 0) {
+            input.value = 0;
+        }
+    });
+
+    document.getElementById('addPromotionForm').addEventListener('submit', function (event) {
+        const discountInput = document.getElementById('promotionDiscount');
+        const discountError = document.getElementById('discountError');
+        if (discountInput.value > 100) {
+            discountError.style.display = 'block';
+            event.preventDefault(); // Prevent form submission
+        } else {
+            discountError.style.display = 'none';
         }
     });
 </script>
