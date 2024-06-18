@@ -1,12 +1,12 @@
 package com.nutrimeal.nutrimeal.controller.order;
 
+import com.nutrimeal.nutrimeal.dto.request.CallRequest;
 import com.nutrimeal.nutrimeal.dto.request.OrderRequest;
 import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.ui.Model;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.util.*;
@@ -34,9 +35,9 @@ public class OrderRestController {
     private final UserPromotionService userPromotionService;
 
     @PostMapping("/order/create")
-    public String createOrder(@RequestBody OrderRequest orderRequest, Principal principal) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest, Principal principal) {
         if (principal == null) {
-            return "Bạn cần đăng nhập để cập nhật số lượng";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bạn cần đăng nhập để cập nhật số lượng");
         }
         User user;
         if (principal instanceof OAuth2AuthenticationToken token) {
@@ -45,13 +46,16 @@ public class OrderRestController {
         } else {
             user = userService.findByUsername(principal.getName());
         }
+        if(user.getPhone() == null || user.getPhone().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng cập nhật số điện thoại trước khi đặt hàng");
+        }
 
         Order order = new Order();
         order.setOrderTempPrice(orderRequest.getOrderTempPrice());
         order.setOrderDeliveryPrice(orderRequest.getOrderDeliveryPrice());
         order.setOrderDiscount(orderRequest.getOrderDiscount());
         order.setOrderTotalPrice(orderRequest.getOrderTotalPrice());
-        order.setOrderStatus(OrderStatus.PENDING);
+        order.setOrderStatus(OrderStatus.PROCESSING);
         order.setOrderNote(orderRequest.getOrderNote());
         order.setPaymentMethod(paymentMethodService.findById(orderRequest.getPaymentMethodId()));
         order.setDeliveryTime(deliveryTimeService.findById(orderRequest.getDeliveryTimeId()));
@@ -84,7 +88,7 @@ public class OrderRestController {
             orderBasketService.delete(orderBasket);
         }
 
-        return order.getOrderId() + "";
+        return ResponseEntity.ok(order.getOrderId());
     }
 
     private static OrderDetail getOrderDetail(OrderBasket orderBasket) {

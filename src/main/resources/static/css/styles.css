@@ -1,0 +1,14 @@
+.opt-head:hover {
+    color: #cccccc; /* Màu thay đổi khi di chuột qua */
+    font-weight: bold; /* Chữ đậm khi di chuột qua */
+}
+.opt-head{
+    padding-bottom: 0px;
+}
+.item-head.active .opt-head {
+    font-weight: bold; /* Chữ đậm cho mục được chọn */
+    color: white;
+}
+/*.frag-head{*/
+/*    padding-bottom: 0px;*/
+/*}*/

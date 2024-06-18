@@ -81,7 +81,7 @@
 <header th:replace="~{fragments :: header_manager}"></header>
 
 <body>
-<div class="container mt-3">
+<div class="container-fluid mt-3">
     <div class="row">
         <div class="col-md-2">
             <h6 style="margin-bottom: 20px;">DANH MỤC</h6>
@@ -153,7 +153,7 @@
                 </tr>
                 </tbody>
             </table>
-            <button class="add-menu mb-2"><a href="addDish.html"  th:href="@{/manager/dish/add}">ADD MÓN ĂN</a></button>
+            <button class="add-menu mb-2"><a href="addDish.html"  th:href="@{/manager/dish/add}">THÊM MÓN ĂN</a></button>
 
             <!-- Pagination for normal list -->
             <nav aria-label="Page navigation" th:if="${param.name == null && param.type == null}">

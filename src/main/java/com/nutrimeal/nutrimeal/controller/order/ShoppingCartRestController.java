@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,11 +27,11 @@ public class ShoppingCartRestController {
     private final UserPromotionService userPromotionService;
 
     @PostMapping("/basket/add/{cid}")
-    public String addProductToBasket(@PathVariable("cid") Integer comboId,
-                                     @RequestParam("day") String day,
-                                     Principal principal) {
+    public ResponseEntity<String> addProductToBasket(@PathVariable("cid") Integer comboId,
+                                                     @RequestParam("day") String day,
+                                                     Principal principal) {
         if (principal == null) {
-            return "Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng";
+            return ResponseEntity.status(401).body("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng");
         }
         User user;
         if (principal instanceof OAuth2AuthenticationToken token) {
@@ -40,15 +41,14 @@ public class ShoppingCartRestController {
             user = userService.findByUsername(principal.getName());
         }
 
-        if (user == null) return "Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng";
-
         int dayByCombo = Integer.parseInt(day);
 
         int addedQuantity = orderBasketService.addComboToBasket(comboId, user, dayByCombo);
-        if (addedQuantity >= 5) return "Bạn đã thêm tối đa 5 sản phẩm cùng loại vào giỏ hàng";
+        if (addedQuantity >= 5) return ResponseEntity.ok("Bạn đã thêm tối đa 5 sản phẩm cùng loại vào giỏ hàng");
 
-        return "Đã thêm sản phẩm vào giỏ hàng";
+        return ResponseEntity.ok("Đã thêm sản phẩm vào giỏ hàng");
     }
+
 
     @PostMapping("/basket/update/{cid}/{qty}")
     public String updateQuantity(@PathVariable("cid") Integer comboId,

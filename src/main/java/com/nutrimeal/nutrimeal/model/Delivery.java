@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,7 +22,7 @@ public class Delivery {
     private Date deliveryDate;
 
     @Column(name = "delivery_status")
-    private boolean deliveryStatus;
+    private String deliveryStatus;
 
     @Column(name = "delivery_note")
     private String deliveryNote;
@@ -34,6 +35,25 @@ public class Delivery {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "shipper_id")
+    private User shipper;
+
     @Column(name = "delivery_update_time")
     private LocalDateTime deliveryUpdateTime;
+
+    @Column(name = "delivery_address")
+    private String deliveryAddress;
+
+    @Column(name = "delivery_price")
+    private int deliveryPrice;
+
+    @Column(name = "delivery_time")
+    private String deliveryTime;
+
+    @Column(name = "delivery_phone")
+    private String deliveryPhone;
+
+    @OneToMany(mappedBy = "delivery")
+    private List<DeliveryDetail> deliveryDetails;
 }

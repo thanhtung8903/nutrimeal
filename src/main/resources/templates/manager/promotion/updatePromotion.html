@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Chỉnh sửa mã khuyến mãi', 'none')}"></head>
+
+<style>
+    body {
+        background-color: #e5e5e5;
+    }
+
+    .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+
+    .btn-primary {
+        background-color: #343a40 !important;
+        border-color: #343a40 !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #000000 !important;
+        font-weight: 600;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268 !important;
+        font-weight: 600;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    }
+</style>
+<header th:replace="~{fragments :: header_manager}"></header>
+
+<body>
+<div class="container mb-5">
+    <div class="form-container">
+        <h2 style="margin-bottom: 40px; text-align: center;">Cập nhật mã khuyến mãi</h2>
+        <form id="updatePromotionForm" th:object="${promotion}" method="post"
+              th:action="@{/manager/promotion/update/{promotionId}(promotionId=${promotion.promotionId})}" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label hidden="hidden" for="promotionId" class="form-label">ID</label>
+                <input hidden="hidden" type="text" class="form-control" id="promotionId" name="promotionId" readonly
+                       th:value="${promotion.promotionId}">
+            </div>
+            <div class="mb-3">
+                <label for="promotionCode" class="form-label">Tên mã khuyến mãi</label>
+                <input type="text" class="form-control" id="promotionCode" name="promotionCode" th:value="${promotion.promotionCode}" required>
+            </div>
+            <div class="col">
+                <label for="promotionQuantity" class="form-label">Số lượng</label>
+                <input type="number" class="form-control" id="promotionQuantity" name="promotionQuantity" min="0"
+                       th:value="${promotion.promotionQuantity}" required>
+            </div>
+            <div class="mb-3">
+                <label for="promotionDescription" class="form-label">Mô tả</label>
+                <input type="text" class="form-control" id="promotionDescription" name="promotionDescription"
+                       th:value="${promotion.promotionDescription}" required>
+            </div>
+            <div class="mb-3">
+                <label for="promotionDiscount" class="form-label">Giảm giá</label>
+                <input type="text" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0"
+                       th:value="${promotion.promotionDiscount}" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Cập nhật mã khuyến mãi</button>
+            <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/promotion\''">Quay lại</button>
+
+            <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
+                <strong>Đã có lỗi xảy ra!</strong> Vui lòng kiểm tra lại thông tin.
+            </div>
+            <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
+                <strong>Cập nhật mã khuyến mãi thành công!</strong>
+            </div>
+            <div th:if="${param.duplicate}" class="alert alert-danger mt-3" role="alert">
+                <strong>Mã khuyến mãi đã tồn tại. Vui lòng kiểm tra lại thông tin.</strong>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</html>

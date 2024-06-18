@@ -588,16 +588,22 @@
                 },
                 body: JSON.stringify(data)
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => { throw new Error(text) });
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (paymentMethodId === '1') {
-                        window.location.href = '/order/confirm/' + data;
+                        window.location.href = '/makeCall/' + data;
                     } else if (paymentMethodId === '2' && data.vnPayUrl) {
                         window.location.href = data.vnPayUrl;
                     }
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
+                    // Hiển thị thông báo lỗi cho người dùng
+                    alert(error.message);
                 });
         }
 
@@ -606,8 +612,6 @@
         orderButton.addEventListener('click', function () {
             sendToApi();
         });
-
-
     });
 
 
