@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="~{fragments :: head('Đơn hàng hiện tại', 'none')}"></head>
+<head th:replace="~{fragments :: head('Đơn hàng của tôi', 'none')}"></head>
 <style>
     body {
         background-color: #EAEAEA;
+        font-family: Arial, sans-serif;
     }
 
     .sidebar {
@@ -48,6 +49,40 @@
         height: 80px; /* Fixed height */
         object-fit: cover; /* Maintain aspect ratio and cover the box */
     }
+
+    .nav-pills .nav-link {
+        border-radius: 0;
+        padding: 10px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        background-color: #343a40;
+        color: #ffffff;
+    }
+
+    .nav-pills .nav-link:hover {
+        background-color: #F8B934;
+        color: #343a40;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: #F8B934;
+        color: #343a40;
+    }
+
+    .table {
+        margin-top: 20px;
+        background-color: #ffffff;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        background-color: #343a40;
+        color: #ffffff;
+    }
 </style>
 
 <header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
@@ -79,7 +114,7 @@
                     <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/orders/status/PENDING}">Chờ xác nhận</a>
                     <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/orders/status/PROCESSING}">Đang xử lý</a>
                     <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/orders/status/SHIPPED}">Đang giao</a>
-                    <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/orders/status/DELIVERED}">Hoàn thành</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/orders/status/COMPLETED}">Hoàn thành</a>
                     <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/orders/status/CANCELLED}">Đã hủy</a>
                 </nav>
 
@@ -90,27 +125,29 @@
                         <thead>
                         <tr>
                             <th>Ngày đặt</th>
-                            <th>Ghi chú</th>
                             <th>Địa chỉ</th>
                             <th>Trạng thái</th>
                             <th>Tổng tiền</th>
+                            <th>Ghi chú</th>
+
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="order : ${orders}">
                             <td th:text="${order.orderDate}"></td>
-                            <td th:text="${order.orderNote}"></td>
-                            <td th:text="${order.address.apartmentNumber}"></td>
+                            <td th:text="${order.address.getFullAddress()}"></td>
                             <td>
                                 <span th:if="${order.orderStatus == 'PENDING'}">Chờ xác nhận</span>
                                 <span th:if="${order.orderStatus == 'PROCESSING'}">Đang xử lý</span>
                                 <span th:if="${order.orderStatus == 'SHIPPED'}">Đang giao</span>
-                                <span th:if="${order.orderStatus == 'DELIVERED'}">Hoàn thành</span>
+                                <span th:if="${order.orderStatus == 'COMPLETED'}">Hoàn thành</span>
                                 <span th:if="${order.orderStatus == 'CANCELLED'}">Đã bị hủy</span>
                                 <span th:unless="${order.orderStatus == 'PENDING' || order.orderStatus == 'PROCESSING' || order.orderStatus == 'SHIPPED'
-                                || order.orderStatus == 'DELIVERED' || order.orderStatus == 'CANCELLED'}" th:text="${order.orderStatus}"></span>
+                                || order.orderStatus == 'COMPLETED' || order.orderStatus == 'CANCELLED'}" th:text="${order.orderStatus}"></span>
                             </td>
                             <td th:text="${order.orderTotalPrice}"></td>
+                            <td th:text="${order.orderNote}"></td>
+
                         </tr>
                         </tbody>
                     </table>

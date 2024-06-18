@@ -39,6 +39,7 @@ public class ManagerPromotionController {
     public String addPromotion() {
         return "manager/promotion/addPromotion";
     }
+
     @PostMapping("/promotion/add")
     public String addPromotion(@ModelAttribute Promotion promotion) {
         try {

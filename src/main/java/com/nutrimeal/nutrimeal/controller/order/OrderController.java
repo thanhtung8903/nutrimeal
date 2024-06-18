@@ -1,9 +1,11 @@
 package com.nutrimeal.nutrimeal.controller.order;
 
 import com.nutrimeal.nutrimeal.dto.request.CallRequest;
+import com.nutrimeal.nutrimeal.dto.request.OrderRequest;
 import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.model.OrderStatus;
 import com.nutrimeal.nutrimeal.model.User;
+import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.OrderService;
 import com.nutrimeal.nutrimeal.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Controller
@@ -32,16 +35,16 @@ public class OrderController {
 
     private int countMakeCall = 0;
 
+
     @GetMapping("/order/confirm/{id}")
     public String confirmOrder(Model model, @PathVariable Integer id) {
-        Order order = orderService.getOrderById(id);
-        model.addAttribute("order", order);
+        model.addAttribute("order", orderService.getOrderById(id));
         model.addAttribute("orderDetailsList", orderService.getOrderById(id));
         return "order/confirmOrder";
     }
 
     @GetMapping("/order/confirm/vnpay-payment")
-    public String GetMapping(HttpServletRequest request, Principal principal, Model model) {
+    public String GetMapping(HttpServletRequest request, Principal principal, Model model){
         if (principal == null) {
             return "redirect:/login";
         }
@@ -52,12 +55,11 @@ public class OrderController {
         } else {
             user = userService.findByUsername(principal.getName());
         }
-        int orderId = vnPayService.orderReturn(request, user);
+        int orderId =vnPayService.orderReturn(request, user);
         model.addAttribute("order", orderService.getOrderById(orderId));
         model.addAttribute("orderDetailsList", orderService.getOrderById(orderId));
         return "order/confirmOrder";
     }
-
 
     @GetMapping("/makeCall/{orderId}")
     public String makeCall(HttpSession session, Principal principal, @PathVariable Integer orderId, Model model) {
@@ -115,8 +117,7 @@ public class OrderController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Accept", "application/json");
 
-        headers.set("X-STRINGEE-AUTH", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InN0cmluZ2VlLWFwaTt2PTEifQ.eyJqdGkiOiJTS051dHJpbWVhbCIsImlzcyI6IlNLLjAucVNkd0R1RW1uQXdlZlA" +
-                "5YWRGdmV1TVVwTUNMM2lrT0ciLCJleHAiOiIzMDAwMDAwMDAwMDAiLCJyZXN0X2FwaSI6dHJ1ZX0.YHmzsHKLB8sasXeboN2Bcsv4vh1M6Rf5_SJUI3yKrwc");
+        headers.set("X-STRINGEE-AUTH", "eyJjdHkiOiJzdHJpbmdlZS1hcGk7dj0xIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJqdGkiOiJTSy4wLjlqM25IeGhIbjFFcnhGdm9IUXVzZGtlRDlWTE5sT0RuLTE3MTg2Mzk5NjkiLCJpc3MiOiJTSy4wLjlqM25IeGhIbjFFcnhGdm9IUXVzZGtlRDlWTE5sT0RuIiwiZXhwIjoxNzIxMjMxOTY5LCJyZXN0X2FwaSI6dHJ1ZX0.HwH8cqW_YkZHd8Th_QD5PoK2kGOwqrYYsr2kD5y65G8");
 
 
         HttpEntity<CallRequest> request = new HttpEntity<>(callRequest, headers);
@@ -137,10 +138,10 @@ public class OrderController {
             model.addAttribute("isOauth2User", isOauth2User);
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
-             user = userService.findByEmail(oauthUser.getAttribute("email"));
+            user = userService.findByEmail(oauthUser.getAttribute("email"));
             model.addAttribute("user", user);
         }else{
-             user = userService.findByUsername(principal.getName());
+            user = userService.findByUsername(principal.getName());
             model.addAttribute("isOauth2User", false);
             model.addAttribute("user", user);
         }
@@ -182,25 +183,6 @@ public class OrderController {
             model.addAttribute("orderId", orderId);
             return "order/confirmOTP";
         }
-    }
-
-    @GetMapping("/orders/status/{status}")
-    public String getOrdersByStatus(@PathVariable String status, Model model, Principal principal) {
-        User user;
-        if (principal instanceof OAuth2AuthenticationToken) {
-            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken;
-            model.addAttribute("isOauth2User", isOauth2User);
-            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
-            OAuth2User oauthUser = token.getPrincipal();
-            user = userService.findByEmail(oauthUser.getAttribute("email"));
-        } else {
-            model.addAttribute("isOauth2User", false);
-            user = userService.findByUsername(principal.getName());
-        }
-        List<Order> orders = orderService.getOrdersByStatus(status);
-        model.addAttribute("user", user);
-        model.addAttribute("orders", orders);
-        return "profile/order";
     }
 
     private String generateRandomText(int length) {

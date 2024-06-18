@@ -57,4 +57,8 @@ public class OrderService {
     public void saveOrder(Order order) {
         orderRepository.save(order);
     }
+
+    public List<Order> getOrdersByStatusAndUser(String status, User user) {
+        return orderRepository.findAllByOrderStatusAndUser(status, user);
+    }
 }

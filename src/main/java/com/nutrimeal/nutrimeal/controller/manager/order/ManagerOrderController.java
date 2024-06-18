@@ -1,6 +1,7 @@
 package com.nutrimeal.nutrimeal.controller.manager.order;
 
 import com.nutrimeal.nutrimeal.model.Order;
+import com.nutrimeal.nutrimeal.service.DeliveryService;
 import com.nutrimeal.nutrimeal.service.OrderService;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,25 +24,21 @@ public class ManagerOrderController {
 
     private final OrderService orderService;
     private final UserService userService;
-
-    @GetMapping("/")
-    public String manager() {
-        return "manager/managerpage";
-    }
+    private final DeliveryService deliveryService;
 
     @GetMapping("/order")
     public String dashboard(Model model) {
         List<Order> orders = orderService.getOrdersByStatus(PROCESSING);
-        model.addAttribute("ordersPending", orders);
+        model.addAttribute("ordersProcessing", orders);
         return "manager/order/order";
     }
 
 
     @PostMapping("/processingorder")
     public String processingOrder(@RequestParam("orderId") Integer orderId,
-                              @RequestParam("status") String status) {
+                                  @RequestParam("status") String status) {
         orderService.updateStatusOrder(orderId, status);
+        deliveryService.createDelivery(orderService.getOrderById(orderId));
         return "redirect:/manager/order";
     }
-
 }
