@@ -86,8 +86,6 @@
 </style>
 
 <header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
-<header th:replace="~{fragments :: header_manager}" sec:authorize="hasAuthority('ROLE_MANAGER')"></header>
-<header th:replace="~{fragments :: header_admin}" sec:authorize="hasAuthority('ROLE_ADMIN')"></header>
 <body>
 <div class="profile__account container mt-3 mb-3">
 
@@ -129,7 +127,7 @@
                             <th>Trạng thái</th>
                             <th>Tổng tiền</th>
                             <th>Ghi chú</th>
-
+                            <th>Xem chi tiết đơn</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -145,9 +143,11 @@
                                 <span th:unless="${order.orderStatus == 'PENDING' || order.orderStatus == 'PROCESSING' || order.orderStatus == 'SHIPPED'
                                 || order.orderStatus == 'COMPLETED' || order.orderStatus == 'CANCELLED'}" th:text="${order.orderStatus}"></span>
                             </td>
-                            <td th:text="${order.orderTotalPrice}"></td>
+                            <td th:text="${order.orderTotalPrice}" th:data-price="${order.orderTotalPrice}" class="currency"></td>
                             <td th:text="${order.orderNote}"></td>
-
+                            <td>
+                                <a th:href="@{/orderdetail/{orderId}(orderId=${order.orderId})}" class="btn btn-info">Xem chi tiết</a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -156,6 +156,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(value).replace('₫', 'đ');
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".currency").forEach(function(element) {
+            const price = element.getAttribute("data-price");
+            if (price) {
+                element.textContent = formatCurrency(price);
+            }
+        });
+    });
+</script>
 
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>
