@@ -15,76 +15,79 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 
 </head>
+<div th:fragment="header-fragment" >
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000;">
+        <div class="container frag-head">
 
-<div th:fragment="header-fragment">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" >
-        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/" style="gap: 10px;">
+                <img src="/img/logo.png" alt="NutriMeal" style="height: 70px;">
 
-            <a class="navbar-brand" href="/"><h1>NutriMeal</h1></a>
+                <h1 class="text-white mb-0" style="font-size: 1.7rem; margin-top: 5px">NutriMeal</h1>
+            </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="">
+            <div class="collapse navbar-collapse" id="navbarNav" style="margin-left: -90px;">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Trang chủ</a>
+                    <!--                    <li class="nav-item item-head" th:classappend="${page == 'home' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">-->
+                    <!--                        <a class="nav-link text-grey opt-head" href="/" th:href="@{/}" style="transition: color 0.3s;">TRANG CHỦ</a>-->
+                    <!--                    </li>-->
+                    <li class="nav-item item-head" th:classappend="${page == 'home' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                        <a class="nav-link text-grey opt-head" href="/" th:href="@{/}" style="transition: color 0.3s;">TRANG CHỦ</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/menu" th:href="@{/menu}">Thực đơn</a>
+                    <li class="nav-item item-head" th:classappend="${page == 'menu' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                        <a class="nav-link text-grey opt-head" href="/menu" th:href="@{/menu}" style="transition: color 0.3s;">THỰC ĐƠN</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/consult" th:href="@{/consult}">Tư vấn</a>
+                    <li class="nav-item item-head" th:classappend="${page == 'consult' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                        <a class="nav-link text-grey opt-head" href="/consult" th:href="@{/consult}" style="transition: color 0.3s;">TƯ VẤN</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/combo" th:href="@{/combo}">Đặt hàng</a>
+                    <li class="nav-item item-head" th:classappend="${page == 'combo' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                        <a class="nav-link text-grey opt-head" href="/combo" th:href="@{/combo}" style="transition: color 0.3s;">ĐẶT HÀNG</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/faq" th:href="@{/faqs}">FAQS</a>
+                    <li class="nav-item item-head" th:classappend="${page == 'faq' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                        <a class="nav-link text-grey opt-head" href="/faq" th:href="@{/faqs}" style="transition: color 0.3s;">FAQS</a>
                     </li>
                 </ul>
-            </div>
 
-
-            <div sec:authorize="isAnonymous()" class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto" sec:authorize="isAnonymous()">
                     <li class="nav-item">
-                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+                        <a class="nav-link text-white" href="/cart"><i class="fas fa-shopping-cart"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/signup">Đăng ký</a>
+                        <a class="nav-link text-white" href="/signup" th:href="@{/signup}">Đăng ký</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Đăng nhập</a>
+                        <a class="nav-link text-white" href="/login" th:href="@{/login}">Đăng nhập</a>
                     </li>
                 </ul>
-            </div>
 
-            <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto" sec:authorize="isAuthenticated()">
                     <li class="nav-item">
-                        <a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+                        <a class="nav-link text-white" href="/cart"><i class="fas fa-shopping-cart"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/profile/account}">
+                        <a class="nav-link text-white" th:href="@{/profile/account}">
                             Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
                         </a>
+
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
+                        <a class="nav-link text-white" th:href="@{/logout}">Đăng xuất</a>
                     </li>
                 </ul>
             </div>
-
         </div>
     </nav>
 </div>
 
-<footer th:fragment="footer" class="bg-dark text-white p-4">
+
+<footer th:fragment="footer" class="text-white p-4" style="background-color: #141414;">
     <div class="container">
         <div class="row mt-5">
-            <div class="col-md-4">
+            <div class="col-md-4" style="margin-right: 100px">
                 <h5>Về chúng tôi</h5>
                 <p class="text-justify">Chúng tôi là NutriMeal team,
                     tin tưởng rằng lối sống lành mạnh bắt đầu từ những bữa ăn bổ dưỡng.
@@ -97,7 +100,7 @@
                 <p class="text-justify">Phone: 0123 666 888</p>
                 <p class="text-justify">Email: nutrimeal@gmail.com</p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <h5>Follow chúng tôi tại: </h5>
                 <a href="#" class="btn btn-primary"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="btn btn-info"><i class="fab fa-twitter"></i></a>
@@ -109,32 +112,35 @@
 </footer>
 
 <header th:fragment="header_manager">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #141414;">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="/manager/" style="gap: 10px; margin-left: 50px;">
+                <img th:src="@{/img/logo.png}" alt="NutriMeal" style="width: 60px; height: 60px;">
+                <h1 class="text-white mb-0" style="font-size: 1.7rem; margin-top: 5px">NutriMeal</h1>
+            </a>
 
-            <a class="navbar-brand" href="/manager/"><h1>NutriMeal</h1></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/manager/">Trang chủ</a>
+                        <a class="nav-link text-grey opt-head" href="/manager/">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/manager/menu" th:href="@{/manager/dish}">Quản lý thực đơn</a>
+                        <a class="nav-link text-grey opt-head" href="/manager/menu" th:href="@{/manager/dish}">Quản lý thực đơn</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/manager/customer" th:href="@{/manager/customer}">Quản lý khách hàng</a>
+                        <a class="nav-link text-grey opt-head" href="/manager/customer" th:href="@{/manager/customer}">Quản lý khách hàng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/manager/order" th:href="@{/manager/ordermanager}">Quản lý đơn hàng</a>
+                        <a class="nav-link text-grey opt-head" href="/manager/order" th:href="@{/manager/order}">Quản lý đơn hàng</a>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle text-grey opt-head" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Khác
                         </a>
@@ -144,42 +150,30 @@
                         </div>
                     </li>
                 </ul>
-            </div>
 
-
-            <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto" sec:authorize="isAnonymous()" style="margin-right: 50px;">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/profile/account}">
-                            Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
+                        <a class="nav-link text-white" href="/signup" th:href="@{/signup}">Đăng ký</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/login" th:href="@{/login}">Đăng nhập</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto" sec:authorize="isAuthenticated()" style="margin-right: 50px;">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" th:href="@{/profile/account}">
+                            Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/logout}">Đăng xuất</a>
+                        <a class="nav-link text-white" th:href="@{/logout}">Đăng xuất</a>
                     </li>
                 </ul>
             </div>
-
         </div>
     </nav>
-    <script>
-        // JavaScript to handle dropdown toggle
-        document.addEventListener("DOMContentLoaded", function () {
-            const moreDropdown = document.querySelector('.nav-item.dropdown');
-            const dropdownMenu = document.getElementById('dropdownMenu');
-
-            moreDropdown.addEventListener('click', function () {
-                dropdownMenu.classList.toggle('show');
-            });
-
-            // Close dropdown when clicking outside of it
-            window.addEventListener('click', function (e) {
-                if (!moreDropdown.contains(e.target)) {
-                    dropdownMenu.classList.remove('show');
-                }
-            });
-        });
-    </script>
 </header>
+
 
 </html>

@@ -303,10 +303,9 @@
 
 </style>
 
-<header th:replace="~{fragments :: header-fragment}"></header>
+<header th:replace="~{fragments :: header-fragment (page='combo')}"></header>
 
 <body class="comboDetail">
-
 
 
 <div class="container_detailCombo ">
@@ -393,17 +392,20 @@
                                 type: "POST",
                                 url: url,
                                 data: form.serialize(),
-                                success: function (response) {
+                                success: function (response, status, xhr) {
                                     $('#notification').removeClass('alert-danger').addClass('alert-success').text(response).fadeIn().delay(3000).fadeOut();
                                 },
                                 error: function (xhr, status, error) {
-                                    $('#notification').removeClass('alert-success').addClass('alert-danger').text('Đã có lỗi xảy ra, vui lòng thử lại.').fadeIn().delay(3000).fadeOut();
+                                    if (xhr.status === 401) {
+                                        window.location.href = '/login';
+                                    } else {
+                                        $('#notification').removeClass('alert-success').addClass('alert-danger').text('Đã có lỗi xảy ra, vui lòng thử lại.').fadeIn().delay(3000).fadeOut();
+                                    }
                                 }
                             });
                         });
                     });
                 </script>
-
 
                 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
                 <script>

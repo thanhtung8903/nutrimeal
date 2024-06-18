@@ -417,7 +417,7 @@
         });
 
         inputs.forEach(input => {
-            input.addEventListener('input', function () {
+            input.addEventListener('blur', function () {
                 let value = parseInt(this.value, 10);
                 const productId = this.dataset.productId;
                 if (isNaN(value) || value < 1) {
