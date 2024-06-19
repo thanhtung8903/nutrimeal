@@ -121,33 +121,37 @@
         }
 
         // Hàm để tải dữ liệu của thực đơn cũ
-        function loadOldMenuData(menuId) {
-            fetch(`http://localhost:8080/api/dailyMenu/${menuId}`)
-                .then(response => response.json())
-                .then(data => {
-                    $('#menuDate').val(data.dailyMenuDate);
-                    $('#menuType').val(data.dailyMenuType).change();
+        async function loadOldMenuData(menuId) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/dailyMenu/${menuId}`);
+                const data = await response.json();
 
-                    fetch(`http://localhost:8080/api/dishes/${data.dailyMenuType}`)
-                        .then(response => response.json())
-                        .then(dishes => {
-                            updateMealOptions(dishes);
-                            $('#menuBreakfast').val(data.dishBreakfast.dishId);
-                            $('#menuLunch').val(data.dishLunch.dishId);
-                            $('#menuDinner').val(data.dishDinner.dishId);
-                            $('#mealSelection').removeClass('d-none');
-                        })
-                        .catch(error => console.error('Error fetching dishes:', error));
-                })
-                .catch(error => console.error('Error fetching daily menu:', error));
+                $('#menuDate').val(data.dailyMenuDate);
+                $('#menuType').val(data.dailyMenuType).change();
+
+                const dishesResponse = await fetch(`http://localhost:8080/api/dishes/${data.dailyMenuType}`);
+                const dishes = await dishesResponse.json();
+
+                updateMealOptions(dishes);
+                $('#menuBreakfast').val(data.dishBreakfast.dishId);
+                $('#menuLunch').val(data.dishLunch.dishId);
+                $('#menuDinner').val(data.dishDinner.dishId);
+                $('#mealSelection').removeClass('d-none');
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
 
-        // Lấy dailyMenuId từ URL
-        const url = window.location.pathname;
-        const dailyMenuId = url.substring(url.lastIndexOf('/') + 1);
+        async function initPage() {
+            // Lấy dailyMenuId từ URL
+            const url = window.location.pathname;
+            const dailyMenuId = url.substring(url.lastIndexOf('/') + 1);
 
-        // Gọi hàm loadOldMenuData với ID của thực đơn cũ
-        loadOldMenuData(dailyMenuId);
+            // Gọi hàm loadOldMenuData với ID của thực đơn cũ
+            await loadOldMenuData(dailyMenuId);
+        }
+
+        initPage();
 
         $('#menuType').change(function() {
             const menuType = $(this).val();

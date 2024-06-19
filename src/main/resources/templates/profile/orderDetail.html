@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments :: head('Chi tiết đơn hàng', 'none')}"></head>
+<style>
+    .order-detail-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+    .order-detail-container h2 {
+        margin-bottom: 20px;
+    }
+    .order-detail-container p {
+        margin: 5px 0;
+        font-size: 16px;
+    }
+    .order-detail-container .btn-back {
+        background-color: #343a40;
+        color: #fff;
+        margin-bottom: 20px;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: inline-block;
+    }
+    .order-detail-container .btn-back:hover {
+        background-color: #F8B934;
+        color: #343a40;
+    }
+    .order-detail-container table {
+        width: 100%;
+        margin-top: 20px;
+    }
+    .order-detail-container table th,
+    .order-detail-container table td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+    .order-detail-container table th {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    .card-product img {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+</style>
+<body>
+<header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
+
+<div class="container mt-3 mb-3">
+    <div class="order-detail-container">
+        <a href="#" th:href="@{/profile/order}" class="btn-back">Quay lại</a>
+        <h2 class="text-center">Chi tiết đơn hàng</h2>
+        <div>
+            <p><strong>Mã đơn hàng:</strong> <span th:text="'#' + ${order.orderId}"></span></p>
+            <p><strong>Ngày đặt:</strong> <span th:text="${order.orderDate}"></span></p>
+            <p><strong>Số điện thoại:</strong> <span th:text="${order.address.phone}"></span></p>
+            <p><strong>Địa chỉ:</strong> <span th:text="${order.address.getFullAddress()}"></span></p>
+            <p><strong>Trạng thái:</strong> <span th:text="${order.orderStatus}"></span></p>
+            <p><strong>Tiền hàng:</strong> <span th:text="${order.orderTempPrice}"></span></p>
+            <p><strong>Phí vận chuyển:</strong> <span th:text="${order.orderDeliveryPrice}"></span></p>
+            <p><strong>Tổng tiền:</strong> <span id="orderTotalPrice" th:data-price="${order.orderTotalPrice}"></span></p>
+            <p><strong>Phương thức thanh toán:</strong> <span th:text="${order.paymentMethod.paymentMethodName}"></span></p>
+            <p><strong>Thời gian giao hàng:</strong> <span th:text="${order.deliveryTime.deliveryTime} + ' mỗi ngày'"></span></p>
+            <p><strong>Ghi chú:</strong> <span th:text="${order.orderNote}"></span></p>
+            <h3>Chi tiết sản phẩm</h3>
+            <section>
+                <table class="order-details-table">
+                    <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Loại</th>
+                        <th>Số lượng</th>
+                        <th>Số tiền</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="orderDetail : ${order.orderDetails}">
+                        <td>
+                            <div class="card-product">
+                                <img th:src="${orderDetail.combo.comboImage}" alt="Combo Image" style="width: auto;"/>
+                                <div class="card-product-name" th:text="${orderDetail.combo.comboName}"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div th:if="${orderDetail.comboDay == 7}" th:text="'Gói tuần'"></div>
+                            <div th:if="${orderDetail.comboDay == 30}" th:text="'Gói tháng'"></div>
+                        </td>
+                        <td>
+                            <div th:text="${orderDetail.orderDetailQuantity}"></div>
+                        </td>
+                        <td>
+                            <div class="priceOrderDetail" th:text="${orderDetail.orderDetailPrice}"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<script>
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(value).replace('₫', 'đ');
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Format order total price
+        const orderTotalPriceElement = document.getElementById("orderTotalPrice");
+        if (orderTotalPriceElement) {
+            const orderTotalPrice = orderTotalPriceElement.getAttribute("data-price");
+            orderTotalPriceElement.textContent = formatCurrency(orderTotalPrice);
+        }
+
+        // Format each order detail price and total
+        document.querySelectorAll("[id^='orderDetailPrice_']").forEach(function(element) {
+            const price = element.getAttribute("data-price");
+            element.textContent = formatCurrency(price);
+        });
+
+        document.querySelectorAll("[id^='orderDetailTotal_']").forEach(function(element) {
+            const price = element.getAttribute("data-price");
+            element.textContent = formatCurrency(price);
+        });
+    });
+</script>
+</body>
+</html>
