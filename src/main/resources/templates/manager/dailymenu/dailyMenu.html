@@ -211,39 +211,105 @@
             </button>
 
             <!-- Pagination for daily menu list -->
-            <nav aria-label="Page navigation">
+            <!-- Thanh phân trang thông thường -->
+            <nav aria-label="Page navigation" th:if="${date == null and type == null and dishName == null}">
                 <ul class="pagination">
+                    <!-- Link to the first page -->
                     <li class="page-item" th:if="${listDailyMenu.number > 0}">
-                        <a
-                                class="page-link"
-                                th:href="@{/manager/dailymenu(page=${listDailyMenu.number - 1})}"
-                                aria-label="Previous"
-                        >
+                        <a class="page-link" th:href="@{/manager/dailymenu(page=0)}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Link to the previous page -->
+                    <li class="page-item" th:if="${listDailyMenu.number > 0}">
+                        <a class="page-link" th:href="@{/manager/dailymenu(page=${listDailyMenu.number - 1})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li
-                            class="page-item"
-                            th:each="i : ${#numbers.sequence(0, listDailyMenu.totalPages - 1)}"
-                            th:class="${i == listDailyMenu.number ? 'active' : ''}"
-                    >
-                        <a
-                                class="page-link"
-                                th:href="@{/manager/dailymenu(page=${i})}"
-                                th:text="${i + 1}"
-                        >1</a
-                        >
+
+                    <!-- Page numbers -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, listDailyMenu.totalPages - 1)}"
+                        th:if="${i >= listDailyMenu.number - 2 && i <= listDailyMenu.number + 2}"
+                        th:class="${i == listDailyMenu.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/manager/dailymenu(page=${i})}" th:text="${i + 1}">1</a>
                     </li>
-                    <li
-                            class="page-item"
-                            th:if="${listDailyMenu.number + 1 < listDailyMenu.totalPages}"
-                    >
-                        <a
-                                class="page-link"
-                                th:href="@{/manager/dailymenu(page=${listDailyMenu.number + 1})}"
-                                aria-label="Next"
-                        >
+
+                    <!-- Ellipsis for skipped pages -->
+                    <li class="page-item" th:if="${listDailyMenu.number > 3}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <!-- Page numbers after ellipsis -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(listDailyMenu.totalPages - 3, listDailyMenu.totalPages - 1)}"
+                        th:if="${i > listDailyMenu.number + 2}"
+                        th:class="${i == listDailyMenu.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/manager/dailymenu(page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+
+                    <!-- Link to the next page -->
+                    <li class="page-item" th:if="${listDailyMenu.number + 1 < listDailyMenu.totalPages}">
+                        <a class="page-link" th:href="@{/manager/dailymenu(page=${listDailyMenu.number + 1})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Link to the last page -->
+                    <li class="page-item" th:if="${listDailyMenu.number + 1 < listDailyMenu.totalPages}">
+                        <a class="page-link" th:href="@{/manager/dailymenu(page=${listDailyMenu.totalPages - 1})}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Thanh phân trang tìm kiếm -->
+            <nav aria-label="Page navigation" th:if="${date != null or type != null or dishName != null}">
+                <ul class="pagination">
+                    <!-- Link to the first page -->
+                    <li class="page-item" th:if="${listDailyMenu.number > 0}">
+                        <a class="page-link" th:href="@{/manager/dailymenu/search(date=${date}, type=${type}, dishName=${dishName}, page=0)}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Link to the previous page -->
+                    <li class="page-item" th:if="${listDailyMenu.number > 0}">
+                        <a class="page-link" th:href="@{/manager/dailymenu/search(date=${date}, type=${type}, dishName=${dishName}, page=${listDailyMenu.number - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Page numbers -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, listDailyMenu.totalPages - 1)}"
+                        th:if="${i >= listDailyMenu.number - 2 && i <= listDailyMenu.number + 2}"
+                        th:class="${i == listDailyMenu.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/manager/dailymenu/search(date=${date}, type=${type}, dishName=${dishName}, page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+
+                    <!-- Ellipsis for skipped pages -->
+                    <li class="page-item" th:if="${listDailyMenu.number > 3}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <!-- Page numbers after ellipsis -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(listDailyMenu.totalPages - 3, listDailyMenu.totalPages - 1)}"
+                        th:if="${i > listDailyMenu.number + 2}"
+                        th:class="${i == listDailyMenu.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/manager/dailymenu/search(date=${date}, type=${type}, dishName=${dishName}, page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+
+                    <!-- Link to the next page -->
+                    <li class="page-item" th:if="${listDailyMenu.number + 1 < listDailyMenu.totalPages}">
+                        <a class="page-link" th:href="@{/manager/dailymenu/search(date=${date}, type=${type}, dishName=${dishName}, page=${listDailyMenu.number + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Link to the last page -->
+                    <li class="page-item" th:if="${listDailyMenu.number + 1 < listDailyMenu.totalPages}">
+                        <a class="page-link" th:href="@{/manager/dailymenu/search(date=${date}, type=${type}, dishName=${dishName}, page=${listDailyMenu.totalPages - 1})}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
                         </a>
                     </li>
                 </ul>

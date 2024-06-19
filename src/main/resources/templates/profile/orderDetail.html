@@ -43,6 +43,13 @@
         background-color: #343a40;
         color: #fff;
     }
+
+    .card-product img {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
 </style>
 <body>
 <header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
@@ -50,36 +57,52 @@
 <div class="container mt-3 mb-3">
     <div class="order-detail-container">
         <a href="#" th:href="@{/profile/order}" class="btn-back">Quay lại</a>
-        <h2>Chi tiết đơn hàng</h2>
+        <h2 class="text-center">Chi tiết đơn hàng</h2>
         <div>
-            <p>Ngày đặt: <span th:text="${order.orderDate}"></span></p>
-            <p>Địa chỉ: <span th:text="${order.address.getFullAddress()}"></span></p>
-            <p>Trạng thái: <span th:text="${order.orderStatus}"></span></p>
-            <p>Tổng tiền: <span id="orderTotalPrice" th:data-price="${order.orderTotalPrice}"></span></p>
-            <p>Ghi chú: <span th:text="${order.orderNote}"></span></p>
+            <p><strong>Mã đơn hàng:</strong> <span th:text="'#' + ${order.orderId}"></span></p>
+            <p><strong>Ngày đặt:</strong> <span th:text="${order.orderDate}"></span></p>
+            <p><strong>Số điện thoại:</strong> <span th:text="${order.address.phone}"></span></p>
+            <p><strong>Địa chỉ:</strong> <span th:text="${order.address.getFullAddress()}"></span></p>
+            <p><strong>Trạng thái:</strong> <span th:text="${order.orderStatus}"></span></p>
+            <p><strong>Tiền hàng:</strong> <span th:text="${order.orderTempPrice}"></span></p>
+            <p><strong>Phí vận chuyển:</strong> <span th:text="${order.orderDeliveryPrice}"></span></p>
+            <p><strong>Tổng tiền:</strong> <span id="orderTotalPrice" th:data-price="${order.orderTotalPrice}"></span></p>
+            <p><strong>Phương thức thanh toán:</strong> <span th:text="${order.paymentMethod.paymentMethodName}"></span></p>
+            <p><strong>Thời gian giao hàng:</strong> <span th:text="${order.deliveryTime.deliveryTime} + ' mỗi ngày'"></span></p>
+            <p><strong>Ghi chú:</strong> <span th:text="${order.orderNote}"></span></p>
             <h3>Chi tiết sản phẩm</h3>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Giá</th>
-                    <th>Tổng</th>
-                    <th>Ngày combo</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="detail : ${orderDetails}">
-                    <td th:text="${detail.combo.comboName}"></td>
-                    <td th:text="${detail.orderDetailQuantity}"></td>
-                    <td><span th:if="${detail.comboDay == 7}" th:id="'orderDetailPrice_' + ${detail.orderDetailId}" th:data-price="${detail.combo.comboPrice7Days}"></span>
-                        <span th:if="${detail.comboDay == 30}" th:id="'orderDetailPrice_' + ${detail.orderDetailId}" th:data-price="${detail.combo.comboPrice30Days}"></span>
-                    </td>
-                    <td><span th:id="'orderDetailTotal_' + ${detail.orderDetailId}" th:data-price="${detail.orderDetailPrice}"></span></td>
-                    <td th:text="${detail.comboDay}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <section>
+                <table class="order-details-table">
+                    <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Loại</th>
+                        <th>Số lượng</th>
+                        <th>Số tiền</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="orderDetail : ${order.orderDetails}">
+                        <td>
+                            <div class="card-product">
+                                <img th:src="${orderDetail.combo.comboImage}" alt="Combo Image" style="width: auto;"/>
+                                <div class="card-product-name" th:text="${orderDetail.combo.comboName}"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div th:if="${orderDetail.comboDay == 7}" th:text="'Gói tuần'"></div>
+                            <div th:if="${orderDetail.comboDay == 30}" th:text="'Gói tháng'"></div>
+                        </td>
+                        <td>
+                            <div th:text="${orderDetail.orderDetailQuantity}"></div>
+                        </td>
+                        <td>
+                            <div class="priceOrderDetail" th:text="${orderDetail.orderDetailPrice}"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
         </div>
     </div>
 </div>

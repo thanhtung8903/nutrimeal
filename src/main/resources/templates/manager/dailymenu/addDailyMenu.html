@@ -75,62 +75,26 @@
                     <div class="me-2 flex-grow-1">
                         <label for="menuBreakfast" class="form-label">Bữa sáng</label>
                         <select class="form-select meal-select" id="menuBreakfast" name="menuBreakfast" style="width: 100%;" required>
-                            <option value="">Chọn món ăn</option>
+                            <option value=""></option>
                         </select>
                     </div>
                     <div class="me-2 flex-grow-1">
                         <label for="menuLunch" class="form-label">Bữa trưa</label>
                         <select class="form-select meal-select" id="menuLunch" name="menuLunch" style="width: 100%;" required>
-                            <option value="">Chọn món ăn</option>
+                            <option value=""></option>
                         </select>
                     </div>
                     <div class="flex-grow-1">
                         <label for="menuDinner" class="form-label">Bữa tối</label>
                         <select class="form-select meal-select" id="menuDinner" name="menuDinner" style="width: 100%;" required>
-                            <option value="">Chọn món ăn</option>
+                            <option value=""></option>
                         </select>
                     </div>
                 </div>
             </div>
 
-
-            <script>
-                $(document).ready(function() {
-                    $('.meal-select').select2({
-                        width: 'resolve',
-                        height: 'resolve'
-                    });
-
-                    $('#menuType').change(function() {
-                        const menuType = $(this).val();
-                        if (menuType) {
-                            fetch(`http://localhost:8080/api/dishes/${menuType}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    updateMealOptions(data);
-                                    $('#mealSelection').removeClass('d-none');
-                                })
-                                .catch(error => console.error('Error fetching data:', error));
-                        } else {
-                            $('#mealSelection').addClass('d-none');
-                        }
-                    });
-
-                    function updateMealOptions(dishes) {
-                        $('.meal-select').each(function() {
-                            $(this).empty().append('<option value="">Chọn món ăn</option>');
-                            dishes.forEach(dish => {
-                                $(this).append(new Option(dish.dishName, dish.dishId));
-                            });
-                        });
-                    }
-                });
-            </script>
-
             <button type="submit" class="btn btn-primary mt-3">Thêm Daily Menu</button>
-            <button type="button" class="btn btn-secondary mt-3"
-                    th:onclick="'window.location.href=\'/manager/dailymenu\''"> Quay lại
-            </button>
+            <button type="button" class="btn btn-secondary mt-3" th:onclick="'window.location.href=\'/manager/dailymenu\''"> Quay lại </button>
         </form>
 
         <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
@@ -145,12 +109,83 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function() {
+        $('.meal-select').select2({
+            width: 'resolve',
+            height: 'resolve'
+        });
+
+        $('#menuType').change(function() {
+            const menuType = $(this).val();
+            if (menuType) {
+                fetch(`http://localhost:8080/api/dishes/${menuType}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateMealOptions(data);
+                        $('#mealSelection').removeClass('d-none');
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            } else {
+                $('#mealSelection').addClass('d-none');
+            }
+        });
+
+        function updateMealOptions(dishes) {
+            $('.meal-select').each(function() {
+                $(this).empty().append('<option value="">Chọn món ăn</option>');
+                dishes.forEach(dish => {
+                    $(this).append(new Option(dish.dishName, dish.dishId));
+                });
+            });
+        }
+
+        function updateSelectOptions() {
+            var selectedDishes = [
+                $('#menuBreakfast').val(),
+                $('#menuLunch').val(),
+                $('#menuDinner').val()
+            ];
+
+            $('#menuBreakfast option, #menuLunch option, #menuDinner option').each(function() {
+                var value = $(this).val();
+                if (value && selectedDishes.includes(value)) {
+                    if ($(this).parent().attr('id') === 'menuBreakfast' && value === $('#menuBreakfast').val() ||
+                        $(this).parent().attr('id') === 'menuLunch' && value === $('#menuLunch').val() ||
+                        $(this).parent().attr('id') === 'menuDinner' && value === $('#menuDinner').val()) {
+                        $(this).removeAttr('disabled');
+                    } else {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                } else {
+                    $(this).removeAttr('disabled');
+                }
+            });
+
+            $('#menuBreakfast').select2('destroy').select2({
+                placeholder: "Chọn món ăn cho bữa sáng",
+                allowClear: true
+            });
+            $('#menuLunch').select2('destroy').select2({
+                placeholder: "Chọn món ăn cho bữa trưa",
+                allowClear: true
+            });
+            $('#menuDinner').select2('destroy').select2({
+                placeholder: "Chọn món ăn cho bữa tối",
+                allowClear: true
+            });
+        }
+
+        $('#menuBreakfast, #menuLunch, #menuDinner').on('change', function() {
+            updateSelectOptions();
+        });
+
+        updateSelectOptions();
+    });
+</script>
+
 <!-- Bootstrap core JS -->
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"
-></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 <footer th:replace="~{fragments :: footer}"></footer>

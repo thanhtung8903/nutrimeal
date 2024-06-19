@@ -158,36 +158,101 @@
             <!-- Pagination for normal list -->
             <nav aria-label="Page navigation" th:if="${param.name == null && param.type == null}">
                 <ul class="pagination">
+                    <!-- Link to the first page -->
+                    <li class="page-item" th:if="${listDish.number > 0}">
+                        <a class="page-link" th:href="@{/manager/dish(page=0)}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Link to the previous page -->
                     <li class="page-item" th:if="${listDish.number > 0}">
                         <a class="page-link" th:href="@{/manager/dish(page=${listDish.number - 1})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, listDish.totalPages - 1)}" th:class="${i == listDish.number ? 'active' : ''}">
+
+                    <!-- Page numbers -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, listDish.totalPages - 1)}"
+                        th:if="${i >= listDish.number - 2 && i <= listDish.number + 2}"
+                        th:class="${i == listDish.number ? 'active' : ''}">
                         <a class="page-link" th:href="@{/manager/dish(page=${i})}" th:text="${i + 1}">1</a>
                     </li>
+
+                    <!-- Ellipsis for skipped pages -->
+                    <li class="page-item" th:if="${listDish.number > 3}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <!-- Page numbers after ellipsis -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(listDish.totalPages - 3, listDish.totalPages - 1)}"
+                        th:if="${i > listDish.number + 2}"
+                        th:class="${i == listDish.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/manager/dish(page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+
+                    <!-- Link to the next page -->
                     <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
                         <a class="page-link" th:href="@{/manager/dish(page=${listDish.number + 1})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
+
+                    <!-- Link to the last page -->
+                    <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
+                        <a class="page-link" th:href="@{/manager/dish(page=${listDish.totalPages - 1})}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
-            <!-- Pagination for search list -->
             <nav aria-label="Page navigation" th:if="${param.name != null || param.type != null}">
                 <ul class="pagination">
+                    <!-- Link to the first page -->
+                    <li class="page-item" th:if="${listDish.number > 0}">
+                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=0)}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Link to the previous page -->
                     <li class="page-item" th:if="${listDish.number > 0}">
                         <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.number - 1})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, listDish.totalPages - 1)}" th:class="${i == listDish.number ? 'active' : ''}">
+
+                    <!-- Page numbers -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, listDish.totalPages - 1)}"
+                        th:if="${i >= listDish.number - 2 && i <= listDish.number + 2}"
+                        th:class="${i == listDish.number ? 'active' : ''}">
                         <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${i})}" th:text="${i + 1}">1</a>
                     </li>
+
+                    <!-- Ellipsis for skipped pages -->
+                    <li class="page-item" th:if="${listDish.number > 3}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <!-- Page numbers after ellipsis -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(listDish.totalPages - 3, listDish.totalPages - 1)}"
+                        th:if="${i > listDish.number + 2}"
+                        th:class="${i == listDish.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+
+                    <!-- Link to the next page -->
                     <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
                         <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.number + 1})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- Link to the last page -->
+                    <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
+                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.totalPages - 1})}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
                         </a>
                     </li>
                 </ul>

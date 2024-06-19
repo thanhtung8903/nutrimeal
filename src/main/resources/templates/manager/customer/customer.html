@@ -4,18 +4,10 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: sans-serif;
-    }
 
     body {
         min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        overflow-x: hidden;
     }
 
     main.customer-table {
@@ -216,7 +208,7 @@ background-color: #0000000b;
 </style>
 
 
-<!--<header th:replace="~{fragments :: header_manager}"></header>-->
+<header th:replace="~{fragments :: header_manager}"></header>
 <body>
 <main class="customer-table">
     <section class="customer-table-header">
@@ -227,10 +219,10 @@ background-color: #0000000b;
         </div>
     </section>
     <section class="customer-table-body">
-        <table>
+        <table id="customer-table">
             <thead>
             <tr>
-                <!--                <th>Customer <span class="icon-arrow">&UpArrow;</span></th>-->
+                <th>STT <span class="icon-arrow">&UpArrow;</span></th>
                 <th>Họ và tên <span class="icon-arrow">&UpArrow;</span></th>
                 <th>Ảnh <span class="icon-arrow">&UpArrow;</span></th>
                 <th>Số điện thoại <span class="icon-arrow">&UpArrow;</span></th>
@@ -422,8 +414,18 @@ background-color: #0000000b;
             }
         }
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        var table = document.getElementById('customer-table');
+        var rows = table.getElementsByTagName('tr');
 
+        for (var i = 1; i < rows.length; i++) {
+            var cell = document.createElement('td');
+            cell.textContent = i;
+            rows[i].insertBefore(cell, rows[i].firstChild);
+        }
+    });
     // openListOrder(id);
 </script>
 </body>
+<footer th:replace="~{fragments :: footer}"></footer>
 </html>
