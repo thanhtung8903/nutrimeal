@@ -1,5 +1,6 @@
 package com.nutrimeal.nutrimeal.service;
 
+import com.nutrimeal.nutrimeal.dto.response.DeliveryResponse;
 import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.repository.DailyMenuRepository;
 import com.nutrimeal.nutrimeal.repository.DeliveryDetailRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -129,5 +131,27 @@ public class DeliveryService {
             deliveryDetailRepository.save(deliveryDetail);
         }
 
+    }
+
+    public List<DeliveryResponse> findDeliveriesByDeliveryStatus(String deliveryStatus) {
+        List<Delivery> deliveryList = deliveryRepository.findDeliveriesByDeliveryStatus(deliveryStatus);
+        List<DeliveryResponse> deliveryResponseList = new ArrayList<>();
+        for (Delivery delivery : deliveryList) {
+            DeliveryResponse deliveryResponse = new DeliveryResponse();
+            deliveryResponse.setDeliveryId(delivery.getDeliveryId());
+            deliveryResponse.setDeliveryStatus(delivery.getDeliveryStatus());
+            deliveryResponse.setDeliveryTime(delivery.getDeliveryTime());
+            deliveryResponse.setDeliveryDate(delivery.getDeliveryDate().toString());
+            deliveryResponse.setDeliveryNote(delivery.getDeliveryNote());
+            deliveryResponse.setDeliveryAddress(delivery.getDeliveryAddress());
+            deliveryResponse.setDeliveryPhone(delivery.getDeliveryPhone());
+            deliveryResponse.setCustomerFullName(delivery.getOrder().getUser().getFullName());
+            deliveryResponse.setShipperFullName(delivery.getShipper().getFullName());
+//            deliveryResponse.setDeliveryUpdateTime(delivery.getDeliveryUpdateTime().toString());
+            deliveryResponse.setDeliveryPrice(delivery.getDeliveryPrice());
+            deliveryResponseList.add(deliveryResponse);
+        }
+
+        return deliveryResponseList;
     }
 }
