@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delivery Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .controls input[type="text"],
+        .controls input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .controls input[type="text"] {
+            width: 300px;
+        }
+
+        .controls input[type="date"] {
+            width: 150px;
+        }
+
+        .table-hover {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-hover th, .table-hover td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table-hover tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table-hover th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: #ddd;
+        }
+        .pagination button:disabled {
+            cursor: not-allowed;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>ĐƠN GIAO THẤT BẠI</h2>
+    <div class="controls">
+        <button id="fetchDelivery" type="button">Fetch Delivery Details</button>
+        <input type="text" id="searchInput" placeholder="Search...">
+        <input type="date" id="searchDate" placeholder="Search by Date">
+    </div>
+    <table class="table-hover">
+        <thead>
+        <tr>
+            <th id="sortDeliveryId">STT</th>
+            <th id="sortOrderId">Mã đơn hàng</th>
+            <th>Trạng thái</th>
+            <th>Thời gian giao</th>
+            <th id="sortDeliveryDate">Ngày giao</th>
+            <th>Tên khách hàng</th>
+            <th>SĐT</th>
+            <th>Địa chỉ</th>
+            <th>Tổng thu</th>
+            <th>Tên shipper</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+    <div class="pagination" id="pagination-controls">
+    </div>
+</div>
+
+<script>
+    let currentPage = 1;
+    const rowsPerPage = 20;
+    let deliveries = [];
+
+    document.getElementById('fetchDelivery').addEventListener('click', function() {
+        location.reload();
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+        currentPage = 1;
+        displayTable();
+        setupPagination();
+    });
+
+    document.getElementById('searchDate').addEventListener('input', function() {
+        currentPage = 1;
+        displayTable();
+        setupPagination();
+    });
+
+    document.getElementById('sortDeliveryDate').addEventListener('click', function() {
+        deliveries.sort((a, b) => {
+            const aDate = new Date(a.deliveryDate);
+            const bDate = new Date(b.deliveryDate);
+            return aDate - bDate;
+        });
+        currentPage = 1;
+        displayTable();
+    });
+
+    document.getElementById('sortOrderId').addEventListener('click', function() {
+        deliveries.sort((a, b) => a.deliveryId.localeCompare(b.deliveryId));
+        currentPage = 1;
+        displayTable();
+    });
+
+    function displayTable() {
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = ''; // Clear previous results
+
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchDate = document.getElementById('searchDate').value;
+
+        const filteredDeliveries = deliveries.filter(delivery => {
+            const matchesSearchTerm = Object.values(delivery).some(val =>
+                val && val.toString().toLowerCase().includes(searchTerm)
+            );
+            const matchesSearchDate = searchDate ?
+                new Date(delivery.deliveryDate).toISOString().split('T')[0] === searchDate : true;
+            return matchesSearchTerm && matchesSearchDate;
+        });
+
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedDeliveries = filteredDeliveries.slice(start, end);
+
+        paginatedDeliveries.forEach((delivery, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${start + index + 1}</td>
+                <td>${delivery.deliveryId}</td>
+                <td>${delivery.deliveryStatus}</td>
+                <td>${delivery.deliveryTime}</td>
+                <td>${formatDate(delivery.deliveryDate)}</td>
+                <td>${delivery.customerFullName}</td>
+                <td>${delivery.deliveryPhone}</td>
+                <td>${delivery.deliveryAddress}</td>
+                <td>${delivery.deliveryPrice}</td>
+                <td>${delivery.shipperFullName}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(-2);
+        return `${day}/${month}/${year}`;
+    }
+
+    function setupPagination() {
+        const paginationControls = document.getElementById('pagination-controls');
+        paginationControls.innerHTML = '';
+
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchDate = document.getElementById('searchDate').value;
+
+        const filteredDeliveries = deliveries.filter(delivery => {
+            const matchesSearchTerm = Object.values(delivery).some(val =>
+                val && val.toString().toLowerCase().includes(searchTerm)
+            );
+            const matchesSearchDate = searchDate ?
+                new Date(delivery.deliveryDate).toISOString().split('T')[0] === searchDate : true;
+            return matchesSearchTerm && matchesSearchDate;
+        });
+
+        const totalPages = Math.ceil(filteredDeliveries.length / rowsPerPage);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const button = document.createElement('button');
+            button.textContent = i;
+            button.classList.toggle('active', i === currentPage);
+            button.addEventListener('click', function() {
+                currentPage = i;
+                displayTable();
+                setupPagination();
+            });
+            paginationControls.appendChild(button);
+        }
+    }
+
+    // Fetch data on page load
+    window.onload = function() {
+        fetch('http://localhost:8080/api/delivery?status=DELIVERY_FAILED')
+            .then(response => response.json())
+            .then(data => {
+                deliveries = data;
+                displayTable();
+                setupPagination();
+            })
+            .catch(error => {
+                console.error('Error fetching delivery details:', error);
+            });
+    };
+</script>
+</body>
+</html>

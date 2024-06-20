@@ -8,8 +8,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/manager/delivery")
 public class ManagerDeliveryController {
 
-    @GetMapping
-    public String managerDelivery() {
-        return "manager/delivery/listDelivery";
+    @GetMapping("/notdelivered")
+    public String managerDeliveryNotDelivered() {
+        return "manager/delivery/notDelivered";
+    }
+
+    @GetMapping("/intransit")
+    public String managerDeliveryIntransit() {
+        return "manager/delivery/inTransit";
+    }
+
+    @GetMapping("/delivered")
+    public String managerDeliveryDelivered() {
+        return "manager/delivery/delivered";
+    }
+
+    @GetMapping("/deliveryfailed")
+    public String managerDeliveryFailed() {
+        return "manager/delivery/deliveredFailed";
     }
 }
