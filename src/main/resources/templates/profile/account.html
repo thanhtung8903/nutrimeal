@@ -202,6 +202,22 @@
                                 isValid = false;
                             }
 
+                            // Validate Họ & Tên
+                            var fullNameInput = document.querySelector('input[name="fullName"]');
+                            var fullName = fullNameInput.value;
+                            var fullNameAlert = document.getElementById('fullName-alert');
+                            if (fullNameAlert) fullNameAlert.remove();
+
+                            var namePattern = /^[^0-9]*$/;
+                            if (!namePattern.test(fullName)) {
+                                var fullNameAlertDiv = document.createElement('div');
+                                fullNameAlertDiv.id = 'fullName-alert';
+                                fullNameAlertDiv.className = 'alert alert-danger mt-2';
+                                fullNameAlertDiv.innerText = 'Họ & Tên không được chứa số.';
+                                fullNameInput.parentNode.appendChild(fullNameAlertDiv);
+                                isValid = false;
+                            }
+
                             return isValid;
                         }
 
