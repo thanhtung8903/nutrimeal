@@ -72,10 +72,10 @@ public class ManagerPromotionController {
     @PostMapping("/promotion/update/{id}")
     public String updatePromotion(@PathVariable("id") Integer id, @ModelAttribute Promotion promotion) {
         try {
-            if(userPromotionService.existsByPromotionId(id)){
+            Promotion oldPromotion = promotionService.findPromotionById(id);
+            if(userPromotionService.existsByPromotionId(id) && !promotion.getPromotionCode().equals(oldPromotion.getPromotionCode())){
                 return "redirect:/manager/promotion/update/" + id + "?fail=true";
             }
-            Promotion oldPromotion = promotionService.findPromotionById(id);
             if(promotionService.existsByPromotionCode(promotion.getPromotionCode()) && !promotion.getPromotionCode().equals(oldPromotion.getPromotionCode()) ){
                 return "redirect:/manager/promotion/update/" + id + "?duplicate=true";
             }
