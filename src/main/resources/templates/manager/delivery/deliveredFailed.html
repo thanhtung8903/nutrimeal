@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Delivery Details</title>
+    <title>Đơn giao thất bại</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
 
+        /*danh dau cua duong san ne*/
+
+        .content {
+            margin-left: 250px;
+            padding: 80px 20px 20px;
+            transition: margin-left 0.3s ease;
+        }
+        .content.collapsed {
+            margin-left: 60px;
+        }
         .container {
-            width: 80%;
+            width: 100%;
             margin: auto;
             overflow: hidden;
         }
@@ -63,6 +72,7 @@
         .pagination {
             display: flex;
             justify-content: center;
+            align-items: center;
             margin-top: 20px;
         }
 
@@ -72,48 +82,90 @@
             border: 1px solid #ddd;
             background-color: #f9f9f9;
             cursor: pointer;
+            border-radius: 4px;
         }
 
         .pagination button.active {
-            background-color: #ddd;
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
         }
+
         .pagination button:disabled {
             cursor: not-allowed;
             background-color: #f1f1f1;
         }
+
+        .pagination .ellipsis {
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: none;
+            background: none;
+            cursor: default;
+        }
+
+
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>ĐƠN GIAO THẤT BẠI</h2>
-    <div class="controls">
-        <button id="fetchDelivery" type="button">Fetch Delivery Details</button>
-        <input type="text" id="searchInput" placeholder="Search...">
-        <input type="date" id="searchDate" placeholder="Search by Date">
-    </div>
-    <table class="table-hover">
-        <thead>
-        <tr>
-            <th id="sortDeliveryId">STT</th>
-            <th id="sortOrderId">Mã đơn hàng</th>
-            <th>Trạng thái</th>
-            <th>Thời gian giao</th>
-            <th id="sortDeliveryDate">Ngày giao</th>
-            <th>Tên khách hàng</th>
-            <th>SĐT</th>
-            <th>Địa chỉ</th>
-            <th>Tổng thu</th>
-            <th>Tên shipper</th>
-        </tr>
-        </thead>
-        <tbody id="table-body">
-        </tbody>
-    </table>
-    <div class="pagination" id="pagination-controls">
+<div th:insert="fragments/sidebar :: sidebar-manager"></div>
+
+
+<div class="content" id="content">
+    <div class="container container-table">
+
+        <div class="controls">
+            <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
+
+            <input type="date" id="searchDate" placeholder="Search by Date">
+        </div>
+        <table class="table-hover">
+            <thead>
+            <tr>
+                <th id="sortDeliveryId">STT</th>
+                <th id="sortOrderId">Mã đơn hàng</th>
+                <th>Trạng thái</th>
+                <th>Thời gian giao</th>
+                <th id="sortDeliveryDate">Ngày giao</th>
+                <th>Tên khách hàng</th>
+                <th>SĐT</th>
+                <th>Địa chỉ</th>
+                <th>Tổng thu</th>
+                <th>Tên shipper</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+        <div class="pagination" id="pagination-controls">
+        </div>
     </div>
 </div>
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+    // Sidebar toggle functionality
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('collapsed');
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function(submenuToggle) {
+            submenuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
+    });
+
     let currentPage = 1;
     const rowsPerPage = 20;
     let deliveries = [];
@@ -214,19 +266,41 @@
 
         const totalPages = Math.ceil(filteredDeliveries.length / rowsPerPage);
 
-        for (let i = 1; i <= totalPages; i++) {
+        const createButton = (text, isActive, isDisabled, page) => {
             const button = document.createElement('button');
-            button.textContent = i;
-            button.classList.toggle('active', i === currentPage);
-            button.addEventListener('click', function() {
-                currentPage = i;
-                displayTable();
-                setupPagination();
-            });
-            paginationControls.appendChild(button);
+            button.textContent = text;
+            if (isActive) button.classList.add('active');
+            if (isDisabled) button.disabled = true;
+            if (page !== undefined) {
+                button.addEventListener('click', function() {
+                    currentPage = page;
+                    displayTable();
+                    setupPagination();
+                });
+            }
+            return button;
+        };
+
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) {
+                paginationControls.appendChild(createButton(i, i === currentPage, false, i));
+            }
+        } else {
+            paginationControls.appendChild(createButton(1, currentPage === 1, false, 1));
+            if (currentPage > 4) {
+                paginationControls.appendChild(createButton('...', false, true));
+            }
+
+            for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) {
+                paginationControls.appendChild(createButton(i, i === currentPage, false, i));
+            }
+
+            if (currentPage < totalPages - 3) {
+                paginationControls.appendChild(createButton('...', false, true));
+            }
+            paginationControls.appendChild(createButton(totalPages, currentPage === totalPages, false, totalPages));
         }
     }
-
     // Fetch data on page load
     window.onload = function() {
         fetch('http://localhost:8080/api/delivery?status=DELIVERY_FAILED')
