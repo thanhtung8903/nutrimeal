@@ -1,0 +1,124 @@
+.body-sidebar {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+}
+.header .search-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+.header .search-bar input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.header .user-info {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-right: 70px;
+
+}
+.user-info img {
+    border-radius: 50%;
+    border: 2px solid white;
+    width: 47px;
+    height: 47px;
+    margin-right: 10px;
+}
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    color: red; /* Red color for the name */
+    font-weight: bold;
+}
+
+.logout {
+    color: white; /* Light text color */
+    text-decoration: underline;
+    margin-top: 5px;
+}
+.sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 250px;
+    height: calc(100% - 60px);
+    background-color: #f8f9fa;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+.sidebar.collapsed {
+    width: 60px;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar ul li {
+    padding: 10px 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+.sidebar ul li a .bi {
+    margin-right: 10px;
+}
+.sidebar ul li a .sidebar-text {
+    display: inline-block;
+    transition: opacity 0.3s ease, max-width 0.3s ease;
+    max-width: 200px; /* Initial max-width */
+}
+.sidebar.collapsed ul li a .sidebar-text {
+    opacity: 0;
+    max-width: 0; /* Collapse width to hide text */
+}
+.sidebar ul li a:hover {
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.has-submenu .submenu {
+    display: none;
+    padding-left: 20px;
+}
+
+.has-submenu .submenu li {
+    padding: 5px 0;
+}
+
+.submenu-toggle {
+    margin-left: auto;
+}
+.submenu.open {
+    display: block;
+}
