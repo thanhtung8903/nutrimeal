@@ -37,7 +37,7 @@ public class ManagerOrderController {
     public String processingOrder(@RequestParam("orderId") Integer orderId,
                                   @RequestParam("status") String status) {
         orderService.updateStatusOrder(orderId, status);
-        if (status.equals("PROCESSING")) {
+        if (status.equals("SHIPPED")) {
             deliveryService.createDelivery(orderService.getOrderById(orderId));
         }
         return "redirect:/manager/order";

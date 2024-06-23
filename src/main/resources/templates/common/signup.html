@@ -121,8 +121,8 @@
         // Validate username
         const username = document.getElementById('username').value;
         const usernameHelp = document.getElementById('usernameHelp');
-        if (username.length < 6 || !/[a-zA-Z]/.test(username)) {
-            usernameHelp.textContent = 'Tên tài khoản phải dài ít nhất 6 ký tự và chứa ít nhất một chữ cái.';
+        if (!/^[a-zA-Z][a-zA-Z0-9]{5,11}$/.test(username)) {
+            usernameHelp.textContent = 'Tên tài khoản phải bắt đầu bằng chữ cái và dài ít nhất 6 ký tự, tối đa 12 ký tự'
             isValid = false;
         } else {
             usernameHelp.textContent = '';
@@ -142,8 +142,14 @@
         // Validate fullname
         const fullname = document.getElementById('fullname').value;
         const fullnameHelp = document.getElementById('fullnameHelp');
+
+        const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[\s'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/;
+
         if (fullname.trim() === '') {
             fullnameHelp.textContent = 'Họ và tên không được bỏ trống.';
+            isValid = false;
+        } else if (!nameRegex.test(fullname)) {
+            fullnameHelp.textContent = 'Họ và tên không hợp lệ. Họ và tên phải bắt đầu bằng chữ cái và chỉ chứa chữ cái, dấu cách, dấu gạch ngang hoặc dấu nháy đơn.';
             isValid = false;
         } else {
             fullnameHelp.textContent = '';
@@ -152,8 +158,11 @@
         // Validate password
         const password = document.getElementById('password').value;
         const passwordHelp = document.getElementById('passwordHelp');
-        if (password.length < 8) {
-            passwordHelp.textContent = 'Mật khẩu phải có ít nhất 8 ký tự.';
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
+
+        if (!passwordRegex.test(password)) {
+            passwordHelp.textContent = 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.';
             isValid = false;
         } else {
             passwordHelp.textContent = '';

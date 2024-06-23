@@ -12,3 +12,30 @@
 /*.frag-head{*/
 /*    padding-bottom: 0px;*/
 /*}*/
+
+.user-info {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-right: 70px;
+}
+.user-info img {
+    border-radius: 50%;
+    border: 2px solid white;
+    width: 47px;
+    height: 47px;
+    margin-right: 10px;
+}
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+.user-name {
+    color: red; /* Red color for the name */
+    font-weight: bold;
+}
+.logout {
+    color: white; /* Light text color */
+    text-decoration: underline;
+    margin-top: 5px;
+}
