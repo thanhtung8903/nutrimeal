@@ -4,9 +4,41 @@
 <head th:replace="~{fragments :: head('Signup', 'none')}"></head>
 
 <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        display: flex;
+        height: 100vh;
+    }
+    .left-side {
+        flex: 1;
+        background-color: #2e47e8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        padding: 20px;
+        overflow: hidden;
+    }
+    .left-side img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+    .right-side {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+        padding: 20px;
+    }
     .signup-container {
         max-width: 450px;
-        margin: 50px auto;
+        width: 100%;
         padding: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
@@ -55,62 +87,106 @@
     .form-text {
         color: #ff0000;
     }
+    .form-group .radio-inline {
+        display: inline-block;
+        margin-right: 15px;
+    }
 </style>
 
 <header th:replace="~{fragments :: header-fragment}"></header>
 <body>
 
 <div class="container">
-    <div class="signup-container">
-        <div class="signup-header">
-            <h3>Đăng ký</h3>
-            <p>Bạn đã có tài khoản? Vui lòng <a style="text-decoration: none" href="#" th:href="@{/login}">Đăng nhập</a></p>
+    <div class="left-side">
+        <img th:src="@{/img/2.png}" alt="Signup Image">
+    </div>
+    <div class="right-side">
+        <div class="signup-container">
+            <div class="signup-header">
+                <h3>Đăng ký</h3>
+                <p>Bạn đã có tài khoản? Vui lòng <a style="text-decoration: none" href="#" th:href="@{/login}">Đăng nhập</a></p>
+            </div>
+
+            <form id="signupForm" action="#" th:action="@{/signup}" th:object="${SignupRequest}" method="post" class="form-horizontal">
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                    <span th:text="${successMessage}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Tên tài khoản</label>
+                    <input type="text" class="form-control" id="username" placeholder="Tên tài khoản" name="username" th:field="*{username}">
+                    <small id="usernameHelp" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" id="email" placeholder="Email" name="email" th:field="*{email}">
+                    <small id="emailHelp" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullname">Họ và tên</label>
+                    <input type="text" class="form-control" id="fullname" placeholder="Họ và tên" name="fullName" th:field="*{fullName}">
+                    <small id="fullnameHelp" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" th:field="*{password}">
+                    <small id="passwordHelp" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Nhập lại mật khẩu</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Xác nhận mật khẩu">
+                    <small id="confirmPasswordHelp" class="form-text"></small>
+                </div>
+
+                <!-- New field for phone number -->
+                <div class="form-group">
+                    <label for="phoneNumber">Số điện thoại</label>
+                    <input type="text" class="form-control" id="phoneNumber" placeholder="Số điện thoại" name="phoneNumber">
+                    <small id="phoneNumberHelp" class="form-text"></small>
+                </div>
+
+                <!-- New field for gender -->
+                <div class="form-group">
+                    <label>Giới tính</label> <br>
+                    <div class="radio-inline">
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label for="male">Nam</label>
+                    </div>
+                    <div class="radio-inline">
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">Nữ</label>
+                    </div>
+                    <div class="radio-inline">
+                        <input type="radio" id="other" name="gender" value="other">
+                        <label for="other">Khác</label>
+                    </div>
+                    <small id="genderHelp" class="form-text"></small>
+                </div>
+
+                <!-- New field for date of birth -->
+                <div class="form-group">
+                    <label for="dob">Ngày sinh</label>
+                    <input type="date" class="form-control" id="dob" name="dob">
+                    <small id="dobHelp" class="form-text"></small>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
+                </div>
+                <div class="divider">Hoặc</div>
+
+                <a class="btn-google bg-danger" th:href="@{/oauth2/authorization/google}">
+                    <i class="fab fa-google"></i> Đăng nhập với Google
+                </a>
+            </form>
         </div>
-
-        <form id="signupForm" action="#" th:action="@{/signup}" th:object="${SignupRequest}" method="post" class="form-horizontal" onsubmit="return validateForm()">
-            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-                <span th:text="${errorMessage}"></span>
-            </div>
-            <div th:if="${successMessage}" class="alert alert-success" role="alert">
-                <span th:text="${successMessage}"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="username">Tên tài khoản</label>
-                <input type="text" class="form-control" id="username" placeholder="Tên tài khoản" name="username" th:field="*{username}" >
-                <small id="usernameHelp" class="form-text"></small>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" class="form-control" id="email" placeholder="Email" name="email" th:field="*{email}" >
-                <small id="emailHelp" class="form-text"></small>
-            </div>
-            <div class="form-group">
-                <label for="fullname">Họ và tên</label>
-                <input type="text" class="form-control" id="fullname" placeholder="Họ và tên" name="fullName" th:field="*{fullName}" >
-                <small id="fullnameHelp" class="form-text"></small>
-            </div>
-            <div class="form-group">
-                <label for="password">Mật khẩu</label>
-                <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" th:field="*{password}" >
-                <small id="passwordHelp" class="form-text"></small>
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">Nhập lại mật khẩu</label>
-                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Xác nhận mật khẩu" >
-                <small id="confirmPasswordHelp" class="form-text"></small>
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
-            </div>
-            <div class="divider">Hoặc</div>
-
-            <a class="btn-google bg-danger" th:href="@{/oauth2/authorization/google}">
-                <i class="fab fa-google"></i> Đăng nhập với Google
-            </a>
-        </form>
     </div>
 </div>
 
