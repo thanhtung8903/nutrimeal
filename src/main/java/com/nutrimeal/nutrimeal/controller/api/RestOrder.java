@@ -28,7 +28,14 @@ public class RestOrder {
         return ResponseEntity.ok(orders);
     }
 
-    @GetMapping("/{orderId}/orderdetail/")
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable int orderId) {
+        Order order = orderService.getOrderById(orderId);
+        OrderResponse orderResponse = orderService.findOrderById(order);
+        return ResponseEntity.ok(orderResponse);
+    }
+
+    @GetMapping("/{orderId}/orderdetail")
     public ResponseEntity<List<OrderDetailResponse>> getOrderDetailByOrderId(@PathVariable int orderId) {
         Order order = orderService.getOrderById(orderId);
         List<OrderDetailResponse> orders = orderDetailService.findOrderDetailByOrder(order);

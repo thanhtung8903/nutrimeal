@@ -16,6 +16,9 @@ public class OrderResponse {
     private String address;
     private String orderStatus;
     private int orderTotalPrice;
+    private int orderTempPrice;
+    private int orderDeliveryPrice;
+    private int orderDiscount;
     private String paymentMethod;
     private String deliveryTime;
     private String orderDate;

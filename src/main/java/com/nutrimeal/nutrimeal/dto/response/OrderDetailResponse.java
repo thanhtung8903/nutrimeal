@@ -11,8 +11,9 @@ import lombok.RequiredArgsConstructor;
 @Builder
 public class OrderDetailResponse {
     private int id;
-    private int quantity;
-    private int price;
     private String comboName;
-    private int comboDay;
+    private String comboImage;
+    private String comboDay;
+    private int price;
+    private int quantity;
 }
