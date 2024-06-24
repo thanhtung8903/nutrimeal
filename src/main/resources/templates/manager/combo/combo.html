@@ -93,8 +93,8 @@
                 </td>
                 <td th:text="${combo.getComboPrice7Days()}"></td>
                 <td th:text="${combo.getComboPrice30Days()}"></td>
-                <td style="display: flex">
-                    <a href="#" class="btn btn-warning btn-sm update-bt bbb" th:href="@{/manager/combo/update/{comboId}(comboId=${combo.comboId})}">
+                <td style="display: compact; text-align: center">
+                    <a href="#" class="btn btn-warning btn-sm update-bt bbb" style="margin-bottom: 5px" th:href="@{/manager/combo/update/{comboId}(comboId=${combo.comboId})}">
                         <i class="bi bi-pencil"></i>
                     </a>
                     <a href="#" class="btn btn-danger btn-sm delete-btn bbb" th:href="@{/manager/combo/delete/{comboId}(comboId=${combo.comboId})}" onclick="return confirm('Are you sure you want to delete this combo?')">
@@ -104,7 +104,7 @@
             </tr>
             </tbody>
         </table>
-        <button class="btn btn-success mb-2 bbb"><a th:href="@{/manager/combo/add}" class="text-white text-decoration-none"><i class="bi bi-plus-circle"></i> ADD COMBO</a></button>
+        <button class="btn btn-success mb-2 bbb"><a th:href="@{/manager/combo/add}" class="text-white text-decoration-none"><i class="bi bi-plus-circle"></i> THÊM COMBO</a></button>
         <div class="pagination" id="pagination-controls">
             <!-- Pagination controls will be dynamically generated here -->
         </div>
