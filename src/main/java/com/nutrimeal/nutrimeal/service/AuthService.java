@@ -44,6 +44,15 @@ public class AuthService {
             user.setUsername(request.getUsername());
             user.setFullName(request.getFullName());
             user.setEmail(request.getEmail());
+            user.setPhone(request.getPhoneNumber());
+            if (request.getGender().equals("male")) {
+                user.setGender(true);
+            } else if (request.getGender().equals("female")) {
+                user.setGender(false);
+            } else {
+                user.setGender(null);
+            }
+            user.setDob(request.getDob());
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setPoint(0);
             user.setActive(true);

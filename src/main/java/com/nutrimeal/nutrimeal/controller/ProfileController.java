@@ -260,7 +260,7 @@ public class ProfileController {
             user = userService.findByUsername(principal.getName());
         }
         Order order = orderService.getOrderById(orderId);
-        List<OrderDetail> orderDetails = orderDetailService.getOrdersByOrder(order);
+        List<OrderDetail> orderDetails = orderDetailService.getOrderDetailsByOrder(order);
         model.addAttribute("order", order);
         model.addAttribute("orderDetails", orderDetails);
         model.addAttribute("user", user);

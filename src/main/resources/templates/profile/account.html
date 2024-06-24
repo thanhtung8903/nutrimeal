@@ -52,6 +52,9 @@
 
 </style>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
+
+
 <body>
 <header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
 <header th:replace="~{fragments :: header_manager}" sec:authorize="hasAuthority('ROLE_MANAGER')"></header>
@@ -199,6 +202,22 @@
                                 phoneAlertDiv.className = 'alert alert-danger mt-2';
                                 phoneAlertDiv.innerText = 'Số điện thoại phải có 10 chữ số và bắt đầu bằng 0.';
                                 phoneInput.parentNode.appendChild(phoneAlertDiv);
+                                isValid = false;
+                            }
+
+                            // Validate Họ & Tên
+                            var fullNameInput = document.querySelector('input[name="fullName"]');
+                            var fullName = fullNameInput.value;
+                            var fullNameAlert = document.getElementById('fullName-alert');
+                            if (fullNameAlert) fullNameAlert.remove();
+
+                            var namePattern = /^[^0-9]*$/;
+                            if (!namePattern.test(fullName)) {
+                                var fullNameAlertDiv = document.createElement('div');
+                                fullNameAlertDiv.id = 'fullName-alert';
+                                fullNameAlertDiv.className = 'alert alert-danger mt-2';
+                                fullNameAlertDiv.innerText = 'Họ & Tên không được chứa số.';
+                                fullNameInput.parentNode.appendChild(fullNameAlertDiv);
                                 isValid = false;
                             }
 

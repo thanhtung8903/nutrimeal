@@ -132,12 +132,18 @@ public class ShoppingCartController {
                 break;
             }
         }
-            model.addAttribute("point", userPoints);
-            model.addAttribute("orderBaskets", orderBaskets);
-            model.addAttribute("address", addressService.findAllAddressByEmail(user.getEmail()));
-            model.addAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
-            model.addAttribute("deliveryTimes", deliveryTimeService.getAllDeliveryTimes());
-            return "order/checkout";
+
+        if (addressService.findAllAddressByEmail(user.getEmail()).isEmpty()) {
+            return "redirect:/profile/address";
+        }
+
+        model.addAttribute("userId", user.getUserId());
+        model.addAttribute("point", userPoints);
+        model.addAttribute("orderBaskets", orderBaskets);
+        model.addAttribute("address", addressService.findAllAddressByEmail(user.getEmail()));
+        model.addAttribute("paymentMethods", paymentMethodService.getAllPaymentMethods());
+        model.addAttribute("deliveryTimes", deliveryTimeService.getAllDeliveryTimes());
+        return "order/checkout";
     }
 
 }

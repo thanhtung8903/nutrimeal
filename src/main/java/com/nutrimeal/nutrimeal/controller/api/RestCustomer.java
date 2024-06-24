@@ -1,6 +1,7 @@
 package com.nutrimeal.nutrimeal.controller.api;
 
 import com.nutrimeal.nutrimeal.dto.response.OrderResponse;
+import com.nutrimeal.nutrimeal.dto.response.UserInfoResponse;
 import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,11 @@ public class RestCustomer {
     public ResponseEntity<List<OrderResponse>> getOrdersByCustomerId(@PathVariable String customerId) {
         List<OrderResponse> orders = userService.findOrdersByCustomerId(customerId);
         return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<UserInfoResponse>> getAllCustomers() {
+        List<UserInfoResponse> customers = userService.findAllCustomers();
+        return ResponseEntity.ok(customers);
     }
 }

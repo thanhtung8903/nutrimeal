@@ -1,13 +1,20 @@
 package com.nutrimeal.nutrimeal.controller.manager.promotion;
 
 import com.nutrimeal.nutrimeal.model.Promotion;
+import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.service.PromotionService;
+import com.nutrimeal.nutrimeal.service.UserPromotionService;
+import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RequestMapping("/manager")
 @Controller
@@ -15,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 public class ManagerPromotionController {
 
     private final PromotionService promotionService;
+    private final UserPromotionService userPromotionService;
+    private final UserService userService;
 
     @GetMapping("/promotion")
     public String promotionManager(Model model, @RequestParam(defaultValue = "0") int page) {
@@ -64,6 +73,9 @@ public class ManagerPromotionController {
     public String updatePromotion(@PathVariable("id") Integer id, @ModelAttribute Promotion promotion) {
         try {
             Promotion oldPromotion = promotionService.findPromotionById(id);
+            if(userPromotionService.existsByPromotionId(id) && !promotion.getPromotionCode().equals(oldPromotion.getPromotionCode())){
+                return "redirect:/manager/promotion/update/" + id + "?fail=true";
+            }
             if(promotionService.existsByPromotionCode(promotion.getPromotionCode()) && !promotion.getPromotionCode().equals(oldPromotion.getPromotionCode()) ){
                 return "redirect:/manager/promotion/update/" + id + "?duplicate=true";
             }
@@ -80,4 +92,18 @@ public class ManagerPromotionController {
         return "redirect:/manager/promotion";
     }
 
+    private User getUser(Principal principal, Model model) {
+        User user;
+        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
+            model.addAttribute("isOauth2User", isOauth2User);
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauthUser = token.getPrincipal();
+            user = userService.findByEmail(oauthUser.getAttribute("email"));
+        } else {
+            model.addAttribute("isOauth2User", false);
+            user = userService.findByUsername(principal.getName());
+        }
+        return user;
+    }
 }
