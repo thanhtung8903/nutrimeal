@@ -15,13 +15,11 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 
 </head>
-<div th:fragment="header-fragment" >
+<div th:fragment="header-fragment">
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000;">
-        <div class="container frag-head">
-
-            <a class="navbar-brand d-flex align-items-center" href="/" style="gap: 10px;">
+        <div class="container-fluid frag-head">
+            <a class="navbar-brand d-flex align-items-center" href="/" style="gap: 10px; padding-left: 50px">
                 <img src="/img/logo.png" alt="NutriMeal" style="height: 70px;">
-
                 <h1 class="text-white mb-0" style="font-size: 1.7rem; margin-top: 5px">NutriMeal</h1>
             </a>
 
@@ -30,32 +28,30 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav" style="margin-left: -90px;">
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <!--                    <li class="nav-item item-head" th:classappend="${page == 'home' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">-->
-                    <!--                        <a class="nav-link text-grey opt-head" href="/" th:href="@{/}" style="transition: color 0.3s;">TRANG CHỦ</a>-->
-                    <!--                    </li>-->
-                    <li class="nav-item item-head" th:classappend="${page == 'home' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                    <li class="nav-item item-head" th:classappend="${page == 'home' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px;">
                         <a class="nav-link text-grey opt-head" href="/" th:href="@{/}" style="transition: color 0.3s;">TRANG CHỦ</a>
                     </li>
-                    <li class="nav-item item-head" th:classappend="${page == 'menu' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                    <li class="nav-item item-head" th:classappend="${page == 'menu' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px;">
                         <a class="nav-link text-grey opt-head" href="/menu" th:href="@{/menu}" style="transition: color 0.3s;">THỰC ĐƠN</a>
                     </li>
-                    <li class="nav-item item-head" th:classappend="${page == 'consult' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                    <li class="nav-item item-head" th:classappend="${page == 'consult' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px;">
                         <a class="nav-link text-grey opt-head" href="/consult" th:href="@{/consult}" style="transition: color 0.3s;">TƯ VẤN</a>
                     </li>
-                    <li class="nav-item item-head" th:classappend="${page == 'combo' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                    <li class="nav-item item-head" th:classappend="${page == 'combo' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px;">
                         <a class="nav-link text-grey opt-head" href="/combo" th:href="@{/combo}" style="transition: color 0.3s;">ĐẶT HÀNG</a>
                     </li>
-                    <li class="nav-item item-head" th:classappend="${page == 'faq' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px">
+                    <li class="nav-item item-head" th:classappend="${page == 'faq' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px;">
                         <a class="nav-link text-grey opt-head" href="/faq" th:href="@{/faqs}" style="transition: color 0.3s;">FAQS</a>
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto" sec:authorize="isAnonymous()">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+                <ul class="navbar-nav ms-auto" sec:authorize="isAnonymous()" style="padding-right: 50px">
+                    <li class="nav-item d-flex align-items-center" style="margin-right: 15px">
+                        <a class="nav-link text-white" href="/cart" style="position: relative; top: 1px; scale: 150%"><i class="bi bi-basket3"></i></a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/signup" th:href="@{/signup}">Đăng ký</a>
                     </li>
@@ -64,24 +60,29 @@
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto" sec:authorize="isAuthenticated()">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+                <ul class="navbar-nav ms-auto d-flex align-items-center" sec:authorize="isAuthenticated()" style="padding-right: 50px">
+                    <li class="nav-item user-info d-flex align-items-center" style="margin-right: 15px;">
+                        <img th:src="${#authentication.principal.image}" alt="User Image" class="rounded-circle" style="border: 2px solid white; width: 47px; height: 47px; margin-right: 10px;">
+                        <div class="user-details d-flex flex-column">
+                            <a th:href="@{/profile/account}" style="text-decoration: none;">
+                                <p style="color: lightgray; margin-top: 0px; margin-bottom: 0;">
+                                    Xin Chào <span class="user-name" th:text="${#authentication.principal.fullName}" style="color: red; font-weight: bold;"></span>
+                                </p>
+                            </a>
+                            <a th:href="@{/logout}" class="logout" style="color: white; text-decoration: none; margin-top: 0px; font-size: 15px;">Đăng xuất</a>
+                        </div>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" th:href="@{/profile/account}">
-                            Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
-                        </a>
 
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" th:href="@{/logout}">Đăng xuất</a>
+                    <li class="nav-item d-flex align-items-center">
+                        <a class="nav-link text-white" href="/cart" style="position: relative;"><i class="bi bi-basket3" style="font-size: 1.5em;"></i></a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 </div>
+
+
 
 
 <footer th:fragment="footer" class="text-white p-4" style="background-color: #141414;">
@@ -130,17 +131,21 @@
                         <a class="nav-link text-grey opt-head" href="/manager/">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-grey opt-head" href="/manager/menu" th:href="@{/manager/dish}">Quản lý thực đơn</a>
+                        <a class="nav-link text-grey opt-head" href="/manager/menu" th:href="@{/manager/dish}">Quản lý
+                            thực đơn</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-grey opt-head" href="/manager/customer" th:href="@{/manager/customer}">Quản lý khách hàng</a>
+                        <a class="nav-link text-grey opt-head" href="/manager/customer" th:href="@{/manager/customer}">Quản
+                            lý khách hàng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-grey opt-head" href="/manager/order" th:href="@{/manager/order}">Quản lý đơn hàng</a>
+                        <a class="nav-link text-grey opt-head" href="/manager/order" th:href="@{/manager/order}">Quản lý
+                            đơn hàng</a>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-grey opt-head" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle text-grey opt-head" href="#" id="navbarDropdown"
+                           role="button"
                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Khác
                         </a>

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 @Controller
@@ -32,7 +33,11 @@ public class AuthController {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(AuthController.class);
 
     @GetMapping("/login")
-    public String getLoginForm(Model model) {
+    public String getLoginForm(Model model, Principal principal) {
+        if (principal != null) {
+            return "redirect:/";
+        }
+
         if (!model.containsAttribute("LoginRequest")) {
             model.addAttribute("LoginRequest", new LoginRequest());
         }

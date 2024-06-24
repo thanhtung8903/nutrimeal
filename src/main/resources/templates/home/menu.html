@@ -2,10 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments :: head('Thực đơn', 'none')}"></head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
+
 <style>
     .body-menu {
         background-color: #e5e5e5;
-        /*font-family: Montserrat, sans-serif;*/
+        font-family: Montserrat, sans-serif;
         font-weight: 500;
         font-size: .875rem;
         line-height: 1.5625rem;
@@ -299,146 +301,171 @@
 
 <header th:replace="~{fragments :: header-fragment (page='menu')}"></header>
 
-<body class="body-menu">
-<section class="banner"
-         style="background-image: url(https://fitfood.vn/img/2160x900/uploads/menu-16952880378313.jpg)">
-    <div class="align-self-center text-center">
-        <div class="container">
-            <div class="title title-banner" style="margin-bottom: 5px;">WEEKLY MEAL PLAN</div>
-            <p class="time" style="margin-bottom: 15px;" th:text="${today} + ' - ' + ${future}"></p>
-            <a th:href="@{/combo}" href="order.html" class="btn-order btn-primary order-now">Đặt Ngay</a>
-        </div>
-    </div>
-</section>
-<div class="container1">
-    <h1 class="title1 pb-4 mb-4">Thực đơn</h1>
-    <div class="tuvan_icon">
-        <svg style="width: 70px; margin-top: -55px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
-    </div>
-    <div class="des">
-        <p>Thực đơn Nutrimeal là sự kết hợp tinh tế của ẩm thực Đông Tây</p>
-        <p>Từng bữa ăn được thiết kế bởi bếp trưởng nhà hàng cùng đội ngũ dinh dưỡng để đảm bảo được sự cân bằng
-            trong hương vị nhưng vẫn giữ được chất lượng ở mức cao nhất. Tất cả các món đều đảm bảo ko bột ngọt và
-            ít đường.</p>
-        <p><br></p>
-    </div>
-    <div class="table-menu pb-5 mb-5">
-        <div class="d-md-flex align-items-center text-center justify-content-md-between mb-4">
-            <div class="time-week mb-3 mb-md-0 d-flex week">
-                <p class="time1 20240520 active" data-id="20240520" style="font-size: 30px; font-weight: 700;"
-                   th:text="${today} + ' - ' + ${future}"></p>
+<body>
+<main class="body-menu">
+
+    <section class="banner"
+             style="background-image: url(https://fitfood.vn/img/2160x900/uploads/menu-16952880378313.jpg)">
+        <div class="align-self-center text-center">
+            <div class="container">
+                <div class="title title-banner" style="margin-bottom: 5px;">WEEKLY MEAL PLAN</div>
+                <p class="time" style="margin-bottom: 15px;" th:text="${today} + ' - ' + ${future}"></p>
+                <a th:href="@{/combo}" href="order.html" class="btn-order btn-primary order-now">Đặt Ngay</a>
             </div>
-            <a th:href="@{/combo}" href="order.html" class="btn btn-primary order-now">Đặt Ngay</a>
         </div>
-        <div class="thead-menu d-none mb-3 d-md-flex flex-fill justify-content-between text-center day">
-            <div class="col-menu text-danger col-md-2">Ngày</div>
-            <div class="col-menu col-md-3">Sáng</div>
-            <div class="col-menu col-md-3">Trưa</div>
-            <div class="col-menu col-md-3">Tối</div>
+    </section>
+    <div class="container1">
+        <h1 class="title1 pb-4 mb-4">Thực đơn</h1>
+        <div class="tuvan_icon">
+            <svg style="width: 70px; margin-top: -55px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                <path fill="#e02606"
+                      d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
+            </svg>
         </div>
-
-        <div class="tab-content">
-            <div>
-                <div class="tab-item active">
-                    <div class="tab-pane fade active show" role="tabpanel">
-                        <div th:each="daily : ${listDailyMenu}" class="day-menu mb-3" th:if="${daily.dailyMenuType == 'N'}">
-                            <div class="col-menu d-none d-md-block col-md-2">
-                                <div class="date" th:utext="${#dates.format(daily.dailyMenuDate, 'E') + '<br>' + #dates.format(daily.dailyMenuDate, 'dd.MM')}"></div>
-                            </div>
-                            <div class="col-menu col-md-3">
-                                <!-- <p class="d-md-none">breakfast</p> -->
-                                <h3 th:text="${daily.dishBreakfast.dishName}"></h3>
-                                <span class="text-danger" th:text="${daily.dishBreakfast.dishCalories} + ' Kcal | ' + ${daily.dishBreakfast.dishCarbs} + ', ' + ${daily.dishBreakfast.dishFats} + ', ' + ${daily.dishBreakfast.dishProteins}"></span>
-                            </div>
-                            <div class="col-menu col-md-3">
-                                <!-- <p class="d-md-none">lunch</p> -->
-                                <h3 th:text="${daily.dishLunch.dishName}"></h3>
-                                <span class="text-danger" th:text="${daily.dishLunch.dishCalories} + ' Kcal | ' + ${daily.dishLunch.dishCarbs} + ', ' + ${daily.dishLunch.dishFats} + ', ' + ${daily.dishLunch.dishProteins}"></span>
-                            </div>
-                            <div class="col-menu col-md-3">
-                                <!-- <p class="d-md-none">dinner</p> -->
-                                <h3 th:text="${daily.dishDinner.dishName}"></h3>
-                                <span class="text-danger" th:text="${daily.dishDinner.dishCalories} + ' Kcal | ' + ${daily.dishDinner.dishCarbs} + ', ' + ${daily.dishDinner.dishFats} + ', ' + ${daily.dishDinner.dishProteins}"></span>
-                            </div>
-                        </div>
-                    </div>
-
-
+        <div class="des">
+            <p>Thực đơn Nutrimeal là sự kết hợp tinh tế của ẩm thực Đông Tây</p>
+            <p>Từng bữa ăn được thiết kế bởi bếp trưởng nhà hàng cùng đội ngũ dinh dưỡng để đảm bảo được sự cân bằng
+                trong hương vị nhưng vẫn giữ được chất lượng ở mức cao nhất. Tất cả các món đều đảm bảo ko bột ngọt và
+                ít đường.</p>
+            <p><br></p>
+        </div>
+        <div class="table-menu pb-5 mb-5">
+            <div class="d-md-flex align-items-center text-center justify-content-md-between mb-4">
+                <div class="time-week mb-3 mb-md-0 d-flex week">
+                    <p class="time1 20240520 active" data-id="20240520" style="font-size: 30px; font-weight: 700;"
+                       th:text="${today} + ' - ' + ${future}"></p>
                 </div>
+                <a th:href="@{/combo}" href="order.html" class="btn btn-primary order-now">Đặt Ngay</a>
+            </div>
+            <div class="thead-menu d-none mb-3 d-md-flex flex-fill justify-content-between text-center day">
+                <div class="col-menu text-danger col-md-2">Ngày</div>
+                <div class="col-menu col-md-3">Sáng</div>
+                <div class="col-menu col-md-3">Trưa</div>
+                <div class="col-menu col-md-3">Tối</div>
+            </div>
 
-                <h1 class="title1 green pb-4 mb-4">Thực đơn chay</h1>
-                <svg style="width: 70px; margin-top: -55px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#3ecc5a" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>                <div class="table-menu green mb-5">
-                    <div class="d-md-flex align-items-center text-center justify-content-md-between mb-4">
-                        <div class="time-week mb-3 mb-md-0 d-flex">
-                            <p class="time2 20240520 active" data-id="20240520"
-                               style="font-size: 30px; font-weight: 700;"
-                               th:text="${today} + ' - ' + ${future}"></p>
-                            <p class="time2 20240527" data-id="20240527" style="font-size: 30px; font-weight: 700;">
-                                27.05
-                                &ndash; 02.06</p>
+            <div class="tab-content">
+                <div>
+                    <div class="tab-item active">
+                        <div class="tab-pane fade active show" role="tabpanel">
+                            <div th:each="daily : ${listDailyMenu}" class="day-menu mb-3"
+                                 th:if="${daily.dailyMenuType == 'N'}">
+                                <div class="col-menu d-none d-md-block col-md-2">
+                                    <div class="date"
+                                         th:utext="${#dates.format(daily.dailyMenuDate, 'E') + '<br>' + #dates.format(daily.dailyMenuDate, 'dd.MM')}"></div>
+                                </div>
+                                <div class="col-menu col-md-3">
+                                    <!-- <p class="d-md-none">breakfast</p> -->
+                                    <h3 th:text="${daily.dishBreakfast.dishName}"></h3>
+                                    <span class="text-danger"
+                                          th:text="${daily.dishBreakfast.dishCalories} + ' Kcal | ' + ${daily.dishBreakfast.dishCarbs} + ', ' + ${daily.dishBreakfast.dishFats} + ', ' + ${daily.dishBreakfast.dishProteins}"></span>
+                                </div>
+                                <div class="col-menu col-md-3">
+                                    <!-- <p class="d-md-none">lunch</p> -->
+                                    <h3 th:text="${daily.dishLunch.dishName}"></h3>
+                                    <span class="text-danger"
+                                          th:text="${daily.dishLunch.dishCalories} + ' Kcal | ' + ${daily.dishLunch.dishCarbs} + ', ' + ${daily.dishLunch.dishFats} + ', ' + ${daily.dishLunch.dishProteins}"></span>
+                                </div>
+                                <div class="col-menu col-md-3">
+                                    <!-- <p class="d-md-none">dinner</p> -->
+                                    <h3 th:text="${daily.dishDinner.dishName}"></h3>
+                                    <span class="text-danger"
+                                          th:text="${daily.dishDinner.dishCalories} + ' Kcal | ' + ${daily.dishDinner.dishCarbs} + ', ' + ${daily.dishDinner.dishFats} + ', ' + ${daily.dishDinner.dishProteins}"></span>
+                                </div>
+                            </div>
                         </div>
-                        <a th:href="@{/combo}" href="#" class="btn btn-success order-now">Đặt Ngay</a>
-                    </div>
-                    <div class="thead-menu d-none mb-3 d-md-flex flex-fill justify-content-between text-center">
-                        <div class="col-menu text-success col-md-2">Ngày</div>
-                        <div class="col-menu col-md-3">Sáng</div>
-                        <div class="col-menu col-md-3">Trưa</div>
-                        <div class="col-menu col-md-3">Tối</div>
+
+
                     </div>
 
-                    <div class="tab-content" id="v-pills-tabContent">
-                        <div id="menu-content">
-                            <div class="tab-item active">
-                                <div class="tab-pane fade active show" role="tabpanel">
-                                    <div th:each="daily : ${listDailyMenu}"  class="day-menu mb-2" th:if="${daily.dailyMenuType == 'V'}">
+                    <h1 class="title1 green pb-4 mb-4">Thực đơn chay</h1>
+                    <svg style="width: 70px; margin-top: -55px" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 448 512">
+                        <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                        <path fill="#3ecc5a"
+                              d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
+                    </svg>
+                    <div class="table-menu green mb-5">
+                        <div class="d-md-flex align-items-center text-center justify-content-md-between mb-4">
+                            <div class="time-week mb-3 mb-md-0 d-flex">
+                                <p class="time2 20240520 active" data-id="20240520"
+                                   style="font-size: 30px; font-weight: 700;"
+                                   th:text="${today} + ' - ' + ${future}"></p>
+                                <p class="time2 20240527" data-id="20240527" style="font-size: 30px; font-weight: 700;">
+                                    27.05
+                                    &ndash; 02.06</p>
+                            </div>
+                            <a th:href="@{/combo}" href="#" class="btn btn-success order-now">Đặt Ngay</a>
+                        </div>
+                        <div class="thead-menu d-none mb-3 d-md-flex flex-fill justify-content-between text-center">
+                            <div class="col-menu text-success col-md-2">Ngày</div>
+                            <div class="col-menu col-md-3">Sáng</div>
+                            <div class="col-menu col-md-3">Trưa</div>
+                            <div class="col-menu col-md-3">Tối</div>
+                        </div>
 
-                                        <div class="col-menu d-none d-md-block col-md-2">
-                                            <div class="date_vegetarian" th:utext="${#dates.format(daily.dailyMenuDate, 'E') + '<br>' + #dates.format(daily.dailyMenuDate, 'dd.MM')}"></div>
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div id="menu-content">
+                                <div class="tab-item active">
+                                    <div class="tab-pane fade active show" role="tabpanel">
+                                        <div th:each="daily : ${listDailyMenu}" class="day-menu mb-2"
+                                             th:if="${daily.dailyMenuType == 'V'}">
 
-                                        </div>
-                                        <div class="col-menu col-md-3">
-                                            <h3 th:text="${daily.dishBreakfast.dishName}"></h3>
-                                            <span class="text-dark" th:text="${daily.dishBreakfast.dishCalories} + ' Kcal | ' + ${daily.dishBreakfast.dishCarbs} + ', ' + ${daily.dishBreakfast.dishFats} + ', ' + ${daily.dishBreakfast.dishProteins}"></span>
-                                        </div>
-                                        <div class="col-menu col-md-3">
-                                            <h3 th:text="${daily.dishLunch.dishName}"></h3>
-                                            <span class="text-dark" th:text="${daily.dishLunch.dishCalories} + ' Kcal | ' + ${daily.dishLunch.dishCarbs} + ', ' + ${daily.dishLunch.dishFats} + ', ' + ${daily.dishLunch.dishProteins}"></span>
-                                        </div>
-                                        <div class="col-menu col-md-3">
-                                            <h3 th:text="${daily.dishDinner.dishName}"></h3>
-                                            <span class="text-dark" th:text="${daily.dishDinner.dishCalories} + ' Kcal | ' + ${daily.dishDinner.dishCarbs} + ', ' + ${daily.dishDinner.dishFats} + ', ' + ${daily.dishDinner.dishProteins}"></span>
+                                            <div class="col-menu d-none d-md-block col-md-2">
+                                                <div class="date_vegetarian"
+                                                     th:utext="${#dates.format(daily.dailyMenuDate, 'E') + '<br>' + #dates.format(daily.dailyMenuDate, 'dd.MM')}"></div>
+
+                                            </div>
+                                            <div class="col-menu col-md-3">
+                                                <h3 th:text="${daily.dishBreakfast.dishName}"></h3>
+                                                <span class="text-dark"
+                                                      th:text="${daily.dishBreakfast.dishCalories} + ' Kcal | ' + ${daily.dishBreakfast.dishCarbs} + ', ' + ${daily.dishBreakfast.dishFats} + ', ' + ${daily.dishBreakfast.dishProteins}"></span>
+                                            </div>
+                                            <div class="col-menu col-md-3">
+                                                <h3 th:text="${daily.dishLunch.dishName}"></h3>
+                                                <span class="text-dark"
+                                                      th:text="${daily.dishLunch.dishCalories} + ' Kcal | ' + ${daily.dishLunch.dishCarbs} + ', ' + ${daily.dishLunch.dishFats} + ', ' + ${daily.dishLunch.dishProteins}"></span>
+                                            </div>
+                                            <div class="col-menu col-md-3">
+                                                <h3 th:text="${daily.dishDinner.dishName}"></h3>
+                                                <span class="text-dark"
+                                                      th:text="${daily.dishDinner.dishCalories} + ' Kcal | ' + ${daily.dishDinner.dishCarbs} + ', ' + ${daily.dishDinner.dishFats} + ', ' + ${daily.dishDinner.dishProteins}"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
+
                     </div>
 
+                    <div class="mb-5">
+                        <h4 class="text-danger text-danger1">Note</h4>
+                        <p></p>
+                        <p>Các phần ăn được tính toán calories cẩn thận. Chỉ số dinh dưỡng dưới tên phần ăn được liệt kê
+                            theo thứ tự
+                            Năng lượng (Kcal/Calories), Tinh Bột, Chất béo và Chất đạm.</p>
+                        <p>Lưu ý: Các phần ăn của Fitfood luôn được giao lạnh, đựng trong hộp nhựa thân thiện với lò vi
+                            sóng. Vui
+                            lòng bảo quản lạnh sau khi nhận hàng và hâm nóng từ 2-3 phút trước khi dùng.</p>
+                        <p> Phần ăn bình thường chỉ bao gồm thịt và rau củ, Tinh bột phức (gạo lức, gạo nâu, mì rau củ,
+                            bún,
+                            bánh mì
+                            nâu) sẽ được gửi kèm trong phần ăn có ghi chú dấu (+) </p>
+                    </div>
                 </div>
 
-                <div class="mb-5">
-                    <h4 class="text-danger text-danger1">Note</h4>
-                    <p></p>
-                    <p>Các phần ăn được tính toán calories cẩn thận. Chỉ số dinh dưỡng dưới tên phần ăn được liệt kê
-                        theo thứ tự
-                        Năng lượng (Kcal/Calories), Tinh Bột, Chất béo và Chất đạm.</p>
-                    <p>Lưu ý: Các phần ăn của Fitfood luôn được giao lạnh, đựng trong hộp nhựa thân thiện với lò vi
-                        sóng. Vui
-                        lòng bảo quản lạnh sau khi nhận hàng và hâm nóng từ 2-3 phút trước khi dùng.</p>
-                    <p> Phần ăn bình thường chỉ bao gồm thịt và rau củ, Tinh bột phức (gạo lức, gạo nâu, mì rau củ, bún,
-                        bánh mì
-                        nâu) sẽ được gửi kèm trong phần ăn có ghi chú dấu (+) </p>
-                </div>
+
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+
             </div>
-
-
-            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-
         </div>
     </div>
-</div>
+</main>
+
 </body>
 
 <footer th:replace="~{fragments :: footer}"></footer>

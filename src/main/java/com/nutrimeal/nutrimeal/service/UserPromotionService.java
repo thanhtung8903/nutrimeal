@@ -14,6 +14,10 @@ public class UserPromotionService {
         return userPromotionRepository.existsByUserIdAndPromotionId(userId, promotionId);
     }
 
+    public boolean existsByPromotionId(int promotionId) {
+        return userPromotionRepository.existsByPromotionId(promotionId);
+    }
+
     public void save(UserPromotion userPromotion) {
         userPromotionRepository.save(userPromotion);
     }

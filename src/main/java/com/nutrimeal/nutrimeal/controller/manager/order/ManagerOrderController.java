@@ -33,12 +33,13 @@ public class ManagerOrderController {
         return "manager/order/order";
     }
 
-
     @PostMapping("/processingorder")
     public String processingOrder(@RequestParam("orderId") Integer orderId,
                                   @RequestParam("status") String status) {
         orderService.updateStatusOrder(orderId, status);
-        deliveryService.createDelivery(orderService.getOrderById(orderId));
+        if (status.equals("SHIPPED")) {
+            deliveryService.createDelivery(orderService.getOrderById(orderId));
+        }
         return "redirect:/manager/order";
     }
 }

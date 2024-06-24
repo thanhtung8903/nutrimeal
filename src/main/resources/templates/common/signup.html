@@ -2,11 +2,48 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments :: head('Signup', 'none')}"></head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
 
 <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+
+    }
+    .container-signup {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        height: 100vh;
+    }
+    .left-side {
+        flex: 1;
+        /*background-color: #f8f9fa;*/
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        padding: 20px;
+        overflow: hidden;
+    }
+    .left-side img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+    .right-side {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /*background-color: #f8f9fa;*/
+        padding: 20px;
+    }
     .signup-container {
-        max-width: 450px;
-        margin: 50px auto;
+        max-width: 85%;
+        width: 100%;
         padding: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
@@ -55,62 +92,108 @@
     .form-text {
         color: #ff0000;
     }
+    .form-group .radio-inline {
+        display: inline-block;
+        margin-right: 15px;
+    }
 </style>
 
 <header th:replace="~{fragments :: header-fragment}"></header>
 <body>
 
-<div class="container">
-    <div class="signup-container">
-        <div class="signup-header">
-            <h3>Đăng ký</h3>
-            <p>Bạn đã có tài khoản? Vui lòng <a style="text-decoration: none" href="#" th:href="@{/login}">Đăng nhập</a></p>
+<div class="container container-signup">
+    <div class="left-side">
+        <img th:src="@{/img/2.png}" alt="Signup Image">
+    </div>
+    <div class="right-side">
+        <div class="signup-container">
+            <div class="signup-header">
+                <h3>Đăng ký</h3>
+                <p>Bạn đã có tài khoản? Vui lòng <a style="text-decoration: none" href="#" th:href="@{/login}">Đăng nhập</a></p>
+            </div>
+
+            <form id="signupForm" action="#" onsubmit="return validateForm()" th:action="@{/signup}" th:object="${SignupRequest}" method="post" class="form-horizontal">
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                    <span th:text="${successMessage}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Tên tài khoản</label>
+                    <input type="text" class="form-control" id="username" placeholder="Tên tài khoản" name="username" th:field="*{username}">
+                    <small id="usernameHelp" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" id="email" placeholder="Email" name="email" th:field="*{email}">
+                    <small id="emailHelp" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullname">Họ và tên</label>
+                    <input type="text" class="form-control" id="fullname" placeholder="Họ và tên" name="fullName" th:field="*{fullName}">
+                    <small id="fullnameHelp" class="form-text"></small>
+                </div>
+
+
+
+                <!-- New field for phone number -->
+                <div class="form-group">
+                    <label for="phoneNumber">Số điện thoại</label>
+                    <input type="text" class="form-control" id="phoneNumber" placeholder="Số điện thoại" name="phoneNumber" th:field="*{phoneNumber}">
+                    <small id="phoneNumberHelp" class="form-text"></small>
+                </div>
+
+                <!-- New field for gender -->
+                <div class="form-group">
+                    <label>Giới tính</label> <br>
+                    <div class="radio-inline">
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label for="male">Nam</label>
+                    </div>
+                    <div class="radio-inline">
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">Nữ</label>
+                    </div>
+                    <div class="radio-inline">
+                        <input type="radio" id="other" name="gender" value="other">
+                        <label for="other">Khác</label>
+                    </div>
+                    <small id="genderHelp" class="form-text"></small>
+                </div>
+
+                <!-- New field for date of birth -->
+                <div class="form-group">
+                    <label for="dob">Ngày sinh</label>
+                    <input type="date" class="form-control" id="dob" name="dob" th:field="*{dob}">
+                    <small id="dobHelp" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" th:field="*{password}">
+                    <small id="passwordHelp" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Nhập lại mật khẩu</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Xác nhận mật khẩu">
+                    <small id="confirmPasswordHelp" class="form-text"></small>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
+                </div>
+                <div class="divider">Hoặc</div>
+
+                <a class="btn-google bg-danger" th:href="@{/oauth2/authorization/google}">
+                    <i class="fab fa-google"></i> Đăng nhập với Google
+                </a>
+            </form>
         </div>
-
-        <form id="signupForm" action="#" th:action="@{/signup}" th:object="${SignupRequest}" method="post" class="form-horizontal" onsubmit="return validateForm()">
-            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-                <span th:text="${errorMessage}"></span>
-            </div>
-            <div th:if="${successMessage}" class="alert alert-success" role="alert">
-                <span th:text="${successMessage}"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="username">Tên tài khoản</label>
-                <input type="text" class="form-control" id="username" placeholder="Tên tài khoản" name="username" th:field="*{username}" >
-                <small id="usernameHelp" class="form-text"></small>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" class="form-control" id="email" placeholder="Email" name="email" th:field="*{email}" >
-                <small id="emailHelp" class="form-text"></small>
-            </div>
-            <div class="form-group">
-                <label for="fullname">Họ và tên</label>
-                <input type="text" class="form-control" id="fullname" placeholder="Họ và tên" name="fullName" th:field="*{fullName}" >
-                <small id="fullnameHelp" class="form-text"></small>
-            </div>
-            <div class="form-group">
-                <label for="password">Mật khẩu</label>
-                <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" th:field="*{password}" >
-                <small id="passwordHelp" class="form-text"></small>
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">Nhập lại mật khẩu</label>
-                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Xác nhận mật khẩu" >
-                <small id="confirmPasswordHelp" class="form-text"></small>
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
-            </div>
-            <div class="divider">Hoặc</div>
-
-            <a class="btn-google bg-danger" th:href="@{/oauth2/authorization/google}">
-                <i class="fab fa-google"></i> Đăng nhập với Google
-            </a>
-        </form>
     </div>
 </div>
 
@@ -121,8 +204,17 @@
         // Validate username
         const username = document.getElementById('username').value;
         const usernameHelp = document.getElementById('usernameHelp');
-        if (username.length < 6 || !/[a-zA-Z]/.test(username)) {
-            usernameHelp.textContent = 'Tên tài khoản phải dài ít nhất 6 ký tự và chứa ít nhất một chữ cái.';
+        if (username.length < 6) {
+            usernameHelp.textContent = 'Tên tài khoản phải dài ít nhất 6 ký tự';
+            isValid = false;
+        } else if (username.length > 12) {
+            usernameHelp.textContent = 'Tên tài khoản không được dài quá 12 ký tự';
+            isValid = false;
+        } else if (!/^[a-zA-Z]/.test(username)) {
+            usernameHelp.textContent = 'Tên tài khoản phải bắt đầu bằng chữ cái';
+            isValid = false;
+        } else if (!/^[a-zA-Z0-9]{6,12}$/.test(username)) {
+            usernameHelp.textContent = 'Tên tài khoản chỉ được chứa chữ cái và số';
             isValid = false;
         } else {
             usernameHelp.textContent = '';
@@ -142,8 +234,14 @@
         // Validate fullname
         const fullname = document.getElementById('fullname').value;
         const fullnameHelp = document.getElementById('fullnameHelp');
+
+        const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[\s'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/;
+
         if (fullname.trim() === '') {
-            fullnameHelp.textContent = 'Họ và tên không được bỏ trống.';
+            fullnameHelp.textContent = 'Họ và tên không được bỏ trống';
+            isValid = false;
+        } else if (!nameRegex.test(fullname)) {
+            fullnameHelp.textContent = 'Họ và tên không hợp lệ. Họ và tên phải bắt đầu bằng chữ cái và chỉ chứa chữ cái, dấu cách, dấu gạch ngang hoặc dấu nháy đơn.';
             isValid = false;
         } else {
             fullnameHelp.textContent = '';
@@ -152,8 +250,24 @@
         // Validate password
         const password = document.getElementById('password').value;
         const passwordHelp = document.getElementById('passwordHelp');
+
         if (password.length < 8) {
-            passwordHelp.textContent = 'Mật khẩu phải có ít nhất 8 ký tự.';
+            passwordHelp.textContent = 'Mật khẩu phải có ít nhất 8 ký tự';
+            isValid = false;
+        } else if (password.length > 32) {
+            passwordHelp.textContent = 'Mật khẩu không được dài quá 32 ký tự';
+            isValid = false;
+        } else if (!/[a-z]/.test(password)) {
+            passwordHelp.textContent = 'Mật khẩu phải chứa ít nhất một chữ cái thường';
+            isValid = false;
+        } else if (!/[A-Z]/.test(password)) {
+            passwordHelp.textContent = 'Mật khẩu phải chứa ít nhất một chữ cái viết hoa';
+            isValid = false;
+        } else if (!/\d/.test(password)) {
+            passwordHelp.textContent = 'Mật khẩu phải chứa ít nhất một chữ số';
+            isValid = false;
+        } else if (!/[@$!%*?&]/.test(password)) {
+            passwordHelp.textContent = 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt (@$!%*?&)';
             isValid = false;
         } else {
             passwordHelp.textContent = '';
@@ -163,17 +277,54 @@
         const confirmPassword = document.getElementById('confirmPassword').value;
         const confirmPasswordHelp = document.getElementById('confirmPasswordHelp');
         if (password !== confirmPassword) {
-            confirmPasswordHelp.textContent = 'Mật khẩu không khớp.';
+            confirmPasswordHelp.textContent = 'Mật khẩu không khớp';
             isValid = false;
         } else {
             confirmPasswordHelp.textContent = '';
         }
+
+        // Validate phone number
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        const phoneNumberHelp = document.getElementById('phoneNumberHelp');
+        const phoneRegex = /^0\d{9}$/;
+        if (!phoneRegex.test(phoneNumber)) {
+            phoneNumberHelp.textContent = 'Số điện thoại không hợp lệ';
+            isValid = false;
+        } else {
+            phoneNumberHelp.textContent = '';
+        }
+
+        // Validate date of birth
+        const dob = document.getElementById('dob').value;
+        const dobHelp = document.getElementById('dobHelp');
+        const dobDate = new Date(dob);
+        const today = new Date();
+        const minAge = 18;
+        const maxAge = 100;
+        const minAgeDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate());
+        const maxAgeDate = new Date(today.getFullYear() - maxAge, today.getMonth(), today.getDate());
+        if (dob === '' || dobDate >= minAgeDate || dobDate <= maxAgeDate) {
+            dobHelp.textContent = 'Ngày sinh không hợp lệ';
+            isValid = false;
+        } else {
+            dobHelp.textContent = '';
+        }
+
+        const genderHelp = document.getElementById('genderHelp');
+        const gender = document.querySelector('input[name="gender"]:checked');
+        if (!gender) {
+            genderHelp.textContent = 'Vui lòng chọn giới tính';
+            isValid = false;
+        } else {
+            genderHelp.textContent = '';
+        }
+
 
         return isValid;
     }
 </script>
 
 </body>
-<footer th:replace="~{fragments :: footer}"></footer>
 
 </html>
+<footer th:replace="~{fragments :: footer}"></footer>
