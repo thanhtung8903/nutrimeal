@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <style>
-
-        /*danh dau cua duong san ne*/
-
         .content {
             margin-left: 250px;
             padding: 80px 20px 20px;
@@ -23,60 +20,49 @@
             margin: auto;
             overflow: hidden;
         }
-
         h2 {
             text-align: center;
             margin: 20px 0;
         }
-
         .controls {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
         }
-
         .controls input[type="text"],
         .controls input[type="date"] {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
         .controls input[type="text"] {
             width: 300px;
         }
-
         .controls input[type="date"] {
             width: 150px;
         }
-
         .table-hover {
             width: 100%;
             border-collapse: collapse;
         }
-
         .table-hover th, .table-hover td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-
         .table-hover tr:hover {
             background-color: #f1f1f1;
         }
-
         .table-hover th {
             background-color: #f2f2f2;
             cursor: pointer;
         }
-
         .pagination {
             display: flex;
             justify-content: center;
             align-items: center;
             margin-top: 20px;
         }
-
         .pagination button {
             padding: 10px 15px;
             margin: 0 5px;
@@ -85,18 +71,15 @@
             cursor: pointer;
             border-radius: 4px;
         }
-
         .pagination button.active {
             background-color: #007bff;
             color: white;
             border-color: #007bff;
         }
-
         .pagination button:disabled {
             cursor: not-allowed;
             background-color: #f1f1f1;
         }
-
         .pagination .ellipsis {
             padding: 10px 15px;
             margin: 0 5px;
@@ -104,22 +87,54 @@
             background: none;
             cursor: default;
         }
-
-
+        .edit-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .edit-form input[readonly] {
+            background-color: #e9ecef;
+        }
+        .edit-form select {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .edit-form .btn {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
 <div th:insert="fragments/sidebar :: sidebar-manager"></div>
 
-
-
 <div class="content" id="content">
     <h2>ĐƠN CHƯA GIAO</h2>
     <div class="container container-table">
-
         <div class="controls">
             <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
-
             <input type="date" id="searchDate" placeholder="Search by Date">
         </div>
         <table class="table-hover">
@@ -135,99 +150,80 @@
                 <th>Địa chỉ</th>
                 <th>Tổng thu</th>
                 <th>Tên shipper</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody id="table-body">
             </tbody>
         </table>
-        <div class="pagination" id="pagination-controls">
-        </div>
+        <div class="pagination" id="pagination-controls"></div>
     </div>
 </div>
 
+<div class="overlay" id="overlay"></div>
+<div class="edit-form" id="editForm">
+    <h3>Chỉnh sửa đơn hàng</h3>
+    <p><strong>Mã đơn hàng: </strong> <span id="orderCode"></span></p>
+    <p><strong>Thời gian giao: </strong> <span id="deliveryTime"></span></p>
+    <p><strong>Ngày giao: </strong> <span id="deliveryDate"></span></p>
+    <p><strong>Tên khách hàng: </strong> <span id="customerName"></span></p>
+    <p><strong>Địa chỉ: </strong> <span id="address"></span></p>
+    <p><strong>Tổng thu: </strong> <span id="totalAmount"></span></p>
+    <p><strong>Shipper: </strong>
+        <select id="shipper" name="shipper">
+            <!-- Options will be populated by JavaScript -->
+        </select>
+    </p>
+    <button class="btn btn-primary" id="saveEdit">Save</button>
+    <button class="btn btn-secondary" id="cancelEdit">Cancel</button>
 
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
     // Sidebar toggle functionality
-    document.getElementById('toggle-sidebar').addEventListener('click', function() {
-        var sidebar = document.getElementById('sidebar');
-        var content = document.getElementById('content');
-        sidebar.classList.toggle('collapsed');
-        content.classList.toggle('collapsed');
-    });
-
     document.addEventListener('DOMContentLoaded', function() {
-        var submenuToggles = document.querySelectorAll('.has-submenu > a');
-        submenuToggles.forEach(function(submenuToggle) {
-            submenuToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                var submenu = this.nextElementSibling;
-                submenu.classList.toggle('open');
+        let currentPage = 1;
+        const rowsPerPage = 20;
+        let deliveries = [];
+        let shippers = [];
+
+        document.getElementById('searchDate').addEventListener('input', function() {
+            currentPage = 1;
+            displayTable();
+            setupPagination();
+        });
+
+        document.getElementById('sortDeliveryDate').addEventListener('click', function() {
+            deliveries.sort((a, b) => new Date(a.deliveryDate) - new Date(b.deliveryDate));
+            currentPage = 1;
+            displayTable();
+        });
+
+        document.getElementById('sortOrderId').addEventListener('click', function() {
+            deliveries.sort((a, b) => a.deliveryId.localeCompare(b.deliveryId));
+            currentPage = 1;
+            displayTable();
+        });
+
+        function displayTable() {
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = '';
+
+            const searchDate = document.getElementById('searchDate').value;
+
+            const filteredDeliveries = deliveries.filter(delivery => {
+                const matchesSearchDate = searchDate ? new Date(delivery.deliveryDate).toISOString().split('T')[0] === searchDate : true;
+                return matchesSearchDate;
             });
-        });
-    });
 
-    let currentPage = 1;
-    const rowsPerPage = 20;
-    let deliveries = [];
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedDeliveries = filteredDeliveries.slice(start, end);
 
-    document.getElementById('fetchDelivery').addEventListener('click', function() {
-        location.reload();
-    });
-
-    document.getElementById('searchInput').addEventListener('input', function() {
-        currentPage = 1;
-        displayTable();
-        setupPagination();
-    });
-
-    document.getElementById('searchDate').addEventListener('input', function() {
-        currentPage = 1;
-        displayTable();
-        setupPagination();
-    });
-
-    document.getElementById('sortDeliveryDate').addEventListener('click', function() {
-        deliveries.sort((a, b) => {
-            const aDate = new Date(a.deliveryDate);
-            const bDate = new Date(b.deliveryDate);
-            return aDate - bDate;
-        });
-        currentPage = 1;
-        displayTable();
-    });
-
-    document.getElementById('sortOrderId').addEventListener('click', function() {
-        deliveries.sort((a, b) => a.deliveryId.localeCompare(b.deliveryId));
-        currentPage = 1;
-        displayTable();
-    });
-
-    function displayTable() {
-        const tableBody = document.getElementById('table-body');
-        tableBody.innerHTML = ''; // Clear previous results
-
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const searchDate = document.getElementById('searchDate').value;
-
-        const filteredDeliveries = deliveries.filter(delivery => {
-            const matchesSearchTerm = Object.values(delivery).some(val =>
-                val && val.toString().toLowerCase().includes(searchTerm)
-            );
-            const matchesSearchDate = searchDate ?
-                new Date(delivery.deliveryDate).toISOString().split('T')[0] === searchDate : true;
-            return matchesSearchTerm && matchesSearchDate;
-        });
-
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const paginatedDeliveries = filteredDeliveries.slice(start, end);
-
-        paginatedDeliveries.forEach((delivery, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+            paginatedDeliveries.forEach((delivery, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
                 <td>${start + index + 1}</td>
                 <td>${delivery.deliveryId}</td>
                 <td>${delivery.deliveryStatus}</td>
@@ -238,85 +234,146 @@
                 <td>${delivery.deliveryAddress}</td>
                 <td>${delivery.deliveryPrice}</td>
                 <td>${delivery.shipperFullName}</td>
+                <td><button class="btn btn-sm btn-primary edit-btn" data-index="${start + index}">Update</button></td>
             `;
-            tableBody.appendChild(row);
-        });
-    }
+                tableBody.appendChild(row);
+            });
 
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = String(date.getFullYear()).slice(-2);
-        return `${day}/${month}/${year}`;
-    }
-
-    function setupPagination() {
-        const paginationControls = document.getElementById('pagination-controls');
-        paginationControls.innerHTML = '';
-
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const searchDate = document.getElementById('searchDate').value;
-
-        const filteredDeliveries = deliveries.filter(delivery => {
-            const matchesSearchTerm = Object.values(delivery).some(val =>
-                val && val.toString().toLowerCase().includes(searchTerm)
-            );
-            const matchesSearchDate = searchDate ?
-                new Date(delivery.deliveryDate).toISOString().split('T')[0] === searchDate : true;
-            return matchesSearchTerm && matchesSearchDate;
-        });
-
-        const totalPages = Math.ceil(filteredDeliveries.length / rowsPerPage);
-
-        const createButton = (text, isActive, isDisabled, page) => {
-            const button = document.createElement('button');
-            button.textContent = text;
-            if (isActive) button.classList.add('active');
-            if (isDisabled) button.disabled = true;
-            if (page !== undefined) {
+            document.querySelectorAll('.edit-btn').forEach(button => {
                 button.addEventListener('click', function() {
-                    currentPage = page;
+                    const index = this.getAttribute('data-index');
+                    const delivery = filteredDeliveries[index];
+                    openEditForm(delivery);
+                });
+            });
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        function setupPagination() {
+            const paginationControls = document.getElementById('pagination-controls');
+            paginationControls.innerHTML = '';
+
+            const searchDate = document.getElementById('searchDate').value;
+
+            const filteredDeliveries = deliveries.filter(delivery => {
+                const matchesSearchDate = searchDate ? new Date(delivery.deliveryDate).toISOString().split('T')[0] === searchDate : true;
+                return matchesSearchDate;
+            });
+
+            const totalPages = Math.ceil(filteredDeliveries.length / rowsPerPage);
+
+            const createButton = (text, isActive, isDisabled, page) => {
+                const button = document.createElement('button');
+                button.textContent = text;
+                if (isActive) button.classList.add('active');
+                if (isDisabled) button.disabled = true;
+                if (page !== undefined) {
+                    button.addEventListener('click', function() {
+                        currentPage = page;
+                        displayTable();
+                        setupPagination();
+                    });
+                }
+                return button;
+            };
+
+            if (totalPages <= 7) {
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationControls.appendChild(createButton(i, i === currentPage, false, i));
+                }
+            } else {
+                paginationControls.appendChild(createButton(1, currentPage === 1, false, 1));
+                if (currentPage > 4) {
+                    paginationControls.appendChild(createButton('...', false, true));
+                }
+
+                for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) {
+                    paginationControls.appendChild(createButton(i, i === currentPage, false, i));
+                }
+
+                if (currentPage < totalPages - 3) {
+                    paginationControls.appendChild(createButton('...', false, true));
+                }
+                paginationControls.appendChild(createButton(totalPages, currentPage === totalPages, false, totalPages));
+            }
+        }
+
+        function openEditForm(delivery) {
+            document.getElementById('orderCode').textContent = delivery.deliveryId;
+            document.getElementById('deliveryTime').textContent = delivery.deliveryTime;
+            document.getElementById('deliveryDate').textContent = formatDate(delivery.deliveryDate);
+            document.getElementById('customerName').textContent = delivery.customerFullName;
+            document.getElementById('address').textContent = delivery.deliveryAddress;
+            document.getElementById('totalAmount').textContent = delivery.deliveryPrice;
+
+            const shipperSelect = document.getElementById('shipper');
+            shipperSelect.innerHTML = ''; // Clear previous options
+
+            shippers.forEach(shipper => {
+                const option = document.createElement('option');
+                option.value = shipper.id;
+                option.textContent = shipper.fullName;
+                if (shipper.id === delivery.shipperId) {
+                    option.selected = true;
+                }
+                shipperSelect.appendChild(option);
+            });
+
+            document.getElementById('editForm').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        document.getElementById('cancelEdit').addEventListener('click', function() {
+            document.getElementById('editForm').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        });
+
+        document.getElementById('saveEdit').addEventListener('click', function() {
+            const shipperSelect = document.getElementById('shipper');
+            const selectedShipper = shipperSelect.value;
+            // Call API to save changes
+            console.log('Saving changes with shipper id:', selectedShipper);
+
+            // Close the form after saving
+            document.getElementById('editForm').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        });
+
+        // Fetch data on page load
+        window.onload = function() {
+            // Fetch deliveries
+            fetch('http://localhost:8080/api/delivery?status=NOT_DELIVERED')
+                .then(response => response.json())
+                .then(data => {
+                    deliveries = data;
                     displayTable();
                     setupPagination();
+                })
+                .catch(error => {
+                    console.error('Error fetching delivery details:', error);
                 });
-            }
-            return button;
+
+            // Fetch shippers
+            fetch('http://localhost:8080/api/shippers')
+                .then(response => response.json())
+                .then(data => {
+                    shippers = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching shippers:', error);
+                });
         };
+    });
 
-        if (totalPages <= 7) {
-            for (let i = 1; i <= totalPages; i++) {
-                paginationControls.appendChild(createButton(i, i === currentPage, false, i));
-            }
-        } else {
-            paginationControls.appendChild(createButton(1, currentPage === 1, false, 1));
-            if (currentPage > 4) {
-                paginationControls.appendChild(createButton('...', false, true));
-            }
-
-            for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) {
-                paginationControls.appendChild(createButton(i, i === currentPage, false, i));
-            }
-
-            if (currentPage < totalPages - 3) {
-                paginationControls.appendChild(createButton('...', false, true));
-            }
-            paginationControls.appendChild(createButton(totalPages, currentPage === totalPages, false, totalPages));
-        }
-    }
-    // Fetch data on page load
-    window.onload = function() {
-        fetch('http://localhost:8080/api/delivery?status=NOT_DELIVERED')
-            .then(response => response.json())
-            .then(data => {
-                deliveries = data;
-                displayTable();
-                setupPagination();
-            })
-            .catch(error => {
-                console.error('Error fetching delivery details:', error);
-            });
-    };
 </script>
+
+
 </body>
 </html>
