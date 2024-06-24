@@ -596,7 +596,8 @@
                 })
                 .then(data => {
                     if (paymentMethodId === '1') {
-                        window.location.href = '/makeCall/' + data;
+                        window.location.href = '/order/confirm/' + data;
+                        // window.location.href = '/makeCall/' + data;
                     } else if (paymentMethodId === '2' && data.vnPayUrl) {
                         window.location.href = data.vnPayUrl;
                     }

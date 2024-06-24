@@ -94,6 +94,9 @@
             <div th:if="${param.duplicate}" class="alert alert-danger mt-3" role="alert">
                 <strong>Mã khuyến mãi đã tồn tại. Vui lòng kiểm tra lại thông tin.</strong>
             </div>
+            <div th:if="${param.fail}" class="alert alert-danger mt-3" role="alert">
+                <strong>Mã khuyến mãi này đã được người dùng sử dụng. Vui lòng kiểm tra lại thông tin.</strong>
+            </div>
         </form>
     </div>
 </div>
