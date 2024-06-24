@@ -1,11 +1,10 @@
-package com.nutrimeal.nutrimeal.controller.order;
+package com.nutrimeal.nutrimeal.service;
 
 import com.nutrimeal.nutrimeal.config.VNPayConfig;
 import com.nutrimeal.nutrimeal.dto.request.OrderRequest;
 import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.repository.OrderRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
-import com.nutrimeal.nutrimeal.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -172,12 +171,12 @@ public class VNPayService {
             } else {
                 order.setOrderStatus(OrderStatus.CANCELLED);
                 ordersRepository.save(order);
-                return 0;
+                return order.getOrderId();
             }
         } else {
             order.setOrderStatus(OrderStatus.CANCELLED);
             ordersRepository.save(order);
-            return -1;
+            return order.getOrderId();
         }
     }
 

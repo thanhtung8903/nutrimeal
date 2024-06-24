@@ -43,9 +43,9 @@ public class HomeController {
             boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
             model.addAttribute("isOauth2User", isOauth2User);
             if (isManager) {
-                return "manager/managerpage";
+                return "redirect:/manager/customer";
             } else if (isAdmin) {
-                return "admin/adminpage";
+                return "redirect:/manager/customer";
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList);
@@ -58,9 +58,9 @@ public class HomeController {
                 isAdmin = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_ADMIN"));
             }
             if (isManager) {
-                return "manager/managerpage";
+                return "redirect:/manager/customer";
             } else if (isAdmin) {
-                return "admin/adminpage";
+                return "redirect:/manager/customer";
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList);

@@ -32,7 +32,8 @@ public class OrderDetailService {
                         .quantity(orderDetail.getOrderDetailQuantity())
                         .price(orderDetail.getOrderDetailPrice())
                         .comboName(orderDetail.getCombo().getComboName())
-                        .comboDay(orderDetail.getCombo().getComboPrice7Days() == 7 ? 7 :  30).build())
+                        .comboImage(orderDetail.getCombo().getComboImage())
+                        .comboDay(orderDetail.getComboDay() == 7 ? "Gói tuần" : "Gói tháng").build())
                 .collect(Collectors.toList());
     }
 }

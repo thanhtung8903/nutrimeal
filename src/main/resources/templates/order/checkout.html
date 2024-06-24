@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head('Mua hàng', 'none')}"></head>
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-        crossorigin="anonymous"></script>
-
-<link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-/>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
     body {
         background-color: #f8f7f7;
@@ -188,6 +185,27 @@
 
     /*section payment*/
 
+    .modal-content {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .modal-header {
+        background-color: #007bff;
+        color: white;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .modal-footer {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+    .list-group-item {
+        cursor: pointer;
+    }
+    .list-group-item:hover {
+        background-color: #f0f0f0;
+    }
+
 </style>
 
 <header th:replace="~{fragments :: header-fragment}"></header>
@@ -222,8 +240,8 @@
         </ol>
     </nav>
 
-
     <section class="order_address mb-4">
+        <input type="hidden" id="userId" th:value="${userId}">
         <div class="card">
             <div class="card-header">
                 Địa chỉ giao hàng
@@ -252,7 +270,7 @@
                     </div>
                     <div class="col-sm-2">
                         <span class="" disabled>Mặc định</span>
-                        <a class="btn btn-custom btn-sm" th:href="@{/profile/address}" data-toggle="modal"
+                        <a class="btn btn-custom btn-sm" data-toggle="modal"
                            data-target="#addressModal">Đổi</a>
                     </div>
                 </div>
@@ -260,8 +278,69 @@
         </div>
     </section>
 
+    <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addressModalLabel">Chọn địa chỉ</h5>
 
-    <!--    --------------->
+                </div>
+                <div class="modal-body">
+                    <ul id="addressList" class="list-group">
+                        <!-- Addresses will be loaded here -->
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Add event listener to the change address button
+            document.querySelector(".btn.btn-custom.btn-sm").addEventListener("click", function () {
+                console.log('Change address button clicked');
+                var userId = document.getElementById('userId').value; // Get userId from hidden input
+                console.log('User ID:', userId);
+
+                fetch(`http://localhost:8080/api/address/${userId}`)
+                    .then(response => {
+                        console.log('Fetch response:', response);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Data fetched:', data);
+                        // Clear the previous list
+                        const addressList = document.getElementById('addressList');
+                        addressList.innerHTML = '';
+
+                        // Populate the list with new addresses
+                        data.forEach(address => {
+                            const listItem = document.createElement('li');
+                            listItem.className = 'list-group-item';
+                            listItem.textContent = address.fullAddress;
+
+                            // Add an event listener to handle address selection
+                            listItem.addEventListener('click', function () {
+                                console.log('Address selected:', address);
+                                document.getElementById('addressId').value = address.addressId;
+                                document.getElementById('accountName').value = address.fullName;
+                                document.getElementById('mobile').value = address.phone;
+                                document.getElementById('address').value = `${address.apartmentNumber}, ${address.ward}, ${address.district}`;
+
+                                // Close the modal
+                                $('#addressModal').modal('hide');
+                            });
+
+                            addressList.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching address:', error));
+            });
+        });
+    </script>
 
     <section class="card-table-body">
         <table>
@@ -300,9 +379,6 @@
                 <td>
                     <div class="card-quantity">
                         <span th:text="${orderBasket.quantity}"></span>
-                        <!--                        <span type="text" id="amount" th:value="${orderBasket.quantity}"-->
-                        <!--                              th:data-product-id="${orderBasket.orderBasketId}"></span>-->
-
                     </div>
                 </td>
                 <td>
@@ -342,7 +418,7 @@
                                 <input type="checkbox" id="xu" name="xu" th:value="${point}"
                                        style="margin-right: 10px;">
                                 <span> Nutrimeal point: </span>
-                                <span th:text="${point}"></span>
+                                <span id="currentPoints" th:text="${point}"></span>
                             </label>
                         </div>
                     </div>
@@ -412,7 +488,8 @@
                         <strong id="totalAmount" class="text-danger"></strong>
                     </li>
                 </ul>
-                <button type="button" class="btn btn-danger btn-lg btn-block mt-3" id="createOrderButton">Đặt hàng</button>
+                <button type="button" class="btn btn-danger btn-lg btn-block mt-3" id="createOrderButton">Đặt hàng
+                </button>
 
                 <button type="button" class="btn btn-secondary btn-block mt-2">Trở về</button>
             </div>
@@ -433,9 +510,12 @@
         const promoCodeInput = document.getElementById('promoCode');
         const applyPromoCodeButton = document.getElementById('applyPromoCode');
         const xuCheckbox = document.getElementById('xu');
+        const currentPointsElement = document.getElementById('currentPoints');
+
 
         let discount = 0;
         let pointsDiscount = 0;
+        let currentPoints = parseInt(currentPointsElement.innerText.replace(/[^0-9]/g, ''), 10);
 
         function formatCurrency(amount) {
             return amount.toLocaleString('vi-VN') + 'đ';
@@ -452,17 +532,6 @@
             totalElement.innerText = formatCurrency(total);
         });
 
-        function updateTotal(input) {
-            const tr = input.closest('tr');
-            const priceElement = tr.querySelector('.card-price').innerText;
-            const price = parseInt(priceElement.replace(/[^0-9]/g, ''), 10);
-            const quantity = parseInt(input.value, 10);
-            const totalElement = tr.querySelector('.card-totalmoney');
-            const total = price * quantity;
-            totalElement.innerText = formatCurrency(total);
-            updateTotalAmount();
-        }
-
         function updateTotalAmount() {
             let totalAmount = 0;
             totalElements.forEach(totalElement => {
@@ -472,6 +541,10 @@
 
             const shippingFeeElement = document.getElementById('shippingFee');
             const shippingFee = parseInt(shippingFeeElement.innerText, 10) * 1000;
+            totalAmount += shippingFee;
+
+            const discountAmount = Math.ceil((totalAmount * discount) / 100 / 1000) * 1000;
+            totalAmount -= discountAmount;
 
             if (xuCheckbox.checked) {
                 pointsDiscount = parseInt(xuCheckbox.value, 10) * 1000;
@@ -479,15 +552,21 @@
                 pointsDiscount = 0;
             }
 
-            const discountAmount = (totalAmount * discount) / 100;
+            // Giới hạn mức giảm giá bằng điểm chỉ tối đa 70% tổng giá trị thanh toán
+            const maxPointsDiscount = Math.ceil((totalAmount + shippingFee) * 0.7 / 1000) * 1000;
+            if (pointsDiscount > maxPointsDiscount) {
+                pointsDiscount = maxPointsDiscount;
+            }
 
-            totalAmount += shippingFee;
-            totalAmount -= discountAmount;
+
             totalAmount -= pointsDiscount;
 
             shippingFeeElement.innerText = formatCurrency(shippingFee);
             discountElement.innerText = formatCurrency(discountAmount + pointsDiscount);
             totalAmountElement.innerText = formatCurrency(totalAmount);
+
+            currentPointsElement.innerText = (currentPoints - pointsDiscount / 1000).toLocaleString('vi-VN');
+
         }
 
         applyPromoCodeButton.addEventListener('click', function () {
@@ -564,7 +643,8 @@
                 paymentMethodId: document.getElementById('paymentMethod').value,
                 orderNote: document.getElementById('note1').value,
                 orderTotalPrice: parseVND(document.getElementById('totalAmount').innerText),
-                promotionCode: promoCodeInput.value.trim()
+                promotionCode: promoCodeInput.value.trim(),
+                pointsDiscount: pointsDiscount
             };
 
             return formData;
@@ -590,7 +670,9 @@
             })
                 .then(response => {
                     if (!response.ok) {
-                        return response.text().then(text => { throw new Error(text) });
+                        return response.text().then(text => {
+                            throw new Error(text)
+                        });
                     }
                     return response.json();
                 })
@@ -614,9 +696,6 @@
             sendToApi();
         });
     });
-
-
-
 
 </script>
 

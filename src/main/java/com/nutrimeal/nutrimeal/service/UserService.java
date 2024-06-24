@@ -6,6 +6,7 @@ import com.nutrimeal.nutrimeal.dto.request.ChangePasswordRequest;
 import com.nutrimeal.nutrimeal.dto.request.SignupRequest;
 import com.nutrimeal.nutrimeal.dto.request.UpdateUserRequest;
 import com.nutrimeal.nutrimeal.dto.response.OrderResponse;
+import com.nutrimeal.nutrimeal.dto.response.ShipperResponse;
 import com.nutrimeal.nutrimeal.dto.response.UserInfoResponse;
 import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.model.Role;
@@ -117,28 +118,36 @@ public class UserService {
         return userRepository.findAllAdmin();
     }
 
-    public List<User> findAllShipper() {
-        return userRepository.findAllShipper();
+    public List<ShipperResponse> findAllShipper() {
+        List<User> users = userRepository.findAllShipper();
+        return users.stream().map(user -> {
+            ShipperResponse response = new ShipperResponse();
+            response.setFullName(user.getFullName());
+            response.setId(user.getUserId());
+            return response;
+        }).collect(Collectors.toList());
     }
 
     public List<OrderResponse> findOrdersByCustomerId(String customerId) {
         User user = userRepository.findById(customerId).orElseThrow(() -> new RuntimeException("User not found"));
         List<Order> orders = user.getOrders();
         return orders.stream().map(order -> {
-            OrderResponse response = new OrderResponse(
-                    order.getOrderId(),
-                    order.getOrderNote(),
-                    order.getAddress().getFullName(),
-                    order.getAddress().getPhone(),
-                    order.getAddress().getFullAddress(),
-                    order.getOrderStatus(),
-                    order.getOrderTotalPrice(),
-                    order.getPaymentMethod().getPaymentMethodName(),
-                    order.getDeliveryTime().getDeliveryTime(),
-                    order.getOrderDate().toString()
-            );
+            OrderResponse response = new OrderResponse();
+            response.setOrderId(order.getOrderId());
+            response.setOrderStatus(order.getOrderStatus());
+            response.setOrderTotalPrice(order.getOrderTotalPrice());
+            response.setOrderDate(order.getOrderDate().toString());
+            response.setPaymentMethod(order.getPaymentMethod().getPaymentMethodName());
+            response.setDeliveryTime(order.getDeliveryTime().getDeliveryTime());
+            response.setAddress(order.getAddress().getFullAddress());
+            response.setFullName(order.getUser().getFullName());
+            response.setPhone(order.getAddress().getPhone());
+            response.setOrderNote(order.getOrderNote());
+            response.setOrderTempPrice(order.getOrderTempPrice());
+            response.setOrderDeliveryPrice(order.getOrderDeliveryPrice());
+            response.setOrderDiscount(order.getOrderDiscount());
             return response;
-        }).collect(Collectors.toList());
+        }).toList();
     }
 
     public List<UserInfoResponse> findAllCustomers() {
@@ -160,5 +169,8 @@ public class UserService {
         }).collect(Collectors.toList());
     }
 
+    public void save(User user) {
+        userRepository.save(user);
+    }
 }
 
