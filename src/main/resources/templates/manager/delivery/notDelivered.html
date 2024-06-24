@@ -176,6 +176,7 @@
     </p>
     <button class="btn btn-primary" id="saveEdit">Save</button>
     <button class="btn btn-secondary" id="cancelEdit">Cancel</button>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -185,6 +186,7 @@
         let currentPage = 1;
         const rowsPerPage = 20;
         let deliveries = [];
+        let shippers = [];
 
         document.getElementById('searchDate').addEventListener('input', function() {
             currentPage = 1;
@@ -314,17 +316,15 @@
             const shipperSelect = document.getElementById('shipper');
             shipperSelect.innerHTML = ''; // Clear previous options
 
-            if (delivery.shippers) {
-                delivery.shippers.forEach(shipper => {
-                    const option = document.createElement('option');
-                    option.value = shipper.id;
-                    option.textContent = shipper.name;
-                    if (shipper.id === delivery.shipperId) {
-                        option.selected = true;
-                    }
-                    shipperSelect.appendChild(option);
-                });
-            }
+            shippers.forEach(shipper => {
+                const option = document.createElement('option');
+                option.value = shipper.id;
+                option.textContent = shipper.fullName;
+                if (shipper.id === delivery.shipperId) {
+                    option.selected = true;
+                }
+                shipperSelect.appendChild(option);
+            });
 
             document.getElementById('editForm').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
@@ -348,6 +348,7 @@
 
         // Fetch data on page load
         window.onload = function() {
+            // Fetch deliveries
             fetch('http://localhost:8080/api/delivery?status=NOT_DELIVERED')
                 .then(response => response.json())
                 .then(data => {
@@ -358,8 +359,19 @@
                 .catch(error => {
                     console.error('Error fetching delivery details:', error);
                 });
+
+            // Fetch shippers
+            fetch('http://localhost:8080/api/shippers')
+                .then(response => response.json())
+                .then(data => {
+                    shippers = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching shippers:', error);
+                });
         };
     });
+
 </script>
 
 
