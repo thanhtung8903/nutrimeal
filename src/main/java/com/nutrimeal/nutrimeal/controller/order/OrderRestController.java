@@ -1,6 +1,5 @@
 package com.nutrimeal.nutrimeal.controller.order;
 
-import com.nutrimeal.nutrimeal.dto.request.CallRequest;
 import com.nutrimeal.nutrimeal.dto.request.OrderRequest;
 import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.service.*;
@@ -10,11 +9,9 @@ import org.springframework.http.*;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.util.*;
@@ -62,6 +59,9 @@ public class OrderRestController {
         order.setOrderDate(new Date());
         order.setUser(user);
         order.setAddress(addressService.findById(orderRequest.getAddressId()));
+        int point = user.getPoint() - (orderRequest.getPointsDiscount() / 1000);
+        user.setPoint(point);
+        userService.save(user);
 
         // update quantity voucher and flag used
         if (orderRequest.getPromotionCode() != null) {

@@ -260,7 +260,6 @@
         </div>
     </section>
 
-
     <!--    --------------->
 
     <section class="card-table-body">
@@ -300,9 +299,6 @@
                 <td>
                     <div class="card-quantity">
                         <span th:text="${orderBasket.quantity}"></span>
-                        <!--                        <span type="text" id="amount" th:value="${orderBasket.quantity}"-->
-                        <!--                              th:data-product-id="${orderBasket.orderBasketId}"></span>-->
-
                     </div>
                 </td>
                 <td>
@@ -342,7 +338,7 @@
                                 <input type="checkbox" id="xu" name="xu" th:value="${point}"
                                        style="margin-right: 10px;">
                                 <span> Nutrimeal point: </span>
-                                <span th:text="${point}"></span>
+                                <span id="currentPoints" th:text="${point}"></span>
                             </label>
                         </div>
                     </div>
@@ -433,9 +429,12 @@
         const promoCodeInput = document.getElementById('promoCode');
         const applyPromoCodeButton = document.getElementById('applyPromoCode');
         const xuCheckbox = document.getElementById('xu');
+        const currentPointsElement = document.getElementById('currentPoints');
+
 
         let discount = 0;
         let pointsDiscount = 0;
+        let currentPoints = parseInt(currentPointsElement.innerText.replace(/[^0-9]/g, ''), 10);
 
         function formatCurrency(amount) {
             return amount.toLocaleString('vi-VN') + 'đ';
@@ -452,17 +451,6 @@
             totalElement.innerText = formatCurrency(total);
         });
 
-        function updateTotal(input) {
-            const tr = input.closest('tr');
-            const priceElement = tr.querySelector('.card-price').innerText;
-            const price = parseInt(priceElement.replace(/[^0-9]/g, ''), 10);
-            const quantity = parseInt(input.value, 10);
-            const totalElement = tr.querySelector('.card-totalmoney');
-            const total = price * quantity;
-            totalElement.innerText = formatCurrency(total);
-            updateTotalAmount();
-        }
-
         function updateTotalAmount() {
             let totalAmount = 0;
             totalElements.forEach(totalElement => {
@@ -472,6 +460,10 @@
 
             const shippingFeeElement = document.getElementById('shippingFee');
             const shippingFee = parseInt(shippingFeeElement.innerText, 10) * 1000;
+            totalAmount += shippingFee;
+
+            const discountAmount = Math.ceil((totalAmount * discount) / 100 / 1000) * 1000;
+            totalAmount -= discountAmount;
 
             if (xuCheckbox.checked) {
                 pointsDiscount = parseInt(xuCheckbox.value, 10) * 1000;
@@ -479,15 +471,21 @@
                 pointsDiscount = 0;
             }
 
-            const discountAmount = (totalAmount * discount) / 100;
+            // Giới hạn mức giảm giá bằng điểm chỉ tối đa 70% tổng giá trị thanh toán
+            const maxPointsDiscount = Math.ceil((totalAmount + shippingFee) * 0.7 / 1000) * 1000;
+            if (pointsDiscount > maxPointsDiscount) {
+                pointsDiscount = maxPointsDiscount;
+            }
 
-            totalAmount += shippingFee;
-            totalAmount -= discountAmount;
+
             totalAmount -= pointsDiscount;
 
             shippingFeeElement.innerText = formatCurrency(shippingFee);
             discountElement.innerText = formatCurrency(discountAmount + pointsDiscount);
             totalAmountElement.innerText = formatCurrency(totalAmount);
+
+            currentPointsElement.innerText = (currentPoints - pointsDiscount / 1000).toLocaleString('vi-VN');
+
         }
 
         applyPromoCodeButton.addEventListener('click', function () {
@@ -564,7 +562,8 @@
                 paymentMethodId: document.getElementById('paymentMethod').value,
                 orderNote: document.getElementById('note1').value,
                 orderTotalPrice: parseVND(document.getElementById('totalAmount').innerText),
-                promotionCode: promoCodeInput.value.trim()
+                promotionCode: promoCodeInput.value.trim(),
+                pointsDiscount: pointsDiscount
             };
 
             return formData;
@@ -614,9 +613,6 @@
             sendToApi();
         });
     });
-
-
-
 
 </script>
 
