@@ -1,15 +1,13 @@
 package com.nutrimeal.nutrimeal.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Builder
 public class OrderResponse {
     private int orderId;
     private String orderNote;

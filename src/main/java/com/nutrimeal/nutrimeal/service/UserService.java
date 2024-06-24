@@ -6,6 +6,7 @@ import com.nutrimeal.nutrimeal.dto.request.ChangePasswordRequest;
 import com.nutrimeal.nutrimeal.dto.request.SignupRequest;
 import com.nutrimeal.nutrimeal.dto.request.UpdateUserRequest;
 import com.nutrimeal.nutrimeal.dto.response.OrderResponse;
+import com.nutrimeal.nutrimeal.dto.response.UserInfoResponse;
 import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.model.Role;
 import com.nutrimeal.nutrimeal.model.RoleName;
@@ -139,5 +140,25 @@ public class UserService {
             return response;
         }).collect(Collectors.toList());
     }
+
+    public List<UserInfoResponse> findAllCustomers() {
+        List<User> users = userRepository.findAllCustomer();
+
+        return users.stream().map(user -> {
+            UserInfoResponse response = new UserInfoResponse(
+                    user.getUserId(),
+                    user.getEmail(),
+                    user.getFullName(),
+                    user.getPhone(),
+                    user.getImage(),
+                    user.getGender(),
+                    user.getDob(),
+                    user.getPoint(),
+                    user.getRoles().stream().map(role -> role.getRoleName().name()).collect(Collectors.toList())
+            );
+            return response;
+        }).collect(Collectors.toList());
+    }
+
 }
 
