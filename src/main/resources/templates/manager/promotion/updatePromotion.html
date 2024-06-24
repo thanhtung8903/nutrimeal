@@ -41,6 +41,7 @@
         border-color: #343a40 !important;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
     }
+
     .error-message {
         color: red;
         font-size: 0.875em;
@@ -90,33 +91,16 @@
             <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
                 <strong>Cập nhật mã khuyến mãi thành công!</strong>
             </div>
+            <div th:if="${param.duplicate}" class="alert alert-danger mt-3" role="alert">
+                <strong>Mã khuyến mãi đã tồn tại. Vui lòng kiểm tra lại thông tin.</strong>
+            </div>
+            <div th:if="${param.fail}" class="alert alert-danger mt-3" role="alert">
+                <strong>Mã khuyến mãi này đã được người dùng sử dụng. Vui lòng kiểm tra lại thông tin.</strong>
+            </div>
         </form>
     </div>
 </div>
 
-<!-- Bootstrap core JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-
-<!--<script>-->
-<!--    document.getElementById('dishImage').addEventListener('change', function (event) {-->
-<!--        const preview = document.getElementById('preview');-->
-<!--        const file = event.target.files[0];-->
-<!--        const reader = new FileReader();-->
-
-<!--        reader.onloadend = function () {-->
-<!--            preview.src = reader.result;-->
-<!--            preview.style.display = 'block';-->
-<!--        }-->
-
-<!--        if (file) {-->
-<!--            reader.readAsDataURL(file);-->
-<!--        } else {-->
-<!--            preview.src = "";-->
-<!--        }-->
-<!--    });-->
-<!--</script>-->
 <script>
     document.getElementById('promotionQuantity').addEventListener('input', function (event) {
         const input = event.target;
@@ -143,6 +127,11 @@
         }
     });
 </script>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 
 </body>
 
