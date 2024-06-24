@@ -76,9 +76,30 @@ public class OrderService {
                         .paymentMethod(order.getPaymentMethod().getPaymentMethodName())
                         .deliveryTime(order.getDeliveryTime().getDeliveryTime())
                         .orderDate(order.getOrderDate().toString())
+                        .orderDiscount(order.getOrderDiscount())
+                        .orderTempPrice(order.getOrderTempPrice())
+                        .orderDeliveryPrice(order.getOrderDeliveryPrice())
+                        .orderNote(order.getOrderNote())
                         .build()
         ).collect(Collectors.toList());
     }
 
 
+    public OrderResponse findOrderById(Order order) {
+        return OrderResponse.builder()
+                .orderId(order.getOrderId())
+                .fullName(order.getUser().getFullName())
+                .phone(order.getUser().getPhone())
+                .address(order.getAddress().getFullAddress())
+                .orderStatus(order.getOrderStatus())
+                .orderTotalPrice(order.getOrderTotalPrice())
+                .paymentMethod(order.getPaymentMethod().getPaymentMethodName())
+                .deliveryTime(order.getDeliveryTime().getDeliveryTime())
+                .orderDiscount(order.getOrderDiscount())
+                .orderTempPrice(order.getOrderTempPrice())
+                .orderDeliveryPrice(order.getOrderDeliveryPrice())
+                .orderNote(order.getOrderNote())
+                .orderDate(order.getOrderDate().toString())
+                .build();
+    }
 }

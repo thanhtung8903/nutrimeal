@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head
-        th:replace="~{fragments :: head('Quản lý thực đơn hàng ngày', 'none')}"
-></head>
 
+<head>
+    <meta charset="UTF-8">
+    <title>Daily menu </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+</head>
 <style>
     body {
-        background-color: #e5e5e5;
+        /*background-color: #e5e5e5;*/
     }
-
+    .content {
+        margin-left: 250px;
+        padding: 80px 20px 20px;
+        transition: margin-left 0.3s ease;
+    }
+    .content.collapsed {
+        margin-left: 60px;
+    }
+    h2 {
+        text-align: center;
+        margin: 20px 0;
+    }
     .list-group-item {
         background-color: #fff !important;
         color: #343a40 !important;
@@ -49,11 +64,29 @@
         gap: 15px;
     }
 
-    .table td,
-    .table th {
-        border-right: 2px solid #dee2e6;
+    /*.table td,*/
+    /*.table th {*/
+    /*    border-right: 2px solid #dee2e6;*/
+    /*}*/
+    .table-hover {
+        width: 100%;
+        border-collapse: collapse;
     }
-
+    .table-hover th, .table-hover td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+    .table-hover tr:hover {
+        background-color: #f1f1f1;
+    }
+    .table-hover th {
+        background-color: #f2f2f2;
+        cursor: pointer;
+    }
+    .bbb {
+        margin-right: 5px;
+    }
     .add-menu {
         display: inline-block;
         padding: 10px 20px;
@@ -81,42 +114,13 @@
     }
 </style>
 
-<header th:replace="~{fragments :: header_manager}"></header>
+<!--<header th:replace="~{fragments :: header_manager}"></header>-->
+<div th:insert="fragments/sidebar :: sidebar-manager"></div>
 
 <body>
-<div class="container-fluid mt-3">
-    <div class="row">
-        <div class="col-md-2">
-            <h6 style="margin-bottom: 20px">DANH MỤC</h6>
-            <ul class="list-group" id="categoryList">
-                <li id="view-food" class="list-group-item" data-category="food">
-                    <a
-                            th:href="@{/manager/dish}"
-                            style="text-decoration: none; color: inherit"
-                    >Món ăn</a
-                    >
-                </li>
-                <li id="view-combo" class="list-group-item" data-category="combo">
-                    <a
-                            th:href="@{/manager/combo}"
-                            style="text-decoration: none; color: inherit"
-                    >Combo</a
-                    >
-                </li>
-                <li
-                        id="view-daily"
-                        class="list-group-item active"
-                        data-category="daily-menu"
-                >
-                    <a
-                            th:href="@{/manager/dailymenu}"
-                            style="text-decoration: none; color: inherit"
-                    >Thực đơn hàng ngày</a
-                    >
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-10">
+<div class="content" id="content">
+    <div class="container-fluid ">
+
             <h2 style="margin-bottom: 40px; text-align: center">
                 QUẢN LÍ DAILY MENU
             </h2>
@@ -162,7 +166,7 @@
                     </div>
                 </div>
             </form>
-            <table class="table daily-table" id="dailyTable">
+            <table class="table daily-table table-hover" id="dailyTable">
                 <thead>
                 <tr>
                     <th class="text-center">Ngày</th>
@@ -196,21 +200,22 @@
                         <span th:if="${dailyMenu.dailyMenuType == 'V'}">Menu chay</span>
                         <span th:if="${dailyMenu.dailyMenuType == 'N'}">Menu mặn</span>
                     </td>
-                    <td class="text-center" style="vertical-align: middle;">
-                        <a href="#" class="btn btn-warning btn-sm update-btn"
-                           th:href="@{/manager/dailymenu/update/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}">Update</a>
-                        <a href="#" class="btn btn-danger btn-sm delete-btn"
-                           th:href="@{/manager/dailymenu/delete/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}"
-                           onclick="return confirm('Are you sure you want to delete this dish?')">Delete</a>
+
+                    <td style="display: marker; padding-top: 60px">
+                        <a href="#" class="btn btn-warning btn-sm update-bt bbb" th:href="@{/manager/dailymenu/update/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="#" class="btn btn-danger btn-sm delete-btn bbb" th:href="@{/manager/dailymenu/delete/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}" onclick="return confirm('Are you sure you want to delete this DAILY MENU?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <button class="add-menu mb-2">
-                <a th:href="@{/manager/dailymenu/add}">ADD DAILY MENU</a>
-            </button>
 
-            <!-- Pagination for daily menu list -->
+        <button class="btn btn-success mb-2 bbb"><a th:href="@{/manager/dailymenu/add}" class="text-white text-decoration-none"><i class="bi bi-plus-circle"></i> THÊM THỰC ĐƠN MỚI </a></button>
+
+        <!-- Pagination for daily menu list -->
             <!-- Thanh phân trang thông thường -->
             <nav aria-label="Page navigation" th:if="${date == null and type == null and dishName == null}">
                 <ul class="pagination">
@@ -314,9 +319,9 @@
                     </li>
                 </ul>
             </nav>
-        </div>
     </div>
 </div>
+
 
 <!-- Bootstrap core JS -->
 <script
@@ -327,6 +332,23 @@
 </body>
 
 <script>
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('collapsed');
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function(submenuToggle) {
+            submenuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
+    });
     document.getElementById("view-food").addEventListener("click", function () {
         window.location.href = this.querySelector("a").href;
     });
@@ -344,5 +366,4 @@
         });
 </script>
 
-<footer th:replace="~{fragments :: footer}"></footer>
 </html>
