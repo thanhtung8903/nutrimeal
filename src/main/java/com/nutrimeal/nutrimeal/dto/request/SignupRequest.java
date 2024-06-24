@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -21,6 +22,8 @@ public class SignupRequest {
     private String email;
     private String password;
     private String phoneNumber;
-    private boolean gender;
+    private String gender;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
 }
