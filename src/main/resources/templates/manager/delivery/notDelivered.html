@@ -132,7 +132,7 @@
 
 <div class="content" id="content">
     <h2>ĐƠN CHƯA GIAO</h2>
-    <div class="container container-table">
+    <div class="container-fluid container-table">
         <div class="controls">
             <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
             <input type="date" id="searchDate" placeholder="Search by Date">
@@ -338,17 +338,32 @@
         document.getElementById('saveEdit').addEventListener('click', function() {
             const shipperSelect = document.getElementById('shipper');
             const selectedShipper = shipperSelect.value;
-            // Call API to save changes
-            console.log('Saving changes with shipper id:', selectedShipper);
+            const deliveryId = document.getElementById('orderCode').textContent;
 
-            // Close the form after saving
-            document.getElementById('editForm').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
+            // Call API to save changes
+            fetch(`http://localhost:8080/api/delivery/update/${deliveryId}/${selectedShipper}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Close the form after saving
+                        document.getElementById('editForm').style.display = 'none';
+                        document.getElementById('overlay').style.display = 'none';
+                        // Optionally, refresh the data
+                        fetchDeliveries();
+                    } else {
+                        console.error('Error updating delivery:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating delivery:', error);
+                });
         });
 
-        // Fetch data on page load
-        window.onload = function() {
-            // Fetch deliveries
+        function fetchDeliveries() {
             fetch('http://localhost:8080/api/delivery?status=NOT_DELIVERED')
                 .then(response => response.json())
                 .then(data => {
@@ -359,6 +374,11 @@
                 .catch(error => {
                     console.error('Error fetching delivery details:', error);
                 });
+        }
+
+        // Fetch data on page load
+        window.onload = function() {
+            fetchDeliveries();
 
             // Fetch shippers
             fetch('http://localhost:8080/api/shippers')
