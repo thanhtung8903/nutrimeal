@@ -182,6 +182,23 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Sidebar toggle functionality
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('collapsed');
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function(submenuToggle) {
+            submenuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
+    });
     document.addEventListener('DOMContentLoaded', function() {
         let currentPage = 1;
         const rowsPerPage = 20;
