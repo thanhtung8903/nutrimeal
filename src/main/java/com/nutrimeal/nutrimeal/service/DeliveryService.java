@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -153,5 +154,15 @@ public class DeliveryService {
         }
 
         return deliveryResponseList;
+    }
+
+    public void updateDelivery(Integer deliveryId, String status, String note) {
+        Delivery delivery = deliveryRepository.findById(deliveryId).orElse(null);
+        if (delivery != null) {
+            delivery.setDeliveryStatus(status);
+            delivery.setDeliveryNote(note);
+            delivery.setDeliveryUpdateTime(LocalDateTime.now());
+            deliveryRepository.save(delivery);
+        }
     }
 }

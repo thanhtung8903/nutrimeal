@@ -23,4 +23,8 @@ public class RestShipper {
         List<ShipperResponse> shippers = userService.findAllShipper();
         return ResponseEntity.ok(shippers);
     }
+
+
+
+
 }
