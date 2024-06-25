@@ -154,4 +154,12 @@ public class DeliveryService {
 
         return deliveryResponseList;
     }
+
+    public void updateDeliveryStatus(Integer deliveryId, String shipperId) {
+        Delivery delivery = deliveryRepository.findByDeliveryId(deliveryId);
+        User shipper = userRepository.findByUserId(shipperId);
+
+        delivery.setShipper(shipper);
+        deliveryRepository.save(delivery);
+    }
 }
