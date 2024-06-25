@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class Demo {
     @GetMapping("/beingDelivery")
     public String beingDelivery() {
-        return "Shipper/beingDelivery";
+        return "Shipper/sidebarShipper";
     }
 }

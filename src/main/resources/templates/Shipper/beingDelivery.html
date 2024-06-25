@@ -257,6 +257,7 @@
     const loginPopup = document.querySelector('#login-popup');
     const searchInput = document.getElementById('search-input');
     let deliveries = [];
+    let isPopupActive = false;
 
     function fetchDeliveredOrders() {
       fetch('http://localhost:8080/api/delivery?status=DELIVERED')
@@ -292,7 +293,19 @@
       });
     }
 
+    document.getElementById('search-input').addEventListener('input', function (event) {
+      const searchValue = event.target.value.trim().toLowerCase();
+      const filteredOrders = deliveries.filter(order =>
+              order.deliveryDate.toLowerCase().match(searchValue)
+      );
+      displayOrders(filteredOrders);
+    });
+
     document.addEventListener('click', function (event) {
+      const loginPopup = document.querySelector('#login-popup');
+      const btnFailOrder = document.querySelector('.btn-fail-order');
+      const btnSuccessOrder = document.querySelector('.btn-success-order');
+
       if (event.target.classList.contains('btn-fail-order')) {
         event.preventDefault();
         const orderRow = event.target.closest('tr');
@@ -300,15 +313,17 @@
         const noteTextarea = document.getElementById('note-textarea');
         noteTextarea.dataset.orderId = orderId;
         loginPopup.classList.add('active');
+        document.body.classList.add('popup-active'); // Thêm lớp để chặn tương tác bên ngoài popup
       } else if (event.target.classList.contains('btn-success-order')) {
         event.preventDefault();
         const orderRow = event.target.closest('tr');
         const orderId = orderRow.querySelector('td:nth-child(3)').textContent;
-        // Here you can call an API to mark the order as successfully delivered if needed
         showToast('Giao hàng thành công!', 'success');
         orderRow.remove();
-      } else if (event.target.classList.contains('close-btn')) {
+      } else if (event.target.classList.contains('close-btn') || !loginPopup.contains(event.target)) {
+        // Đóng form popup khi click vào nút đóng hoặc bên ngoài form popup
         loginPopup.classList.remove('active');
+        document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
       } else if (event.target.classList.contains('btn-fail-order2')) {
         event.preventDefault();
         const orderId = document.getElementById('note-textarea').dataset.orderId;
@@ -323,19 +338,24 @@
                 .then(response => {
                   if (response.ok) {
                     showToast('Thất bại giao hàng thành công!', 'success');
-                    fetchDeliveredOrders();
+                    const orderRow = document.querySelector(`td:nth-child(3):contains(${orderId})`).closest('tr');
+                    orderRow.remove(); // Xóa dòng khi thành công
                     loginPopup.classList.remove('active');
+                    document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
                   } else {
                     showToast('Lỗi khi thất bại giao hàng!', 'danger');
                     loginPopup.classList.remove('active');
+                    document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
                   }
                 })
                 .catch(error => {
                   showToast('Lỗi khi thất bại giao hàng!', 'danger');
                   loginPopup.classList.remove('active');
+                  document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
                 });
       }
     });
+
 
     searchInput.addEventListener('input', function () {
       const searchTerm = searchInput.value.toLowerCase();
