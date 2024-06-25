@@ -1,18 +1,50 @@
 <!DOCTYPE html>
 <html html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Chỉnh sửa mã khuyến mãi', 'none')}"></head>
-
+<!--<head th:replace="~{fragments :: head('Quản lý món ăn', 'none')}"></head>-->
+<head>
+    <meta charset="UTF-8">
+    <title>List dish </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+</head>
 <style>
     body {
-        background-color: #e5e5e5;
+        /*background-color: #e5e5e5;*/
     }
 
-    .form-container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-top: 30px;
+    .content {
+        margin-left: 250px;
+        padding: 80px 20px 20px;
+        transition: margin-left 0.3s ease;
+    }
+
+    .content.collapsed {
+        margin-left: 60px;
+    }
+
+    h2 {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .list-group-item {
+        background-color: #fff !important;
+        color: #343a40 !important;
+        cursor: pointer;
+    }
+
+    .list-group-item.active {
+        background-color: #fff !important;
+        border-color: none;
+        border: 1px solid #343a40;
+        font-weight: bold;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+        border-color: #343a40 !important;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
     }
 
     .btn-primary {
@@ -25,109 +57,128 @@
         font-weight: 600;
     }
 
-    .btn-secondary {
-        background-color: #6c757d !important;
-        border-color: #6c757d !important;
-    }
-
-    .btn-secondary:hover {
-        background-color: #5a6268 !important;
+    .btn-danger:hover {
+        background-color: red !important;
         font-weight: 600;
     }
 
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    textarea:focus {
-        border-color: #343a40 !important;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    .radio-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
     }
 
-    .error-message {
-        color: red;
-        font-size: 0.875em;
-        display: none;
+    /*.table td, .table th {*/
+    /*    border-right: 2px solid #dee2e6;*/
+    /*}*/
+    .table-hover {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-hover th, .table-hover td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .table-hover tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table-hover th {
+        background-color: #f2f2f2;
+        cursor: pointer;
+    }
+
+    .bbb {
+        margin-right: 5px;
+    }
+
+    .add-menu {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #343a40;
+        color: #ffffff;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        border: none;
+    }
+
+    .add-menu:hover {
+        background-color: #000000;
+    }
+
+    .add-menu a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .add-menu a:hover {
+        text-decoration: none;
     }
 </style>
-<header th:replace="~{fragments :: header_manager}"></header>
+
+<div th:insert="fragments/sidebar :: sidebar-manager"></div>
 
 <body>
-<div class="container mb-5">
-    <div class="form-container">
-        <h2 style="margin-bottom: 40px; text-align: center;">Cập nhật mã khuyến mãi</h2>
-        <form id="updatePromotionForm" th:object="${promotion}" method="post"
-              th:action="@{/manager/promotion/update/{promotionId}(promotionId=${promotion.promotionId})}" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label hidden="hidden" for="promotionId" class="form-label">ID</label>
-                <input hidden="hidden" type="text" class="form-control" id="promotionId" name="promotionId" readonly
-                       th:value="${promotion.promotionId}">
-            </div>
-            <div class="mb-3">
-                <label for="promotionCode" class="form-label">Tên mã khuyến mãi</label>
-                <input type="text" class="form-control" id="promotionCode" name="promotionCode" th:value="${promotion.promotionCode}" required>
-            </div>
-            <div class="col">
-                <label for="promotionQuantity" class="form-label">Số lượng</label>
-                <input type="number" class="form-control" id="promotionQuantity" name="promotionQuantity" min="0"
-                       th:value="${promotion.promotionQuantity}" required>
-            </div>
-            <div class="mb-3">
-                <label for="promotionDescription" class="form-label">Mô tả</label>
-                <input type="text" class="form-control" id="promotionDescription" name="promotionDescription"
-                       th:value="${promotion.promotionDescription}" required>
-            </div>
-            <div class="mb-3">
-                <label for="promotionDiscount" class="form-label">Giảm giá</label>
-                <input type="text" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0"
-                       th:value="${promotion.promotionDiscount}" required>
-                <span id="discountError" class="error-message">Phiếu giảm giá không được vượt quá 100%</span>
-            </div>
+<div class="content" id="content">
 
-            <button type="submit" class="btn btn-primary">Cập nhật mã khuyến mãi</button>
-            <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/promotion\''">Quay lại</button>
+    <div class="container mb-5">
+        <div class="form-container">
+            <h2 style="margin-bottom: 40px; text-align: center;">Cập nhật mã khuyến mãi</h2>
+            <form id="updatePromotionForm" th:object="${promotion}" method="post"
+                  th:action="@{/manager/promotion/update/{promotionId}(promotionId=${promotion.promotionId})}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label hidden="hidden" for="promotionId" class="form-label">ID</label>
+                    <input hidden="hidden" type="text" class="form-control" id="promotionId" name="promotionId" readonly
+                           th:value="${promotion.promotionId}">
+                </div>
+                <div class="mb-3">
+                    <label for="promotionCode" class="form-label">Tên mã khuyến mãi</label>
+                    <input type="text" class="form-control" id="promotionCode" name="promotionCode" th:value="${promotion.promotionCode}" required>
+                </div>
+                <div class="col">
+                    <label for="promotionQuantity" class="form-label">Số lượng</label>
+                    <input type="number" class="form-control" id="promotionQuantity" name="promotionQuantity" min="0"
+                           th:value="${promotion.promotionQuantity}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="promotionDescription" class="form-label">Mô tả</label>
+                    <input type="text" class="form-control" id="promotionDescription" name="promotionDescription"
+                           th:value="${promotion.promotionDescription}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="promotionDiscount" class="form-label">Giảm giá</label>
+                    <input type="text" class="form-control" id="promotionDiscount" name="promotionDiscount" min="0"
+                           th:value="${promotion.promotionDiscount}" required>
+                    <span id="discountError" class="error-message">Phiếu giảm giá không được vượt quá 100%</span>
+                </div>
 
-            <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
-                <strong>Đã có lỗi xảy ra!</strong> Vui lòng kiểm tra lại thông tin.
-            </div>
-            <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
-                <strong>Cập nhật mã khuyến mãi thành công!</strong>
-            </div>
-            <div th:if="${param.duplicate}" class="alert alert-danger mt-3" role="alert">
-                <strong>Mã khuyến mãi đã tồn tại. Vui lòng kiểm tra lại thông tin.</strong>
-            </div>
-            <div th:if="${param.fail}" class="alert alert-danger mt-3" role="alert">
-                <strong>Mã khuyến mãi này đã được người dùng sử dụng. Vui lòng kiểm tra lại thông tin.</strong>
-            </div>
-        </form>
+                <button type="submit" class="btn btn-primary">Cập nhật mã khuyến mãi</button>
+                <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/promotion\''">Quay lại</button>
+
+                <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
+                    <strong>Đã có lỗi xảy ra!</strong> Vui lòng kiểm tra lại thông tin.
+                </div>
+                <div th:if="${param.success}" class="alert alert-success mt-3" role="alert">
+                    <strong>Cập nhật mã khuyến mãi thành công!</strong>
+                </div>
+                <div th:if="${param.duplicate}" class="alert alert-danger mt-3" role="alert">
+                    <strong>Mã khuyến mãi đã tồn tại. Vui lòng kiểm tra lại thông tin.</strong>
+                </div>
+                <div th:if="${param.fail}" class="alert alert-danger mt-3" role="alert">
+                    <strong>Mã khuyến mãi này đã được người dùng sử dụng. Vui lòng kiểm tra lại thông tin.</strong>
+                </div>
+            </form>
+        </div>
     </div>
+
+
 </div>
-
-<script>
-    document.getElementById('promotionQuantity').addEventListener('input', function (event) {
-        const input = event.target;
-        if (input.value < 0) {
-            input.value = 0;
-        }
-    });
-
-    document.getElementById('promotionDiscount').addEventListener('input', function (event) {
-        const input = event.target;
-        if (input.value < 0) {
-            input.value = 0;
-        }
-    });
-
-    document.getElementById('updatePromotionForm').addEventListener('submit', function (event) {
-        const discountInput = document.getElementById('promotionDiscount');
-        const discountError = document.getElementById('discountError');
-        if (discountInput.value > 100) {
-            discountError.style.display = 'block';
-            event.preventDefault(); // Prevent form submission
-        } else {
-            discountError.style.display = 'none';
-        }
-    });
-</script>
-
 <!-- Bootstrap core JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -135,6 +186,40 @@
 
 </body>
 
-<footer th:replace="~{fragments :: footer}"></footer>
+<script>
+    document.getElementById('toggle-sidebar').addEventListener('click', function () {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('collapsed');
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function (submenuToggle) {
+            submenuToggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
+    });
+    document.getElementById('searchInput').addEventListener('input', function () {
+        currentPage = 1;
+        displayTable();
+        setupPagination();
+    });
+    document.getElementById('view-food').addEventListener('click', function () {
+        window.location.href = this.querySelector('a').href;
+    });
+
+    document.getElementById('view-combo').addEventListener('click', function () {
+        window.location.href = this.querySelector('a').href;
+    });
+
+    document.getElementById('view-daily').addEventListener('click', function () {
+        window.location.href = this.querySelector('a').href;
+    });
+</script>
 
 </html>

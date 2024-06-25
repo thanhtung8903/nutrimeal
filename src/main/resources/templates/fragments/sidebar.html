@@ -52,7 +52,7 @@
                 </ul>
             </li>
             <li class="has-submenu">
-                <a href="#"><i class="bi bi-truck"></i><span class="sidebar-text">Quản lý đơn giao</span> <i class="bi bi-chevron-down submenu-toggle sidebar-text"></i></a>
+                <a href="#"><i class="bi bi-truck"></i><span class="sidebar-text">Quản lý giao hàng</span> <i class="bi bi-chevron-down submenu-toggle sidebar-text"></i></a>
                 <ul class="submenu">
                     <li><a th:href="@{/manager/delivery/notdelivered}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn chưa giao</a></li>
                     <li><a th:href="@{/manager/delivery/intransit}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn đang giao</a></li>
@@ -61,7 +61,7 @@
                 </ul>
             </li>
             <li><a href="#"><i class="bi bi-table"></i> <span class="sidebar-text">Quản lý chi tiêu</span></a></li>
-            <li><a href="#"><i class="bi bi-star"></i> <span class="sidebar-text">CTKM</span></a></li>
+            <li><a th:href="@{/manager/promotion}"><i class="bi bi-star"></i> <span class="sidebar-text">CTKM</span></a></li>
         </ul>
     </div>
 </div>

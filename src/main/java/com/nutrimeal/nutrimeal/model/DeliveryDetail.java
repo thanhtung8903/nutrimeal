@@ -1,5 +1,6 @@
 package com.nutrimeal.nutrimeal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class DeliveryDetail {
 
     @ManyToOne
     @JoinColumn(name = "delivery_id", nullable = false)
+    @JsonIgnore
     private Delivery delivery;
 
     @ManyToOne

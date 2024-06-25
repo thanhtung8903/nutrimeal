@@ -1,5 +1,6 @@
 package com.nutrimeal.nutrimeal.controller.api;
 
+import com.nutrimeal.nutrimeal.dto.response.DeliveryDetailResponse;
 import com.nutrimeal.nutrimeal.dto.response.DeliveryResponse;
 import com.nutrimeal.nutrimeal.model.Delivery;
 import com.nutrimeal.nutrimeal.service.DeliveryService;
@@ -29,6 +30,11 @@ public class RestDelivery {
     public ResponseEntity<String> updateDeliveryStatus(@PathVariable Integer deliveryId, @PathVariable String shipperId) {
         deliveryService.updateDeliveryStatus(deliveryId, shipperId);
         return ResponseEntity.ok("Delivery status updated");
+    }
+
+    @GetMapping("/detail/{deliveryId}")
+    public ResponseEntity<DeliveryDetailResponse> getDeliveryDetail(@PathVariable Integer deliveryId) {
+        return ResponseEntity.ok(deliveryService.findDeliveryDetail(deliveryId));
     }
 
 
