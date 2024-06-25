@@ -41,4 +41,6 @@ public interface UserRepository extends JpaRepository<User, String> {
     default List<User> findAllShipper() {
         return findAllUsersByRoleId(4);
     }
+
+    User findByUserId(String userId);
 }

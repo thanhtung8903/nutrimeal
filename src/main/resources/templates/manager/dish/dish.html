@@ -12,18 +12,22 @@
     body {
         /*background-color: #e5e5e5;*/
     }
+
     .content {
         margin-left: 250px;
         padding: 80px 20px 20px;
         transition: margin-left 0.3s ease;
     }
+
     .content.collapsed {
         margin-left: 60px;
     }
+
     h2 {
         text-align: center;
         margin: 20px 0;
     }
+
     .list-group-item {
         background-color: #fff !important;
         color: #343a40 !important;
@@ -71,21 +75,26 @@
         width: 100%;
         border-collapse: collapse;
     }
+
     .table-hover th, .table-hover td {
         padding: 12px;
         text-align: left;
         border: 1px solid #ddd;
     }
+
     .table-hover tr:hover {
         background-color: #f1f1f1;
     }
+
     .table-hover th {
         background-color: #f2f2f2;
         cursor: pointer;
     }
+
     .bbb {
         margin-right: 5px;
     }
+
     .add-menu {
         display: inline-block;
         padding: 10px 20px;
@@ -118,177 +127,200 @@
 <body>
 <div class="content" id="content">
 
-<div class="container-fluid mt-3">
-    <div class="row">
+    <div class="container-fluid mt-3">
+        <div class="row">
 
-        <div >
-            <h2 style="margin-bottom: 40px; text-align: center;">QUẢN LÍ MÓN ĂN</h2>
-            <form th:action="@{/manager/dish/search}" method="get" class="mb-3">
-                <div class="row g-2">
-                    <div class="col-auto">
-                        <input type="text" class="form-control" name="name" placeholder="Tên món ăn" th:value="${name}">
+            <div>
+                <h2 style="margin-bottom: 40px; text-align: center;">QUẢN LÍ MÓN ĂN</h2>
+                <form th:action="@{/manager/dish/search}" method="get" class="mb-3">
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            <input type="text" class="form-control" name="name" placeholder="Tên món ăn"
+                                   th:value="${name}">
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-control" name="type">
+                                <option value="">Loại món ăn</option>
+                                <option value="V" th:selected="${type == 'V'}">Món chay</option>
+                                <option value="N" th:selected="${type == 'N'}">Món mặn</option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        <select class="form-control" name="type">
-                            <option value="">Loại món ăn</option>
-                            <option value="V" th:selected="${type == 'V'}">Món chay</option>
-                            <option value="N" th:selected="${type == 'N'}">Món mặn</option>
-                        </select>
-                    </div>
-                    <div class="col-auto">
-                        <button class="btn btn-primary" type="submit">Tìm kiếm</button>
-                    </div>
-                </div>
-            </form>
+                </form>
 
-            <table class="table food-table table-hover" id="foodTable">
-                <thead>
-                <tr>
-                    <th>Tên món ăn</th>
-                    <th>Hình ảnh</th>
-                    <th>KCal</th>
-                    <th>Proteins</th>
-                    <th>Fats</th>
-                    <th>Carbs</th>
-                    <th>Loại</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody id="foodTableBody">
-                <tr th:each="dish : ${listDish}">
-                    <td th:text="${dish.dishName}"></td>
-                    <td><img th:src="${dish.dishImage}" alt="" class="img-thumbnail" style="max-width: 100px;"></td>
-                    <td th:text="${dish.dishCalories}"></td>
-                    <td th:text="${dish.dishProteins}"></td>
-                    <td th:text="${dish.dishFats}"></td>
-                    <td th:text="${dish.dishCarbs}"></td>
-                    <td>
-                        <span th:if="${dish.getDishType() == 'V'}">Món chay</span>
-                        <span th:if="${dish.getDishType() == 'N'}">Món mặn</span>
-                    </td>
-<!--                    <td>-->
-<!--                        <a href="#" class="btn btn-warning btn-sm update-btn" th:href="@{/manager/dish/update/{dishId}(dishId=${dish.dishId})}">Update</a>-->
-<!--                        <a href="#" class="btn btn-danger btn-sm delete-btn" th:href="@{/manager/dish/delete/{dishId}(dishId=${dish.dishId})}" onclick="return confirm('Are you sure you want to delete this dish?')">Delete</a>-->
-<!--                    </td>-->
-                    <td style="display: compact">
-                        <a href="#" class="btn btn-warning btn-sm update-bt bbb" th:href="@{/manager/dish/update/{dishId}(dishId=${dish.dishId})}">
-                            <i class="bi bi-pencil"></i>
-                        </a>
-                        <a href="#" class="btn btn-danger btn-sm delete-btn bbb" th:href="@{/manager/dish/delete/{dishId}(dishId=${dish.dishId})}" onclick="return confirm('Are you sure you want to delete this dish?')">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <button class="btn btn-success mb-2 bbb"><a th:href="@{/manager/dish/add}" class="text-white text-decoration-none"><i class="bi bi-plus-circle"></i> THÊM MÓN ĂN </a></button>
+                <table class="table food-table table-hover" id="foodTable">
+                    <thead>
+                    <tr>
+                        <th>Tên món ăn</th>
+                        <th>Hình ảnh</th>
+                        <th>KCal</th>
+                        <th>Proteins</th>
+                        <th>Fats</th>
+                        <th>Carbs</th>
+                        <th>Loại</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="foodTableBody">
+                    <tr th:each="dish : ${listDish}">
+                        <td th:text="${dish.dishName}"></td>
+                        <td><img th:src="${dish.dishImage}" alt="" class="img-thumbnail" style="max-width: 100px;"></td>
+                        <td th:text="${dish.dishCalories}"></td>
+                        <td th:text="${dish.dishProteins}"></td>
+                        <td th:text="${dish.dishFats}"></td>
+                        <td th:text="${dish.dishCarbs}"></td>
+                        <td>
+                            <span th:if="${dish.getDishType() == 'V'}">Món chay</span>
+                            <span th:if="${dish.getDishType() == 'N'}">Món mặn</span>
+                        </td>
+                        <!--                    <td>-->
+                        <!--                        <a href="#" class="btn btn-warning btn-sm update-btn" th:href="@{/manager/dish/update/{dishId}(dishId=${dish.dishId})}">Update</a>-->
+                        <!--                        <a href="#" class="btn btn-danger btn-sm delete-btn" th:href="@{/manager/dish/delete/{dishId}(dishId=${dish.dishId})}" onclick="return confirm('Are you sure you want to delete this dish?')">Delete</a>-->
+                        <!--                    </td>-->
+                        <td style="display: compact">
+                            <a href="#" class="btn btn-warning btn-sm update-bt bbb"
+                               th:href="@{/manager/dish/update/{dishId}(dishId=${dish.dishId})}">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="#" class="btn btn-danger btn-sm delete-btn bbb"
+                               th:href="@{/manager/dish/delete/{dishId}(dishId=${dish.dishId})}"
+                               onclick="return confirm('Are you sure you want to delete this dish?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-success mb-2 bbb"><a th:href="@{/manager/dish/add}"
+                                                            class="text-white text-decoration-none"><i
+                        class="bi bi-plus-circle"></i> THÊM MÓN ĂN </a></button>
 
-            <!-- Pagination for normal list -->
-            <nav aria-label="Page navigation" th:if="${param.name == null && param.type == null}">
-                <ul class="pagination">
-                    <!-- Link to the first page -->
-                    <li class="page-item" th:if="${listDish.number > 0}">
-                        <a class="page-link" th:href="@{/manager/dish(page=0)}" aria-label="First">
-                            <span aria-hidden="true">&laquo;&laquo;</span>
-                        </a>
-                    </li>
+                <!-- Pagination for normal list -->
+                <nav aria-label="Page navigation" th:if="${param.name == null && param.type == null}">
+                    <ul class="pagination">
+                        <!-- Link to the first page -->
+                        <li class="page-item" th:if="${listDish.number > 0}">
+                            <a class="page-link" th:href="@{/manager/dish(page=0)}" aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
 
-                    <!-- Link to the previous page -->
-                    <li class="page-item" th:if="${listDish.number > 0}">
-                        <a class="page-link" th:href="@{/manager/dish(page=${listDish.number - 1})}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
+                        <!-- Link to the previous page -->
+                        <li class="page-item" th:if="${listDish.number > 0}">
+                            <a class="page-link" th:href="@{/manager/dish(page=${listDish.number - 1})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
 
-                    <!-- Page numbers -->
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, listDish.totalPages - 1)}"
-                        th:if="${i >= listDish.number - 2 && i <= listDish.number + 2}"
-                        th:class="${i == listDish.number ? 'active' : ''}">
-                        <a class="page-link" th:href="@{/manager/dish(page=${i})}" th:text="${i + 1}">1</a>
-                    </li>
+                        <!-- Page numbers -->
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, listDish.totalPages - 1)}"
+                            th:if="${i >= listDish.number - 2 && i <= listDish.number + 2}"
+                            th:class="${i == listDish.number ? 'active' : ''}">
+                            <a class="page-link" th:href="@{/manager/dish(page=${i})}" th:text="${i + 1}">1</a>
+                        </li>
 
-                    <!-- Ellipsis for skipped pages -->
-                    <li class="page-item" th:if="${listDish.number > 3}">
-                        <span class="page-link">...</span>
-                    </li>
+                        <!-- Ellipsis for skipped pages -->
+                        <li class="page-item" th:if="${listDish.number > 3}">
+                            <span class="page-link">...</span>
+                        </li>
 
-                    <!-- Page numbers after ellipsis -->
-                    <li class="page-item" th:each="i : ${#numbers.sequence(listDish.totalPages - 3, listDish.totalPages - 1)}"
-                        th:if="${i > listDish.number + 2}"
-                        th:class="${i == listDish.number ? 'active' : ''}">
-                        <a class="page-link" th:href="@{/manager/dish(page=${i})}" th:text="${i + 1}">1</a>
-                    </li>
+                        <!-- Page numbers after ellipsis -->
+                        <li class="page-item"
+                            th:each="i : ${#numbers.sequence(listDish.totalPages - 3, listDish.totalPages - 1)}"
+                            th:if="${i > listDish.number + 2}"
+                            th:class="${i == listDish.number ? 'active' : ''}">
+                            <a class="page-link" th:href="@{/manager/dish(page=${i})}" th:text="${i + 1}">1</a>
+                        </li>
 
-                    <!-- Link to the next page -->
-                    <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
-                        <a class="page-link" th:href="@{/manager/dish(page=${listDish.number + 1})}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
+                        <!-- Link to the next page -->
+                        <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
+                            <a class="page-link" th:href="@{/manager/dish(page=${listDish.number + 1})}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
 
-                    <!-- Link to the last page -->
-                    <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
-                        <a class="page-link" th:href="@{/manager/dish(page=${listDish.totalPages - 1})}" aria-label="Last">
-                            <span aria-hidden="true">&raquo;&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+                        <!-- Link to the last page -->
+                        <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
+                            <a class="page-link" th:href="@{/manager/dish(page=${listDish.totalPages - 1})}"
+                               aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
-            <nav aria-label="Page navigation" th:if="${param.name != null || param.type != null}">
-                <ul class="pagination">
-                    <!-- Link to the first page -->
-                    <li class="page-item" th:if="${listDish.number > 0}">
-                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=0)}" aria-label="First">
-                            <span aria-hidden="true">&laquo;&laquo;</span>
-                        </a>
-                    </li>
+                <nav aria-label="Page navigation" th:if="${param.name != null || param.type != null}">
+                    <ul class="pagination">
+                        <!-- Link to the first page -->
+                        <li class="page-item" th:if="${listDish.number > 0}">
+                            <a class="page-link"
+                               th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=0)}"
+                               aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
 
-                    <!-- Link to the previous page -->
-                    <li class="page-item" th:if="${listDish.number > 0}">
-                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.number - 1})}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
+                        <!-- Link to the previous page -->
+                        <li class="page-item" th:if="${listDish.number > 0}">
+                            <a class="page-link"
+                               th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.number - 1})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
 
-                    <!-- Page numbers -->
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, listDish.totalPages - 1)}"
-                        th:if="${i >= listDish.number - 2 && i <= listDish.number + 2}"
-                        th:class="${i == listDish.number ? 'active' : ''}">
-                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${i})}" th:text="${i + 1}">1</a>
-                    </li>
+                        <!-- Page numbers -->
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, listDish.totalPages - 1)}"
+                            th:if="${i >= listDish.number - 2 && i <= listDish.number + 2}"
+                            th:class="${i == listDish.number ? 'active' : ''}">
+                            <a class="page-link"
+                               th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${i})}"
+                               th:text="${i + 1}">1</a>
+                        </li>
 
-                    <!-- Ellipsis for skipped pages -->
-                    <li class="page-item" th:if="${listDish.number > 3}">
-                        <span class="page-link">...</span>
-                    </li>
+                        <!-- Ellipsis for skipped pages -->
+                        <li class="page-item" th:if="${listDish.number > 3}">
+                            <span class="page-link">...</span>
+                        </li>
 
-                    <!-- Page numbers after ellipsis -->
-                    <li class="page-item" th:each="i : ${#numbers.sequence(listDish.totalPages - 3, listDish.totalPages - 1)}"
-                        th:if="${i > listDish.number + 2}"
-                        th:class="${i == listDish.number ? 'active' : ''}">
-                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${i})}" th:text="${i + 1}">1</a>
-                    </li>
+                        <!-- Page numbers after ellipsis -->
+                        <li class="page-item"
+                            th:each="i : ${#numbers.sequence(listDish.totalPages - 3, listDish.totalPages - 1)}"
+                            th:if="${i > listDish.number + 2}"
+                            th:class="${i == listDish.number ? 'active' : ''}">
+                            <a class="page-link"
+                               th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${i})}"
+                               th:text="${i + 1}">1</a>
+                        </li>
 
-                    <!-- Link to the next page -->
-                    <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
-                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.number + 1})}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
+                        <!-- Link to the next page -->
+                        <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
+                            <a class="page-link"
+                               th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.number + 1})}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
 
-                    <!-- Link to the last page -->
-                    <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
-                        <a class="page-link" th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.totalPages - 1})}" aria-label="Last">
-                            <span aria-hidden="true">&raquo;&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+                        <!-- Link to the last page -->
+                        <li class="page-item" th:if="${listDish.number + 1 < listDish.totalPages}">
+                            <a class="page-link"
+                               th:href="@{/manager/dish/search(name=${param.name}, type=${param.type}, page=${listDish.totalPages - 1})}"
+                               aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
 </div>
 <!-- Bootstrap core JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -298,24 +330,24 @@
 </body>
 
 <script>
-    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+    document.getElementById('toggle-sidebar').addEventListener('click', function () {
         var sidebar = document.getElementById('sidebar');
         var content = document.getElementById('content');
         sidebar.classList.toggle('collapsed');
         content.classList.toggle('collapsed');
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var submenuToggles = document.querySelectorAll('.has-submenu > a');
-        submenuToggles.forEach(function(submenuToggle) {
-            submenuToggle.addEventListener('click', function(e) {
+        submenuToggles.forEach(function (submenuToggle) {
+            submenuToggle.addEventListener('click', function (e) {
                 e.preventDefault();
                 var submenu = this.nextElementSibling;
                 submenu.classList.toggle('open');
             });
         });
     });
-    document.getElementById('searchInput').addEventListener('input', function() {
+    document.getElementById('searchInput').addEventListener('input', function () {
         currentPage = 1;
         displayTable();
         setupPagination();

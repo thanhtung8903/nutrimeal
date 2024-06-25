@@ -1,5 +1,6 @@
 package com.nutrimeal.nutrimeal.controller.api;
 
+import com.nutrimeal.nutrimeal.dto.response.DeliveryDetailResponse;
 import com.nutrimeal.nutrimeal.dto.response.DeliveryResponse;
 import com.nutrimeal.nutrimeal.model.Delivery;
 import com.nutrimeal.nutrimeal.service.DeliveryService;
@@ -10,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-
-import static com.nutrimeal.nutrimeal.model.DeliveryStatus.DELIVERED;
-import static com.nutrimeal.nutrimeal.model.DeliveryStatus.IN_TRANSIT;
 
 @RestController
 @RequestMapping("/api/delivery")
@@ -28,17 +26,16 @@ public class RestDelivery {
         return deliveryService.findDeliveriesByDeliveryStatus(status);
     }
 
-    @PostMapping("/processingdelivery")
-    public ResponseEntity<String> processingDelivery(@RequestParam Integer deliveryId,
-                                                     @RequestParam String status, @RequestParam String note) {
-        deliveryService.updateDelivery(deliveryId, status, note);
-        if (status.equals(IN_TRANSIT.toString())) {
-            return ResponseEntity.ok("Bắt đầu giao hàng");
-        } else if (status.equals(DELIVERED.toString())) {
-            return ResponseEntity.ok("Giao hàng thành công");
-        } else {
-            return ResponseEntity.ok("Giao hàng thất bại");
-        }
+    @PutMapping("/update/{deliveryId}/{shipperId}")
+    public ResponseEntity<String> updateDeliveryStatus(@PathVariable Integer deliveryId, @PathVariable String shipperId) {
+        deliveryService.updateDeliveryStatus(deliveryId, shipperId);
+        return ResponseEntity.ok("Delivery status updated");
     }
+
+    @GetMapping("/detail/{deliveryId}")
+    public ResponseEntity<DeliveryDetailResponse> getDeliveryDetail(@PathVariable Integer deliveryId) {
+        return ResponseEntity.ok(deliveryService.findDeliveryDetail(deliveryId));
+    }
+
 
 }
