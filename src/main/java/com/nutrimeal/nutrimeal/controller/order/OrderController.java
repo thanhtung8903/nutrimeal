@@ -1,13 +1,12 @@
 package com.nutrimeal.nutrimeal.controller.order;
 
 import com.nutrimeal.nutrimeal.dto.request.CallRequest;
-import com.nutrimeal.nutrimeal.dto.request.OrderRequest;
 import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.model.OrderStatus;
 import com.nutrimeal.nutrimeal.model.User;
-import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.OrderService;
 import com.nutrimeal.nutrimeal.service.UserService;
+import com.nutrimeal.nutrimeal.service.VNPayService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 @Controller
@@ -55,7 +52,7 @@ public class OrderController {
         } else {
             user = userService.findByUsername(principal.getName());
         }
-        int orderId =vnPayService.orderReturn(request, user);
+        int orderId = vnPayService.orderReturn(request, user);
         model.addAttribute("order", orderService.getOrderById(orderId));
         model.addAttribute("orderDetailsList", orderService.getOrderById(orderId));
         return "order/confirmOrder";
