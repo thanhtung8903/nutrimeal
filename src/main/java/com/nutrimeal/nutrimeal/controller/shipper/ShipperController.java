@@ -34,6 +34,18 @@ public class ShipperController {
         return "shipper/beingDelivery";
     }
 
+    @GetMapping("/orderDeliverySucess")
+    public String viewOrderDeliverySucess(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "shipper/orderDeliverySucess";
+    }
 
+    @GetMapping("/orderDeliveryFail")
+    public String viewOrderDeliveryFail(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "shipper/orderDeliveryFail";
+    }
 
 }
