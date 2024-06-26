@@ -453,8 +453,6 @@
                 noteTextarea.value = ''; // Đặt lại nội dung của textarea
                 loginPopup.classList.add('active');
                 document.body.classList.add('popup-active'); // Thêm lớp để chặn tương tác bên ngoài popup
-                orderRow.remove();
-
             } else if (event.target.classList.contains('btn-success-order')) {
                 event.preventDefault();
                 const orderRow = event.target.closest('tr');
@@ -495,11 +493,11 @@
                             const orderRow = document.querySelector(`td:nth-child(3):contains(${deliveryId})`).closest('tr');
                             orderRow.remove(); // Xóa dòng khi thành công
                             loginPopup.classList.remove('active');
-                            document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
+                            document.body.classList.remove('popup-active');
                         } else {
                             showToast('Giao hàng thất bại!', 'danger');
                             loginPopup.classList.remove('active');
-                            document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
+                            document.body.classList.remove('popup-active');
                         }
                     })
                     .catch(error => {
