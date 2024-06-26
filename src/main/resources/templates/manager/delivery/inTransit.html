@@ -124,6 +124,7 @@
             <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
 
             <input type="date" id="searchDate" placeholder="Search by Date">
+            <input type="search" id="searchInput" placeholder="Search now" style="width: 500px">
         </div>
         <table class="table-hover">
             <thead>
@@ -188,6 +189,11 @@
                 submenu.classList.toggle('open');
             });
         });
+    });
+    document.getElementById('searchInput').addEventListener('input', function() {
+        currentPage = 1;
+        displayTable();
+        setupPagination();
     });
 
     let currentPage = 1;
@@ -257,7 +263,7 @@
                 <td>${delivery.customerFullName}</td>
                 <td>${delivery.deliveryPhone}</td>
                 <td>${delivery.deliveryAddress}</td>
-                <td>${delivery.deliveryPrice}</td>
+                <td>${formatCurrency(delivery.deliveryPrice) + "đ"}</td>
                 <td>${delivery.shipperFullName}</td>
                 <td><button class="btn btn-sm btn-secondary detail-btn" data-id="${delivery.deliveryId}">Chi tiết</button></td>
             `;
@@ -272,6 +278,9 @@
             });
         });
 
+        function formatCurrency(amount) {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
         function fetchDeliveryDetails(deliveryId) {
             fetch(`http://localhost:8080/api/delivery/detail/${deliveryId}`)
                 .then(response => response.json())
@@ -287,7 +296,7 @@
         function displayDeliveryDetails(data) {
             const modalBody = document.getElementById('deliveryDetailsModalBody');
             modalBody.innerHTML = `
-        <table class="table table-bordered">
+        <table class="table table-bordered" ">
             <thead>
                 <tr>
                     <th>Combo</th>
@@ -315,6 +324,7 @@
             modal.show();
         }
     }
+
 
     function formatDate(dateString) {
         const date = new Date(dateString);

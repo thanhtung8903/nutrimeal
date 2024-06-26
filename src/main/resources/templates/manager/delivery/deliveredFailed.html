@@ -121,6 +121,7 @@
             <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
 
             <input type="date" id="searchDate" placeholder="Search by Date">
+            <input type="search" id="searchInput" placeholder="Search now" style="width: 500px">
         </div>
         <table class="table-hover">
             <thead>
@@ -186,7 +187,11 @@
             });
         });
     });
-
+    document.getElementById('searchInput').addEventListener('input', function() {
+        currentPage = 1;
+        displayTable();
+        setupPagination();
+    });
     let currentPage = 1;
     const rowsPerPage = 20;
     let deliveries = [];
@@ -254,7 +259,7 @@
                 <td>${delivery.customerFullName}</td>
                 <td>${delivery.deliveryPhone}</td>
                 <td>${delivery.deliveryAddress}</td>
-                <td>${delivery.deliveryPrice}</td>
+                <td>${formatCurrency(delivery.deliveryPrice) + "đ"}</td>
                 <td>${delivery.shipperFullName}</td>
                 <td><button class="btn btn-sm btn-secondary detail-btn" data-id="${delivery.deliveryId}">Chi tiết</button></td>
             `;
@@ -268,7 +273,9 @@
                 fetchDeliveryDetails(deliveryId);
             });
         });
-
+        function formatCurrency(amount) {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
         function fetchDeliveryDetails(deliveryId) {
             fetch(`http://localhost:8080/api/delivery/detail/${deliveryId}`)
                 .then(response => response.json())
