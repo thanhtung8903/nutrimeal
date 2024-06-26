@@ -1,5 +1,6 @@
 package com.nutrimeal.nutrimeal.service;
 
+import com.nutrimeal.nutrimeal.dto.response.DeliveryDetailResponse;
 import com.nutrimeal.nutrimeal.dto.response.DeliveryResponse;
 import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.repository.DailyMenuRepository;
@@ -161,5 +162,30 @@ public class DeliveryService {
 
         delivery.setShipper(shipper);
         deliveryRepository.save(delivery);
+    }
+
+    public DeliveryDetailResponse findDeliveryDetail(Integer deliveryId) {
+        Delivery delivery = deliveryRepository.findByDeliveryId(deliveryId);
+        DeliveryDetailResponse deliveryDetailResponse = new DeliveryDetailResponse();
+
+        DeliveryResponse deliveryResponse = new DeliveryResponse();
+        deliveryResponse.setDeliveryId(delivery.getDeliveryId());
+        deliveryResponse.setDeliveryStatus(delivery.getDeliveryStatus());
+        deliveryResponse.setDeliveryTime(delivery.getDeliveryTime());
+        deliveryResponse.setDeliveryDate(delivery.getDeliveryDate().toString());
+        deliveryResponse.setDeliveryNote(delivery.getDeliveryNote());
+        deliveryResponse.setDeliveryAddress(delivery.getDeliveryAddress());
+        deliveryResponse.setDeliveryPhone(delivery.getDeliveryPhone());
+        deliveryResponse.setCustomerFullName(delivery.getOrder().getUser().getFullName());
+        deliveryResponse.setShipperFullName(delivery.getShipper().getFullName());
+        deliveryResponse.setDeliveryPrice(delivery.getDeliveryPrice());
+//        deliveryDetailResponse.setDelivery(deliveryResponse);
+
+        List<DeliveryDetail> deliveryDetails = deliveryDetailRepository.findDeliveryDetailsByDelivery(delivery);
+
+        deliveryDetailResponse.setDeliveryDetails(deliveryDetails);
+//        deliveryDetailResponse.setDelivery(deliveryResponse);
+
+        return deliveryDetailResponse;
     }
 }
