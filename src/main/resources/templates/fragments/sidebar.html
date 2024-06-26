@@ -20,7 +20,7 @@
             <button id="toggle-sidebar" style="margin-left: 100px; padding: 16px; border: none; background-color: black; color: white; font-size: 20px; border-radius: 8px;">
                 <i class="bi bi-list" style="font-size: 24px;"></i>
             </button>
-            <input type="search" id="searchInput" placeholder="Search now" style="width: 500px;">
+<!--            <input type="search" id="searchInput" placeholder="Search now" style="width: 500px;">-->
         </div>
         <div class="user-info">
             <img th:src="${#authentication.principal.image}" alt="User Image">
@@ -91,11 +91,7 @@
     });
 
 
-    document.getElementById('searchInput').addEventListener('input', function() {
-        currentPage = 1;
-        displayTable();
-        setupPagination();
-    });
+
 
 </script>
 </body>

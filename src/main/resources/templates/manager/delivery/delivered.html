@@ -105,6 +105,18 @@
             background: none;
             cursor: default;
         }
+        /*#searchInput{*/
+        /*    flex: 1;*/
+        /*    display: flex;*/
+        /*    align-items: center;*/
+        /*    margin-left: 20px;*/
+        /*}*/
+        /*#searchInput input {*/
+        /*    width: 100%;*/
+        /*    padding: 8px 12px;*/
+        /*    border: 1px solid #ccc;*/
+        /*    border-radius: 4px;*/
+        /*}*/
 
 
     </style>
@@ -118,8 +130,9 @@
         <h2>ĐƠN GIAO THÀNH CÔNG</h2>
         <div class="controls">
             <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
-
             <input type="date" id="searchDate" placeholder="Search by Date">
+            <input type="search" id="searchInput" placeholder="Search now" style="width: 500px;">
+
         </div>
         <table class="table-hover">
             <thead>

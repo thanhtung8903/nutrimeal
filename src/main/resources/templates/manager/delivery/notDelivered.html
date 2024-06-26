@@ -126,6 +126,10 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+        #searchInput{
+            width: 400px;
+            height: 40px;
+        }
     </style>
 </head>
 <body>
@@ -137,6 +141,7 @@
         <div class="controls">
             <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
             <input type="date" id="searchDate" placeholder="Search by Date">
+            <input type="search" id="searchInput" placeholder="Search now">
         </div>
         <table class="table-hover">
             <thead>
@@ -215,13 +220,17 @@
                 submenu.classList.toggle('open');
             });
         });
-    });
 
-    document.addEventListener('DOMContentLoaded', function() {
         let currentPage = 1;
         const rowsPerPage = 20;
         let deliveries = [];
         let shippers = [];
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            currentPage = 1;
+            displayTable();
+            setupPagination();
+        });
 
         document.getElementById('searchDate').addEventListener('input', function() {
             currentPage = 1;
@@ -245,11 +254,15 @@
             const tableBody = document.getElementById('table-body');
             tableBody.innerHTML = '';
 
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const searchDate = document.getElementById('searchDate').value;
 
             const filteredDeliveries = deliveries.filter(delivery => {
+                const matchesSearchTerm = Object.values(delivery).some(val =>
+                    val && val.toString().toLowerCase().includes(searchTerm)
+                );
                 const matchesSearchDate = searchDate ? new Date(delivery.deliveryDate).toISOString().split('T')[0] === searchDate : true;
-                return matchesSearchDate;
+                return matchesSearchTerm && matchesSearchDate;
             });
 
             const start = (currentPage - 1) * rowsPerPage;
@@ -350,11 +363,16 @@
             const paginationControls = document.getElementById('pagination-controls');
             paginationControls.innerHTML = '';
 
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const searchDate = document.getElementById('searchDate').value;
 
             const filteredDeliveries = deliveries.filter(delivery => {
-                const matchesSearchDate = searchDate ? new Date(delivery.deliveryDate).toISOString().split('T')[0] === searchDate : true;
-                return matchesSearchDate;
+                const matchesSearchTerm = Object.values(delivery).some(val =>
+                    val && val.toString().toLowerCase().includes(searchTerm)
+                );
+                const matchesSearchDate = searchDate ?
+                    new Date(delivery.deliveryDate).toISOString().split('T')[0] === searchDate : true;
+                return matchesSearchTerm && matchesSearchDate;
             });
 
             const totalPages = Math.ceil(filteredDeliveries.length / rowsPerPage);
