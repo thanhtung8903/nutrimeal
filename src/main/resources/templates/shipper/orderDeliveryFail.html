@@ -96,68 +96,6 @@
             margin: 0 5px;
         }
 
-        .popup {
-            position: fixed;
-            top: -150%;
-            left: 50%;
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1.25);
-            width: 380px;
-            padding: 20px 30px;
-            background: #fff;
-            box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, 0.15);
-            border-radius: 10px;
-            transition: top 0ms ease-in-out 200ms, opacity 200ms ease-in-out 0ms, transform 200ms ease-in-out 0ms;
-        }
-
-        .popup.active {
-            top: 50%;
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-            transition: top 0ms ease-in-out 0ms, opacity 200ms ease-in-out 0ms, transform 200ms ease-in-out 0ms;
-        }
-
-        .popup .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 15px;
-            height: 15px;
-            background: #888;
-            color: #eee;
-            text-align: center;
-            line-height: 15px;
-            cursor: pointer;
-            border-radius: 15px;
-        }
-
-        .popup .form h2 {
-            text-align: center;
-            color: #222;
-            margin: 10px 0 20px;
-            font-size: 25px;
-        }
-
-        .popup .form .form-element {
-            margin: 15px 0;
-        }
-
-        .popup .form .form-element label {
-            font-size: 14px;
-            color: #222;
-        }
-
-        .popup .form .form-element textarea[type="text"],
-        .popup .form .form-element input[type="password"] {
-            margin-top: 5px;
-            display: block;
-            width: 100%;
-            padding: 10px;
-            outline: none;
-            border: 1px solid #aaa;
-            border-radius: 5px;
-        }
-
         .search-bar_delivered {
             display: flex;
             align-items: center;
@@ -185,8 +123,6 @@
                 margin-left: 0;
             }
         }
-
-        /* phan trang */
         .pagination {
             display: flex;
             justify-content: flex-start;
@@ -219,13 +155,13 @@
 </head>
 <body class="delivered">
 <div th:insert="fragments/sidebar :: sidebar-shipper"></div>
+
 <div class="content-wrapper">
     <div class="">
-        <!-- Content for delivered orders -->
         <div id="content-delivered" class="order-content_delivered">
             <div class="search-bar_delivered">
-                <h2 class="delivery-manager-h2">Đơn Hàng Đang Giao</h2>
-                <input type="text" id="search-input" class="form-control_delivered" placeholder="Tìm kiếm đơn hàng">
+                <h2 class="delivery-manager-h2">Đơn Giao Thất Bại</h2>
+                <input type="text" id="search-date" class="form-control_delivered" placeholder="Tìm kiếm đơn hàng">
             </div>
             <table class="table table-bordered table-striped table-hover">
                 <thead>
@@ -236,8 +172,9 @@
                     <th>Tên khách hàng</th>
                     <th>Số điện thoại khách hàng</th>
                     <th>Địa chỉ khách hàng</th>
+                    <th>Ghi chú</th>
                     <th>Tổng tiền</th>
-                    <th>Action</th>
+                    <th>Trạng thái</th>
                 </tr>
                 </thead>
                 <tbody id="order-table-body">
@@ -253,31 +190,6 @@
     </div>
 </div>
 
-<!-- Toast for success and failure notifications -->
-<div class="toast-container"></div>
-
-<!-- Login Popup -->
-<div class="popup" id="login-popup">
-    <div class="close-btn">&times;</div>
-    <div class="form">
-        <table class="table">
-            <tbody>
-            <tr>
-                <td>Ghi chú:</td>
-                <td><textarea id="note-textarea" rows="3"></textarea></td>
-            </tr>
-            <tr>
-                <td>Action:</td>
-                <td>
-                    <div class="btn-group">
-                        <a href="#" class="btn-danger btn-fail-order2">Xác nhận</a>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -289,22 +201,17 @@
     document.addEventListener("DOMContentLoaded", function () {
         const orderTableBody = document.getElementById('order-table-body');
         const pagination = document.getElementById('pagination');
-
-        const toastContainer = document.querySelector('.toast-container');
-        const loginPopup = document.querySelector('#login-popup');
-        const searchInput = document.getElementById('search-input');
         let deliveries = [];
-        let isPopupActive = false;
         let currentPage = 1;
         const rowsPerPage = 10;
+
         function fetchDeliveredOrders() {
-            fetch('http://localhost:8080/api/shippers/delivery?status=IN_TRANSIT')
+            fetch('http://localhost:8080/api/shippers/delivery?status=DELIVERY_FAILED')
                 .then(response => response.json())
                 .then(data => {
                     deliveries = data;
                     displayOrders(deliveries, currentPage, rowsPerPage);
                     setupPagination(deliveries.length, rowsPerPage);
-
                 })
                 .catch(error => console.error('Lỗi khi lấy chi tiết đơn hàng đã giao:', error));
         }
@@ -317,24 +224,20 @@
             const end = start + rows;
             const paginatedItems = data.slice(start, end);
 
-            paginatedItems.forEach(deliveries => {
+            paginatedItems.forEach(delivery => {
                 const row = document.createElement('tr');
                 row.classList.add('text-center');
                 row.innerHTML = `
-                <td>${deliveries.deliveryDate}</td>
-                <td>${deliveries.deliveryTime}</td>
-                <td>${deliveries.deliveryId}</td>
-                <td>${deliveries.customerFullName}</td>
-                <td>${deliveries.deliveryPhone}</td>
-                <td>${deliveries.deliveryAddress}</td>
-                <td>${deliveries.deliveryPrice}</td>
-        <td>
-          <div class="btn-group">
-            <a href="#" class="btn btn-success btn-success-order">Thành công</a>
-            <a href="#" class="btn btn-danger btn-fail-order">Thất bại</a>
-          </div>
-        </td>
-      `;
+                    <td>${delivery.deliveryDate}</td>
+                    <td>${delivery.deliveryTime}</td>
+                    <td>${delivery.deliveryId}</td>
+                    <td>${delivery.customerFullName}</td>
+                    <td>${delivery.deliveryPhone}</td>
+                    <td>${delivery.deliveryAddress}</td>
+                    <td>${delivery.deliveryNote}</td>
+                    <td>${delivery.deliveryPrice}</td>
+                    <td>${delivery.deliveryStatus}</td>
+                `;
                 orderTableBody.appendChild(row);
             });
         }
@@ -430,111 +333,14 @@
             return ellipsis;
         }
 
-
-        document.getElementById('search-input').addEventListener('input', function (event) {
+        document.getElementById('search-date').addEventListener('input', function (event) {
             const searchValue = event.target.value.trim().toLowerCase();
             const filteredOrders = deliveries.filter(order =>
                 order.deliveryDate.toLowerCase().match(searchValue)
             );
-            displayOrders(filteredOrders);
+            displayOrders(filteredOrders, currentPage, rowsPerPage);
+            setupPagination(filteredOrders.length, rowsPerPage);
         });
-
-        document.addEventListener('click', function (event) {
-            const loginPopup = document.querySelector('#login-popup');
-            const btnFailOrder = document.querySelector('.btn-fail-order');
-            const btnSuccessOrder = document.querySelector('.btn-success-order');
-
-            if (event.target.classList.contains('btn-fail-order')) {
-                event.preventDefault();
-                const orderRow = event.target.closest('tr');
-                const orderId = orderRow.querySelector('td:nth-child(3)').textContent;
-                const noteTextarea = document.getElementById('note-textarea');
-                noteTextarea.dataset.orderId = orderId;
-                noteTextarea.value = ''; // Đặt lại nội dung của textarea
-                loginPopup.classList.add('active');
-                document.body.classList.add('popup-active'); // Thêm lớp để chặn tương tác bên ngoài popup
-                orderRow.remove();
-
-            } else if (event.target.classList.contains('btn-success-order')) {
-                event.preventDefault();
-                const orderRow = event.target.closest('tr');
-                const deliveryId = orderRow.querySelector('td:nth-child(3)').textContent;
-                // showToast('Giao hàng thành công!', 'success');
-                orderRow.remove();
-                fetch(`http://localhost:8080/api/shippers/delivery/${deliveryId}?status=DELIVERED`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({}),
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            showToast('Bắt đầu giao hàng!', 'success');
-                            orderRow.remove(); // Xóa dòng khi thành công
-                        }
-                    });
-            } else if (event.target.classList.contains('close-btn') || !loginPopup.contains(event.target)) {
-                // Đóng form popup khi click vào nút đóng hoặc bên ngoài form popup
-                loginPopup.classList.remove('active');
-                document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
-            } else if (event.target.classList.contains('btn-fail-order2')) {
-                event.preventDefault();
-                const deliveryId = document.getElementById('note-textarea').dataset.orderId;
-                const note = document.getElementById('note-textarea').value;
-                fetch(`http://localhost:8080/api/shippers/delivery/${deliveryId}?status=DELIVERY_FAILED`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ note }),
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            // showToast('Giao hàng thất bại!', 'success');
-                            const orderRow = document.querySelector(`td:nth-child(3):contains(${deliveryId})`).closest('tr');
-                            orderRow.remove(); // Xóa dòng khi thành công
-                            loginPopup.classList.remove('active');
-                            document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
-                        } else {
-                            showToast('Giao hàng thất bại!', 'danger');
-                            loginPopup.classList.remove('active');
-                            document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
-                        }
-                    })
-                    .catch(error => {
-                        showToast('Giao hàng thất bại!', 'danger');
-                        loginPopup.classList.remove('active');
-                        document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
-                    });
-            }
-        });
-
-
-        searchInput.addEventListener('input', function () {
-            const searchTerm = searchInput.value.toLowerCase();
-            const filteredOrders = deliveries.filter(order =>
-                order.customerName.toLowerCase().includes(searchTerm) ||
-                order.customerPhone.includes(searchTerm) ||
-                order.orderId.toLowerCase().includes(searchTerm)
-            );
-            displayOrders(filteredOrders);
-        });
-
-        function showToast(message, type) {
-            const toast = document.createElement('div');
-            toast.className = `toast align-items-center text-bg-${type} border-0 show`;
-            toast.role = 'alert';
-            toast.innerHTML = `
-                <div class="d-flex">
-                    <div class="toast-body">${message}</div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                            aria-label="Close"></button>
-                </div>
-            `;
-            toastContainer.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
 
         fetchDeliveredOrders();
     });

@@ -123,6 +123,36 @@
         margin-left: 0;
       }
     }
+
+    .pagination {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 20px;
+    }
+
+    .pagination .page-item {
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    .pagination .page-link {
+      padding: 8px 16px;
+      border-radius: 5px;
+      color: #343a40;
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+    }
+
+    .pagination .page-link:hover {
+      background-color: #e9ecef;
+    }
+
+    .pagination .page-item.active .page-link {
+      background-color: #343a40;
+      color: #ffffff;
+      border-color: #343a40;
+    }
+
   </style>
 </head>
 <body class="delivered">
@@ -171,6 +201,8 @@
     const orderTableBody = document.getElementById('order-table-body');
     const toastContainer = document.querySelector('.toast-container');
     let deliveries = [];
+    const itemsPerPage = 10; // Số lượng mục hiển thị trên mỗi trang
+    let currentPage = 1;
 
     function fetchDeliveredOrders() {
       fetch('http://localhost:8080/api/shippers/delivery?status=NOT_DELIVERED')
@@ -183,33 +215,141 @@
     }
 
     function displayOrders(deliveries) {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedOrders = deliveries.slice(startIndex, endIndex);
+
       orderTableBody.innerHTML = '';
-      deliveries.forEach(deliveries => {
+      paginatedOrders.forEach(delivery => {
         const row = document.createElement('tr');
         row.classList.add('text-center');
         row.innerHTML = `
-                <td>${deliveries.deliveryDate}</td>
-                <td>${deliveries.deliveryTime}</td>
-                <td>${deliveries.deliveryId}</td>
-                <td>${deliveries.customerFullName}</td>
-                <td>${deliveries.deliveryPhone}</td>
-                <td>${deliveries.deliveryAddress}</td>
-                <td>${deliveries.deliveryPrice}</td>
-                <td>
-                    <div class="btn-group">
-                        <a href="#" class="btn btn-success btn-fail-order">Xác nhận giao</a>
-                    </div>
-                </td>
-            `;
+        <td>${delivery.deliveryDate}</td>
+        <td>${delivery.deliveryTime}</td>
+        <td>${delivery.deliveryId}</td>
+        <td>${delivery.customerFullName}</td>
+        <td>${delivery.deliveryPhone}</td>
+        <td>${delivery.deliveryAddress}</td>
+        <td>${delivery.deliveryPrice}</td>
+        <td>
+          <div class="btn-group">
+            <a href="#" class="btn btn-success btn-fail-order">Xác nhận giao</a>
+          </div>
+        </td>
+      `;
         orderTableBody.appendChild(row);
       });
+
+      renderPagination();
     }
+
+    function renderPagination() {
+      const totalPages = Math.ceil(deliveries.length / itemsPerPage);
+      const paginationContainer = document.createElement('ul');
+      paginationContainer.classList.add('pagination');
+      paginationContainer.id = 'pagination';
+
+      const maxPagesToShow = 3; // Maximum number of page links to show
+      const currentPageIndex = currentPage - 1;
+
+      let startPage, endPage;
+      if (totalPages <= maxPagesToShow) {
+        // If total pages are less than or equal to max pages to show
+        startPage = 1;
+        endPage = totalPages;
+      } else {
+        // Calculate start and end pages based on current page
+        if (currentPageIndex <= Math.floor(maxPagesToShow / 2)) {
+          startPage = 1;
+          endPage = maxPagesToShow;
+        } else if (currentPageIndex >= totalPages - Math.floor(maxPagesToShow / 2)) {
+          startPage = totalPages - maxPagesToShow + 1;
+          endPage = totalPages;
+        } else {
+          startPage = currentPageIndex - Math.floor(maxPagesToShow / 2) + 1;
+          endPage = startPage + maxPagesToShow - 1;
+        }
+      }
+
+      // Previous button
+      paginationContainer.appendChild(createPaginationItem('Back', currentPage > 1 ? currentPage - 1 : 1, currentPage === 1));
+
+      // First page button and ellipsis if needed
+      if (startPage > 1) {
+        paginationContainer.appendChild(createPaginationItem(1, 1, false));
+        if (startPage > 2) {
+          paginationContainer.appendChild(createEllipsis());
+        }
+      }
+
+      // Page buttons
+      for (let page = startPage; page <= endPage; page++) {
+        paginationContainer.appendChild(createPaginationItem(page, page, page === currentPage));
+      }
+
+      // Last page button and ellipsis if needed
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          paginationContainer.appendChild(createEllipsis());
+        }
+        paginationContainer.appendChild(createPaginationItem(totalPages, totalPages, false));
+      }
+
+      // Next button
+      paginationContainer.appendChild(createPaginationItem('Next', currentPage < totalPages ? currentPage + 1 : totalPages, currentPage === totalPages));
+
+      const existingPagination = document.getElementById('pagination');
+      if (existingPagination) {
+        existingPagination.replaceWith(paginationContainer);
+      } else {
+        document.getElementById('content-delivered').appendChild(paginationContainer);
+      }
+    }
+
+    function createPaginationItem(text, page, isActive) {
+      const li = document.createElement('li');
+      li.classList.add('page-item');
+      if (isActive) {
+        li.classList.add('active');
+      }
+
+      const link = document.createElement('a');
+      link.classList.add('page-link');
+      link.href = '#';
+      link.textContent = text;
+      li.appendChild(link);
+
+      if (!isActive) {
+        link.addEventListener('click', function (event) {
+          event.preventDefault();
+          currentPage = page;
+          displayOrders(deliveries);
+        });
+      }
+
+      return li;
+    }
+
+    function createEllipsis() {
+      const li = document.createElement('li');
+      li.classList.add('page-item', 'disabled');
+
+      const link = document.createElement('a');
+      link.classList.add('page-link');
+      link.href = '#';
+      link.textContent = '...';
+
+      li.appendChild(link);
+      return li;
+    }
+
 
     document.getElementById('search-date').addEventListener('input', function (event) {
       const searchValue = event.target.value.trim().toLowerCase();
       const filteredOrders = deliveries.filter(order =>
-              order.deliveryDate.toLowerCase().match(searchValue)
+              order.deliveryDate.toLowerCase().includes(searchValue)
       );
+      currentPage = 1; // Reset to first page when searching
       displayOrders(filteredOrders);
     });
 
@@ -234,7 +374,7 @@
                 .then(response => {
                   if (response.ok) {
                     showToast('Bắt đầu giao hàng!', 'success');
-                    orderRow.remove(); // Xóa dòng khi thành công
+                    fetchDeliveredOrders(); // Reload data after successful delivery
                   }
                 });
       }
@@ -245,20 +385,18 @@
       toast.className = `toast align-items-center text-bg-${type} border-0 show`;
       toast.role = 'alert';
       toast.innerHTML = `
-            <div class="d-flex">
-                <div class="toast-body">${message}</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-            </div>
-        `;
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+      </div>
+    `;
       toastContainer.appendChild(toast);
       setTimeout(() => toast.remove(), 2000);
     }
 
     fetchDeliveredOrders();
   });
-
-
 
 </script>
 </body>
