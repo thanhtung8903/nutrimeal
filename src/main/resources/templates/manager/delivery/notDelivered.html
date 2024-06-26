@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Đơn chưa giao</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <style>
@@ -132,7 +133,7 @@
 
 <div class="content" id="content">
     <h2>ĐƠN CHƯA GIAO</h2>
-    <div class="container container-table">
+    <div class="container-fluid container-table">
         <div class="controls">
             <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
             <input type="date" id="searchDate" placeholder="Search by Date">
@@ -174,14 +175,48 @@
             <!-- Options will be populated by JavaScript -->
         </select>
     </p>
-    <button class="btn btn-primary" id="saveEdit">Save</button>
-    <button class="btn btn-secondary" id="cancelEdit">Cancel</button>
+    <button class="btn btn-primary" id="saveEdit">Cập nhật</button>
+    <button class="btn btn-secondary" id="cancelEdit">Hủy</button>
+</div>
 
+<div class="modal fade" id="deliveryDetailsModal" tabindex="-1" aria-labelledby="deliveryDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Use modal-lg to increase width -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deliveryDetailsModalLabel">Chi tiết đơn giao</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="deliveryDetailsModalBody">
+                <!-- Delivery details will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Sidebar toggle functionality
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('collapsed');
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function(submenuToggle) {
+            submenuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         let currentPage = 1;
         const rowsPerPage = 20;
@@ -234,7 +269,10 @@
                 <td>${delivery.deliveryAddress}</td>
                 <td>${delivery.deliveryPrice}</td>
                 <td>${delivery.shipperFullName}</td>
-                <td><button class="btn btn-sm btn-primary edit-btn" data-index="${start + index}">Update</button></td>
+                <td>
+                    <button class="btn btn-sm btn-secondary detail-btn" data-id="${delivery.deliveryId}">Chi tiết</button>
+                    <button class="btn btn-sm btn-primary edit-btn" data-index="${start + index}">Cập nhật</button>
+                </td>
             `;
                 tableBody.appendChild(row);
             });
@@ -246,6 +284,58 @@
                     openEditForm(delivery);
                 });
             });
+
+            document.querySelectorAll('.detail-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const deliveryId = this.getAttribute('data-id');
+                    fetchDeliveryDetails(deliveryId);
+                });
+            });
+        }
+
+        function fetchDeliveryDetails(deliveryId) {
+            fetch(`http://localhost:8080/api/delivery/detail/${deliveryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    displayDeliveryDetails(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching delivery details:', error);
+                });
+        }
+
+        function displayDeliveryDetails(data) {
+            const modalBody = document.getElementById('deliveryDetailsModalBody');
+            modalBody.innerHTML = `
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Combo</th>
+                    <th>Bữa sáng</th>
+                    <th>Bữa trưa</th>
+                    <th>Bữa tối</th>
+                    <th>Số lượng</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${data.deliveryDetails.map(detail => `
+                    <tr>
+                        <td>${detail.deliveryDetailCombo}</td>
+                        <td>${detail.dishBreakfast ? detail.dishBreakfast.dishName : ''}</td>
+                        <td>${detail.dishLunch ? detail.dishLunch.dishName : ''}</td>
+                        <td>${detail.dishDinner ? detail.dishDinner.dishName : ''}</td>
+                        <td>${detail.deliveryDetailQuantity}</td>
+                    </tr>
+
+                `).join('')}
+            </tbody>
+        </table>
+        `;
+
+            // Show the modal
+            const deliveryDetailsModal = new bootstrap.Modal(document.getElementById('deliveryDetailsModal'));
+            deliveryDetailsModal.show();
         }
 
         function formatDate(dateString) {
@@ -338,17 +428,32 @@
         document.getElementById('saveEdit').addEventListener('click', function() {
             const shipperSelect = document.getElementById('shipper');
             const selectedShipper = shipperSelect.value;
-            // Call API to save changes
-            console.log('Saving changes with shipper id:', selectedShipper);
+            const deliveryId = document.getElementById('orderCode').textContent;
 
-            // Close the form after saving
-            document.getElementById('editForm').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
+            // Call API to save changes
+            fetch(`http://localhost:8080/api/delivery/update/${deliveryId}/${selectedShipper}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Close the form after saving
+                        document.getElementById('editForm').style.display = 'none';
+                        document.getElementById('overlay').style.display = 'none';
+                        // Optionally, refresh the data
+                        fetchDeliveries();
+                    } else {
+                        console.error('Error updating delivery:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating delivery:', error);
+                });
         });
 
-        // Fetch data on page load
-        window.onload = function() {
-            // Fetch deliveries
+        function fetchDeliveries() {
             fetch('http://localhost:8080/api/delivery?status=NOT_DELIVERED')
                 .then(response => response.json())
                 .then(data => {
@@ -359,6 +464,11 @@
                 .catch(error => {
                     console.error('Error fetching delivery details:', error);
                 });
+        }
+
+        // Fetch data on page load
+        window.onload = function() {
+            fetchDeliveries();
 
             // Fetch shippers
             fetch('http://localhost:8080/api/shippers')
@@ -371,9 +481,6 @@
                 });
         };
     });
-
 </script>
-
-
 </body>
 </html>

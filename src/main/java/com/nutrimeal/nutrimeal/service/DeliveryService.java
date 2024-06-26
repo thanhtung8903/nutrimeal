@@ -1,5 +1,6 @@
 package com.nutrimeal.nutrimeal.service;
 
+import com.nutrimeal.nutrimeal.dto.response.DeliveryDetailResponse;
 import com.nutrimeal.nutrimeal.dto.response.DeliveryResponse;
 import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.repository.DailyMenuRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -153,5 +155,80 @@ public class DeliveryService {
         }
 
         return deliveryResponseList;
+    }
+
+    public void updateDeliveryStatus(Integer deliveryId, String shipperId) {
+        Delivery delivery = deliveryRepository.findByDeliveryId(deliveryId);
+        User shipper = userRepository.findByUserId(shipperId);
+
+        delivery.setShipper(shipper);
+        deliveryRepository.save(delivery);
+    }
+
+    public DeliveryDetailResponse findDeliveryDetail(Integer deliveryId) {
+        Delivery delivery = deliveryRepository.findByDeliveryId(deliveryId);
+        DeliveryDetailResponse deliveryDetailResponse = new DeliveryDetailResponse();
+
+        DeliveryResponse deliveryResponse = new DeliveryResponse();
+        deliveryResponse.setDeliveryId(delivery.getDeliveryId());
+        deliveryResponse.setDeliveryStatus(delivery.getDeliveryStatus());
+        deliveryResponse.setDeliveryTime(delivery.getDeliveryTime());
+        deliveryResponse.setDeliveryDate(delivery.getDeliveryDate().toString());
+        deliveryResponse.setDeliveryNote(delivery.getDeliveryNote());
+        deliveryResponse.setDeliveryAddress(delivery.getDeliveryAddress());
+        deliveryResponse.setDeliveryPhone(delivery.getDeliveryPhone());
+        deliveryResponse.setCustomerFullName(delivery.getOrder().getUser().getFullName());
+        deliveryResponse.setShipperFullName(delivery.getShipper().getFullName());
+        deliveryResponse.setDeliveryPrice(delivery.getDeliveryPrice());
+//        deliveryDetailResponse.setDelivery(deliveryResponse);
+
+        List<DeliveryDetail> deliveryDetails = deliveryDetailRepository.findDeliveryDetailsByDelivery(delivery);
+
+        deliveryDetailResponse.setDeliveryDetails(deliveryDetails);
+//        deliveryDetailResponse.setDelivery(deliveryResponse);
+
+        return deliveryDetailResponse;
+    }
+
+    public List<DeliveryResponse> findDeliveriesByShipperAndStatus(User shipper, String status) {
+        List<Delivery> deliveryList = deliveryRepository.findDeliveriesByShipperAndDeliveryStatus(shipper, status);
+        List<DeliveryResponse> deliveryResponseList = new ArrayList<>();
+        for (Delivery delivery : deliveryList) {
+            DeliveryResponse deliveryResponse = new DeliveryResponse();
+            deliveryResponse.setDeliveryId(delivery.getDeliveryId());
+            deliveryResponse.setDeliveryStatus(delivery.getDeliveryStatus());
+            deliveryResponse.setDeliveryTime(delivery.getDeliveryTime());
+            deliveryResponse.setDeliveryDate(delivery.getDeliveryDate().toString());
+            deliveryResponse.setDeliveryNote(delivery.getDeliveryNote());
+            deliveryResponse.setDeliveryAddress(delivery.getDeliveryAddress());
+            deliveryResponse.setDeliveryPhone(delivery.getDeliveryPhone());
+            deliveryResponse.setCustomerFullName(delivery.getOrder().getUser().getFullName());
+            deliveryResponse.setShipperFullName(delivery.getShipper().getFullName());
+//            deliveryResponse.setDeliveryUpdateTime(delivery.getDeliveryUpdateTime().toString());
+            deliveryResponse.setDeliveryPrice(delivery.getDeliveryPrice());
+            deliveryResponseList.add(deliveryResponse);
+    }
+        return deliveryResponseList;
+    }
+
+    public DeliveryResponse updateDeliveryStatus(int deliveryId, String status, User shipper, String note) {
+        Delivery delivery = deliveryRepository.findByDeliveryIdAndShipper(deliveryId, shipper);
+        delivery.setDeliveryStatus(status);
+        delivery.setDeliveryNote(note);
+        delivery.setDeliveryUpdateTime(LocalDateTime.now());
+        deliveryRepository.save(delivery);
+
+        DeliveryResponse deliveryResponse = new DeliveryResponse();
+        deliveryResponse.setDeliveryId(delivery.getDeliveryId());
+        deliveryResponse.setDeliveryStatus(delivery.getDeliveryStatus());
+        deliveryResponse.setDeliveryTime(delivery.getDeliveryTime());
+        deliveryResponse.setDeliveryDate(delivery.getDeliveryDate().toString());
+        deliveryResponse.setDeliveryNote(delivery.getDeliveryNote());
+        deliveryResponse.setDeliveryAddress(delivery.getDeliveryAddress());
+        deliveryResponse.setDeliveryPhone(delivery.getDeliveryPhone());
+        deliveryResponse.setCustomerFullName(delivery.getOrder().getUser().getFullName());
+        deliveryResponse.setShipperFullName(delivery.getShipper().getFullName());
+        deliveryResponse.setDeliveryUpdateTime(LocalDateTime.now().toString());
+        return deliveryResponse;
     }
 }

@@ -1,18 +1,33 @@
 @startuml
-package "com.nutrimeal.nutrimeal" {
-    package "controller" {
-        package "manager"
-    }
-    package "service" {
-    }
-    package "model" {
-    }
-    package "config" {
-        package "security" {
-        }
-    }
-
-    package "repository" {
-    }
+package "Config" {
 }
+
+package "Controller" {
+}
+
+package "DTO" {
+}
+
+package "Email" {
+}
+
+package "Model" {
+}
+
+package "Repository" {
+}
+
+package "Service" {
+}
+
+package "Templates" {
+}
+
+Controller --> Service
+Controller --> Templates
+Service --> Repository
+Service --> Model
+Service --> DTO
+Service --> Email
+Repository --> Model
 @enduml
