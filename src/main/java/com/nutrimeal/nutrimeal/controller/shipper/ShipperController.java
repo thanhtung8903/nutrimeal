@@ -34,18 +34,20 @@ public class ShipperController {
         return "shipper/beingDelivery";
     }
 
-    @GetMapping("/orderDeliverySucess")
-    public String viewOrderDeliverySucess(Model model, Principal principal) {
+    @GetMapping("/delivered")
+    public String viewDelivered(Model model, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         model.addAttribute("user", user);
-        return "shipper/orderDeliverySucess";
+        return "shipper/orderDeliverySuccess";
     }
 
-    @GetMapping("/orderDeliveryFail")
-    public String viewOrderDeliveryFail(Model model, Principal principal) {
+    @GetMapping("/deliveryfailed")
+    public String viewDeliveryFailed(Model model, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         model.addAttribute("user", user);
         return "shipper/orderDeliveryFail";
     }
+
+
 
 }

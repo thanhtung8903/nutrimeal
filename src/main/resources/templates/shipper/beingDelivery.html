@@ -185,6 +185,36 @@
                 margin-left: 0;
             }
         }
+
+        /* phan trang */
+        .pagination {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .pagination .page-link {
+            padding: 8px 16px;
+            border-radius: 5px;
+            color: #343a40;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #e9ecef;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #343a40;
+            color: #ffffff;
+            border-color: #343a40;
+        }
     </style>
 </head>
 <body class="delivered">
@@ -214,6 +244,11 @@
                 <!-- Table rows will be populated dynamically -->
                 </tbody>
             </table>
+            <nav>
+                <ul class="pagination" id="pagination">
+                    <!-- Pagination controls will be dynamically generated here -->
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -253,25 +288,36 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const orderTableBody = document.getElementById('order-table-body');
+        const pagination = document.getElementById('pagination');
+
         const toastContainer = document.querySelector('.toast-container');
         const loginPopup = document.querySelector('#login-popup');
         const searchInput = document.getElementById('search-input');
         let deliveries = [];
         let isPopupActive = false;
-
+        let currentPage = 1;
+        const rowsPerPage = 10;
         function fetchDeliveredOrders() {
             fetch('http://localhost:8080/api/shippers/delivery?status=IN_TRANSIT')
                 .then(response => response.json())
                 .then(data => {
                     deliveries = data;
-                    displayOrders(deliveries);
+                    displayOrders(deliveries, currentPage, rowsPerPage);
+                    setupPagination(deliveries.length, rowsPerPage);
+
                 })
                 .catch(error => console.error('Lỗi khi lấy chi tiết đơn hàng đã giao:', error));
         }
 
-        function displayOrders(deliveries) {
+        function displayOrders(data, page, rows) {
             orderTableBody.innerHTML = '';
-            deliveries.forEach(deliveries => {
+            page--;
+
+            const start = rows * page;
+            const end = start + rows;
+            const paginatedItems = data.slice(start, end);
+
+            paginatedItems.forEach(deliveries => {
                 const row = document.createElement('tr');
                 row.classList.add('text-center');
                 row.innerHTML = `
@@ -282,16 +328,108 @@
                 <td>${deliveries.deliveryPhone}</td>
                 <td>${deliveries.deliveryAddress}</td>
                 <td>${deliveries.deliveryPrice}</td>
-                <td>
-                    <div class="btn-group">
-                        <a href="#" class="btn btn-success btn-success-order">Thành công</a>
-                        <a href="#" class="btn btn-danger btn-fail-order">Thất bại</a>
-                    </div>
-                </td>
-                `;
+        <td>
+          <div class="btn-group">
+            <a href="#" class="btn btn-success btn-success-order">Thành công</a>
+            <a href="#" class="btn btn-danger btn-fail-order">Thất bại</a>
+          </div>
+        </td>
+      `;
                 orderTableBody.appendChild(row);
             });
         }
+
+        function setupPagination(itemsCount, rowsPerPage) {
+            pagination.innerHTML = '';
+
+            const pageCount = Math.ceil(itemsCount / rowsPerPage);
+            const maxPagesToShow = 3;
+            const maxPagesBeforeCurrentPage = Math.floor(maxPagesToShow / 2);
+            const maxPagesAfterCurrentPage = Math.ceil(maxPagesToShow / 2) - 1;
+
+            if (pageCount <= 1) return;
+
+            let startPage, endPage;
+            if (pageCount <= maxPagesToShow) {
+                // Total pages less than max pages to show
+                startPage = 1;
+                endPage = pageCount;
+            } else {
+                if (currentPage <= maxPagesBeforeCurrentPage) {
+                    // Current page near the start
+                    startPage = 1;
+                    endPage = maxPagesToShow;
+                } else if (currentPage + maxPagesAfterCurrentPage >= pageCount) {
+                    // Current page near the end
+                    startPage = pageCount - maxPagesToShow + 1;
+                    endPage = pageCount;
+                } else {
+                    // Current page in the middle
+                    startPage = currentPage - maxPagesBeforeCurrentPage;
+                    endPage = currentPage + maxPagesAfterCurrentPage;
+                }
+            }
+
+            // Add previous button
+            if (currentPage > 1) {
+                pagination.appendChild(createPaginationButton(currentPage - 1, 'Back'));
+            }
+
+            // Add first page button
+            if (startPage > 1) {
+                pagination.appendChild(createPaginationButton(1));
+                if (startPage > 2) {
+                    pagination.appendChild(createEllipsis());
+                }
+            }
+
+            // Add page buttons
+            for (let page = startPage; page <= endPage; page++) {
+                pagination.appendChild(createPaginationButton(page));
+            }
+
+            // Add last page button
+            if (endPage < pageCount) {
+                if (endPage < pageCount - 1) {
+                    pagination.appendChild(createEllipsis());
+                }
+                pagination.appendChild(createPaginationButton(pageCount));
+            }
+
+            // Add next button
+            if (currentPage < pageCount) {
+                pagination.appendChild(createPaginationButton(currentPage + 1, 'Next'));
+            }
+        }
+
+        function createPaginationButton(page, text) {
+            const button = document.createElement('li');
+            button.classList.add('page-item');
+            button.innerHTML = `<a class="page-link" href="#">${text || page}</a>`;
+
+            if (currentPage == page) button.classList.add('active');
+
+            button.addEventListener('click', function () {
+                currentPage = page;
+                displayOrders(deliveries, currentPage, rowsPerPage);
+
+                const currentBtn = document.querySelector('.pagination li.active');
+                currentBtn.classList.remove('active');
+
+                button.classList.add('active');
+                setupPagination(deliveries.length, rowsPerPage); // Update pagination
+            });
+
+            return button;
+        }
+
+        function createEllipsis() {
+            const ellipsis = document.createElement('li');
+            ellipsis.classList.add('page-item', 'disabled');
+            ellipsis.innerHTML = `<a class="page-link" href="#">...</a>`;
+            return ellipsis;
+        }
+
 
         document.getElementById('search-input').addEventListener('input', function (event) {
             const searchValue = event.target.value.trim().toLowerCase();
@@ -312,6 +450,7 @@
                 const orderId = orderRow.querySelector('td:nth-child(3)').textContent;
                 const noteTextarea = document.getElementById('note-textarea');
                 noteTextarea.dataset.orderId = orderId;
+                noteTextarea.value = ''; // Đặt lại nội dung của textarea
                 loginPopup.classList.add('active');
                 document.body.classList.add('popup-active'); // Thêm lớp để chặn tương tác bên ngoài popup
                 orderRow.remove();
@@ -320,7 +459,7 @@
                 event.preventDefault();
                 const orderRow = event.target.closest('tr');
                 const deliveryId = orderRow.querySelector('td:nth-child(3)').textContent;
-                showToast('Giao hàng thành công!', 'success');
+                // showToast('Giao hàng thành công!', 'success');
                 orderRow.remove();
                 fetch(`http://localhost:8080/api/shippers/delivery/${deliveryId}?status=DELIVERED`, {
                     method: 'PUT',
@@ -364,7 +503,7 @@
                         }
                     })
                     .catch(error => {
-                        showToast('Lỗi khi thất bại giao hàng!', 'danger');
+                        showToast('Giao hàng thất bại!', 'danger');
                         loginPopup.classList.remove('active');
                         document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
                     });

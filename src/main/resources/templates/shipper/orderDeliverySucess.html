@@ -199,7 +199,7 @@
         const rowsPerPage = 10;
 
         function fetchDeliveredOrders() {
-            fetch('http://localhost:8080/api/shippers/delivery?status=NOT_DELIVERED')
+            fetch('http://localhost:8080/api/shippers/delivery?status=DELIVERED')
                 .then(response => response.json())
                 .then(data => {
                     deliveries = data;

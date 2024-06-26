@@ -172,6 +172,7 @@
                     <th>Tên khách hàng</th>
                     <th>Số điện thoại khách hàng</th>
                     <th>Địa chỉ khách hàng</th>
+                    <th>Ghi chú</th>
                     <th>Tổng tiền</th>
                     <th>Trạng thái</th>
                 </tr>
@@ -205,7 +206,7 @@
         const rowsPerPage = 10;
 
         function fetchDeliveredOrders() {
-            fetch('http://localhost:8080/api/shippers/delivery?status=NOT_DELIVERED')
+            fetch('http://localhost:8080/api/shippers/delivery?status=DELIVERY_FAILED')
                 .then(response => response.json())
                 .then(data => {
                     deliveries = data;
@@ -233,6 +234,7 @@
                     <td>${delivery.customerFullName}</td>
                     <td>${delivery.deliveryPhone}</td>
                     <td>${delivery.deliveryAddress}</td>
+                    <td>${delivery.deliveryNote}</td>
                     <td>${delivery.deliveryPrice}</td>
                     <td>${delivery.deliveryStatus}</td>
                 `;
