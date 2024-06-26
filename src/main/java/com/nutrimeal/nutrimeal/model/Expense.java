@@ -32,9 +32,11 @@ public class Expense {
     private String supplier;
 
     @Column(name = "purchase_date")
+    @Temporal(TemporalType.DATE)
     private Date purchaseDate;
 
     @Column(name = "expiration_date")
+    @Temporal(TemporalType.DATE)
     private Date expirationDate;
 
     @Column(name = "is_active")
