@@ -141,7 +141,7 @@
         <div class="controls">
             <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
             <input type="date" id="searchDate" placeholder="Search by Date">
-            <input type="search" id="searchInput" placeholder="Search now">
+            <input type="search" id="searchInput" placeholder="Search now" style="width: 500px">
         </div>
         <table class="table-hover">
             <thead>
@@ -280,10 +280,10 @@
                 <td>${delivery.customerFullName}</td>
                 <td>${delivery.deliveryPhone}</td>
                 <td>${delivery.deliveryAddress}</td>
-                <td>${delivery.deliveryPrice}</td>
+                <td>${formatCurrency(delivery.deliveryPrice)+ "đ"}</td>
                 <td>${delivery.shipperFullName}</td>
-                <td>
-                    <button class="btn btn-sm btn-secondary detail-btn" data-id="${delivery.deliveryId}">Chi tiết</button>
+                <td style="display: inline-grid">
+                    <button class="btn btn-sm btn-secondary detail-btn" data-id="${delivery.deliveryId}" style="margin-bottom: 5px">Chi tiết</button>
                     <button class="btn btn-sm btn-primary edit-btn" data-index="${start + index}">Cập nhật</button>
                 </td>
             `;
@@ -304,6 +304,10 @@
                     fetchDeliveryDetails(deliveryId);
                 });
             });
+        }
+
+        function formatCurrency(amount) {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
         function fetchDeliveryDetails(deliveryId) {

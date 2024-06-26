@@ -264,7 +264,7 @@
                 <td>${delivery.customerFullName}</td>
                 <td>${delivery.deliveryPhone}</td>
                 <td>${delivery.deliveryAddress}</td>
-                <td>${delivery.deliveryPrice}</td>
+                <td>${formatCurrency(delivery.deliveryPrice) + "đ"}</td>
                 <td>${delivery.shipperFullName}</td>
                 <td><button class="btn btn-sm btn-secondary detail-btn" data-id="${delivery.deliveryId}">Chi tiết</button></td>
             `;
@@ -278,7 +278,9 @@
                 fetchDeliveryDetails(deliveryId);
             });
         });
-
+        function formatCurrency(amount) {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
         function fetchDeliveryDetails(deliveryId) {
             fetch(`http://localhost:8080/api/delivery/detail/${deliveryId}`)
                 .then(response => response.json())
