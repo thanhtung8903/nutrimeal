@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -30,10 +32,10 @@ public class Expense {
     private String supplier;
 
     @Column(name = "purchase_date")
-    private String purchaseDate;
+    private Date purchaseDate;
 
     @Column(name = "expiration_date")
-    private String expirationDate;
+    private Date expirationDate;
 
     @Column(name = "is_active")
     private Boolean isActive;

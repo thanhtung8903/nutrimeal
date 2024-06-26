@@ -12,5 +12,5 @@ public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
 
     List<Expense> findAllByIsActiveTrue();
 
-    Optional<Expense> findByIdAndIsActiveTrue(int id);
+    Optional<Expense> findByExpenseIdAndIsActiveTrue(int id);
 }

@@ -20,7 +20,7 @@ public class ExpenseService {
     }
 
     public Expense getExpenseById(int id) {
-        return expenseRepository.findByIdAndIsActiveTrue(id).orElse(null);
+        return expenseRepository.findByExpenseIdAndIsActiveTrue(id).orElse(null);
     }
 
     public Expense addExpense(ExpenseRequest expenseRequest) {
