@@ -11,6 +11,17 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         background-color: #ffffff;
+        position: relative;
+    }
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #000;
     }
     .login-header {
         text-align: center;
@@ -61,6 +72,7 @@
 
 <div class="container">
     <div class="login-container">
+        <button class="close-button" onclick="window.location.href='/'">&times;</button>
         <div class="login-header">
             <h3>Đăng nhập</h3>
             <p>Bạn chưa có tài khoản? Vui lòng <a th:href="@{/signup}" style="text-decoration: none">Đăng ký</a></p>
