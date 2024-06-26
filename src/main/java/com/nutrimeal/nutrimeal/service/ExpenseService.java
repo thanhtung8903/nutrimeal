@@ -35,6 +35,10 @@ public class ExpenseService {
         }).collect(Collectors.toList());
     }
 
+    public Expense getExpense(int id) {
+        return expenseRepository.findByExpenseIdAndIsActiveTrue(id).orElse(null);
+    }
+
     public ExpenseResponse getExpenseById(int id) {
         Expense expense = expenseRepository.findByExpenseIdAndIsActiveTrue(id).orElse(null);
 

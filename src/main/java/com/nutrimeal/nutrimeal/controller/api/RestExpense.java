@@ -1,9 +1,11 @@
 package com.nutrimeal.nutrimeal.controller.api;
 
 import com.nutrimeal.nutrimeal.dto.request.ExpenseRequest;
+import com.nutrimeal.nutrimeal.dto.response.ExpenseResponse;
 import com.nutrimeal.nutrimeal.model.Expense;
 import com.nutrimeal.nutrimeal.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +19,15 @@ public class RestExpense {
     private final ExpenseService expenseService;
 
     @GetMapping()
-    public ResponseEntity<List<Expense>> getAllExpense() {
+    public ResponseEntity<List<ExpenseResponse>> getAllExpense() {
         return ResponseEntity.ok(expenseService.getAllExpense());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Expense> getExpenseById(@PathVariable int id) {
+    public ResponseEntity<ExpenseResponse> getExpenseById(@PathVariable int id) {
+        if (expenseService.getExpense(id) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         return ResponseEntity.ok(expenseService.getExpenseById(id));
     }
 
@@ -38,7 +43,7 @@ public class RestExpense {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteExpense(@PathVariable int id) {
-        Expense expense = expenseService.getExpenseById(id);
+        Expense expense = expenseService.getExpense(id);
         if (expense == null) {
             return ResponseEntity.notFound().build();
         }
