@@ -5,49 +5,52 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
 
 <style>
-    body {
+    html, body {
         margin: 0;
+        height: 100%;
         font-family: Arial, sans-serif;
         background-color: #f8f9fa;
-
     }
     .container-signup {
-        margin-top: 20px;
-        margin-bottom: 20px;
         display: flex;
-        height: 145vh;
-    }
-    .left-side {
-        flex: 1;
-        /*background-color: #f8f9fa;*/
-        display: flex;
+        /*min-height: 100vh;*/
+        height: 130vh; /* Tăng chiều cao của background */
         justify-content: center;
         align-items: center;
-        color: white;
-        padding: 20px;
-        overflow: hidden;
+        background-image: url('/img/11.png'); /* Thay đổi đường dẫn ảnh theo yêu cầu */
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: relative;
     }
-    .left-side img {
-        max-width: 100%;
-        max-height: 100%;
-        border-radius: 8px;
-        object-fit: cover;
-    }
-    .right-side {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        /*background-color: #f8f9fa;*/
-        padding: 20px;
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* Lớp phủ mờ */
+        z-index: 1;
     }
     .signup-container {
-        max-width: 85%;
-        width: 100%;
+        width: 90%;
+        max-width: 600px;
         padding: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
-        background-color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.95); /* Đặt nền có độ trong suốt */
+        z-index: 2;
+        position: relative;
+    }
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #000;
     }
     .signup-header {
         text-align: center;
@@ -96,104 +99,102 @@
         display: inline-block;
         margin-right: 15px;
     }
+    .form-group label {
+        font-weight: bold;
+    }
 </style>
 
 <header th:replace="~{fragments :: header-fragment}"></header>
 <body>
 
-<div class="container container-signup">
-    <div class="left-side">
-        <img th:src="@{/img/2.png}" alt="Signup Image">
-    </div>
-    <div class="right-side">
-        <div class="signup-container">
-            <div class="signup-header">
-                <h3>Đăng ký</h3>
-                <p>Bạn đã có tài khoản? Vui lòng <a style="text-decoration: none" href="#" th:href="@{/login}">Đăng nhập</a></p>
+<div class="container-signup">
+    <div class="overlay"></div>
+    <div class="signup-container">
+        <button class="close-button" onclick="window.location.href='/login'">&times;</button>
+        <div class="signup-header">
+            <h3 style="font-weight: bold">Đăng ký</h3>
+            <p>Bạn đã có tài khoản? Vui lòng <a style="text-decoration: none" href="#" th:href="@{/login}">Đăng nhập</a></p>
+        </div>
+
+        <form id="signupForm" action="#" onsubmit="return validateForm()" th:action="@{/signup}" th:object="${SignupRequest}" method="post" class="form-horizontal">
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                <span th:text="${successMessage}"></span>
             </div>
 
-            <form id="signupForm" action="#" onsubmit="return validateForm()" th:action="@{/signup}" th:object="${SignupRequest}" method="post" class="form-horizontal">
-                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-                    <span th:text="${errorMessage}"></span>
+            <div class="form-group">
+                <label for="username">Tên tài khoản</label>
+                <input type="text" class="form-control" id="username" placeholder="Tên tài khoản" name="username" th:field="*{username}">
+                <small id="usernameHelp" class="form-text"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Email" name="email" th:field="*{email}">
+                <small id="emailHelp" class="form-text"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="fullname">Họ và tên</label>
+                <input type="text" class="form-control" id="fullname" placeholder="Họ và tên" name="fullName" th:field="*{fullName}">
+                <small id="fullnameHelp" class="form-text"></small>
+            </div>
+
+            <!-- New field for phone number -->
+            <div class="form-group">
+                <label for="phoneNumber">Số điện thoại</label>
+                <input type="text" class="form-control" id="phoneNumber" placeholder="Số điện thoại" name="phoneNumber" th:field="*{phoneNumber}">
+                <small id="phoneNumberHelp" class="form-text"></small>
+            </div>
+
+            <!-- New field for gender -->
+            <div class="form-group">
+                <label>Giới tính</label> <br>
+                <div class="radio-inline">
+                    <input type="radio" id="male" name="gender" value="male">
+                    <label for="male">Nam</label>
                 </div>
-                <div th:if="${successMessage}" class="alert alert-success" role="alert">
-                    <span th:text="${successMessage}"></span>
+                <div class="radio-inline">
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Nữ</label>
                 </div>
-
-                <div class="form-group">
-                    <label for="username">Tên tài khoản</label>
-                    <input type="text" class="form-control" id="username" placeholder="Tên tài khoản" name="username" th:field="*{username}">
-                    <small id="usernameHelp" class="form-text"></small>
+                <div class="radio-inline">
+                    <input type="radio" id="other" name="gender" value="other">
+                    <label for="other">Khác</label>
                 </div>
+                <small id="genderHelp" class="form-text"></small>
+            </div>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" class="form-control" id="email" placeholder="Email" name="email" th:field="*{email}">
-                    <small id="emailHelp" class="form-text"></small>
-                </div>
+            <!-- New field for date of birth -->
+            <div class="form-group">
+                <label for="dob">Ngày sinh</label>
+                <input type="date" class="form-control" id="dob" name="dob" th:field="*{dob}">
+                <small id="dobHelp" class="form-text"></small>
+            </div>
 
-                <div class="form-group">
-                    <label for="fullname">Họ và tên</label>
-                    <input type="text" class="form-control" id="fullname" placeholder="Họ và tên" name="fullName" th:field="*{fullName}">
-                    <small id="fullnameHelp" class="form-text"></small>
-                </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" th:field="*{password}">
+                <small id="passwordHelp" class="form-text"></small>
+            </div>
 
+            <div class="form-group">
+                <label for="confirmPassword">Nhập lại mật khẩu</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Xác nhận mật khẩu">
+                <small id="confirmPasswordHelp" class="form-text"></small>
+            </div>
 
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
+            </div>
+            <div class="divider">Hoặc</div>
 
-                <!-- New field for phone number -->
-                <div class="form-group">
-                    <label for="phoneNumber">Số điện thoại</label>
-                    <input type="text" class="form-control" id="phoneNumber" placeholder="Số điện thoại" name="phoneNumber" th:field="*{phoneNumber}">
-                    <small id="phoneNumberHelp" class="form-text"></small>
-                </div>
-
-                <!-- New field for gender -->
-                <div class="form-group">
-                    <label>Giới tính</label> <br>
-                    <div class="radio-inline">
-                        <input type="radio" id="male" name="gender" value="male">
-                        <label for="male">Nam</label>
-                    </div>
-                    <div class="radio-inline">
-                        <input type="radio" id="female" name="gender" value="female">
-                        <label for="female">Nữ</label>
-                    </div>
-                    <div class="radio-inline">
-                        <input type="radio" id="other" name="gender" value="other">
-                        <label for="other">Khác</label>
-                    </div>
-                    <small id="genderHelp" class="form-text"></small>
-                </div>
-
-                <!-- New field for date of birth -->
-                <div class="form-group">
-                    <label for="dob">Ngày sinh</label>
-                    <input type="date" class="form-control" id="dob" name="dob" th:field="*{dob}">
-                    <small id="dobHelp" class="form-text"></small>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Mật khẩu</label>
-                    <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" th:field="*{password}">
-                    <small id="passwordHelp" class="form-text"></small>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirmPassword">Nhập lại mật khẩu</label>
-                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Xác nhận mật khẩu">
-                    <small id="confirmPasswordHelp" class="form-text"></small>
-                </div>
-
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
-                </div>
-                <div class="divider">Hoặc</div>
-
-                <a class="btn-google bg-danger" th:href="@{/oauth2/authorization/google}">
-                    <i class="fab fa-google"></i> Đăng nhập với Google
-                </a>
-            </form>
-        </div>
+            <a class="btn-google bg-danger" th:href="@{/oauth2/authorization/google}">
+                <i class="fab fa-google"></i> Đăng nhập với Google
+            </a>
+        </form>
     </div>
 </div>
 
@@ -318,7 +319,6 @@
         } else {
             genderHelp.textContent = '';
         }
-
 
         return isValid;
     }
