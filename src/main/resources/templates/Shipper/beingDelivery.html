@@ -188,13 +188,13 @@
   </style>
 </head>
 <body class="delivered">
-<div th:insert="fragments/sidebar :: sidebar-manager"></div>
+<div th:insert="fragments/sidebar :: sidebar-shipper"></div>
 <div class="content-wrapper">
   <div class="">
     <!-- Content for delivered orders -->
     <div id="content-delivered" class="order-content_delivered">
       <div class="search-bar_delivered">
-        <h2 class="delivery-manager-h2">Đơn Hàng Đã Giao</h2>
+        <h2 class="delivery-manager-h2">Đơn Hàng Đang Giao</h2>
         <input type="text" id="search-input" class="form-control_delivered" placeholder="Tìm kiếm đơn hàng">
       </div>
       <table class="table table-bordered table-striped table-hover">
@@ -260,7 +260,7 @@
     let isPopupActive = false;
 
     function fetchDeliveredOrders() {
-      fetch('http://localhost:8080/api/delivery?status=DELIVERED')
+      fetch('http://localhost:8080/api/shippers/delivery?status=IN_TRANSIT')
               .then(response => response.json())
               .then(data => {
                 deliveries = data;
@@ -269,19 +269,19 @@
               .catch(error => console.error('Lỗi khi lấy chi tiết đơn hàng đã giao:', error));
     }
 
-    function displayOrders(orders) {
+    function displayOrders(deliveries) {
       orderTableBody.innerHTML = '';
-      orders.forEach(order => {
+      deliveries.forEach(deliveries => {
         const row = document.createElement('tr');
         row.classList.add('text-center');
         row.innerHTML = `
-        <td>${order.deliveryDate}</td>
-        <td>${order.deliveryTime}</td>
-        <td>${order.order}</td>
-        <td>${order.user}</td>
-        <td>${order.deliveryPhone}</td>
-        <td>${order.deliveryAddress}</td>
-        <td>${order.deliveryPrice}</td>
+                <td>${deliveries.deliveryDate}</td>
+                <td>${deliveries.deliveryTime}</td>
+                <td>${deliveries.deliveryId}</td>
+                <td>${deliveries.customerFullName}</td>
+                <td>${deliveries.deliveryPhone}</td>
+                <td>${deliveries.deliveryAddress}</td>
+                <td>${deliveries.deliveryPrice}</td>
         <td>
           <div class="btn-group">
             <a href="#" class="btn btn-success btn-success-order">Thành công</a>
@@ -314,21 +314,36 @@
         noteTextarea.dataset.orderId = orderId;
         loginPopup.classList.add('active');
         document.body.classList.add('popup-active'); // Thêm lớp để chặn tương tác bên ngoài popup
+        orderRow.remove();
+
       } else if (event.target.classList.contains('btn-success-order')) {
         event.preventDefault();
         const orderRow = event.target.closest('tr');
-        const orderId = orderRow.querySelector('td:nth-child(3)').textContent;
+        const deliveryId = orderRow.querySelector('td:nth-child(3)').textContent;
         showToast('Giao hàng thành công!', 'success');
         orderRow.remove();
+        fetch(`http://localhost:8080/api/shippers/delivery/${deliveryId}?status=DELIVERED`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        })
+                .then(response => {
+                  if (response.ok) {
+                    showToast('Bắt đầu giao hàng!', 'success');
+                    orderRow.remove(); // Xóa dòng khi thành công
+                  }
+                });
       } else if (event.target.classList.contains('close-btn') || !loginPopup.contains(event.target)) {
         // Đóng form popup khi click vào nút đóng hoặc bên ngoài form popup
         loginPopup.classList.remove('active');
         document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
       } else if (event.target.classList.contains('btn-fail-order2')) {
         event.preventDefault();
-        const orderId = document.getElementById('note-textarea').dataset.orderId;
+        const deliveryId = document.getElementById('note-textarea').dataset.orderId;
         const note = document.getElementById('note-textarea').value;
-        fetch(`http://localhost:8080/api/delivery/${orderId}/failure`, {
+        fetch(`http://localhost:8080/api/shippers/delivery/${deliveryId}?status=DELIVERY_FAILED`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -337,13 +352,13 @@
         })
                 .then(response => {
                   if (response.ok) {
-                    showToast('Thất bại giao hàng thành công!', 'success');
-                    const orderRow = document.querySelector(`td:nth-child(3):contains(${orderId})`).closest('tr');
+                    // showToast('Giao hàng thất bại!', 'success');
+                    const orderRow = document.querySelector(`td:nth-child(3):contains(${deliveryId})`).closest('tr');
                     orderRow.remove(); // Xóa dòng khi thành công
                     loginPopup.classList.remove('active');
                     document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
                   } else {
-                    showToast('Lỗi khi thất bại giao hàng!', 'danger');
+                    showToast('Giao hàng thất bại!', 'danger');
                     loginPopup.classList.remove('active');
                     document.body.classList.remove('popup-active'); // Xóa lớp để cho phép tương tác bên ngoài popup
                   }
