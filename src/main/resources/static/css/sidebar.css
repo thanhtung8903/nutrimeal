@@ -123,3 +123,39 @@
 .submenu.open {
     display: block;
 }
+/*.opt-head:hover {*/
+/*    color: #4bc849; !* Màu thay đổi khi di chuột qua *!*/
+/*    font-weight: bold; !* Chữ đậm khi di chuột qua *!*/
+/*}*/
+/*.opt-head{*/
+/*    padding-bottom: 0px;*/
+/*}*/
+/*.item-head.active .opt-head {*/
+/*    font-weight: bold; !* Chữ đậm cho mục được chọn *!*/
+/*    color: #4d84e2;*/
+/*}*/
+.opt-head {
+    padding-bottom: 0px;
+}
+
+.item-head.active .opt-head {
+    font-weight: bold; /* Chữ đậm cho mục được chọn */
+    color: #4d84e2;
+}
+.sub-item-head.active {
+    font-weight: bold;
+    color: #2f2f2f;
+    font-size: 13px;
+}
+.sub-item-head {
+    font-size: 13px;
+}
+.nav-item:hover .opt-head {
+    color: #007bff; /* Màu chữ khi di chuột qua */
+}
+
+.nav-item.active .opt-head {
+    color: #4d84e2; /* Màu chữ khi được chọn */
+    font-weight: bold; /* Chữ đậm cho mục được chọn */
+}
+
