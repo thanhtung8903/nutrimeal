@@ -236,7 +236,7 @@
         const fullname = document.getElementById('fullname').value;
         const fullnameHelp = document.getElementById('fullnameHelp');
 
-        const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[\s'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/;
+        const nameRegex = /^[A-Za-zÀ-ÿ\u00C0-\u1FFF\u2C00-\uD7FF]+(?:[\s'-][A-Za-zÀ-ÿ\u00C0-\u1FFF\u2C00-\uD7FF]+)*$/;
 
         if (fullname.trim() === '') {
             fullnameHelp.textContent = 'Họ và tên không được bỏ trống';
