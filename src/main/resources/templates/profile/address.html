@@ -259,8 +259,12 @@
                             // Validate tên
                             const name = document.getElementById('name').value;
                             const nameHelp = document.getElementById('nameHelp');
+                            const nameRegex = /^[a-zA-Z\s]+$/;
                             if (name.trim() === '') {
                                 nameHelp.textContent = 'Họ và tên không được bỏ trống.';
+                                isValid = false;
+                            } else if (!nameRegex.test(name)) {
+                                nameHelp.textContent = 'Họ và tên chỉ được nhập chữ.';
                                 isValid = false;
                             } else {
                                 nameHelp.textContent = '';
@@ -406,8 +410,12 @@
                             // Validate tên
                             const name = document.getElementById('editName').value;
                             const nameHelp = document.getElementById('editNameHelp');
+                            const nameRegex = /^[a-zA-Z\s]+$/;
                             if (name.trim() === '') {
                                 nameHelp.textContent = 'Họ và tên không được bỏ trống.';
+                                isValid = false;
+                            } else if (!nameRegex.test(name)) {
+                                nameHelp.textContent = 'Họ và tên chỉ được nhập chữ.';
                                 isValid = false;
                             } else {
                                 nameHelp.textContent = '';
