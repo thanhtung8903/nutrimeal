@@ -129,6 +129,7 @@ public class ProfileController {
             user = userService.findByUsername(principal.getName());
         }
         model.addAttribute("user", user);
+        model.addAttribute("point", user.getPoint());
         return "profile/point";
     }
 

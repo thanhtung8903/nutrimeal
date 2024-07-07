@@ -58,6 +58,9 @@ public class Delivery {
     @Column(name = "delivery_phone")
     private String deliveryPhone;
 
+    @Column(name = "is_bonus")
+    private Boolean isBonus;
+
     @OneToMany(mappedBy = "delivery")
     @JsonIgnore
     private List<DeliveryDetail> deliveryDetails;

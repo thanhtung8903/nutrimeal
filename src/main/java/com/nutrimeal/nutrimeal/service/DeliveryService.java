@@ -42,6 +42,8 @@ public class DeliveryService {
         }
         for (int i = 1; i <= day; i++) {
             calendar.add(Calendar.DATE, 1);
+
+
             Date deliveryDate = calendar.getTime();
             Delivery delivery = new Delivery();
             delivery.setDeliveryDate(deliveryDate);
@@ -53,6 +55,9 @@ public class DeliveryService {
             delivery.setUser(order.getUser());
             delivery.setDeliveryUpdateTime(null);
             delivery.setDeliveryNote(null);
+
+            delivery.setIsBonus(i == day);
+
             if (order.getPaymentMethod().getPaymentMethodId() == 1) {
                 if (i == 1) {
                     delivery.setDeliveryPrice(order.getOrderTotalPrice());
@@ -230,5 +235,9 @@ public class DeliveryService {
         deliveryResponse.setShipperFullName(delivery.getShipper().getFullName());
         deliveryResponse.setDeliveryUpdateTime(LocalDateTime.now().toString());
         return deliveryResponse;
+    }
+
+    public Delivery findDeliveryById(int deliveryId) {
+        return deliveryRepository.findByDeliveryId(deliveryId);
     }
 }
