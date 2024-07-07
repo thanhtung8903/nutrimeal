@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments :: head('Point', 'none')}"></head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
 
 <style>
     body {
@@ -141,7 +142,7 @@
                 <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">
                     <i class="bi bi-lock"></i> Đổi mật khẩu
                 </a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}"  class="active">
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">
                     <i class="bi bi-coin"></i> Điểm thưởng
                 </a>
                 <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">
@@ -150,97 +151,19 @@
                 <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">
                     <i class="bi bi-card-list"></i> Đơn hàng của tôi
                 </a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/delivery}">
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/delivery}" class="active">
                     <i class="bi bi-truck"></i> Đơn nhận hôm nay
                 </a>
             </nav>
 
             <!-- Main content -->
             <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
-                <h2 class="my-4">Điểm thưởng: <span th:text="${point}"></span></h2>
-                <div id="pointHistoryContainer"></div>
-                <nav class="pagination">
-                    <button class="page-link" onclick="prevPage()" id="prevPageBtn">Previous</button>
-                    <button class="page-link" onclick="nextPage()" id="nextPageBtn">Next</button>
-                </nav>
+
             </main>
         </div>
     </div>
 </div>
 
-<script>
-    let currentPage = 1;
-    const pageSize = 10;
-    let allData = [];
-
-    document.addEventListener('DOMContentLoaded', function() {
-        fetchPointHistory();
-    });
-
-    function fetchPointHistory() {
-        fetch(`http://localhost:8080/api/pointHistory`)
-            .then(response => response.json())
-            .then(data => {
-                allData = data;
-                loadPointHistory(currentPage, pageSize);
-            })
-            .catch(error => console.error('Error fetching point history:', error));
-    }
-
-    function loadPointHistory(page, size) {
-        const start = (page - 1) * size;
-        const end = page * size;
-        const paginatedData = allData.slice(start, end);
-        displayPointHistory(paginatedData);
-        updatePaginationButtons();
-    }
-
-    function displayPointHistory(data) {
-        const container = document.getElementById('pointHistoryContainer');
-        container.innerHTML = '';
-
-        data.forEach(item => {
-            const pointItem = document.createElement('div');
-            pointItem.classList.add('point-item');
-
-            const icon = document.createElement('i');
-            icon.classList.add('bi', item.pointHistoryStatus === 'MINUS' ? 'bi-dash-circle' : 'bi-plus-circle');
-            pointItem.appendChild(icon);
-
-            const description = document.createElement('div');
-            description.classList.add('point-description');
-            description.innerHTML = `<strong>${item.pointHistoryDescription}</strong><br>${item.pointHistoryDate}`;
-            pointItem.appendChild(description);
-
-            const points = document.createElement('div');
-            points.textContent = (item.pointHistoryStatus === 'MINUS' ? '-' : '+') + item.pointHistoryPoint;
-            points.classList.add('point-amount', item.pointHistoryStatus === 'MINUS' ? 'point-minus' : 'point-bonus');
-            pointItem.appendChild(points);
-
-            container.appendChild(pointItem);
-        });
-    }
-
-    function updatePaginationButtons() {
-        const prevPageBtn = document.getElementById('prevPageBtn');
-        const nextPageBtn = document.getElementById('nextPageBtn');
-
-        prevPageBtn.disabled = currentPage === 1;
-        nextPageBtn.disabled = currentPage * pageSize >= allData.length;
-    }
-
-    function nextPage() {
-        currentPage++;
-        loadPointHistory(currentPage, pageSize);
-    }
-
-    function prevPage() {
-        if (currentPage > 1) {
-            currentPage--;
-            loadPointHistory(currentPage, pageSize);
-        }
-    }
-</script>
 
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>
