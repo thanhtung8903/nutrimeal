@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nhập hàng</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+    <style>
+        body {
+            background-color: #e5e5e5;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 80px 20px 20px;
+            transition: margin-left 0.3s ease;
+        }
+        .content.collapsed {
+            margin-left: 60px;
+        }
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .btn-primary {
+            background-color: #343a40 !important;
+            border-color: #343a40 !important;
+        }
+        .btn-primary:hover {
+            background-color: #000000 !important;
+            font-weight: 600;
+        }
+        .btn-secondary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268 !important;
+            font-weight: 600;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none; /* initially hide error message */
+        }
+        .alert {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="fragments/sidebar :: sidebar-manager"></div>
+
+<div class="content" id="content">
+    <div class="container mb-4">
+        <div class="form-container">
+            <h2 style="margin-bottom: 40px; text-align: center;">NHẬP NGUYÊN LIỆU</h2>
+            <form id="addProduct" th:action="@{/manager/expense/add}" method="post" enctype="multipart/form-data">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="ingredientName" class="form-label">Tên nguyên liệu</label>
+                        <input type="text" class="form-control" id="ingredientName" name="ingredientName" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="supplier" class="form-label">Nhà cung cấp</label>
+                        <input type="text" class="form-control" id="supplier" name="supplier" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="quantity" class="form-label">Số lượng</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" min="0" required>
+                        <div id="quantityError" class="error-message">Số lượng không được âm!</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="unitPrice" class="form-label">Đơn giá (VNĐ)</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="unitPrice" name="unitPrice" min="0" required>
+                            <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <div id="unitPriceError" class="error-message">Đơn giá không được âm!</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="totalCost" class="form-label">Tổng chi phí (VNĐ)</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="totalCost" name="totalCost" readonly>
+                            <span class="input-group-text">VNĐ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="deliveryDate" class="form-label">Ngày giao</label>
+                        <input type="date" class="form-control" id="deliveryDate" name="deliveryDate" onchange="validateDates()" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="expiryDate" class="form-label">Ngày hết hạn</label>
+                        <input type="date" class="form-control" id="expiryDate" name="expiryDate" onchange="validateDates()" required>
+                        <div id="expiryDateError" class="error-message">Ngày giao phải nhỏ hơn hoặc bằng ngày hết hạn!</div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Thêm nguyên liệu</button>
+                <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/expense\''">Quay lại</button>
+            </form>
+            <div class="alert alert-success mt-3" role="alert" id="successAlert">
+                <strong>Thêm nguyên liệu thành công!</strong>
+            </div>
+            <div class="alert alert-danger mt-3" role="alert" id="errorAlert">
+                <strong>Đã có lỗi xảy ra!</strong> Vui lòng kiểm tra lại thông tin.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script>
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+        if (sidebar && content) {
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var unitPriceInput = document.getElementById('unitPrice');
+        var quantityInput = document.getElementById('quantity');
+        var totalCostInput = document.getElementById('totalCost');
+
+        if (unitPriceInput && quantityInput && totalCostInput) {
+            unitPriceInput.addEventListener('input', updateTotalCost);
+            quantityInput.addEventListener('input', updateTotalCost);
+
+            function updateTotalCost() {
+                var unitPrice = parseFloat(unitPriceInput.value);
+                var quantity = parseFloat(quantityInput.value);
+                var totalCost = unitPrice * quantity;
+
+                totalCostInput.value = totalCost.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); // Format the number with thousand separators
+            }
+        }
+    });
+
+    function validateDates() {
+        var deliveryDateInput = document.getElementById('deliveryDate');
+        var expiryDateInput = document.getElementById('expiryDate');
+        var expiryDateError = document.getElementById('expiryDateError');
+
+        if (deliveryDateInput && expiryDateInput && expiryDateError) {
+            var deliveryDate = new Date(deliveryDateInput.value);
+            var expiryDate = new Date(expiryDateInput.value);
+
+            // Check if expiry date is valid
+            if (isNaN(expiryDate.getTime())) {
+                expiryDateError.innerText = 'Ngày hết hạn không hợp lệ!';
+                expiryDateError.style.display = 'block';
+                return false;
+            }
+
+            // Check if delivery date is greater than expiry date
+            if (deliveryDate > expiryDate) {
+                expiryDateError.innerText = 'Ngày giao phải nhỏ hơn hoặc bằng ngày hết hạn!';
+                expiryDateError.style.display = 'block';
+                return false;
+            } else {
+                expiryDateError.style.display = 'none';
+                return true;
+            }
+        }
+        return true; // Default to true if inputs are not found
+    }
+
+    document.getElementById('addProduct').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var quantityInput = document.getElementById('quantity');
+        var unitPriceInput = document.getElementById('unitPrice');
+        var quantityError = document.getElementById('quantityError');
+        var unitPriceError = document.getElementById('unitPriceError');
+        var hasError = false;
+
+        if (quantityInput && unitPriceInput && quantityError && unitPriceError) {
+            var quantity = parseFloat(quantityInput.value);
+            var unitPrice = parseFloat(unitPriceInput.value);
+
+            if (quantity < 0) {
+                quantityError.style.display = 'block';
+                hasError = true;
+            } else {
+                quantityError.style.display = 'none';
+            }
+
+            if (unitPrice < 0) {
+                unitPriceError.style.display = 'block';
+                hasError = true;
+            } else {
+                unitPriceError.style.display = 'none';
+            }
+
+            // Kiểm tra ngày giao và ngày hết hạn
+            if (!validateDates()) {
+                hasError = true;
+            }
+
+            if (hasError) {
+                return; // Prevent form submission if there are errors
+            }
+
+            var ingredientName = document.getElementById('ingredientName').value;
+            var supplier = document.getElementById('supplier').value;
+            var deliveryDate = document.getElementById('deliveryDate').value;
+            var expiryDate = document.getElementById('expiryDate').value;
+
+            var formData = {
+                ingredientName: ingredientName,
+                quantity: quantity,
+                unitPrice: unitPrice,
+                supplier: supplier,
+                purchaseDate: deliveryDate,
+                expirationDate: expiryDate
+            };
+
+            console.log(formData);
+
+            fetch('http://localhost:8080/api/expense', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Handle success response here (e.g., show success message)
+                    var successAlert = document.getElementById('successAlert');
+                    if (successAlert) {
+                        successAlert.style.display = 'block'; // Show success alert message
+                    }
+                    document.getElementById('addProduct').reset(); // Reset form after successful submission
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle error response here (e.g., show error message)
+                    var errorAlert = document.getElementById('errorAlert');
+                    if (errorAlert) {
+                        errorAlert.style.display = 'block'; // Show error alert message
+                    }
+                });
+        }
+    });
+</script>
+
+</body>
+</html>
