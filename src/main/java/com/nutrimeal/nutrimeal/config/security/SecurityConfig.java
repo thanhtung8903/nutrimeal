@@ -37,6 +37,8 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/signup", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/", "/home", "/faqs", "/consult", "/combo", "/menu").permitAll()
                         .requestMatchers("/profile/point", "/profile/order", "profile/address", "/cart/**", "/checkout/**").hasRole("CUSTOMER")
+                        .requestMatchers("/shippers/**").hasRole("SHIPPER")
+                        .requestMatchers("/shipper/**").hasRole("SHIPPER")
                         .requestMatchers("/manager/**").hasRole("MANAGER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll())

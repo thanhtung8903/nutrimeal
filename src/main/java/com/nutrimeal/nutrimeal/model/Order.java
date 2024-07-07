@@ -58,5 +58,6 @@ public class Order {
     @JsonIgnore
     private List<OrderDetail> orderDetails;
 
-
+    @Column(name = "point")
+    private Integer point;
 }

@@ -115,14 +115,14 @@
 </style>
 
 <!--<header th:replace="~{fragments :: header_manager}"></header>-->
-<div th:insert="fragments/sidebar :: sidebar-manager"></div>
+<div th:insert="fragments/sidebar :: sidebar-manager (page = 'dailymenu')"></div>
 
 <body>
 <div class="content" id="content">
     <div class="container-fluid ">
 
             <h2 style="margin-bottom: 40px; text-align: center">
-                QUẢN LÍ DAILY MENU
+                QUẢN LÝ MENU HÀNG NGÀY
             </h2>
             <form
                     th:action="@{/manager/dailymenu/search}"

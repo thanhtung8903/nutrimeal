@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Being Delivery</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+    <style>
+        .btn-primary {
+            background-color: #343a40 !important;
+            border-color: #343a40 !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .delivery-manager-h2 {
+            text-align: center;
+            margin: 0;
+        }
+
+        .order-content_delivered {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 60px;
+        }
+
+        .order-content_delivered table {
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .order-content_delivered thead {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .order-content_delivered tbody tr:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        /* Updated button styles */
+        .btn-success {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+            border-radius: 5px !important;
+            padding: 5px 10px !important;
+            font-size: 14px !important;
+            color: #fff !important;
+        }
+
+        .btn-success:hover {
+            background-color: #218838 !important;
+            border-color: #1e7e34 !important;
+        }
+
+        .btn-danger {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+            border-radius: 5px !important;
+            padding: 5px 10px !important;
+            font-size: 14px !important;
+            color: #fff !important;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333 !important;
+            border-color: #bd2130 !important;
+        }
+
+        /* Ensuring table buttons alignment and spacing */
+        .table .btn-group {
+            display: flex;
+            justify-content: center;
+        }
+
+        .table .btn-group .btn {
+            margin: 0 5px;
+        }
+
+        .popup {
+            position: fixed;
+            top: -150%;
+            left: 50%;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1.25);
+            width: 380px;
+            padding: 20px 30px;
+            background: #fff;
+            box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            transition: top 0ms ease-in-out 200ms, opacity 200ms ease-in-out 0ms, transform 200ms ease-in-out 0ms;
+        }
+
+        .popup.active {
+            top: 50%;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            transition: top 0ms ease-in-out 0ms, opacity 200ms ease-in-out 0ms, transform 200ms ease-in-out 0ms;
+        }
+
+        .popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 15px;
+            height: 15px;
+            background: #888;
+            color: #eee;
+            text-align: center;
+            line-height: 15px;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+
+        .popup .form h2 {
+            text-align: center;
+            color: #222;
+            margin: 10px 0 20px;
+            font-size: 25px;
+        }
+
+        .popup .form .form-element {
+            margin: 15px 0;
+        }
+
+        .popup .form .form-element label {
+            font-size: 14px;
+            color: #222;
+        }
+
+        .popup .form .form-element textarea[type="text"],
+        .popup .form .form-element input[type="password"] {
+            margin-top: 5px;
+            display: block;
+            width: 100%;
+            padding: 10px;
+            outline: none;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+
+        .search-bar_delivered {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-bar_delivered input {
+            margin-right: 10px;
+            width: 200px;
+        }
+
+        .form-control_delivered:focus {
+            border-color: #343a40 !important;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        /* Add this style to ensure content doesn't overlap with sidebar */
+        .content-wrapper {
+            margin-left: 250px; /* Adjust this value based on your sidebar width */
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                margin-left: 0;
+            }
+        }
+
+        /* phan trang */
+        .pagination {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .pagination .page-link {
+            padding: 8px 16px;
+            border-radius: 5px;
+            color: #343a40;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #e9ecef;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #343a40;
+            color: #ffffff;
+            border-color: #343a40;
+        }
+    </style>
+</head>
+<body class="delivered">
+<div th:insert="fragments/sidebar :: sidebar-shipper"></div>
+<div class="content-wrapper">
+    <div class="">
+        <!-- Content for delivered orders -->
+        <div id="content-delivered" class="order-content_delivered">
+            <div class="search-bar_delivered">
+                <h2 class="delivery-manager-h2">Đơn Hàng Đang Giao</h2>
+                <input type="text" id="search-date" class="form-control_delivered" placeholder="Tìm kiếm đơn hàng">
+            </div>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr class="text-center">
+                    <th>Ngày</th>
+                    <th>Thời gian giao hàng</th>
+                    <th>Mã đơn</th>
+                    <th>Tên khách hàng</th>
+                    <th>Số điện thoại khách hàng</th>
+                    <th>Địa chỉ khách hàng</th>
+                    <th>Tổng tiền</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="order-table-body">
+                <!-- Table rows will be populated dynamically -->
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pagination" id="pagination">
+                    <!-- Pagination controls will be dynamically generated here -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Toast for success and failure notifications -->
+<div class="toast-container"></div>
+
+<!-- Login Popup -->
+<div class="popup" id="login-popup">
+    <div class="close-btn">&times;</div>
+    <div class="form">
+        <table class="table">
+            <tbody>
+            <tr>
+                <td>Ghi chú:</td>
+                <td><textarea id="note-textarea" rows="3"></textarea></td>
+            </tr>
+            <tr>
+                <td>Action:</td>
+                <td>
+                    <div class="btn-group">
+                        <a href="#" class="btn-danger btn-fail-order2" style="text-decoration: none">Xác nhận</a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="deliveryDetailsModal" tabindex="-1" aria-labelledby="deliveryDetailsModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Use modal-lg to increase width -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deliveryDetailsModalLabel">Chi tiết đơn giao</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="deliveryDetailsModalBody">
+                <!-- Delivery details will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7ie1L1vJ+/DLg5rJ/rxxp5La7CbB8Kb7Bjk" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz4fnFO9gybBogGz5S5RB8CROIWJME3tkh0D7pFF7ZZjFZ6fv94HND1eK6" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-Y4oPL3rAGj06/X3Ck8lmZgK4ujPpOtId7PwvbojjAZjFzhr6rDxzWuYe0HgW3K3s" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const orderTableBody = document.getElementById('order-table-body');
+        const pagination = document.getElementById('pagination');
+        const toastContainer = document.querySelector('.toast-container');
+        const loginPopup = document.querySelector('#login-popup');
+        let deliveries = [];
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let isPopupVisible = false;
+
+        function fetchDeliveredOrders() {
+            fetch('http://localhost:8080/api/shippers/delivery?status=IN_TRANSIT')
+                .then(response => response.json())
+                .then(data => {
+                    deliveries = data;
+                    sortDeliveriesByDate(deliveries); // Sắp xếp dữ liệu
+                    displayOrders(deliveries, currentPage, rowsPerPage);
+                    setupPagination(deliveries.length, rowsPerPage);
+                })
+                .catch(error => console.error('Lỗi khi lấy chi tiết đơn hàng đã giao:', error));
+        }
+
+        function sortDeliveriesByDate(data) {
+            data.sort((a, b) => new Date(a.deliveryDate) - new Date(b.deliveryDate));
+        }
+
+        function displayOrders(data, page, rows) {
+            orderTableBody.innerHTML = '';
+            page--;
+            const start = rows * page;
+            const end = start + rows;
+            const paginatedItems = data.slice(start, end);
+
+            paginatedItems.forEach(deliveries => {
+                const row = document.createElement('tr');
+                row.classList.add('text-center');
+                row.innerHTML = `
+                    <td>${deliveries.deliveryDate}</td>
+                    <td>${deliveries.deliveryTime}</td>
+                    <td data-delivery-id="${deliveries.deliveryId}">${deliveries.deliveryId}</td>
+                    <td>${deliveries.customerFullName}</td>
+                    <td>${deliveries.deliveryPhone}</td>
+                    <td>${deliveries.deliveryAddress}</td>
+                    <td>${deliveries.deliveryPrice}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="#" class="btn btn-success btn-success-order">Thành công</a>
+                            <a href="#" class="btn btn-danger btn-fail-order">Thất bại</a>
+                            <button class="btn btn-sm btn-secondary detail-btn" data-id="${deliveries.deliveryId}">Chi tiết</button>
+                        </div>
+                    </td>
+                `;
+                orderTableBody.appendChild(row);
+            });
+
+            // here show form
+            document.querySelectorAll('.detail-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const deliveryId = this.getAttribute('data-id');
+                    // console.log('Fetching delivery details for delivery ID:', deliveryId);
+                    fetchDeliveryDetails(deliveryId);
+                });
+            });
+
+            function fetchDeliveryDetails(deliveryId) {
+                fetch(`http://localhost:8080/api/delivery/detail/${deliveryId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        displayDeliveryDetails(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching delivery details:', error);
+                    });
+            }
+
+            function displayDeliveryDetails(data) {
+                const modalBody = document.getElementById('deliveryDetailsModalBody');
+                modalBody.innerHTML = `
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Combo</th>
+                    <th>Bữa sáng</th>
+                    <th>Bữa trưa</th>
+                    <th>Bữa tối</th>
+                    <th>Số lượng</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${data.deliveryDetails.map(detail => `
+                    <tr>
+                        <td>${detail.deliveryDetailCombo}</td>
+                        <td>${detail.dishBreakfast ? detail.dishBreakfast.dishName : ''}</td>
+                        <td>${detail.dishLunch ? detail.dishLunch.dishName : ''}</td>
+                        <td>${detail.dishDinner ? detail.dishDinner.dishName : ''}</td>
+                        <td>${detail.deliveryDetailQuantity}</td>
+                    </tr>
+
+                `).join('')}
+            </tbody>
+        </table>
+        `;
+                const modal = new bootstrap.Modal(document.getElementById('deliveryDetailsModal'));
+                modal.show();
+            }
+        }
+
+        function setupPagination(itemsCount, rowsPerPage) {
+            pagination.innerHTML = '';
+
+            const pageCount = Math.ceil(itemsCount / rowsPerPage);
+            const maxPagesToShow = 3;
+            const maxPagesBeforeCurrentPage = Math.floor(maxPagesToShow / 2);
+            const maxPagesAfterCurrentPage = Math.ceil(maxPagesToShow / 2) - 1;
+
+            if (pageCount <= 1) return;
+
+            let startPage, endPage;
+            if (pageCount <= maxPagesToShow) {
+                startPage = 1;
+                endPage = pageCount;
+            } else {
+                if (currentPage <= maxPagesBeforeCurrentPage) {
+                    startPage = 1;
+                    endPage = maxPagesToShow;
+                } else if (currentPage + maxPagesAfterCurrentPage >= pageCount) {
+                    startPage = pageCount - maxPagesToShow + 1;
+                    endPage = pageCount;
+                } else {
+                    startPage = currentPage - maxPagesBeforeCurrentPage;
+                    endPage = currentPage + maxPagesAfterCurrentPage;
+                }
+            }
+
+            if (currentPage > 1) {
+                pagination.appendChild(createPaginationButton(currentPage - 1, 'Back'));
+            }
+
+            if (startPage > 1) {
+                pagination.appendChild(createPaginationButton(1));
+                if (startPage > 2) {
+                    pagination.appendChild(createEllipsis());
+                }
+            }
+
+            for (let page = startPage; page <= endPage; page++) {
+                pagination.appendChild(createPaginationButton(page));
+            }
+
+            if (endPage < pageCount) {
+                if (endPage < pageCount - 1) {
+                    pagination.appendChild(createEllipsis());
+                }
+                pagination.appendChild(createPaginationButton(pageCount));
+            }
+
+            if (currentPage < pageCount) {
+                pagination.appendChild(createPaginationButton(currentPage + 1, 'Next'));
+            }
+        }
+
+        function createPaginationButton(page, text) {
+            const button = document.createElement('li');
+            button.classList.add('page-item');
+            button.innerHTML = `<a class="page-link" href="#">${text || page}</a>`;
+
+            if (currentPage == page) button.classList.add('active');
+
+            button.addEventListener('click', function () {
+                currentPage = page;
+                displayOrders(deliveries, currentPage, rowsPerPage);
+
+                const currentBtn = document.querySelector('.pagination li.active');
+                currentBtn.classList.remove('active');
+
+                button.classList.add('active');
+                setupPagination(deliveries.length, rowsPerPage);
+            });
+
+            return button;
+        }
+
+        function createEllipsis() {
+            const ellipsis = document.createElement('li');
+            ellipsis.classList.add('page-item', 'disabled');
+            ellipsis.innerHTML = `<a class="page-link" href="#">...</a>`;
+            return ellipsis;
+        }
+
+
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('btn-fail-order')) {
+                event.preventDefault();
+                if (isPopupVisible) return;
+                const orderRow = event.target.closest('tr');
+                const orderId = orderRow.querySelector('td:nth-child(3)').textContent;
+                const noteTextarea = document.getElementById('note-textarea');
+                noteTextarea.dataset.orderId = orderId;
+                noteTextarea.value = '';
+                loginPopup.classList.add('active');
+                isPopupVisible = true;
+            } else if (event.target.classList.contains('btn-success-order')) {
+                event.preventDefault();
+                if (isPopupVisible) return;
+                const orderRow = event.target.closest('tr');
+                const deliveryId = orderRow.querySelector('td:nth-child(3)').textContent;
+                orderRow.remove();
+                fetch(`http://localhost:8080/api/shippers/delivery/${deliveryId}?status=DELIVERED`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({}),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            showToast('Bắt đầu giao hàng!', 'success');
+                            orderRow.remove();
+                        }
+                    });
+            } else if (event.target.classList.contains('close-btn') || !loginPopup.contains(event.target)) {
+                loginPopup.classList.remove('active');
+                isPopupVisible = false;
+            } else if (event.target.classList.contains('btn-fail-order2')) {
+                event.preventDefault();
+                const deliveryId = document.getElementById('note-textarea').dataset.orderId;
+                const note = document.getElementById('note-textarea').value.trim();
+                if(note !== ''){
+                    fetch(`http://localhost:8080/api/shippers/delivery/${deliveryId}?status=DELIVERY_FAILED`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ note }),
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                const orderRow = document.querySelector(`td[data-delivery-id="${deliveryId}"]`).closest('tr');
+                                if (orderRow) {
+                                    showToast('Giao hàng thất bại!', 'danger');
+                                    orderRow.remove();
+                                }
+                                loginPopup.classList.remove('active');
+                                isPopupVisible = false;
+                            }
+                        })
+                        .catch(error => {
+                            showToast('Giao hàng thất bại!', 'danger');
+                            loginPopup.classList.remove('active');
+                            isPopupVisible = false;
+                        });
+                } else {
+                    alert('Vui lòng nhập ghi chú trước khi xác nhận.');
+                }
+            }
+        });
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-bg-${type} border-0 show`;
+            toast.role = 'alert';
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 1000);
+            }, 1000);
+        }
+
+        document.getElementById('search-date').addEventListener('input', function (event) {
+            const searchValue = event.target.value.trim().toLowerCase();
+            const filteredOrders = deliveries.filter(order =>
+                order.deliveryDate.toLowerCase().match(searchValue)
+            );
+            displayOrders(filteredOrders, currentPage, rowsPerPage);
+            setupPagination(filteredOrders.length, rowsPerPage);
+        });
+
+        fetchDeliveredOrders();
+    });
+</script>
+</body>
+</html>

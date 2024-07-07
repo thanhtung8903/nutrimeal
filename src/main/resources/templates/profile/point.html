@@ -50,6 +50,74 @@
         height: 80px; /* Fixed height */
         object-fit: cover; /* Maintain aspect ratio and cover the box */
     }
+
+    .point-minus {
+        color: red;
+    }
+
+    .point-bonus {
+        color: green;
+    }
+
+    .point-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        background-color: #fff;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .point-item:last-child {
+        border-bottom: none;
+    }
+
+    .point-item i {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+
+    .point-description {
+        flex-grow: 1;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .point-amount {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .page-link {
+        color: #343a40;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 5px 10px;
+        margin: 0 2px;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .page-link:hover {
+        background-color: #F8B934;
+        border-color: #F8B934;
+        color: #fff;
+    }
+
+    .page-link:disabled {
+        color: #aaa;
+        cursor: not-allowed;
+    }
 </style>
 
 <header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
@@ -57,7 +125,6 @@
 <header th:replace="~{fragments :: header_admin}" sec:authorize="hasAuthority('ROLE_ADMIN')"></header>
 <body>
 <div class="profile__account container mt-3 mb-3">
-
     <div class="container-fluid">
         <div class="row" th:object="${user}">
             <!-- Sidebar -->
@@ -70,18 +137,88 @@
                 <p th:text="*{getFullName()}"></p>
                 <a href="#" th:href="@{/profile/account}">Thông tin tài khoản</a>
                 <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">Đổi mật khẩu</a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">Point</a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">Điểm thưởng</a>
                 <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
                 <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">Đơn hàng của tôi</a>
             </nav>
 
             <!-- Main content -->
             <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
-                <h2 class="my-4">Điểm thưởng</h2>
+                <h2 class="my-4">Điểm thưởng: <span th:text="${point}"></span></h2>
+                <div id="pointHistoryContainer"></div>
+                <nav class="pagination">
+                    <button class="page-link" onclick="prevPage()" id="prevPageBtn">Previous</button>
+                    <button class="page-link" onclick="nextPage()" id="nextPageBtn">Next</button>
+                </nav>
             </main>
         </div>
     </div>
 </div>
+
+<script>
+    let currentPage = 1;
+    const pageSize = 10;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadPointHistory(currentPage, pageSize);
+    });
+
+    function loadPointHistory(page, size) {
+        fetch(`http://localhost:8080/api/pointHistory?page=${page}&size=${size}`)
+            .then(response => response.json())
+            .then(data => {
+                displayPointHistory(data);
+                updatePaginationButtons(data.length);
+            })
+            .catch(error => console.error('Error fetching point history:', error));
+    }
+
+    function displayPointHistory(data) {
+        const container = document.getElementById('pointHistoryContainer');
+        container.innerHTML = '';
+
+        data.forEach(item => {
+            const pointItem = document.createElement('div');
+            pointItem.classList.add('point-item');
+
+            const icon = document.createElement('i');
+            icon.classList.add('bi', item.pointHistoryStatus === 'MINUS' ? 'bi-dash-circle' : 'bi-plus-circle');
+            pointItem.appendChild(icon);
+
+            const description = document.createElement('div');
+            description.classList.add('point-description');
+            description.innerHTML = `<strong>${item.pointHistoryDescription}</strong><br>${item.pointHistoryDate}`;
+            pointItem.appendChild(description);
+
+            const points = document.createElement('div');
+            points.textContent = (item.pointHistoryStatus === 'MINUS' ? '-' : '+') + item.pointHistoryPoint;
+            points.classList.add('point-amount', item.pointHistoryStatus === 'MINUS' ? 'point-minus' : 'point-bonus');
+            pointItem.appendChild(points);
+
+            container.appendChild(pointItem);
+        });
+    }
+
+    function updatePaginationButtons(dataLength) {
+        const prevPageBtn = document.getElementById('prevPageBtn');
+        const nextPageBtn = document.getElementById('nextPageBtn');
+
+        prevPageBtn.disabled = currentPage === 1;
+        nextPageBtn.disabled = dataLength < pageSize;
+    }
+
+    function nextPage() {
+        currentPage++;
+        loadPointHistory(currentPage, pageSize);
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            loadPointHistory(currentPage, pageSize);
+        }
+    }
+</script>
 
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>

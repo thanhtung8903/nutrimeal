@@ -33,6 +33,7 @@ public class HomeController {
     public String home(Model model, Principal principal) {
         boolean isManager = false;
         boolean isAdmin = false;
+        boolean isShipper = false;
 
         if (principal instanceof OAuth2AuthenticationToken && principal != null) {
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
@@ -40,12 +41,16 @@ public class HomeController {
             User user = userRepository.findByEmail(oauthUser.getAttribute("email")).orElse(null);
             isManager = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_MANAGER"));
             isAdmin = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_ADMIN"));
+            isShipper = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_SHIPPER"));
+
             boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
             model.addAttribute("isOauth2User", isOauth2User);
             if (isManager) {
                 return "redirect:/manager/customer";
             } else if (isAdmin) {
                 return "redirect:/manager/customer";
+            } else if (isShipper) {
+                return "redirect:/shipper//orderNotYetDelivery";
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList);
@@ -56,14 +61,17 @@ public class HomeController {
                 User user = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
                 isManager = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_MANAGER"));
                 isAdmin = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_ADMIN"));
+                isShipper = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_SHIPPER"));
             }
             if (isManager) {
                 return "redirect:/manager/customer";
             } else if (isAdmin) {
                 return "redirect:/manager/customer";
+            } else if (isShipper) {
+                return "redirect:/shipper/orderNotYetDelivery";
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
-                model.addAttribute("comboList", comboList);
+                model.addAttribute("comboList", comboList.subList(0, 8));
                 return "common/home";
             }
         }

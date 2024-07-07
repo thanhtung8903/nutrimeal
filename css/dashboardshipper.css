@@ -1,0 +1,69 @@
+.dashboard-shipper {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 30px;
+  width: calc(100%-250px);
+}
+.dashboard-shipper .dashboard-shipper-box {
+  width: 20%;
+  height: 100px;
+  box-shadow: 0 0 5px rgba(48, 46, 46, 0.5);
+  text-align: center;
+  padding: 10px;
+}
+.dashboard-shipper .dashboard-shipper-box p {
+  color: rgb(166, 168, 168);
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 20px;
+}
+.dashboard-shipper-table {
+  display: flex;
+  justify-content: center;
+}
+.dashboard-shipper-table table {
+  width: 90%;
+  border-collapse: collapse;
+  border: 1px solid black;
+  align-items: center;
+}
+.dashboard-shipper-table table th,
+.dashboard-shipper-table table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.dashboard-shipper-table table td:last-child {
+  width: 160px;
+}
+.dashboard-shipper-table table tr:hover {
+  background-color: #f1f1f1;
+}
+.dashboard-shipper-table table th {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+button {
+  color: #f1f1f1;
+  border-radius: 3px;
+  width: 70px;
+  border: none;
+  height: 25px;
+}
+.btn-edit {
+  background-color: green;
+}
+.btn-edit:hover {
+  background-color: rgb(12, 154, 12);
+}
+.btn-delete {
+  background-color: rgb(205, 23, 23);
+}
+.btn-delete:hover {
+  background-color: rgba(248, 12, 12, 0.945);
+}
+.dashboard-shipper-chart {
+  margin: 20px auto;
+  width: 80%;
+  background-color: #ffffff;
+  padding: 20px;
+}

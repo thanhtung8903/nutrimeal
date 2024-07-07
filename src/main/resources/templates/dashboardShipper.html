@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="path/to/font-awesome/css/font-awesome.min.css"
+    />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/dashboardshipper.css" />
+    <style>
+      .dashboard-shipper {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 30px;
+        width: calc(100%-250px);
+      }
+      .dashboard-shipper .dashboard-shipper-box {
+        width: 20%;
+        height: 100px;
+        box-shadow: 0 0 5px rgba(48, 46, 46, 0.5);
+        text-align: center;
+        padding: 10px;
+      }
+      .dashboard-shipper .dashboard-shipper-box p {
+        color: rgb(166, 168, 168);
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+        font-size: 20px;
+      }
+      .dashboard-shipper-table {
+        display: flex;
+        justify-content: center;
+      }
+      .dashboard-shipper-table table {
+        width: 90%;
+        border-collapse: collapse;
+        border: 1px solid black;
+        align-items: center;
+      }
+      .dashboard-shipper-table table th,
+      .dashboard-shipper-table table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      .dashboard-shipper-table table td:last-child {
+        width: 160px;
+      }
+      .dashboard-shipper-table table tr:hover {
+        background-color: #f1f1f1;
+      }
+      .dashboard-shipper-table table th {
+        background-color: #f2f2f2;
+        cursor: pointer;
+      }
+      button {
+        color: #f1f1f1;
+        border-radius: 3px;
+        width: 70px;
+        border: none;
+        height: 25px;
+      }
+      .btn-edit {
+        background-color: green;
+      }
+      .btn-edit:hover {
+        background-color: rgb(12, 154, 12);
+      }
+      .btn-delete {
+        background-color: rgb(205, 23, 23);
+      }
+      .btn-delete:hover {
+        background-color: rgba(248, 12, 12, 0.945);
+      }
+      .dashboard-shipper-chart {
+        margin: 20px auto;
+        width: 80%;
+        background-color: #ffffff;
+        padding: 20px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-shipper">
+      <div class="dashboard-shipper-box">
+        <p class="dashboard-shipper-title">Total order</p>
+        <div class="dashboard-shipper-number">
+          <h1>Number</h1>
+          <i class="fa-regular fa-user"></i>
+        </div>
+      </div>
+      <div class="dashboard-shipper-box">
+        <p class="dashboard-shipper-title">Order today</p>
+        <div class="dashboard-shipper-number">
+          <h1>Number</h1>
+        </div>
+      </div>
+      <div class="dashboard-shipper-box">
+        <p class="dashboard-shipper-title">Cancel</p>
+        <div class="dashboard-shipper-number">
+          <h1>Number</h1>
+        </div>
+      </div>
+      <div class="dashboard-shipper-box">
+        <p class="dashboard-shipper-title">Success</p>
+        <div class="dashboard-shipper-number">
+          <h1>Number</h1>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-shipper-chart">
+      <canvas id="barchart"></canvas>
+    </div>
+    <div class="dashboard-shipper-table">
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>DOB</th>
+            <th>Role</th>
+            <th>Action</th>
+            <th>Action</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="dashboard-shipper-tbody">
+        </tbody>
+      </table>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const labels = ["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12"];
+        const data = {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Success',
+              data: [43, 34, 2, 54, 23, 5, 23, 43, 23, 45, 23, 78],
+              backgroundColor: [
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+              ],
+              borderColor: [
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+                "rgb(201, 203, 207)",
+              ],
+              borderWidth: 2,
+            },
+            {
+              label: 'Cancel',
+              data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+              backgroundColor: [
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+              ],
+              borderColor: [
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+                "rgb(153, 102, 255)",
+              ],
+              borderWidth: 2,
+            },
+          ],
+        };
+        const config = {
+          type: "bar",
+          data: data,
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        };
+        const barchart = new Chart(document.getElementById("barchart"), config);
+      });
+      fetch('http://localhost:8080/api/delivery?status=DELIVERED')
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+              })
+              .then(data => {
+                // Process the fetched data
+                const tableBody = document.getElementById('dashboard-shipper-tbody');
+                tableBody.innerHTML = '';
+                data.forEach((delivery, index) => {
+                  const row = document.createElement('tr');
+                  row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${delivery.deliveryId}</td>
+        <td>${delivery.deliveryStatus}</td>
+        <td>${delivery.deliveryTime}</td>
+        <td>${formatDate(delivery.deliveryDate)}</td>
+        <td>${delivery.customerFullName}</td>
+        <td>${delivery.deliveryPhone}</td>
+        <td>${delivery.deliveryAddress}</td>
+        <td>${delivery.deliveryPrice}</td>
+        <td>${delivery.shipperFullName}</td>
+      `;
+                  tableBody.appendChild(row);
+                });
+              })
+              .catch(error => console.error('Error fetching delivery data:', error));
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(-2);
+        return `${day}/${month}/${year}`;
+      }
+
+      function fetchDataFromAPI() {
+        return fetch("http://localhost:8080/api/delivery?status=DELIVERED")
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                  }
+                  return response.json();
+                })
+                .then((data) => {
+                  // Ensure data is an array before returning
+                  if (!Array.isArray(data)) {
+                    throw new Error("Data received is not in expected array format");
+                  }
+                  return data;
+                })
+                .catch((error) => {
+                  console.error("Error fetching delivery data:", error);
+                  throw error; // Re-throw the error to propagate it
+                });
+      }
+
+      // Hàm tính tổng số đơn hàng theo từng tháng từ dữ liệu đơn hàng
+      function calculateTotalOrdersByMonth(deliveries) {
+        if (!Array.isArray(deliveries)) {
+          throw new Error("Invalid deliveries data format. Expected an array.");
+        }
+
+        const monthlyOrders = new Array(12).fill(0);
+
+        deliveries.forEach((delivery) => {
+          const deliveryDate = new Date(delivery.deliveryDate);
+          const monthIndex = deliveryDate.getMonth();
+          monthlyOrders[monthIndex]++;
+        });
+
+        return monthlyOrders;
+      }
+      //
+      // function calculateSuccessfulOrdersByMonth(deliveries) {
+      //   const successfulOrders = new Array(12).fill(0);
+      //   deliveries.forEach(delivery => {
+      //     const deliveryDate = new Date(delivery.deliveryDate);
+      //     const monthIndex = deliveryDate.getMonth();
+      //     if (delivery.deliveryStatus === 'SUCCESS') {
+      //       successfulOrders[monthIndex]++;
+      //     }
+      //   });
+      //   return successfulOrders;
+      // }
+      //
+      // function calculateCancelledOrdersByMonth(deliveries) {
+      //   const cancelledOrders = new Array(12).fill(0);
+      //   deliveries.forEach(delivery => {
+      //     const deliveryDate = new Date(delivery.deliveryDate);
+      //     const monthIndex = deliveryDate.getMonth();
+      //     if (delivery.deliveryStatus === 'CANCELLED') {
+      //       cancelledOrders[monthIndex]++;
+      //     }
+      //   });
+      //   return cancelledOrders;
+      // }
+
+      // Hàm chính để xử lý dữ liệu và in ra kết quả
+      function processDataAndDisplayChart() {
+        fetchDataFromAPI()
+                .then((data) => {
+                  try {
+                    const monthlyOrders = calculateTotalOrdersByMonth(data);
+                    console.log('Số lượng đơn hàng theo từng tháng:', monthlyOrders);
+                    // Update chart or UI based on monthlyOrders
+                    updateChart(monthlyOrders);
+                  } catch (error) {
+                    console.error('Error processing data:', error);
+                    // Handle error: show message, log, etc.
+                  }
+                })
+                .catch((error) => console.error('Error fetching data:', error));
+      }
+      processDataAndDisplayChart();
+      function updateChart(monthlyOrders) {
+        const chart = Chart.getChart('barchart');
+        chart.data.datasets[1].data= monthlyOrders;
+        chart.update();
+      }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
