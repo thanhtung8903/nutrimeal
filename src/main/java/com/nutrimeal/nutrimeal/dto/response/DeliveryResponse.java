@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
+@Builder
 public class DeliveryResponse {
 
     private int deliveryId;

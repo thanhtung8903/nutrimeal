@@ -172,5 +172,23 @@ public class UserService {
     public void save(User user) {
         userRepository.save(user);
     }
+
+    public List<UserInfoResponse> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user -> {
+            UserInfoResponse response = new UserInfoResponse(
+                    user.getUserId(),
+                    user.getEmail(),
+                    user.getFullName(),
+                    user.getPhone(),
+                    user.getImage(),
+                    user.getGender(),
+                    user.getDob(),
+                    user.getPoint(),
+                    user.getRoles().stream().map(role -> role.getRoleName().name()).collect(Collectors.toList())
+            );
+            return response;
+        }).collect(Collectors.toList());
+    }
 }
 

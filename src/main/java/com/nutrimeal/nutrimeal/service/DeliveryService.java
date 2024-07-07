@@ -212,7 +212,7 @@ public class DeliveryService {
 //            deliveryResponse.setDeliveryUpdateTime(delivery.getDeliveryUpdateTime().toString());
             deliveryResponse.setDeliveryPrice(delivery.getDeliveryPrice());
             deliveryResponseList.add(deliveryResponse);
-    }
+        }
         return deliveryResponseList;
     }
 
@@ -239,5 +239,53 @@ public class DeliveryService {
 
     public Delivery findDeliveryById(int deliveryId) {
         return deliveryRepository.findByDeliveryId(deliveryId);
+    }
+
+    public List<DeliveryResponse> findDeliveriesByUser(User user) {
+        List<Delivery> deliveryList = deliveryRepository.findAllByUserOrderByDeliveryDateAsc(user);
+        List<DeliveryResponse> deliveryResponseList = new ArrayList<>();
+        for (Delivery delivery : deliveryList) {
+            DeliveryResponse deliveryResponse = new DeliveryResponse().builder()
+                    .deliveryId(delivery.getDeliveryId())
+                    .deliveryStatus(delivery.getDeliveryStatus())
+                    .deliveryTime(delivery.getDeliveryTime())
+                    .deliveryDate(delivery.getDeliveryDate().toString())
+                    .deliveryNote(delivery.getDeliveryNote())
+                    .deliveryAddress(delivery.getDeliveryAddress())
+                    .deliveryPhone(delivery.getDeliveryPhone())
+                    .customerFullName(delivery.getOrder().getUser().getFullName())
+                    .shipperFullName(delivery.getShipper().getFullName())
+                    .deliveryUpdateTime(delivery.getDeliveryUpdateTime() == null ? null : delivery.getDeliveryUpdateTime().toString())
+                    .deliveryPrice(delivery.getDeliveryPrice())
+            .build();
+
+            deliveryResponseList.add(deliveryResponse);
+        }
+
+        return deliveryResponseList;
+    }
+
+    public List<DeliveryResponse> findDeliveriesByShipper(User user) {
+        List<Delivery> deliveryList = deliveryRepository.findAllByShipperOrderByDeliveryDateAsc(user);
+        List<DeliveryResponse> deliveryResponseList = new ArrayList<>();
+        for (Delivery delivery : deliveryList) {
+            DeliveryResponse deliveryResponse = new DeliveryResponse().builder()
+                    .deliveryId(delivery.getDeliveryId())
+                    .deliveryStatus(delivery.getDeliveryStatus())
+                    .deliveryTime(delivery.getDeliveryTime())
+                    .deliveryDate(delivery.getDeliveryDate().toString())
+                    .deliveryNote(delivery.getDeliveryNote())
+                    .deliveryAddress(delivery.getDeliveryAddress())
+                    .deliveryPhone(delivery.getDeliveryPhone())
+                    .customerFullName(delivery.getOrder().getUser().getFullName())
+                    .shipperFullName(delivery.getShipper().getFullName())
+                    .deliveryUpdateTime(delivery.getDeliveryUpdateTime() == null ? null : delivery.getDeliveryUpdateTime().toString())
+                    .deliveryPrice(delivery.getDeliveryPrice())
+                    .build();
+
+            deliveryResponseList.add(deliveryResponse);
+        }
+
+        return deliveryResponseList;
     }
 }

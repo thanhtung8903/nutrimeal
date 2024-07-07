@@ -60,4 +60,7 @@ public class Order {
 
     @Column(name = "point")
     private Integer point;
+
+    @Column(name = "delay")
+    private Integer delay;
 }
