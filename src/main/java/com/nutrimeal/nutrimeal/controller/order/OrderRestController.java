@@ -49,6 +49,7 @@ public class OrderRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng cập nhật số điện thoại trước khi đặt hàng");
         }
 
+
         Order order = new Order();
         order.setOrderTempPrice(orderRequest.getOrderTempPrice());
         order.setOrderDeliveryPrice(orderRequest.getOrderDeliveryPrice());
@@ -87,15 +88,21 @@ public class OrderRestController {
 
         List<OrderBasket> orderBaskets = orderBasketService.findAllByUser(user);
 
+        boolean hasThirtyDayOrder = orderBaskets.stream().anyMatch(orderBasket -> orderBasket.getDay() == 30);
+        int delayDay = hasThirtyDayOrder ? 3 : 1;
+        order.setDelay(delayDay);
+
         orderService.save(order);
 
-        PointHistory pointHistory = new PointHistory();
-        pointHistory.setPointHistoryDate(LocalDate.now());
-        pointHistory.setPointHistoryDescription("Đặt hàng đơn hàng #" + order.getOrderId());
-        pointHistory.setPointHistoryStatus(PointHistoryStatus.MINUS.name());
-        pointHistory.setPointHistoryPoint(orderRequest.getPointsDiscount() / 1000);
-        pointHistory.setUser(user);
-        pointHistoryService.save(pointHistory);
+        if (orderRequest.getPointsDiscount() / 1000 > 0) {
+            PointHistory pointHistory = new PointHistory();
+            pointHistory.setPointHistoryDate(LocalDate.now());
+            pointHistory.setPointHistoryDescription("Đặt hàng đơn hàng #" + order.getOrderId());
+            pointHistory.setPointHistoryStatus(PointHistoryStatus.MINUS.name());
+            pointHistory.setPointHistoryPoint(orderRequest.getPointsDiscount() / 1000);
+            pointHistory.setUser(user);
+            pointHistoryService.save(pointHistory);
+        }
 
         for (OrderBasket orderBasket : orderBaskets) {
             OrderDetail orderDetail = getOrderDetail(orderBasket);

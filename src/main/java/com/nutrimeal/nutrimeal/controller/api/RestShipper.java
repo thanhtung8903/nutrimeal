@@ -43,24 +43,25 @@ public class RestShipper {
 
     @PutMapping("/delivery/{deliveryId}")
     public ResponseEntity<DeliveryResponse> updateDeliveryStatus(@PathVariable int deliveryId, @RequestParam String status,
-                                                                 @RequestBody(required = false) Map<String, String> note , Principal principal) {
+                                                                 @RequestBody(required = false) Map<String, String> note, Principal principal) {
         String noteValue = note.get("note");
         User shipper = userService.findByUsername(principal.getName());
 
         Delivery delivery = deliveryService.findDeliveryById(deliveryId);
 
         if (status.equals("DELIVERED") && Boolean.TRUE.equals(delivery.getIsBonus())) {
-            PointHistory pointHistory = new PointHistory();
-            pointHistory.setPointHistoryDescription("Hoàn thành đơn hàng #" + delivery.getOrder().getOrderId());
-
             int point = delivery.getOrder().getOrderTotalPrice() / 1000;
-            pointHistory.setPointHistoryPoint(point);
 
-            pointHistory.setUser(delivery.getOrder().getUser());
-            pointHistory.setPointHistoryStatus(PointHistoryStatus.BONUS.name());
-            pointHistory.setPointHistoryDate(LocalDate.now());
-            delivery.getOrder().getUser().setPoint(delivery.getOrder().getUser().getPoint() + pointHistory.getPointHistoryPoint());
-            pointHistoryService.save(pointHistory);
+            if (point > 0) {
+                PointHistory pointHistory = new PointHistory();
+                pointHistory.setPointHistoryDescription("Hoàn thành đơn hàng #" + delivery.getOrder().getOrderId());
+                pointHistory.setPointHistoryPoint(point);
+                pointHistory.setUser(delivery.getOrder().getUser());
+                pointHistory.setPointHistoryStatus(PointHistoryStatus.BONUS.name());
+                pointHistory.setPointHistoryDate(LocalDate.now());
+                delivery.getOrder().getUser().setPoint(delivery.getOrder().getUser().getPoint() + pointHistory.getPointHistoryPoint());
+                pointHistoryService.save(pointHistory);
+            }
         }
 
         DeliveryResponse deliveryResponse = deliveryService.updateDeliveryStatus(deliveryId, status, shipper, noteValue);

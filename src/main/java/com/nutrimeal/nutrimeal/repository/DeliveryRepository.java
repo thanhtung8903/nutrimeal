@@ -18,4 +18,9 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
 
     Delivery findByDeliveryIdAndShipper(Integer deliveryId, User shipper);
 
+    List<Delivery> findAllByUserOrderByDeliveryDateAsc(User user);
+
+
+    List<Delivery> findAllByShipperOrderByDeliveryDateAsc(User user);
+
 }

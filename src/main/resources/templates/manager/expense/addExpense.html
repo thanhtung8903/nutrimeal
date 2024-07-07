@@ -57,7 +57,7 @@
     </style>
 </head>
 <body>
-<div th:insert="fragments/sidebar :: sidebar-manager"></div>
+<div th:insert="fragments/sidebar :: sidebar-manager (page = 'expense')"></div>
 
 <div class="content" id="content">
     <div class="container mb-4">
@@ -120,7 +120,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
 
 <script>
     document.getElementById('toggle-sidebar').addEventListener('click', function() {
@@ -130,6 +130,16 @@
             sidebar.classList.toggle('collapsed');
             content.classList.toggle('collapsed');
         }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function(submenuToggle) {
+            submenuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
     });
 
     document.addEventListener('DOMContentLoaded', function() {
