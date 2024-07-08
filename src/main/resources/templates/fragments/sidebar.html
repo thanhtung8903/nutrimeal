@@ -69,7 +69,7 @@
                 <a href="#"><i class="bi bi-card-checklist opt-head"></i><span class="sidebar-text opt-head">Quản lý đơn hàng</span> <i class="bi bi-chevron-down submenu-toggle sidebar-text opt-head"></i></a>
                 <ul class="submenu">
                     <li class="nav-item sub-item-head" th:classappend="${page == 'cfOrder' ? 'active' : ''}"><a th:href="@{/manager/order}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Xác nhận đơn hàng</a></li>
-                    <li class="nav-item sub-item-head" th:classappend="${page == 'listOrder' ? 'active' : ''}"><a href="#"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Danh sách đơn hàng</a></li>
+                    <li class="nav-item sub-item-head" th:classappend="${page == 'listOrder' ? 'active' : ''}"><a th:href="@{/manager/listorder}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Danh sách đơn hàng</a></li>
                 </ul>
             </li>
             <li class="has-submenu item-head" th:classappend="${page == 'notdeli' || page == 'inTran'  || page == 'failOrder'  || page == 'delivered' ?  'active' : ''}">
@@ -79,6 +79,8 @@
                     <li class="nav-item sub-item-head" th:classappend="${page == 'inTran' ? 'active' : ''}"><a th:href="@{/manager/delivery/intransit}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn đang giao</a></li>
                     <li class="nav-item sub-item-head" th:classappend="${page == 'delivered' ? 'active' : ''}"><a th:href="@{/manager/delivery/delivered}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn giao thành công</a></li>
                     <li class="nav-item sub-item-head" th:classappend="${page == 'failOrder' ? 'active' : ''}"><a th:href="@{/manager/delivery/deliveryfailed}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn giao thất bại</a></li>
+                    <li class="nav-item sub-item-head" th:classappend="${page == 'delay' ? 'active' : ''}"><a th:href="@{/manager/delivery/delayed}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn hoãn</a></li>
+
                 </ul>
             </li>
             <li class="nav-item item-head" th:classappend="${page == 'expense' ? 'active' : ''}"><a th:href="@{/manager/expense}"><i class="bi bi-table opt-head"></i> <span class="sidebar-text opt-head">Quản lý chi tiêu</span></a></li>

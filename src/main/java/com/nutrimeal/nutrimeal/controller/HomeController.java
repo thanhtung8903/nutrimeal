@@ -50,7 +50,7 @@ public class HomeController {
             } else if (isAdmin) {
                 return "redirect:/manager/customer";
             } else if (isShipper) {
-                return "redirect:/shipper//orderNotYetDelivery";
+                return "redirect:/shipper/orderNotYetDelivery";
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList);

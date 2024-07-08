@@ -38,6 +38,10 @@ public class ManagerOrderController {
         model.addAttribute("ordersProcessing", orders);
         return "manager/order/order";
     }
+    @GetMapping("/order/listorder")
+    public String managerListOrder() {
+        return "manager/order/listOrder";
+    }
 
     @PostMapping("/processingorder")
     public String processingOrder(@RequestParam("orderId") Integer orderId,
@@ -45,7 +49,7 @@ public class ManagerOrderController {
         orderService.updateStatusOrder(orderId, status);
         Order order = orderService.getOrderById(orderId);
         Integer points = order.getPoint(); // Get points as Integer to handle null
-        if (status.equals("CANCELLED")) {
+        if (status.equals("CANCELLED") && points != null && points > 0) {
             PointHistory pointHistory = new PointHistory();
             pointHistory.setPointHistoryDescription("Hoàn điểm đơn hàng #" + orderId);
             // Check if points is not null before calling intValue()

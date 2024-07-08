@@ -59,5 +59,11 @@ public class RestDelivery {
         return deliveryService.findDeliveriesByShipper(user);
     }
 
+    @PostMapping("/delay/{deliveryId}")
+    public ResponseEntity<String> delayDelivery(@PathVariable Integer deliveryId) {
+        deliveryService.delayDelivery(deliveryId);
+        return ResponseEntity.ok("Delivery delayed");
+    }
+
 
 }
