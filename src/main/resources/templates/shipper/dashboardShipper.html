@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css" />
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/dashboardshipper.css" />
+  <style>
+    .dashboard-shipper {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 30px;
+      width: calc(100%-250px);
+    }
+    .dashboard-shipper .dashboard-shipper-box {
+      width: 20%;
+      height: 100px;
+      box-shadow: 0 0 5px rgba(48, 46, 46, 0.5);
+      text-align: center;
+      padding: 10px;
+    }
+    .dashboard-shipper .dashboard-shipper-box p {
+      color: rgb(166, 168, 168);
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+      font-size: 20px;
+    }
+    .dashboard-shipper-table {
+      display: flex;
+      justify-content: center;
+    }
+    .dashboard-shipper-table table {
+      width: 90%;
+      border-collapse: collapse;
+      border: 1px solid black;
+      align-items: center;
+    }
+    .dashboard-shipper-table table th,
+    .dashboard-shipper-table table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    .dashboard-shipper-table table td:last-child {
+      width: 160px;
+    }
+    .dashboard-shipper-table table tr:hover {
+      background-color: #f1f1f1;
+    }
+    .dashboard-shipper-table table th {
+      background-color: #f2f2f2;
+      cursor: pointer;
+    }
+    button {
+      color: #f1f1f1;
+      border-radius: 3px;
+      width: 70px;
+      border: none;
+      height: 25px;
+    }
+    .btn-edit {
+      background-color: green;
+    }
+    .btn-edit:hover {
+      background-color: rgb(12, 154, 12);
+    }
+    .btn-delete {
+      background-color: rgb(205, 23, 23);
+    }
+    .btn-delete:hover {
+      background-color: rgba(248, 12, 12, 0.945);
+    }
+    .dashboard-shipper-chart {
+      margin: 20px auto;
+      width: 80%;
+      background-color: #ffffff;
+      padding: 20px;
+    }
+    .dashboard-shipper-chart #searchForm button{
+      background: black;
+      color: white;
+    }
+    /*.dashboard-shipper-chart #searchForm input{*/
+    /*  width: 60px;*/
+    /*}*/
+  </style>
+</head>
+<body>
+<div class="dashboard-shipper">
+  <div class="dashboard-shipper-box">
+    <p class="dashboard-shipper-title">Đơn hàng chưa giao</p>
+    <div class="dashboard-shipper-number">
+      <h1 id="total-orders"></h1>
+      <i class="fa-regular fa-user"></i>
+    </div>
+  </div>
+  <div class="dashboard-shipper-box">
+    <p class="dashboard-shipper-title">Đơn hàng đang giao</p>
+    <div class="dashboard-shipper-number">
+      <h1 id="order-today">Number</h1>
+    </div>
+  </div>
+  <div class="dashboard-shipper-box">
+    <p class="dashboard-shipper-title">Đơn hàng giao thành công</p>
+    <div class="dashboard-shipper-number">
+      <h1 id="order-success">Number</h1>
+    </div>
+  </div>
+  <div class="dashboard-shipper-box">
+    <p class="dashboard-shipper-title">Đơn hàng giao thất bại</p>
+    <div class="dashboard-shipper-number">
+      <h1 id="order-cancel">Number</h1>
+    </div>
+  </div>
+</div>
+<div class="dashboard-shipper-chart">
+  <form id="searchForm">
+    <label for="search-year">Select Year:</label>
+    <input type="number" id="search-year" name="search-year" min="1900" max="" placeholder="YYYY">
+    <button type="submit">Search</button>
+  </form>
+  <canvas id="barchart"></canvas>
+</div>
+<div class="dashboard-shipper-table">
+  <table>
+    <thead>
+    <tr>
+      <th>STT</th>
+      <th>Order ID</th>
+      <th>Trạng thái</th>
+      <th>Thời gian giao hàng</th>
+      <th>Ngày giao hàng</th>
+      <th>Tên khách hàng</th>
+      <th>Số điện thoại</th>
+      <th>Địa chỉ giao hàng</th>
+      <th>Giá</th>
+      <th>Shipper</th>
+    </tr>
+    </thead>
+    <tbody id="dashboard-shipper-tbody"></tbody>
+  </table>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const labels = ["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12"];
+    const data = {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Success',
+          data: [],
+          backgroundColor: "rgba(201, 203, 207, 0.2)",
+          borderColor: "rgb(201, 203, 207)",
+          borderWidth: 2,
+        },
+        {
+          label: 'Cancel',
+          data: [],
+          backgroundColor: "rgba(153, 102, 255, 0.2)",
+          borderColor: "rgb(153, 102, 255)",
+          borderWidth: 2,
+        },
+      ],
+    };
+    const config = {
+      type: "bar",
+      data: data,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    };
+    const barchart = new Chart(document.getElementById("barchart"), config);
+
+    fetch('http://localhost:8080/api/delivery/shipper')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              // Process the fetched data
+              const NotyetDelivery=calculateNotYetDeliveryOrders(data);
+              document.getElementById('total-orders').textContent = NotyetDelivery;
+              const TodayOrders=calculateTodayOrders(data);
+              document.getElementById('order-today').textContent = TodayOrders;
+              const SuccessOrders=calculateSuccessOrders(data);
+              document.getElementById('order-success').textContent = SuccessOrders;
+              const CancelOrders=calculateCancelOrders(data);
+              document.getElementById('order-cancel').textContent = CancelOrders;
+              const tableBody = document.getElementById('dashboard-shipper-tbody');
+              tableBody.innerHTML = '';
+              data.forEach((delivery, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${delivery.deliveryId}</td>
+                <td>${delivery.deliveryStatus}</td>
+                <td>${delivery.deliveryTime}</td>
+                <td>${formatDate(delivery.deliveryDate)}</td>
+                <td>${delivery.customerFullName}</td>
+                <td>${delivery.deliveryPhone}</td>
+                <td>${delivery.deliveryAddress}</td>
+                <td>${delivery.deliveryPrice}</td>
+                <td>${delivery.shipperFullName}</td>
+              `;
+                tableBody.appendChild(row);
+              });
+            })
+            .catch(error => console.error('Error fetching delivery data:', error));
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = String(date.getFullYear()).slice(-2);
+      return `${day}/${month}/${year}`;
+    }
+
+    function fetchDataFromAPI(year) {
+      return fetch(`http://localhost:8080/api/delivery/shipper?year=${year}`)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+              });
+    }
+
+    function updateChart(chart, dataSuccess, dataCancel) {
+      chart.data.datasets[0].data = dataSuccess;
+      chart.data.datasets[1].data = dataCancel;
+      chart.update();
+    }
+
+    function calculateMonthlyData(data, year) {
+      // Nếu year trống, thiết lập nó thành năm hiện tại
+      const currentYear = new Date().getFullYear();
+      year = year || currentYear;
+      const monthlyDataSuccess = Array(12).fill(0);
+      const monthlyDataCancel = Array(12).fill(0);
+
+      data.forEach(order => {
+        const orderDate = new Date(order.deliveryDate);
+        const orderYear = orderDate.getFullYear();
+        const orderMonth = orderDate.getMonth();
+
+        if (orderYear === year) {
+          if (order.deliveryStatus === "DELIVERED") {
+            monthlyDataSuccess[orderMonth]++;
+          } else if (order.deliveryStatus === "DELIVERY_FAILED") {
+            monthlyDataCancel[orderMonth]++;
+          }
+        }
+      });
+
+      return { monthlyDataSuccess, monthlyDataCancel };
+    }
+
+    const currentYear = new Date().getFullYear();
+    const yearInput = document.getElementById("search-year");
+    yearInput.setAttribute('max', currentYear.toString());
+    fetchDataFromAPI(currentYear)
+            .then(data => {
+              const { monthlyDataSuccess, monthlyDataCancel } = calculateMonthlyData(data, currentYear);
+              updateChart(barchart, monthlyDataSuccess, monthlyDataCancel);
+            })
+            .catch(error => console.error('Error fetching data for chart:', error));
+
+    // Event listener for the search form
+    document.getElementById("searchForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const year = parseInt(yearInput.value);
+      if (isNaN(year) || year < 1900 || year > currentYear) {
+        if (year < 1900) {
+          alert("Please enter a valid year (1900 or later).");
+        } else if (year > currentYear) {
+          alert(`Please enter a valid year (${currentYear} or earlier).`);
+        }
+        return;
+      }
+
+      fetchDataFromAPI(year)
+              .then(data => {
+                const { monthlyDataSuccess, monthlyDataCancel } = calculateMonthlyData(data, year);
+                updateChart(barchart, monthlyDataSuccess, monthlyDataCancel);
+              })
+              .catch(error => console.error('Error fetching data for chart:', error));
+    });
+  });
+
+
+  function calculateNotYetDeliveryOrders(data) {
+    return data.filter(order => order.deliveryStatus === 'NOT_DELIVERED').length;
+  }
+  function calculateTodayOrders(data) {
+    const today = new Date().toISOString().split('T')[0];
+    return data.filter(order => order.deliveryDate === 'IN_TRANSIT').length;
+  }
+  function calculateSuccessOrders(data) {
+    return data.filter(order => order.deliveryStatus === 'DELIVERED').length;
+  }
+  function calculateCancelOrders(data) {
+    return data.filter(order => order.deliveryStatus === 'DELIVERY_FAILED').length;
+  }
+</script>
+</body>
+</html>
