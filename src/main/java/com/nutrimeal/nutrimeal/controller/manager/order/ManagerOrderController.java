@@ -38,6 +38,10 @@ public class ManagerOrderController {
         model.addAttribute("ordersProcessing", orders);
         return "manager/order/order";
     }
+    @GetMapping("/order/listorder")
+    public String managerListOrder() {
+        return "manager/order/listOrder";
+    }
 
     @PostMapping("/processingorder")
     public String processingOrder(@RequestParam("orderId") Integer orderId,
