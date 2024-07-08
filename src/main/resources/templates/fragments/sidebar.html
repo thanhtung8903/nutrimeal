@@ -69,7 +69,7 @@
                 <a href="#"><i class="bi bi-card-checklist opt-head"></i><span class="sidebar-text opt-head">Quản lý đơn hàng</span> <i class="bi bi-chevron-down submenu-toggle sidebar-text opt-head"></i></a>
                 <ul class="submenu">
                     <li class="nav-item sub-item-head" th:classappend="${page == 'cfOrder' ? 'active' : ''}"><a th:href="@{/manager/order}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Xác nhận đơn hàng</a></li>
-                    <li class="nav-item sub-item-head" th:classappend="${page == 'listOrder' ? 'active' : ''}"><a href="#"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Danh sách đơn hàng</a></li>
+                    <li class="nav-item sub-item-head" th:classappend="${page == 'listOrder' ? 'active' : ''}"><a th:href="@{/manager/listorder}><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Danh sách đơn hàng</a></li>
                 </ul>
             </li>
             <li class="has-submenu item-head" th:classappend="${page == 'notdeli' || page == 'inTran'  || page == 'failOrder'  || page == 'delivered' ?  'active' : ''}">
