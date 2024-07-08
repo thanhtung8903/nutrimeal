@@ -79,6 +79,8 @@
                     <li class="nav-item sub-item-head" th:classappend="${page == 'inTran' ? 'active' : ''}"><a th:href="@{/manager/delivery/intransit}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn đang giao</a></li>
                     <li class="nav-item sub-item-head" th:classappend="${page == 'delivered' ? 'active' : ''}"><a th:href="@{/manager/delivery/delivered}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn giao thành công</a></li>
                     <li class="nav-item sub-item-head" th:classappend="${page == 'failOrder' ? 'active' : ''}"><a th:href="@{/manager/delivery/deliveryfailed}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn giao thất bại</a></li>
+                    <li class="nav-item sub-item-head" th:classappend="${page == 'delay' ? 'active' : ''}"><a th:href="@{/manager/delivery/delayed}"><i class="bi bi-circle-fill" style="font-size: 0.5em; color: #6c757d"></i>Đơn hoãn</a></li>
+
                 </ul>
             </li>
             <li class="nav-item item-head" th:classappend="${page == 'expense' ? 'active' : ''}"><a th:href="@{/manager/expense}"><i class="bi bi-table opt-head"></i> <span class="sidebar-text opt-head">Quản lý chi tiêu</span></a></li>

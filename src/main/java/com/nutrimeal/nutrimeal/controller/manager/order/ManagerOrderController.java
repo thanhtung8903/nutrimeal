@@ -45,7 +45,7 @@ public class ManagerOrderController {
         orderService.updateStatusOrder(orderId, status);
         Order order = orderService.getOrderById(orderId);
         Integer points = order.getPoint(); // Get points as Integer to handle null
-        if (status.equals("CANCELLED")) {
+        if (status.equals("CANCELLED") && points != null && points > 0) {
             PointHistory pointHistory = new PointHistory();
             pointHistory.setPointHistoryDescription("Hoàn điểm đơn hàng #" + orderId);
             // Check if points is not null before calling intValue()

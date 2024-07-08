@@ -104,7 +104,6 @@ public class DeliveryService {
                 continue;
             }
 
-
             DeliveryDetail deliveryDetail = new DeliveryDetail();
             deliveryDetail.setDelivery(delivery);
             DailyMenu dailyMenu = getDailyMenu(date, orderDetail.getCombo().getComboType().getComboTypeName());
@@ -287,5 +286,49 @@ public class DeliveryService {
         }
 
         return deliveryResponseList;
+    }
+
+    @Transactional
+    public void delayDelivery(Integer deliveryId) {
+        Order order = deliveryRepository.findByDeliveryId(deliveryId).getOrder();
+        List<Delivery> listDelivery = deliveryRepository.findAllByOrder(order);
+
+//       delivery delayed
+        Delivery delayedDelivery = deliveryRepository.findByDeliveryId(deliveryId);
+        delayedDelivery.setDeliveryStatus(DeliveryStatus.DELAYED.toString());
+        delayedDelivery.setDeliveryUpdateTime(LocalDateTime.now());
+        delayedDelivery.setDeliveryNote("DELAYED");
+        deliveryRepository.save(delayedDelivery);
+
+        int index = listDelivery.indexOf(delayedDelivery) + 1 >= 8 ? 7 : listDelivery.indexOf(delayedDelivery) + 1;
+
+
+        Delivery lastDelivery = listDelivery.getLast();
+        lastDelivery.setIsBonus(false);
+
+        Delivery newDelivery = new Delivery();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(lastDelivery.getDeliveryDate());
+        calendar.add(Calendar.DATE, 1);
+
+        newDelivery.setDeliveryDate(calendar.getTime());
+        newDelivery.setDeliveryStatus(DeliveryStatus.NOT_DELIVERED.toString());
+        newDelivery.setDeliveryAddress(lastDelivery.getDeliveryAddress());
+        newDelivery.setDeliveryTime(lastDelivery.getDeliveryTime());
+        newDelivery.setDeliveryPhone(lastDelivery.getDeliveryPhone());
+        newDelivery.setOrder(order);
+        newDelivery.setUser(order.getUser());
+        newDelivery.setDeliveryUpdateTime(LocalDateTime.now());
+        newDelivery.setDeliveryNote("DELAYED FROM " + delayedDelivery.getDeliveryDate());
+        newDelivery.setIsBonus(true);
+        newDelivery.setDeliveryPrice(0);
+        newDelivery.setShipper(lastDelivery.getShipper());
+
+
+        deliveryRepository.save(newDelivery);
+
+
+        createDeliveryDetails(newDelivery, order.getOrderDetails(), index);
     }
 }
