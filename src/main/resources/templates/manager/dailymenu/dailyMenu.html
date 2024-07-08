@@ -201,11 +201,11 @@
                         <span th:if="${dailyMenu.dailyMenuType == 'N'}">Menu mặn</span>
                     </td>
 
-                    <td style="display: marker; padding-top: 60px">
-                        <a href="#" class="btn btn-warning btn-sm update-bt bbb" th:href="@{/manager/dailymenu/update/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}">
+                    <td style="display: marker; padding-top: 60px; ">
+                        <a href="#" class="btn btn-warning btn-sm update-bt bbb" style="margin: 5px" th:href="@{/manager/dailymenu/update/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <a href="#" class="btn btn-danger btn-sm delete-btn bbb" th:href="@{/manager/dailymenu/delete/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}" onclick="return confirm('Are you sure you want to delete this DAILY MENU?')">
+                        <a href="#" class="btn btn-danger btn-sm delete-btn bbb" style="margin: 5px" th:href="@{/manager/dailymenu/delete/{dailymenuId}(dailymenuId=${dailyMenu.dailyMenuId})}" onclick="return confirm('Are you sure you want to delete this DAILY MENU?')">
                             <i class="bi bi-trash"></i>
                         </a>
                     </td>
