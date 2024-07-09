@@ -524,7 +524,7 @@
                 })
                     .then(response => {
                         if (response.ok) {
-                            showToast('Bắt đầu giao hàng!', 'success');
+                            showToast('Giao hàng thành công!', 'success');
                             orderRow.remove();
                         }
                     });
@@ -583,8 +583,8 @@
                 toast.classList.remove('show');
                 setTimeout(() => {
                     toast.remove();
-                }, 1000);
-            }, 1000);
+                }, 2000);
+            }, 2000);
         }
 
         document.getElementById('search-date').addEventListener('input', function (event) {
