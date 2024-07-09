@@ -85,6 +85,17 @@
         background-color: #343a40;
         color: #ffffff;
     }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn-info {
+        color: #fff;
+    }
+
 </style>
 
 <header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
@@ -142,7 +153,7 @@
                             <th>Trạng thái</th>
                             <th>Tổng tiền</th>
                             <th>Ghi chú</th>
-                            <th>Xem chi tiết đơn</th>
+                            <th>Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -160,8 +171,15 @@
                             </td>
                             <td th:text="${order.orderTotalPrice}" th:data-price="${order.orderTotalPrice}" class="currency"></td>
                             <td th:text="${order.orderNote}"></td>
-                            <td>
-                                <a th:href="@{/orderdetail/{orderId}(orderId=${order.orderId})}" class="btn btn-info">Xem chi tiết</a>
+                            <td class="action-buttons">
+                            <a th:href="@{/orderdetail/{orderId}(orderId=${order.orderId})}" class="btn btn-info">Xem chi tiết</a>
+                                <form th:if="${order.orderStatus == 'PROCESSING'}" th:action="@{/order/cancellorder}" method="post">
+                                    <input type="hidden" name="orderId" th:value="${order.orderId}">
+                                    <input type="hidden" name="status" value="CANCELLED">
+                                    <button type="submit" class="btn btn-danger btn-sm me-1" title="Hủy đơn" style="color: #fff;">
+                                        <i class="bi bi-check-circle">Hủy đơn</i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         </tbody>

@@ -1,12 +1,8 @@
 package com.nutrimeal.nutrimeal.controller.order;
 
 import com.nutrimeal.nutrimeal.dto.request.CallRequest;
-import com.nutrimeal.nutrimeal.model.Order;
-import com.nutrimeal.nutrimeal.model.OrderStatus;
-import com.nutrimeal.nutrimeal.model.User;
-import com.nutrimeal.nutrimeal.service.OrderService;
-import com.nutrimeal.nutrimeal.service.UserService;
-import com.nutrimeal.nutrimeal.service.VNPayService;
+import com.nutrimeal.nutrimeal.model.*;
+import com.nutrimeal.nutrimeal.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Random;
 
 @Controller
@@ -29,6 +26,8 @@ public class OrderController {
     private final VNPayService vnPayService;
     private final UserService userService;
     private final RestTemplate restTemplate;
+    private final PointHistoryService pointHistoryService;
+    private final DeliveryService deliveryService;
 
     private int countMakeCall = 0;
 
@@ -193,6 +192,29 @@ public class OrderController {
             }
         }
         return text.toString();
+    }
+
+    @PostMapping("/order/cancellorder")
+    public String processingOrder(@RequestParam("orderId") Integer orderId,
+                                  @RequestParam("status") String status) {
+        orderService.updateStatusOrder(orderId, status);
+        Order order = orderService.getOrderById(orderId);
+        Integer points = order.getPoint(); // Get points as Integer to handle null
+        if (status.equals("CANCELLED") && points != null && points > 0) {
+            PointHistory pointHistory = new PointHistory();
+            pointHistory.setPointHistoryDescription("Hoàn điểm đơn hàng #" + orderId);
+            // Check if points is not null before calling intValue()
+            pointHistory.setPointHistoryPoint(points != null ? points.intValue() : 0);
+            pointHistory.setUser(order.getUser());
+            pointHistory.setPointHistoryStatus(PointHistoryStatus.BONUS.name());
+            pointHistory.setPointHistoryDate(LocalDate.now());
+            order.getUser().setPoint(order.getUser().getPoint() + pointHistory.getPointHistoryPoint());
+            pointHistoryService.save(pointHistory);
+        }
+        if (status.equals("SHIPPED")) {
+            deliveryService.createDelivery(order);
+        }
+        return "redirect:/profile/order";
     }
 
 }
