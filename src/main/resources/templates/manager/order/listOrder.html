@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List order</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+</head>
+<style>
+    body {
+        /*background-color: #e5e5e5;*/
+    }
+    .content {
+        margin-left: 250px;
+        padding: 80px 20px 20px;
+        transition: margin-left 0.3s ease;
+    }
+    .content.collapsed {
+        margin-left: 60px;
+    }
+    h2 {
+        text-align: center;
+        margin: 20px 0;
+        font-weight: 500;
+    }
+    .table-hover {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .table-hover th, .table-hover td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+    .table-hover tr:hover {
+        background-color: #f1f1f1;
+    }
+    .table-hover th {
+        background-color: #f2f2f2;
+        cursor: pointer;
+    }
+    .btn-danger:hover {
+        background-color: red !important;
+        font-weight: 600;
+    }
+    .orderManager-h2 {
+        text-align: center;
+    }
+    .beo1 {
+        border: 1px solid rgb(255, 2, 2);
+    }
+    .beo1:hover {
+        background-color: rgb(255, 2, 2);
+        border: 1px solid rgb(255, 2, 2);
+    }
+    .beo1 a {
+        text-decoration: none;
+        color: #fff;
+    }
+    .me-1 {
+        background-color: #343a40;
+        border: 1px solid #343a40;
+    }
+    .me-1:hover {
+        background-color: #000000;
+        font-weight: 600;
+        border: 1px solid #343a40;
+    }
+    .me-1 a {
+        text-decoration: none;
+        color: #fff;
+    }
+    .order-content {
+        border-radius: 5px;
+    }
+    .combo-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .combo-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin-right: 15px;
+    }
+</style>
+
+<body>
+<div th:insert="fragments/sidebar :: sidebar-manager (page = 'listOrder')"></div>
+
+<div class="content" id="content">
+    <div class="container-fluid">
+
+        <!-- Content for managing orders -->
+        <div id="content-view" class="order-content">
+            <h2 class="orderManager-h2">DANH MỤC ĐƠN HÀNG</h2>
+            <!-- Add content for viewing and accepting orders -->
+            <!-- Dropdown for selecting order status -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <select id="statusFilter" class="form-select">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="PENDING">PENDING</option>
+                        <option value="PROCESSING">PROCESSING</option>
+                        <option value="SHIPPED">SHIPPED</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                        <option value="CANCELLED">CANCELLED</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button id="filterButton" class="btn btn-primary">Lọc</button>
+                </div>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                <tr style="text-align: center;">
+                    <th>ID</th>
+                    <th>Người đặt</th>
+                    <th>Địa chỉ</th>
+                    <th>Ghi chú</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="order-table-body">
+                <!-- Order rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderDetailsModalLabel">Chi tiết đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="orderDetailsContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle sidebar
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            var sidebar = document.getElementById('sidebar');
+            var content = document.getElementById('content');
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        });
+
+        // Handle submenu toggles
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function(submenuToggle) {
+            submenuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
+
+        // Fetch order data from the API and populate the table
+        function fetchOrders(status = '') {
+            let url = '/api/orders';
+            if (status) {
+                url += `?status=${status}`;
+            }
+
+            console.log('Fetching orders from URL:', url); // Log the URL
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('order-table-body');
+                    tableBody.innerHTML = ''; // Clear any existing rows
+
+                    data.forEach(order => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${order.orderId}</td>
+                        <td>${order.fullName}</td>
+                        <td>${order.address}</td>
+                        <td>${order.orderNote}</td>
+                        <td>${order.orderDate}</td>
+                        <td>${order.orderTotalPrice}</td>
+                        <td>${order.orderStatus}</td>
+                        <td class="justify-content-center d-flex">
+                            <button class="btn btn-secondary btn-sm me-1" onclick="viewDetails(${order.orderId})" title="Xem chi tiết">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </td>
+                    `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching orders:', error));
+        }
+
+        // Fetch orders on page load
+        fetchOrders();
+
+        // Filter orders by status
+        document.getElementById('filterButton').addEventListener('click', function() {
+            const status = document.getElementById('statusFilter').value;
+            fetchOrders(status);
+        });
+
+        async function fetchOrderDetails(orderId) {
+            try {
+                const orderResponse = await fetch(`/api/orders/${orderId}`);
+                const orderDetailsResponse = await fetch(`/api/orders/${orderId}/orderdetail`);
+
+                if (!orderResponse.ok || !orderDetailsResponse.ok) {
+                    throw new Error('Failed to fetch order details');
+                }
+
+                const order = await orderResponse.json();
+                const orderDetails = await orderDetailsResponse.json();
+
+                displayOrderDetails(order, orderDetails);
+            } catch (error) {
+                alert('Failed to fetch order details');
+                console.error(error);
+            }
+        }
+
+        function displayOrderDetails(order, orderDetails) {
+            const orderDetailsContent = document.getElementById('orderDetailsContent');
+            orderDetailsContent.innerHTML = `
+            <h4>Thông tin đơn hàng</h4>
+            <p><strong>ID:</strong> ${order.orderId}</p>
+            <p><strong>Người đặt:</strong> ${order.fullName}</p>
+            <p><strong>Địa chỉ:</strong> ${order.address}</p>
+            <p><strong>Số điện thoại:</strong> ${order.phone}</p>
+            <p><strong>Trạng thái:</strong> ${order.orderStatus}</p>
+            <p><strong>Ngày đặt:</strong> ${order.orderDate}</p>
+            <p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod}</p>
+            <p><strong>Tổng tiền:</strong> ${order.orderTotalPrice} VND</p>
+            <h4>Chi tiết sản phẩm</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Loại</th>
+                        <th>Số lượng</th>
+                        <th>Số tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${orderDetails.map(detail => `
+                        <tr>
+                            <td>
+                                <img src="${detail.comboImage}" alt="${detail.comboName}" class="combo-image">
+                                <div>${detail.comboName}</div>
+                            </td>
+                            <td>${detail.comboDay}</td>
+                            <td>${detail.quantity}</td>
+                            <td>${detail.price} VND</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+
+            const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+            modal.show();
+        }
+
+        window.viewDetails = function(orderId) {
+            fetchOrderDetails(orderId);
+        }
+    });
+
+
+</script>
+
+</body>
+</html>
