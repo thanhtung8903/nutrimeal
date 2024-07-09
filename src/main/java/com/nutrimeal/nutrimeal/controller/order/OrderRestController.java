@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class OrderRestController {
     private final VNPayService vnPayService;
     private final PromotionService promotionService;
     private final UserPromotionService userPromotionService;
+    private final PointHistoryService pointHistoryService;
 
     @PostMapping("/order/create")
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest, Principal principal) {
@@ -47,6 +49,7 @@ public class OrderRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng cập nhật số điện thoại trước khi đặt hàng");
         }
 
+
         Order order = new Order();
         order.setOrderTempPrice(orderRequest.getOrderTempPrice());
         order.setOrderDeliveryPrice(orderRequest.getOrderDeliveryPrice());
@@ -57,10 +60,16 @@ public class OrderRestController {
         order.setPaymentMethod(paymentMethodService.findById(orderRequest.getPaymentMethodId()));
         order.setDeliveryTime(deliveryTimeService.findById(orderRequest.getDeliveryTimeId()));
         order.setOrderDate(new Date());
+        order.setPoint(orderRequest.getPointsDiscount() / 1000);
         order.setUser(user);
         order.setAddress(addressService.findById(orderRequest.getAddressId()));
+
         int point = user.getPoint() - (orderRequest.getPointsDiscount() / 1000);
         user.setPoint(point);
+
+
+
+
         userService.save(user);
 
         // update quantity voucher and flag used
@@ -79,7 +88,21 @@ public class OrderRestController {
 
         List<OrderBasket> orderBaskets = orderBasketService.findAllByUser(user);
 
+        boolean hasThirtyDayOrder = orderBaskets.stream().anyMatch(orderBasket -> orderBasket.getDay() == 30);
+        int delayDay = hasThirtyDayOrder ? 3 : 1;
+        order.setDelay(delayDay);
+
         orderService.save(order);
+
+        if (orderRequest.getPointsDiscount() / 1000 > 0) {
+            PointHistory pointHistory = new PointHistory();
+            pointHistory.setPointHistoryDate(LocalDate.now());
+            pointHistory.setPointHistoryDescription("Đặt hàng đơn hàng #" + order.getOrderId());
+            pointHistory.setPointHistoryStatus(PointHistoryStatus.MINUS.name());
+            pointHistory.setPointHistoryPoint(orderRequest.getPointsDiscount() / 1000);
+            pointHistory.setUser(user);
+            pointHistoryService.save(pointHistory);
+        }
 
         for (OrderBasket orderBasket : orderBaskets) {
             OrderDetail orderDetail = getOrderDetail(orderBasket);

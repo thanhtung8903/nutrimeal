@@ -122,14 +122,14 @@
     }
 </style>
 
-<div th:insert="fragments/sidebar :: sidebar-manager"></div>
+<div th:insert="fragments/sidebar :: sidebar-manager (page = 'promotion')"></div>
 
 <body>
 <div class="content" id="content">
 
     <div class="container mb-5">
         <div class="form-container">
-            <h2 style="margin-bottom: 40px; text-align: center;">Thêm mã khuyến mãi</h2>
+            <h2 style="margin-bottom: 40px; text-align: center;">THÊM MÃ KHUYẾN MÃI</h2>
             <form id="addPromotionForm" th:action="@{/manager/promotion/add}" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="promotionCode" class="form-label">Tên mã khuyến mãi</label>
@@ -149,7 +149,7 @@
                     <span id="discountError" class="error-message">Phiếu giảm giá không được vượt quá 100%</span>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Thêm mã khuyến mãi</button>
+                <button type="submit" class="btn btn-primary">Thêm mã </button>
                 <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/manager/promotion\''">Quay lại</button>
             </form>
 

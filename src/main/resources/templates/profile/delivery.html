@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments :: head('Point', 'none')}"></head>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
+
+<style>
+    body {
+        background-color: #EAEAEA;
+    }
+
+    .sidebar {
+        height: 100vh;
+        background-color: #343a40;
+        padding-top: 20px;
+        color: #ffffff;
+    }
+
+    .sidebar a {
+        color: #ffffff;
+        font-size: 18px;
+        margin: 10px 0;
+        display: block;
+        text-decoration: none;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+        color: #F8B934; /* For Highlight */
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .btn-change {
+        font-size: 14px;
+        padding: 0.25rem 0.5rem;
+        color: #ffffff;
+        background-color: #F8B934;
+        border-color: #F8B934;
+    }
+
+    .btn-danger {
+        background-color: #F8B934;
+        border-color: #F8B934;
+    }
+
+    .avatar {
+        width: 80px; /* Fixed width */
+        height: 80px; /* Fixed height */
+        object-fit: cover; /* Maintain aspect ratio and cover the box */
+    }
+
+    .point-minus {
+        color: red;
+    }
+
+    .point-bonus {
+        color: green;
+    }
+
+    .point-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        background-color: #fff;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .point-item:last-child {
+        border-bottom: none;
+    }
+
+    .point-item i {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+
+    .point-description {
+        flex-grow: 1;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .point-amount {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .page-link {
+        color: #343a40;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 5px 10px;
+        margin: 0 2px;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .page-link:hover {
+        background-color: #F8B934;
+        border-color: #F8B934;
+        color: #fff;
+    }
+
+    .page-link:disabled {
+        color: #aaa;
+        cursor: not-allowed;
+    }
+</style>
+
+<header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
+<header th:replace="~{fragments :: header_manager}" sec:authorize="hasAuthority('ROLE_MANAGER')"></header>
+<header th:replace="~{fragments :: header_admin}" sec:authorize="hasAuthority('ROLE_ADMIN')"></header>
+<body>
+<div class="profile__account container mt-3 mb-3">
+    <div class="container-fluid">
+        <div class="row" th:object="${user}">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column align-items-center">
+                <img
+                        th:src="*{getImage()}"
+                        class="rounded-circle mb-3 avatar"
+                        alt="Avatar"
+                />
+                <p th:text="*{getFullName()}"></p>
+                <a href="#" th:href="@{/profile/account}">
+                    <i class="bi bi-person"></i> Thông tin tài khoản
+                </a>
+                <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">
+                    <i class="bi bi-lock"></i> Đổi mật khẩu
+                </a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">
+                    <i class="bi bi-coin"></i> Điểm thưởng
+                </a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">
+                    <i class="bi bi-geo-alt"></i> Địa chỉ giao hàng
+                </a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">
+                    <i class="bi bi-card-list"></i> Đơn hàng của tôi
+                </a>
+                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/delivery}" class="active">
+                    <i class="bi bi-truck"></i> Đơn nhận hôm nay
+                </a>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
+                <div class="table-container">
+                    <div class="input-group mb-3">
+                        <input type="date" class="form-control" id="searchDate" placeholder="Search by date">
+                        <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Mã đơn hàng</th>
+                            <th>Trạng thái</th>
+                            <th>Thời gian giao</th>
+                            <th>Ngày giao</th>
+                            <th>Tên khách hàng</th>
+                            <th>SĐT</th>
+                            <th>Địa chỉ</th>
+                            <th>Tiền hàng</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="deliveryTableBody">
+                        <!-- Data will be injected here by JavaScript -->
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination" id="pagination">
+                            <!-- Pagination controls will be injected here by JavaScript -->
+                        </ul>
+                    </nav>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Xác nhận hoãn đơn hàng</h5>
+                <!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+                <!--                    <span aria-hidden="true">&times;</span>-->
+                <!--                </button>-->
+            </div>
+            <div class="modal-body">
+                <p>Nếu đơn hàng của bạn chỉ có gói tuần, số lần hoãn là 1, nếu có gói tháng thì là 3. Khi hoãn đơn giao
+                    thì sẽ thêm một đơn giao vào sau ngày dự kiến cuối cùng.</p>
+                <p>Bạn có chắc chắn muốn hoãn đơn hàng này không?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-warning" id="confirmDelayBtn">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deliveryDetailsModal" tabindex="-1" aria-labelledby="deliveryDetailsModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Use modal-lg to increase width -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deliveryDetailsModalLabel">Chi tiết đơn giao</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="deliveryDetailsModalBody">
+                <!-- Delivery details will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let allData = [];
+        let currentDeliveryId = null;
+
+        function fetchData() {
+            fetch('http://localhost:8080/api/delivery/user')
+                .then(response => response.json())
+                .then(data => {
+                    allData = data;
+                    renderTable(data, currentPage);
+                    renderPagination(data.length, itemsPerPage, currentPage);
+                });
+        }
+
+        function renderTable(data, page) {
+            const deliveryTableBody = document.getElementById('deliveryTableBody');
+            const start = (page - 1) * itemsPerPage;
+            const end = page * itemsPerPage;
+            const paginatedData = data.slice(start, end);
+
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            const tomorrowString = tomorrow.toISOString().slice(0, 10);
+
+            deliveryTableBody.innerHTML = paginatedData.map((delivery, index) => {
+                const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
+                const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED') ?
+                    `<button class="btn btn-warning btn-sm" onclick="showDelayConfirmation(${delivery.deliveryId})">Hoãn</button>` : '';
+                return `
+                <tr>
+                    <td>${delivery.deliveryId}</td>
+                    <td>${delivery.deliveryStatus}</td>
+                    <td>${delivery.deliveryTime}</td>
+                    <td>${delivery.deliveryDate}</td>
+                    <td>${delivery.customerFullName}</td>
+                    <td>${delivery.deliveryPhone}</td>
+                    <td>${delivery.deliveryAddress}</td>
+                    <td>${delivery.deliveryPrice}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="showDetail(${delivery.deliveryId})">Chi tiết</button>
+                        ${delayButton}
+                    </td>
+                </tr>
+            `;
+            }).join('');
+        }
+
+        function renderPagination(totalItems, itemsPerPage, currentPage) {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            let paginationHtml = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHtml += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="navigateToPage(${i})">${i}</a>
+                </li>
+            `;
+            }
+
+            pagination.innerHTML = paginationHtml;
+        }
+
+        window.navigateToPage = function (page) {
+            currentPage = page;
+            renderTable(allData, page);
+            renderPagination(allData.length, itemsPerPage, page);
+        };
+
+        window.showDelayConfirmation = function (deliveryId) {
+            currentDeliveryId = deliveryId;
+            const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            confirmationModal.show();
+        }
+
+        document.getElementById('confirmDelayBtn').addEventListener('click', function () {
+            if (currentDeliveryId) {
+                delayDelivery(currentDeliveryId);
+                const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+                confirmationModal.hide();
+            }
+        });
+
+        function delayDelivery(deliveryId) {
+            fetch(`http://localhost:8080/api/delivery/delay/${deliveryId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    fetchData(); // Refresh data
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        document.getElementById('searchButton').addEventListener('click', function () {
+            const searchDate = document.getElementById('searchDate').value;
+            const filteredData = allData.filter(delivery => delivery.deliveryDate === searchDate);
+            renderTable(filteredData, 1);
+            renderPagination(filteredData.length, itemsPerPage, 1);
+        });
+
+        window.showDetail = function (deliveryId) {
+            fetchDeliveryDetails(deliveryId);
+        }
+
+        function fetchDeliveryDetails(deliveryId) {
+            fetch(`http://localhost:8080/api/delivery/detail/${deliveryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayDeliveryDetails(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching delivery details:', error);
+                });
+        }
+
+        function displayDeliveryDetails(data) {
+            const modalBody = document.getElementById('deliveryDetailsModalBody');
+            modalBody.innerHTML = `
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Combo</th>
+                        <th>Bữa sáng</th>
+                        <th>Bữa trưa</th>
+                        <th>Bữa tối</th>
+                        <th>Số lượng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.deliveryDetails.map(detail => `
+                        <tr>
+                            <td>${detail.deliveryDetailCombo}</td>
+                            <td>${detail.dishBreakfast ? `
+                                <div>
+                                    <p>${detail.dishBreakfast.dishName}</p>
+                                    <img src="${detail.dishBreakfast.dishImage}" alt="${detail.dishBreakfast.dishName}" width="100">
+                                </div>` : 'N/A'}
+                            </td>
+                            <td>${detail.dishLunch ? `
+                                <div>
+                                    <p>${detail.dishLunch.dishName}</p>
+                                    <img src="${detail.dishLunch.dishImage}" alt="${detail.dishLunch.dishName}" width="100">
+                                </div>` : 'N/A'}
+                            </td>
+                            <td>${detail.dishDinner ? `
+                                <div>
+                                    <p>${detail.dishDinner.dishName}</p>
+                                    <img src="${detail.dishDinner.dishImage}" alt="${detail.dishDinner.dishName}" width="100">
+                                </div>` : 'N/A'}
+                            </td>
+                            <td>${detail.deliveryDetailQuantity}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+            const modal = new bootstrap.Modal(document.getElementById('deliveryDetailsModal'));
+            modal.show();
+        }
+
+        fetchData();
+    });
+
+</script>
+</body>
+<footer th:replace="~{fragments :: footer}"></footer>
+</html>

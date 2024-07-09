@@ -46,11 +46,11 @@ public class HomeController {
             boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
             model.addAttribute("isOauth2User", isOauth2User);
             if (isManager) {
-                return "redirect:/admin/adminpage";
+                return "redirect:/manager/customer";
             } else if (isAdmin) {
                 return "redirect:/manager/customer";
             } else if (isShipper) {
-                return "redirect:/shipper";
+                return "redirect:/shipper/orderNotYetDelivery";
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList);
@@ -68,7 +68,7 @@ public class HomeController {
             } else if (isAdmin) {
                 return "redirect:/manager/customer";
             } else if (isShipper) {
-                return "redirect:/shipper";
+                return "redirect:/shipper/orderNotYetDelivery";
             } else {
                 List<Combo> comboList = comboService.getAllComboActive();
                 model.addAttribute("comboList", comboList.subList(0, 8));

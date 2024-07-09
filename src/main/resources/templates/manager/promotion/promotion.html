@@ -130,7 +130,7 @@
     <div class="container-fluid mt-3">
         <div class="row justify-content-center">
             <div class="col-md-10">
-                <h2 style="margin-bottom: 40px; text-align: center;">QUẢN LÍ MÃ KHUYẾN MÃI</h2>
+                <h2 style="margin-bottom: 40px; text-align: center;"> MÃ KHUYẾN MÃI</h2>
                 <form th:action="@{/manager/promotion/search}" method="get" class="mb-3">
                     <div class="row g-2">
                         <div class="col-auto">
@@ -169,7 +169,8 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="add-menu mb-2"><a th:href="@{/manager/promotion/add}">THÊM MÃ KHUYẾN MÃI</a></button>
+<!--                <button class="add-menu mb-2"><a th:href="@{/manager/promotion/add}">THÊM MÃ KHUYẾN MÃI</a></button>-->
+                <button class="btn btn-success mb-2 bbb"><a th:href="@{/manager/promotion/add}" class="text-white text-decoration-none"><i class="bi bi-plus-circle"></i> THÊM MÃ KHUYẾN MÃI</a></button>
 
                 <!-- Pagination for normal list -->
                 <nav aria-label="Page navigation" th:if="${param.name == null}">

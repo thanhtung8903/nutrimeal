@@ -102,4 +102,24 @@ public class OrderService {
                 .orderDate(order.getOrderDate().toString())
                 .build();
     }
+
+    public List<OrderResponse> findAllOrdersByStatus(String status) {
+        return orderRepository.findAllByOrderStatus(status).stream().map(
+                order -> OrderResponse.builder()
+                        .orderId(order.getOrderId())
+                        .fullName(order.getUser().getFullName())
+                        .phone(order.getUser().getPhone())
+                        .address(order.getAddress().getFullAddress())
+                        .orderStatus(order.getOrderStatus())
+                        .orderTotalPrice(order.getOrderTotalPrice())
+                        .paymentMethod(order.getPaymentMethod().getPaymentMethodName())
+                        .deliveryTime(order.getDeliveryTime().getDeliveryTime())
+                        .orderDiscount(order.getOrderDiscount())
+                        .orderTempPrice(order.getOrderTempPrice())
+                        .orderDeliveryPrice(order.getOrderDeliveryPrice())
+                        .orderNote(order.getOrderNote())
+                        .orderDate(order.getOrderDate().toString())
+                        .build()
+        ).collect(Collectors.toList());
+    }
 }

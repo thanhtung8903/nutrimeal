@@ -1,6 +1,7 @@
 package com.nutrimeal.nutrimeal.repository;
 
 import com.nutrimeal.nutrimeal.model.Delivery;
+import com.nutrimeal.nutrimeal.model.Order;
 import com.nutrimeal.nutrimeal.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,5 +18,11 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
     List<Delivery> findDeliveriesByShipperAndDeliveryStatus(User shipper, String deliveryStatus);
 
     Delivery findByDeliveryIdAndShipper(Integer deliveryId, User shipper);
+
+    List<Delivery> findAllByUserOrderByDeliveryDateAsc(User user);
+
+    List<Delivery> findAllByShipperOrderByDeliveryDateAsc(User user);
+
+    List<Delivery> findAllByOrder(Order order);
 
 }

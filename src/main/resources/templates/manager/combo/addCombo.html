@@ -56,14 +56,14 @@
 
 <!--<header th:replace="~{fragments :: header_manager}"></header>-->
 
-<div th:insert="fragments/sidebar :: sidebar-manager"></div>
+<div th:insert="fragments/sidebar :: sidebar-manager (page ='combo')"></div>
 
 <body>
 <div class="content" id="content">
 
 <div class="container mb-4">
     <div class="form-container">
-        <h2 style="margin-bottom: 40px; text-align: center;">Thêm Combo</h2>
+        <h2 style="margin-bottom: 40px; text-align: center;">THÊM COMBO</h2>
         <form id="addComboForm" th:action="@{/manager/combo/add}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="comboName" class="form-label">Tên Combo</label>

@@ -27,4 +27,9 @@ public class ManagerDeliveryController {
     public String managerDeliveryFailed() {
         return "manager/delivery/deliveredFailed";
     }
+
+    @GetMapping("/delayed")
+    public String managerDeliveryDelayed() {
+        return "manager/delivery/delayedDelivery";
+    }
 }
