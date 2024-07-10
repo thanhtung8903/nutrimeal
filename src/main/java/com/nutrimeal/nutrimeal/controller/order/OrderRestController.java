@@ -60,11 +60,11 @@ public class OrderRestController {
         order.setPaymentMethod(paymentMethodService.findById(orderRequest.getPaymentMethodId()));
         order.setDeliveryTime(deliveryTimeService.findById(orderRequest.getDeliveryTimeId()));
         order.setOrderDate(new Date());
-        order.setPoint(orderRequest.getPointsDiscount() / 1000);
+        order.setPoint(orderRequest.getPointsDiscount() / 100);
         order.setUser(user);
         order.setAddress(addressService.findById(orderRequest.getAddressId()));
 
-        int point = user.getPoint() - (orderRequest.getPointsDiscount() / 1000);
+        int point = user.getPoint() - (orderRequest.getPointsDiscount() / 100);
         user.setPoint(point);
 
 
@@ -94,12 +94,12 @@ public class OrderRestController {
 
         orderService.save(order);
 
-        if (orderRequest.getPointsDiscount() / 1000 > 0) {
+        if (orderRequest.getPointsDiscount() / 100 > 0) {
             PointHistory pointHistory = new PointHistory();
             pointHistory.setPointHistoryDate(LocalDate.now());
             pointHistory.setPointHistoryDescription("Đặt hàng đơn hàng #" + order.getOrderId());
             pointHistory.setPointHistoryStatus(PointHistoryStatus.MINUS.name());
-            pointHistory.setPointHistoryPoint(orderRequest.getPointsDiscount() / 1000);
+            pointHistory.setPointHistoryPoint(orderRequest.getPointsDiscount() / 100);
             pointHistory.setUser(user);
             pointHistoryService.save(pointHistory);
         }
@@ -151,4 +151,6 @@ public class OrderRestController {
         response.put("vnPayUrl", vnpayUrl);
         return ResponseEntity.ok(response);
     }
+
+
 }
