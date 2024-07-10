@@ -47,6 +47,12 @@ public class ShipperController {
         model.addAttribute("user", user);
         return "shipper/orderDeliveryFail";
     }
+    @GetMapping("/dashboardShipper")
+    public String viewDashboardShipper(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "shipper/dashboardShipper";
+    }
 
 
 
