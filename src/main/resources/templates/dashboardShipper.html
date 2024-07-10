@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="path/to/font-awesome/css/font-awesome.min.css"
+    />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/dashboardshipper.css" />
+    <style>
+      .dashboard-shipper {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 30px;
+        width: calc(100%-250px);
+      }
+      .dashboard-shipper .dashboard-shipper-box {
+        width: 20%;
+        height: 100px;
+        box-shadow: 0 0 5px rgba(48, 46, 46, 0.5);
+        text-align: center;
+        padding: 10px;
+      }
+      .dashboard-shipper .dashboard-shipper-box p {
+        color: rgb(166, 168, 168);
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        font-size: 20px;
+      }
+      .dashboard-shipper-table {
+        display: flex;
+        justify-content: center;
+      }
+      .dashboard-shipper-table table {
+        width: 90%;
+        border-collapse: collapse;
+        border: 1px solid black;
+        align-items: center;
+      }
+      .dashboard-shipper-table table th,
+      .dashboard-shipper-table table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      .dashboard-shipper-table table td:last-child {
+        width: 160px;
+      }
+      .dashboard-shipper-table table tr:hover {
+        background-color: #f1f1f1;
+      }
+      .dashboard-shipper-table table th {
+        background-color: #f2f2f2;
+        cursor: pointer;
+      }
+      button {
+        color: #f1f1f1;
+        border-radius: 3px;
+        width: 70px;
+        border: none;
+        height: 25px;
+      }
+      .btn-edit {
+        background-color: green;
+      }
+      .btn-edit:hover {
+        background-color: rgb(12, 154, 12);
+      }
+      .btn-delete {
+        background-color: rgb(205, 23, 23);
+      }
+      .btn-delete:hover {
+        background-color: rgba(248, 12, 12, 0.945);
+      }
+      .dashboard-shipper-chart {
+        margin: 20px auto;
+        width: 80%;
+        background-color: #ffffff;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-shipper">
+      <div class="dashboard-shipper-box">
+        <p class="dashboard-shipper-title">Account</p>
+        <div class="dashboard-shipper-number">
+          <h1>Number</h1>
+          <i class="fa-regular fa-user"></i>
+        </div>
+      </div>
+      <div class="dashboard-shipper-box">
+        <p class="dashboard-shipper-title">Customer</p>
+        <div class="dashboard-shipper-number">
+          <h1>Number</h1>
+        </div>
+      </div>
+      <div class="dashboard-shipper-box">
+        <p class="dashboard-shipper-title">Manager</p>
+        <div class="dashboard-shipper-number">
+          <h1>Number</h1>
+        </div>
+      </div>
+      <div class="dashboard-shipper-box">
+        <p class="dashboard-shipper-title">Shipper</p>
+        <div class="dashboard-shipper-number">
+          <h1>Number</h1>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-shipper-chart">
+      <canvas id="barchart"></canvas>
+    </div>
+    <div class="dashboard-shipper-table">
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>DOB</th>
+            <th>Role</th>
+            <th>Action</th>
+            <th>Action</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="dashboard-shipper-tbody"></tbody>
+      </table>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const labels = ["t1", "t2", "t3", "t4", "t5", "t6", "t7"];
+        const data = {
+          labels: labels,
+          datasets: [
+            {
+              label: "My First Dataset",
+              data: [65, 59, 80, 81, 56, 55, 40],
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(255, 159, 64, 0.2)",
+                "rgba(255, 205, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+              ],
+              borderColor: [
+                "rgb(255, 99, 132)",
+                "rgb(255, 159, 64)",
+                "rgb(255, 205, 86)",
+                "rgb(75, 192, 192)",
+                "rgb(54, 162, 235)",
+                "rgb(153, 102, 255)",
+                "rgb(201, 203, 207)",
+              ],
+              borderWidth: 2,
+            },
+            {
+              label: "My First Dataset",
+              data: [65, 59, 80, 81, 56, 55, 40],
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(255, 159, 64, 0.2)",
+                "rgba(255, 205, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(201, 203, 207, 0.2)",
+              ],
+              borderColor: [
+                "rgb(255, 99, 132)",
+                "rgb(255, 159, 64)",
+                "rgb(255, 205, 86)",
+                "rgb(75, 192, 192)",
+                "rgb(54, 162, 235)",
+                "rgb(153, 102, 255)",
+                "rgb(201, 203, 207)",
+              ],
+              borderWidth: 2,
+            },
+          ],
+        };
+        const config = {
+          type: "bar",
+          data: data,
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        };
+        const barchart = new Chart(document.getElementById("barchart"), config);
+      });
+      fetch("http://localhost:8080/api/delivery?status=DELIVERED")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Process the fetched data
+          const tableBody = document.getElementById("dashboard-shipper-tbody");
+          tableBody.innerHTML = "";
+          data.forEach((delivery, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${delivery.deliveryId}</td>
+        <td>${delivery.deliveryStatus}</td>
+        <td>${delivery.deliveryTime}</td>
+        <td>${formatDate(delivery.deliveryDate)}</td>
+        <td>${delivery.customerFullName}</td>
+        <td>${delivery.deliveryPhone}</td>
+        <td>${delivery.deliveryAddress}</td>
+        <td>${delivery.deliveryPrice}</td>
+        <td>${delivery.shipperFullName}</td>
+      `;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch((error) =>
+          console.error("Error fetching delivery data:", error)
+        );
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = String(date.getFullYear()).slice(-2);
+        return `${day}/${month}/${year}`;
+      }
+      // Hàm tính tổng số đơn hàng theo từng tháng từ dữ liệu đơn hàng
+      function calculateTotalOrdersByMonth(deliveries) {
+        // Khởi tạo mảng để lưu số lượng đơn hàng của từng tháng
+        const monthlyOrders = new Array(12).fill(0); // Mảng 12 phần tử, mỗi phần tử tương ứng với một tháng
+
+        // Lặp qua mỗi đơn hàng và tính tổng số lượng đơn hàng theo tháng
+        deliveries.forEach((delivery) => {
+          const deliveryDate = new Date(delivery.deliveryTime);
+          const monthIndex = deliveryDate.getMonth(); // Lấy index của tháng (từ 0 đến 11)
+
+          // Tăng giá trị số lượng đơn hàng của tháng tương ứng
+          monthlyOrders[monthIndex]++;
+        });
+
+        return monthlyOrders;
+      }
+
+      // Hàm chính để xử lý dữ liệu và in ra kết quả
+      function processDataAndDisplayChart() {
+        fetchDataFromAPI()
+          .then((data) => {
+            // Tính tổng số đơn hàng theo từng tháng
+            const monthlyOrders = calculateTotalOrdersByMonth(data);
+
+            // In ra mảng số lượng đơn hàng theo từng tháng
+            console.log("Số lượng đơn hàng theo từng tháng:", monthlyOrders);
+
+            // Đoạn code để vẽ biểu đồ Chart.js dựa trên monthlyOrders
+            // Bạn có thể sử dụng các dữ liệu này để cập nhật biểu đồ hoặc giao diện người dùng khác
+          })
+          .catch((error) => console.error("Error processing data:", error));
+      }
+
+      // Gọi hàm để xử lý dữ liệu và hiển thị kết quả
+      processDataAndDisplayChart();
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
