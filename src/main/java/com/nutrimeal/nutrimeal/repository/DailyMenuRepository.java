@@ -39,4 +39,7 @@ public interface DailyMenuRepository extends JpaRepository<DailyMenu, Integer> {
 
     DailyMenu findByDailyMenuDateAndDailyMenuTypeAndIsActiveTrue(Date date, String type);
 
+//    find by date today and type
+    List<DailyMenu> findAllByDailyMenuDateGreaterThanEqualAndDailyMenuTypeAndIsActiveTrue(Date date, String type);
+
 }
