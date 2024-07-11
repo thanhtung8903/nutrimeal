@@ -11,7 +11,13 @@
     <style>
 
         /*danh dau cua duong san ne*/
-
+        .content-wrapper{
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
         .content {
             margin-left: 250px;
             padding: 80px 20px 20px;
@@ -117,8 +123,11 @@
 
 
 <div class="content" id="content">
-    <h2>ĐƠN ĐANG GIAO</h2>
+    <div class="content-wrapper">
+
     <div class="container-fluid container-table">
+        <h3>ĐƠN ĐANG GIAO</h3>
+        <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
 
         <div class="controls">
             <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
@@ -147,6 +156,8 @@
         </table>
         <div class="pagination" id="pagination-controls">
         </div>
+    </div>
+
     </div>
 </div>
 
