@@ -251,6 +251,27 @@
     .icon i {
         color: black; /* Màu đỏ hoặc màu bạn muốn sử dụng để làm nổi bật */
     }
+    .custom-button {
+        display: inline-grid;
+        padding: 10px 20px;
+        background-color: red; /* Màu nền đỏ */
+        color: white; /* Màu chữ trắng */
+        text-align: center;
+        text-decoration: none; /* Loại bỏ gạch chân */
+        border-radius: 3px; /* Bo tròn góc */
+        font-weight: bold; /* Chữ đậm */
+        font-family: Arial, sans-serif; /* Phông chữ */
+        transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền */
+        width: 170px;
+        height: 50px;
+        /*justify-content: center;*/
+        margin-left: 390px;
+        padding-top: 15px;
+    }
+
+    .custom-button:hover {
+        background-color: #CC3232; /* Màu nền khi hover */
+    }
 
 
 </style>
@@ -268,15 +289,22 @@
               background-image: url('https://fitfood.vn/img/1920x800/images/nen-final-2-16947528537416.webp?f=jpg');
             "
             >
+                <div style="display: grid">
                 <div class="text-overlay">Một lối sống lành mạnh</div>
+                <a href="/combo" class="custom-button" style="border-radius: 5px">ĐẶT NGAY</a>
+                </div>
             </div>
+
             <div
                     class="image-with-text"
                     style="
               background-image: url('https://fitfood.vn/img/1920x800/images/nen-web-16950958311174.webp?f=jpg');
             "
             >
-                <div class="text-overlay">TRẢI NGHIỆM BỮA ĂN SẠCH</div>
+                <div style="display: grid">
+                    <div class="text-overlay">TRẢI NGHIỆM BỮA ĂN SẠCH</div>
+                    <a href="/combo" class="custom-button" style="margin-left: 390px; border-radius: 5px">ĐẶT NGAY</a>
+                </div>
             </div>
             <div
                     class="image-with-text"
@@ -284,7 +312,10 @@
               background-image: url('https://fitfood.vn/img/1920x800/images/nen-final-3-16947527108499.webp?f=jpg');
             "
             >
-                <div class="text-overlay">NHÀ CUNG CẤP LỚN NHẤT HÀ NỘI</div>
+                <div style="display: grid">
+                    <div class="text-overlay">NHÀ CUNG CẤP LỚN NHẤT HÀ NỘI</div>
+                    <a href="/combo" class="custom-button"  style="margin-left: 480px; border-radius: 5px">ĐẶT NGAY</a>
+                </div>
             </div>
             <div
                     class="image-with-text"
@@ -292,7 +323,10 @@
               background-image: url('https://fitfood.vn/img/2160x900/uploads/menu-16952880378313.jpg');
             "
             >
-                <div class="text-overlay">GIẢI PHÁP HEALTHY FOOD</div>
+                <div style="display: grid">
+                    <div class="text-overlay">GIẢI PHÁP HEALTHY FOOD</div>
+                    <a href="/combo" class="custom-button"  style="margin-left: 360px; border-radius: 5px">ĐẶT NGAY</a>
+                </div>
             </div>
         </div>
         <div class="btns">

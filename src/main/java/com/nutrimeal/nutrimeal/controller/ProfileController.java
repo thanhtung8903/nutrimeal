@@ -129,6 +129,7 @@ public class ProfileController {
             user = userService.findByUsername(principal.getName());
         }
         model.addAttribute("user", user);
+        model.addAttribute("point", user.getPoint());
         return "profile/point";
     }
 
@@ -264,6 +265,24 @@ public class ProfileController {
         model.addAttribute("orderDetails", orderDetails);
         model.addAttribute("user", user);
         return "profile/orderDetail";
+    }
+
+    @GetMapping("/profile/delivery")
+    public String delivery(Model model, Principal principal) {
+        User user;
+        if (principal instanceof OAuth2AuthenticationToken) {
+            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken;
+            model.addAttribute("isOauth2User", isOauth2User);
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauthUser = token.getPrincipal();
+            user = userService.findByEmail(oauthUser.getAttribute("email"));
+        } else {
+            model.addAttribute("isOauth2User", false);
+            user = userService.findByUsername(principal.getName());
+        }
+
+        model.addAttribute("user", user);
+        return "profile/delivery";
     }
 
 }

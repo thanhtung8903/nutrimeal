@@ -10,35 +10,34 @@
 </head>
 
 <body>
-<div class="header" style="background: black; padding: 40px">
-    <div class="logo" style="margin-left: 30px; display: flex">
-        <img src="/img/logo.png" alt="NutriMeal" style="height: 60px;">
-        <h2 class="text-white mb-0" style="margin-left:10px; color: white; font-size: 20px;">NutriMeal</h2>
-    </div>
-    <div class="search-bar">
-        <button id="toggle-sidebar" style="margin-left: 100px; padding: 16px; border: none; background-color: black; color: white; font-size: 20px; border-radius: 8px;">
-            <i class="bi bi-list" style="font-size: 24px;"></i>
-        </button>
-        <input type="search" id="searchInput" placeholder="Search now" style="width: 500px;">
-    </div>
-    <div class="user-info">
-        <img th:src="${#authentication.principal.image}" alt="User Image">
-        <div class="user-details">
-            <a th:href="@{/profile/account}" style="text-decoration-line: none;">
-                <p style="color: lightgray; margin-top: 10px">Xin Chào <span class="user-name" th:text="${#authentication.principal.fullName}"></span></p>
-            </a>
-            <a th:href="@{/logout}" class="logout" style="margin-top: -10px; font-size: 15px;">Đăng xuất</a>
+    <div class="header" style="background: black; padding: 40px">
+        <div class="logo" style="margin-left: 30px; display: flex">
+            <img src="/img/logo.png" alt="NutriMeal" style="height: 60px;">
+            <h2 class="text-white mb-0" style="margin-left:10px; color: white; font-size: 20px;">NutriMeal</h2>
+        </div>
+        <div class="search-bar">
+            <button id="toggle-sidebar" style="margin-left: 100px; padding: 16px; border: none; background-color: black; color: white; font-size: 20px; border-radius: 8px;">
+                <i class="bi bi-list" style="font-size: 24px;"></i>
+            </button>
+            <input type="search" id="searchInput" placeholder="Search now" style="width: 500px;">
+        </div>
+        <div class="user-info">
+            <img th:src="${#authentication.principal.image}" alt="User Image">
+            <div class="user-details">
+                <a th:href="@{/profile/account}" style="text-decoration-line: none;">
+                    <p style="color: lightgray; margin-top: 10px">Xin Chào <span class="user-name" th:text="${#authentication.principal.fullName}"></span></p>
+                </a>
+                <a th:href="@{/logout}" class="logout" style="margin-top: -10px; font-size: 15px;">Đăng xuất</a>
+            </div>
         </div>
     </div>
-</div>
-<div class="sidebar" id="sidebar">
-    <ul>
-        <li><a th:href="@{/manager/delivery/notdelivered}"><i class="bi bi-truck" style="font-size: 1em; color: #6c757d"></i> Đơn hàng chưa giao</a></li>
-        <li><a th:href="@{/manager/delivery/intransit}"><i class="bi bi-truck" style="font-size: 1em; color: #6c757d"></i> Đơn hàng đang giao</a></li>
-        <li><a th:href="@{/manager/delivery/delivered}"><i class="bi bi-truck" style="font-size: 1em; color: #6c757d"></i> Đơn giao thành công</a></li>
-        <li><a th:href="@{/manager/delivery/delivered}"><i class="bi bi-truck" style="font-size: 1em; color: #6c757d"></i> Đơn giao thất bại</a></li>
-    </ul>
-</div>
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a th:href="@{/manager/delivery/notdelivered}"><i class="bi bi-truck" style="font-size: 1em; color: #6c757d"></i> Đơn hàng chưa giao</a></li>
+            <li><a th:href="@{/manager/delivery/intransit}"><i class="bi bi-truck" style="font-size: 1em; color: #6c757d"></i> Đơn hàng đang giao</a></li>
+            <li><a th:href="@{/manager/delivery/delivered}"><i class="bi bi-truck" style="font-size: 1em; color: #6c757d"></i> Đơn hàng đã giao</a></li>
+        </ul>
+    </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

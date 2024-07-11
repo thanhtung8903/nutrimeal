@@ -172,5 +172,32 @@ public class UserService {
     public void save(User user) {
         userRepository.save(user);
     }
+
+    public List<UserInfoResponse> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user -> {
+            return new UserInfoResponse(
+                    user.getUserId(),
+                    user.getEmail(),
+                    user.getFullName(),
+                    user.getPhone(),
+                    user.getImage(),
+                    user.getGender(),
+                    user.getDob(),
+                    user.getPoint(),
+                    user.getRoles().stream().map(role -> role.getRoleName().name()).collect(Collectors.toList())
+            );
+        }).collect(Collectors.toList());
+    }
+
+//    set only one role new user
+    public void updateUserRoles(String userId,  String role) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Set<Role> roles = new HashSet<>();
+        Role userRole = roleRepository.findByRoleName(RoleName.valueOf(role)).orElseThrow(() -> new RuntimeException("Role not found"));
+        roles.add(userRole);
+        user.setRoles(roles);
+        userRepository.save(user);
+    }
 }
 

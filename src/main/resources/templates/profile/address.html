@@ -15,6 +15,14 @@
         background-color: #343a40;
         padding-top: 20px;
         color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebar-content {
+        width: 100%;
+        padding-left: 20px;
     }
 
     .sidebar a {
@@ -29,9 +37,11 @@
     .sidebar a.active {
         color: #F8B934; /* For Highlight */
     }
+    .sidebar-content a {
+        font-size: 17px;
+        margin-top: 28px;
+        margin-left: -8px;
 
-    .form-group label {
-        font-weight: bold;
     }
 
     .btn-change {
@@ -93,24 +103,42 @@
     <div class="container-fluid">
         <div class="row" th:object="${user}">
             <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column align-items-center">
+            <nav class="col-md-4 col-lg-2 sidebar">
                 <img
                         th:src="*{getImage()}"
                         class="rounded-circle mb-3 avatar"
                         alt="Avatar"
                 />
-                <p th:text="*{getFullName()}"></p>
-                <a href="#" th:href="@{/profile/account}">Thông tin tài khoản</a>
-                <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">Đổi mật khẩu</a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">Point</a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">Địa chỉ giao
-                    hàng</a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">Đơn hàng của tôi</a>
+                <p style="font-weight: bold" th:text="*{getFullName()}"></p>
+
+                <div class="sidebar-content">
+                    <a href="#" th:href="@{/profile/account}">
+                        <i class="bi bi-person"></i> Thông tin tài khoản
+                    </a>
+                    <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">
+                        <i class="bi bi-lock"></i> Đổi mật khẩu
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">
+                        <i class="bi bi-coin"></i> Điểm thưởng
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}" class="active">
+                        <i class="bi bi-geo-alt"></i> Địa chỉ giao hàng
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}" >
+                        <i class="bi bi-card-list"></i> Đơn hàng của tôi
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/delivery}">
+                        <i class="bi bi-truck"></i> Đơn giao mỗi ngày
+                    </a>
+                </div>
             </nav>
+
 
             <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
                 <div class="d-flex justify-content-end mt-3 mb-3"></div>
-                <h2 class="my-4">Địa chỉ giao hàng</h2>
+                <h3 class="my-4">ĐỊA CHỈ GIAO HÀNG</h3>
+<!--                <svg style="width: 90px; margin-top: -100px; margin-bottom: 20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">&lt;!&ndash;!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.&ndash;&gt;<path fill="#f8b934" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>-->
+
                 <button type="button" class="btn btn-primary btn-change" data-toggle="modal"
                         data-target="#addAddressModal">Thêm địa chỉ giao hàng
                 </button>

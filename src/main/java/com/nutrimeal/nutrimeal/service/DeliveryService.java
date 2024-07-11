@@ -25,6 +25,7 @@ public class DeliveryService {
     private final DeliveryRepository deliveryRepository;
     private final DeliveryDetailRepository deliveryDetailRepository;
     private final UserRepository userRepository;
+    private final OrderService orderService;
 
     @Transactional
     public void createDelivery(Order order) {
@@ -42,6 +43,8 @@ public class DeliveryService {
         }
         for (int i = 1; i <= day; i++) {
             calendar.add(Calendar.DATE, 1);
+
+
             Date deliveryDate = calendar.getTime();
             Delivery delivery = new Delivery();
             delivery.setDeliveryDate(deliveryDate);
@@ -53,6 +56,9 @@ public class DeliveryService {
             delivery.setUser(order.getUser());
             delivery.setDeliveryUpdateTime(null);
             delivery.setDeliveryNote(null);
+
+            delivery.setIsBonus(i == day);
+
             if (order.getPaymentMethod().getPaymentMethodId() == 1) {
                 if (i == 1) {
                     delivery.setDeliveryPrice(order.getOrderTotalPrice());
@@ -98,7 +104,6 @@ public class DeliveryService {
             if (countDay >= 8 && orderDetail.getComboDay() == 7) {
                 continue;
             }
-
 
             DeliveryDetail deliveryDetail = new DeliveryDetail();
             deliveryDetail.setDelivery(delivery);
@@ -207,7 +212,7 @@ public class DeliveryService {
 //            deliveryResponse.setDeliveryUpdateTime(delivery.getDeliveryUpdateTime().toString());
             deliveryResponse.setDeliveryPrice(delivery.getDeliveryPrice());
             deliveryResponseList.add(deliveryResponse);
-    }
+        }
         return deliveryResponseList;
     }
 
@@ -230,5 +235,107 @@ public class DeliveryService {
         deliveryResponse.setShipperFullName(delivery.getShipper().getFullName());
         deliveryResponse.setDeliveryUpdateTime(LocalDateTime.now().toString());
         return deliveryResponse;
+    }
+
+    public Delivery findDeliveryById(int deliveryId) {
+        return deliveryRepository.findByDeliveryId(deliveryId);
+    }
+
+    public List<DeliveryResponse> findDeliveriesByUser(User user) {
+        List<Delivery> deliveryList = deliveryRepository.findAllByUserOrderByDeliveryDateAsc(user);
+        List<DeliveryResponse> deliveryResponseList = new ArrayList<>();
+        for (Delivery delivery : deliveryList) {
+            DeliveryResponse deliveryResponse = new DeliveryResponse().builder()
+                    .deliveryId(delivery.getDeliveryId())
+                    .deliveryStatus(delivery.getDeliveryStatus())
+                    .deliveryTime(delivery.getDeliveryTime())
+                    .deliveryDate(delivery.getDeliveryDate().toString())
+                    .deliveryNote(delivery.getDeliveryNote())
+                    .deliveryAddress(delivery.getDeliveryAddress())
+                    .deliveryPhone(delivery.getDeliveryPhone())
+                    .customerFullName(delivery.getOrder().getUser().getFullName())
+                    .shipperFullName(delivery.getShipper().getFullName())
+                    .deliveryUpdateTime(delivery.getDeliveryUpdateTime() == null ? null : delivery.getDeliveryUpdateTime().toString())
+                    .deliveryPrice(delivery.getDeliveryPrice())
+            .build();
+
+            deliveryResponseList.add(deliveryResponse);
+        }
+
+        return deliveryResponseList;
+    }
+
+    public List<DeliveryResponse> findDeliveriesByShipper(User user) {
+        List<Delivery> deliveryList = deliveryRepository.findAllByShipperOrderByDeliveryDateAsc(user);
+        List<DeliveryResponse> deliveryResponseList = new ArrayList<>();
+        for (Delivery delivery : deliveryList) {
+            DeliveryResponse deliveryResponse = new DeliveryResponse().builder()
+                    .deliveryId(delivery.getDeliveryId())
+                    .deliveryStatus(delivery.getDeliveryStatus())
+                    .deliveryTime(delivery.getDeliveryTime())
+                    .deliveryDate(delivery.getDeliveryDate().toString())
+                    .deliveryNote(delivery.getDeliveryNote())
+                    .deliveryAddress(delivery.getDeliveryAddress())
+                    .deliveryPhone(delivery.getDeliveryPhone())
+                    .customerFullName(delivery.getOrder().getUser().getFullName())
+                    .shipperFullName(delivery.getShipper().getFullName())
+                    .deliveryUpdateTime(delivery.getDeliveryUpdateTime() == null ? null : delivery.getDeliveryUpdateTime().toString())
+                    .deliveryPrice(delivery.getDeliveryPrice())
+                    .build();
+
+            deliveryResponseList.add(deliveryResponse);
+        }
+
+        return deliveryResponseList;
+    }
+
+    @Transactional
+    public void delayDelivery(Integer deliveryId) {
+        Order order = deliveryRepository.findByDeliveryId(deliveryId).getOrder();
+        List<Delivery> listDelivery = deliveryRepository.findAllByOrder(order);
+
+        if (order.getDelay().equals(0)) {
+            return;
+        }
+
+//       delivery delayed
+        Delivery delayedDelivery = deliveryRepository.findByDeliveryId(deliveryId);
+        delayedDelivery.setDeliveryStatus(DeliveryStatus.DELAYED.toString());
+        delayedDelivery.setDeliveryUpdateTime(LocalDateTime.now());
+        delayedDelivery.setDeliveryNote("DELAYED");
+        deliveryRepository.save(delayedDelivery);
+
+        int index = listDelivery.indexOf(delayedDelivery) + 1 >= 8 ? 7 : listDelivery.indexOf(delayedDelivery) + 1;
+
+
+        Delivery lastDelivery = listDelivery.getLast();
+        lastDelivery.setIsBonus(false);
+
+        Delivery newDelivery = new Delivery();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(lastDelivery.getDeliveryDate());
+        calendar.add(Calendar.DATE, 1);
+
+        newDelivery.setDeliveryDate(calendar.getTime());
+        newDelivery.setDeliveryStatus(DeliveryStatus.NOT_DELIVERED.toString());
+        newDelivery.setDeliveryAddress(lastDelivery.getDeliveryAddress());
+        newDelivery.setDeliveryTime(lastDelivery.getDeliveryTime());
+        newDelivery.setDeliveryPhone(lastDelivery.getDeliveryPhone());
+        newDelivery.setOrder(order);
+        newDelivery.setUser(order.getUser());
+        newDelivery.setDeliveryUpdateTime(LocalDateTime.now());
+        newDelivery.setDeliveryNote("DELAYED FROM " + delayedDelivery.getDeliveryDate());
+        newDelivery.setIsBonus(true);
+        newDelivery.setDeliveryPrice(0);
+        newDelivery.setShipper(lastDelivery.getShipper());
+
+
+        deliveryRepository.save(newDelivery);
+
+        order.setDelay(order.getDelay() - 1);
+        orderService.saveOrder(order);
+
+        createDeliveryDetails(newDelivery, order.getOrderDetails(), index);
     }
 }

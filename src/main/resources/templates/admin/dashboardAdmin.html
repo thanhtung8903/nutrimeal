@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/dashboardshipper.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+
+    <style>
+        .content-wrapper {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /*margin-top: 60px;*/
+            margin: 120px 60px 60px 60px ;
+        }
+        .dashboard-admin {
+            display: flex;
+            justify-content: space-evenly;
+            margin: 30px;
+            width: calc(100%- 250px);
+        }
+        .dashboard-admin-number {
+            width: 100%;
+        }
+        .dashboard-admin-number h1, .dashboard-admin-number i {
+            flex-grow: 1;
+            text-align: center;
+        }
+        .dashboard-admin .dashboard-admin-box {
+            width: 22%;
+            height: 130px;
+            box-shadow: 0 0 5px rgba(48, 46, 46, 0.5);
+            text-align: center;
+            /*padding: 10px;*/
+        }
+        .dashboard-admin .dashboard-admin-box p {
+            color: #787878;
+            font-family:  Roboto, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .dashboard-admin .dashboard-admin-box:hover{
+            width: 22%;
+        }
+        .dashboard-admin-search{
+            text-align: center;
+            margin: 50px 0;
+        }
+        .dashboard-admin-search input{
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .dashboard-admin-table {
+            display: flex;
+            justify-content: center;
+        }
+        .dashboard-admin-table table {
+            width: 90%;
+            border-collapse: collapse;
+            align-items: center;
+        }
+        .dashboard-admin-table table th,
+        .dashboard-admin-table table td {
+            padding: 12px;
+            text-align: left;
+            font-size: small;
+            border: 1px solid #ddd;
+        }
+        .dashboard-admin-table table td:last-child {
+            width: 80px;
+        }
+        .dashboard-admin-table table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .dashboard-admin-table table th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        .dashboard-admin-table table tbody td img{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .dashboard-admin-table table tbody tr td,
+        .dashboard-admin-table table tbody tr td p,
+        .dashboard-admin-table table tbody tr td p img {
+            transition: 0.2s ease-in-out;
+        }
+        .dashboard-admin-table table tbody button {
+            color: #f1f1f1;
+            border-radius: 3px;
+            width: 25px;
+            height: 25px;
+            border: none;
+        }
+        .dashboard-admin-table table tbody tr{
+            --delay: 0.1s;
+            transition: 0.5s ease-in-out var(--delay), background-color 0s;
+        }
+        .dashboard-admin-table table tbody tr.hide {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        .dashboard-admin-table table tbody tr.hide td,
+        .dashboard-admin-table table tbody tr.hide td p{
+            padding: 0;
+            /*font: 0 / 0 sans-serif;*/
+            transition: 0.2s ease-in-out 0.5s;
+        }
+
+        .dashboard-admin-table table tbody tr.hide td img {
+            width: 0;
+            height: 0;
+            transition: 0.2s ease-in-out 0.5s;
+        }
+        .btn-edit {
+            background-color: rgb(254, 204, 0);
+        }
+        .btn-edit i{
+            color: black;
+        }
+        .btn-edit:hover {
+            background-color: rgb(255, 224, 48);
+        }
+        .btn-delete {
+            background-color: rgb(205, 23, 23);
+        }
+        .btn-delete:hover {
+            background-color: rgba(248, 12, 12, 0.945);
+        }
+        /* Ẩn form mặc định */
+        .dashboard-admin-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #090808;
+            color: #f2f2f2;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 1000;
+            width: 300px;
+        }
+
+        /* Thêm một lớp nền mờ phía sau form */
+        .dashboard-admin-form-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .dashboard-admin-form.show {
+            display: block;
+        }
+        .dashboard-admin-form-backdrop.show {
+            display: block;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar-admin}"></div>
+<div class="content-wrapper">
+
+    <div class="dashboard-admin">
+        <div class="dashboard-admin-box" id="admin-box">
+            <p class="dashboard-admin-title">Admin</p>
+            <div class="dashboard-admin-number d-flex justify-content-center align-items-center">
+                <h1 id="adminCount" class="me-3 ms-0" style="color: #cd1524"></h1>
+                <i class="bi bi-person-workspace opt-head fs-1"></i>
+            </div>
+        </div>
+
+        <div class="dashboard-admin-box" id="customer-box">
+            <p class="dashboard-admin-title">Customer</p>
+            <div class="dashboard-admin-number d-flex justify-content-center align-items-center">
+                <h1 id="customerCount" class="me-3 ms-0" style="color: #cd1524"></h1>
+                <i class="bi bi-person opt-head fs-1"></i>
+            </div>
+        </div>
+
+        <div class="dashboard-admin-box" id="manager-box">
+            <p class="dashboard-admin-title">Manager</p>
+            <div class="dashboard-admin-number d-flex justify-content-center align-items-center">
+                <h1 id="managerCount" class="me-3 ms-0" style="color: #cd1524"></h1>
+                <i class="bi bi-person-gear opt-head fs-1"></i>
+            </div>
+        </div>
+
+        <div class="dashboard-admin-box" id="shipper-box">
+            <p class="dashboard-admin-title">Shipper</p>
+            <div class="dashboard-admin-number d-flex justify-content-center align-items-center">
+                <h1 id="shipperCount" class="me-3 ms-0" style="color: #cd1524"></h1>
+                <i class="bi bi-truck opt-head fs-1"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap Icons -->
+
+    <div class="dashboard-admin-search">
+        <div class="acount-table-search">
+            <input type="search" id="searchInput" placeholder="Search now" style="width: 500px;">
+        </div>
+    </div>
+    <div class="dashboard-admin-table">
+        <table>
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Gender</th>
+                <th>DOB</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="dashboard-admin-tbody">
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination" id="pagination"></div>
+    <div class="dashboard-admin-form-backdrop"></div>
+    <div class="container mt-5">
+        <div class="dashboard-admin-form">
+            <form>
+                <input type="hidden" id="edit-user-id" name="edit-user-id" />
+                <div class="form-group">
+                    <label for="account-name">Account Name:</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="account-name"
+                            name="account-name"
+                            required
+                            readonly
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="account-email">Account Email:</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="account-email"
+                            name="account-email"
+                            required
+                            readonly
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="account-role">Account Role:</label>
+                    <select class="form-control" id="account-role" name="account-role" required>
+<!--                        <option value="ROLE_ADMIN">Admin</option>-->
+                        <option value="ROLE_MANAGER">Manager</option>
+                        <option value="ROLE_CUSTOMER">Customer</option>
+                        <option value="ROLE_SHIPPER">Shipper</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let users = [];
+    const rowsPerPage = 5;
+    let filteredRows = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchUsers();
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', searchTable);
+
+    async function fetchUsers() {
+        try {
+            const response = await fetch('http://localhost:8080/api/users'); // Thay URL này bằng URL của API thực tế
+            const data = await response.json();
+            users = data;
+            displayUsers(users);
+            setupPagination();
+            setupEditButtons(); // Thiết lập sự kiện cho nút edit sau khi dữ liệu được hiển thị
+            updateStatistical(users);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }
+
+    function displayUsers(usersToDisplay) {
+        const tbody = document.getElementById('dashboard-admin-tbody');
+        tbody.innerHTML = '';
+        usersToDisplay.forEach((user, index) => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-user-id', user.userId);
+            row.innerHTML = `
+            <td>${index + 1}</td>
+            <td><img src="${user.avatar}" alt="user_image" width="50" height="50"></td>
+            <td>${user.fullName}</td>
+            <td>${user.email}</td>
+            <td>${user.phone}</td>
+            <td>${user.gender}</td>
+            <td>${user.dob}</td>
+            <td>${user.roles.join(', ')}</td>
+            <td>
+                <button class="btn-edit" data-user-id="${user.userId}"><i class="bi bi-pencil"></i></button>
+                <button class="btn-delete" data-user-id="${user.userId}"><i class="bi bi-trash"></i></button>
+            </td>
+        `;
+            tbody.appendChild(row);
+        });
+
+        filteredRows = Array.from(document.querySelectorAll('#dashboard-admin-tbody tr'));
+    }
+
+    function searchTable() {
+        const filter = searchInput.value.toLowerCase();
+        const rows = Array.from(document.querySelectorAll('#dashboard-admin-tbody tr'));
+        filteredRows = rows.filter(row => {
+            const cells = row.querySelectorAll('td');
+            return Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
+        });
+
+        // Hide all rows initially
+        rows.forEach(row => row.classList.add('hide'));
+
+        // Show filtered rows
+        filteredRows.forEach(row => row.classList.remove('hide'));
+
+        // Reset and setup pagination for filtered rows
+        setupPagination();
+    }
+
+    function setupPagination() {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        const pageCount = Math.ceil(filteredRows.length / rowsPerPage);
+        for (let i = 1; i <= pageCount; i++) {
+            const button = document.createElement('button');
+            button.textContent = i;
+            button.addEventListener('click', () => showPage(i));
+            pagination.appendChild(button);
+        }
+
+        // Show the first page by default
+        if (pageCount > 0) {
+            showPage(1);
+        }
+    }
+
+    function showPage(page) {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        filteredRows.forEach((row, index) => {
+            if (index >= start && index < end) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        const buttons = document.querySelectorAll('#pagination button');
+        buttons.forEach(button => button.classList.remove('active'));
+        buttons[page - 1].classList.add('active');
+    }
+
+    function setupEditButtons() {
+        const editButtons = document.querySelectorAll('.btn-edit');
+        const form = document.querySelector('.dashboard-admin-form');
+        const backdrop = document.querySelector('.dashboard-admin-form-backdrop');
+        const accountIdInput = document.getElementById('edit-user-id');
+        const accountNameInput = document.getElementById('account-name');
+        const accountEmailInput = document.getElementById('account-email');
+        const accountRoleInput = document.getElementById('account-role');
+
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = button.getAttribute('data-user-id');
+                const userRow = document.querySelector(`tr[data-user-id="${userId}"]`);
+                if (userRow) {
+                    const userName = userRow.querySelector('td:nth-child(3)').innerText;
+                    const userEmail = userRow.querySelector('td:nth-child(4)').innerText;
+                    const userRole = userRow.querySelector('td:nth-child(8)').innerText.trim();
+
+                    accountIdInput.value = userId;
+                    accountNameInput.value = userName;
+                    accountEmailInput.value = userEmail;
+                    accountRoleInput.value = userRole;
+
+                    form.classList.add('show');
+                    backdrop.classList.add('show');
+                }
+            });
+        });
+
+        backdrop.addEventListener('click', function() {
+            form.classList.remove('show');
+            backdrop.classList.remove('show');
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userId = accountIdInput.value;
+            const selectedRole = accountRoleInput.value;
+
+            // Send PUT request via AJAX
+            fetch(`http://localhost:8080/api/users/roles?userId=${userId}&role=${selectedRole}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(updatedUser => {
+                    console.log('User updated:', updatedUser);
+                    // Update the user role in the table
+                    const userRow = document.querySelector(`tr[data-user-id="${userId}"]`);
+                    if (userRow) {
+                        const roleCell = userRow.querySelector('td:nth-child(8)');
+                        roleCell.innerText = selectedRole;
+                    }
+                    // Hide the form
+                    form.classList.remove('show');
+                    backdrop.classList.remove('show');
+                    // Reload the page to reflect changes
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
+    }
+
+    function updateStatistical(data) {
+        const adminCount = data.filter(user => user.roles.includes('ROLE_ADMIN')).length;
+        const customerCount = data.filter(user => user.roles.includes('ROLE_CUSTOMER')).length;
+        const managerCount = data.filter(user => user.roles.includes('ROLE_MANAGER')).length;
+        const shipperCount = data.filter(user => user.roles.includes('ROLE_SHIPPER')).length;
+
+        document.getElementById('adminCount').textContent = adminCount;
+        document.getElementById('customerCount').textContent = customerCount;
+        document.getElementById('managerCount').textContent = managerCount;
+        document.getElementById('shipperCount').textContent = shipperCount;
+    }
+
+    document.getElementById('admin-box').addEventListener('click', () => filterByRole('ROLE_ADMIN'));
+    document.getElementById('customer-box').addEventListener('click', () => filterByRole('ROLE_CUSTOMER'));
+    document.getElementById('manager-box').addEventListener('click', () => filterByRole('ROLE_MANAGER'));
+    document.getElementById('shipper-box').addEventListener('click', () => filterByRole('ROLE_SHIPPER'));
+
+    function filterByRole(role) {
+        const roleFilteredRows = users.filter(user => user.roles.includes(role));
+
+        displayUsers(roleFilteredRows);
+        setupEditButtons();
+        setupPagination();
+    }
+
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

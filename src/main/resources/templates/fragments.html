@@ -112,73 +112,129 @@
     </div>
 </footer>
 
-<header th:fragment="header_manager">
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #141414;">
-        <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="/manager/" style="gap: 10px; margin-left: 50px;">
-                <img th:src="@{/img/logo.png}" alt="NutriMeal" style="width: 60px; height: 60px;">
-                <h1 class="text-white mb-0" style="font-size: 1.7rem; margin-top: 5px">NutriMeal</h1>
-            </a>
+<!--<header th:fragment="header_manager">-->
+<!--    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #141414;">-->
+<!--        <div class="container-fluid">-->
+<!--            <a class="navbar-brand d-flex align-items-center" href="/manager/" style="gap: 10px; margin-left: 50px;">-->
+<!--                <img th:src="@{/img/logo.png}" alt="NutriMeal" style="width: 60px; height: 60px;">-->
+<!--                <h1 class="text-white mb-0" style="font-size: 1.7rem; margin-top: 5px">NutriMeal</h1>-->
+<!--            </a>-->
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<!--            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
+<!--                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-grey opt-head" href="/manager/">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-grey opt-head" href="/manager/menu" th:href="@{/manager/dish}">Quản lý
-                            thực đơn</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-grey opt-head" href="/manager/customer" th:href="@{/manager/customer}">Quản
-                            lý khách hàng</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-grey opt-head" href="/manager/order" th:href="@{/manager/order}">Quản lý
-                            đơn hàng</a>
-                    </li>
+<!--            <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--                <ul class="navbar-nav ms-auto">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-grey opt-head" href="/manager/">Trang chủ</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-grey opt-head" href="/manager/menu" th:href="@{/manager/dish}">Quản lý-->
+<!--                            thực đơn</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-grey opt-head" href="/manager/customer" th:href="@{/manager/customer}">Quản-->
+<!--                            lý khách hàng</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-grey opt-head" href="/manager/order" th:href="@{/manager/order}">Quản lý-->
+<!--                            đơn hàng</a>-->
+<!--                    </li>-->
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-grey opt-head" href="#" id="navbarDropdown"
-                           role="button"
-                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Khác
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" th:href="@{/manager/expenses}">Quản lý chi tiêu</a>
-                            <a class="dropdown-item" th:href="@{/manager/promotion}">Khuyến mãi</a>
-                        </div>
-                    </li>
-                </ul>
+<!--                    <li class="nav-item dropdown">-->
+<!--                        <a class="nav-link dropdown-toggle text-grey opt-head" href="#" id="navbarDropdown"-->
+<!--                           role="button"-->
+<!--                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                            Khác-->
+<!--                        </a>-->
+<!--                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--                            <a class="dropdown-item" th:href="@{/manager/expense}">Quản lý chi tiêu</a>-->
+<!--                            <a class="dropdown-item" th:href="@{/manager/promotion}">Khuyến mãi</a>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                </ul>-->
 
-                <ul class="navbar-nav ms-auto" sec:authorize="isAnonymous()" style="margin-right: 50px;">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/signup" th:href="@{/signup}">Đăng ký</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/login" th:href="@{/login}">Đăng nhập</a>
-                    </li>
-                </ul>
+<!--                <ul class="navbar-nav ms-auto" sec:authorize="isAnonymous()" style="margin-right: 50px;">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-white" href="/signup" th:href="@{/signup}">Đăng ký</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-white" href="/login" th:href="@{/login}">Đăng nhập</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
 
-                <ul class="navbar-nav ms-auto" sec:authorize="isAuthenticated()" style="margin-right: 50px;">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" th:href="@{/profile/account}">
-                            Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" th:href="@{/logout}">Đăng xuất</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
+<!--                <ul class="navbar-nav ms-auto" sec:authorize="isAuthenticated()" style="margin-right: 50px;">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-white" th:href="@{/profile/account}">-->
+<!--                            Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-white" th:href="@{/logout}">Đăng xuất</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </nav>-->
+<!--</header>-->
+
+<!--<header th:fragment="header_shipper">-->
+<!--    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #141414;">-->
+<!--        <div class="container-fluid">-->
+<!--            <a class="navbar-brand d-flex align-items-center" href="/manager/" style="gap: 10px; margin-left: 50px;">-->
+<!--                <img th:src="@{/img/logo.png}" alt="NutriMeal" style="width: 60px; height: 60px;">-->
+<!--                <h1 class="text-white mb-0" style="font-size: 1.7rem; margin-top: 5px">NutriMeal</h1>-->
+<!--            </a>-->
+
+<!--            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
+<!--                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+
+<!--            <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--                <ul class="navbar-nav ms-auto">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-grey opt-head" href="/shipper/dashboardShipper">Trang chủ</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-grey opt-head" th:href="@{/shipper/orderNotYetDelivery}">Đơn hàng chưa giao</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-grey opt-head" th:href="@{/shipper/beingDelivery}">Đơn hàng đang giao</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-grey opt-head" th:href="@{/shipper/delivered}">Đơn hàng thành công</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-grey opt-head" th:href="@{/shipper/deliveryfailed}">Đơn hàng thất bại</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+
+<!--                <ul class="navbar-nav ms-auto" sec:authorize="isAnonymous()" style="margin-right: 50px;">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-white" href="/signup" th:href="@{/signup}">Đăng ký</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-white" href="/login" th:href="@{/login}">Đăng nhập</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+
+<!--                <ul class="navbar-nav ms-auto" sec:authorize="isAuthenticated()" style="margin-right: 50px;">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-white" th:href="@{/profile/account}">-->
+<!--                            Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link text-white" th:href="@{/logout}">Đăng xuất</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </nav>-->
+<!--</header>-->
 
 
 </html>

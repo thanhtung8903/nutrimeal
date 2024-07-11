@@ -6,7 +6,6 @@
 <style>
     body {
         background-color: #EAEAEA;
-        font-family: Arial, sans-serif;
     }
 
     .sidebar {
@@ -14,6 +13,14 @@
         background-color: #343a40;
         padding-top: 20px;
         color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebar-content {
+        width: 100%;
+        padding-left: 20px;
     }
 
     .sidebar a {
@@ -28,23 +35,13 @@
     .sidebar a.active {
         color: #F8B934; /* For Highlight */
     }
+    .sidebar-content a {
+        font-size: 17px;
+        margin-top: 28px;
+        margin-left: -8px;
 
-    .form-group label {
-        font-weight: bold;
     }
 
-    .btn-change {
-        font-size: 14px;
-        padding: 0.25rem 0.5rem;
-        color: #ffffff;
-        background-color: #F8B934;
-        border-color: #F8B934;
-    }
-
-    .btn-danger {
-        background-color: #F8B934;
-        border-color: #F8B934;
-    }
 
     .avatar {
         width: 80px; /* Fixed width */
@@ -85,6 +82,18 @@
         background-color: #343a40;
         color: #ffffff;
     }
+  
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn-info {
+        color: #fff;
+    }
+
+
 </style>
 
 <header th:replace="~{fragments :: header-fragment}" sec:authorize="hasAuthority('ROLE_CUSTOMER')"></header>
@@ -94,23 +103,39 @@
     <div class="container-fluid">
         <div class="row" th:object="${user}">
             <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column align-items-center">
+            <nav class="col-md-4 col-lg-2 sidebar">
                 <img
                         th:src="*{getImage()}"
                         class="rounded-circle mb-3 avatar"
                         alt="Avatar"
                 />
-                <p th:text="*{getFullName()}"></p>
-                <a href="#" th:href="@{/profile/account}">Thông tin tài khoản</a>
-                <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">Đổi mật khẩu</a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">Point</a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">Địa chỉ giao hàng</a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">Đơn hàng của tôi</a>
+                <p style="font-weight: bold" th:text="*{getFullName()}"></p>
+
+                <div class="sidebar-content">
+                    <a href="#" th:href="@{/profile/account}">
+                        <i class="bi bi-person"></i> Thông tin tài khoản
+                    </a>
+                    <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">
+                        <i class="bi bi-lock"></i> Đổi mật khẩu
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">
+                        <i class="bi bi-coin"></i> Điểm thưởng
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">
+                        <i class="bi bi-geo-alt"></i> Địa chỉ giao hàng
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}" class="active">
+                        <i class="bi bi-card-list"></i> Đơn hàng của tôi
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/delivery}">
+                        <i class="bi bi-truck"></i> Đơn giao mỗi ngày
+                    </a>
+                </div>
             </nav>
 
             <!-- Main content -->
             <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
-                <nav class="nav nav-pills flex-column flex-sm-row">
+                <nav id="order-status-nav" class="nav nav-pills flex-column flex-sm-row">
                     <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/orders/status/PENDING}">Chờ xác nhận</a>
                     <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/orders/status/PROCESSING}">Đang xử lý</a>
                     <a class="flex-sm-fill text-sm-center nav-link" th:href="@{/orders/status/SHIPPED}">Đang giao</a>
@@ -120,7 +145,8 @@
 
                 <!-- Orders Table -->
                 <div class="mt-4">
-                    <h2>Danh sách đơn hàng</h2>
+                    <h3>DANH SÁCH ĐƠN HÀNG</h3>
+                    <svg style="width: 90px; margin-top: -75px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#f8b934" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -129,7 +155,7 @@
                             <th>Trạng thái</th>
                             <th>Tổng tiền</th>
                             <th>Ghi chú</th>
-                            <th>Xem chi tiết đơn</th>
+                            <th>Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -147,8 +173,15 @@
                             </td>
                             <td th:text="${order.orderTotalPrice}" th:data-price="${order.orderTotalPrice}" class="currency"></td>
                             <td th:text="${order.orderNote}"></td>
-                            <td>
-                                <a th:href="@{/orderdetail/{orderId}(orderId=${order.orderId})}" class="btn btn-info">Xem chi tiết</a>
+                            <td class="action-buttons">
+                            <a th:href="@{/orderdetail/{orderId}(orderId=${order.orderId})}" class="btn btn-info">Xem chi tiết</a>
+                                <form th:if="${order.orderStatus == 'PROCESSING'}" th:action="@{/order/cancellorder}" method="post">
+                                    <input type="hidden" name="orderId" th:value="${order.orderId}">
+                                    <input type="hidden" name="status" value="CANCELLED">
+                                    <button type="submit" class="btn btn-danger btn-sm me-1" title="Hủy đơn" style="color: #fff;">
+                                        <i class="bi bi-check-circle">Hủy đơn</i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         </tbody>
@@ -172,6 +205,14 @@
             const price = element.getAttribute("data-price");
             if (price) {
                 element.textContent = formatCurrency(price);
+            }
+        });
+
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('#order-status-nav .nav-link');
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
             }
         });
     });
