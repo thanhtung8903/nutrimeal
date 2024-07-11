@@ -12,10 +12,12 @@
 <body>
 <div th:fragment="sidebar-manager" class="body-sidebar">
     <div class="header" style="background: black; padding: 40px">
-        <div class="logo" style="margin-left: 30px; display: flex">
-            <img src="/img/logo.png" alt="NutriMeal" style="height: 60px;">
-            <h2 class="text-white mb-0" style="margin-left:10px; color: white; font-size: 20px;">NutriMeal</h2>
-        </div>
+        <a href="/manager/dashboard" style="display: flex; align-items: center; text-decoration: none;">
+            <div class="logo" style="display: flex; align-items: center;">
+                <img src="/img/logo.png" alt="NutriMeal" style="height: 60px;">
+                <h2 class="text-white mb-0" style="margin-left: 10px; color: white; font-size: 20px;">NutriMeal</h2>
+            </div>
+        </a>
         <div class="search-bar">
             <button id="toggle-sidebar" style="margin-left: 100px; padding: 16px; border: none; background-color: black; color: white; font-size: 20px; border-radius: 8px;">
                 <i class="bi bi-list" style="font-size: 24px;"></i>
@@ -33,7 +35,12 @@
     </div>
     <div class="sidebar" id="sidebar">
         <ul>
-            <li class="nav-item item-head" th:classappend="${page == 'manager' ? 'active' : ''}"><a th:href="@{/manager}"><i class="bi bi-grid opt-head"></i> <span class="sidebar-text opt-head" style="transition: color 0.3s">Dashboard</span></a></li>
+            <li class="nav-item item-head" th:classappend="${page == 'manager' ? 'active' : ''}">
+                <a th:href="@{/manager}">
+                    <i class="bi bi-grid opt-head"></i>
+                    <span class="sidebar-text opt-head" style="transition: color 0.3s">Dashboard</span>
+                </a>
+                </li>
             <li class="nav-item item-head" th:classappend="${page == 'mcustomer' ? 'active' : ''}">
                 <a th:href="@{/manager/customer}">
                     <i class="bi bi-person opt-head"></i>
@@ -123,10 +130,12 @@
 
 <div th:fragment="sidebar-shipper" class="body-sidebar">
     <div class="header" style="background: black; padding: 40px">
-        <div class="logo" style="margin-left: 30px; display: flex">
-            <img src="/img/logo.png" alt="NutriMeal" style="height: 60px;">
-            <h2 class="text-white mb-0" style="margin-left:10px; color: white; font-size: 20px;margin-top: 20px">NutriMeal</h2>
-        </div>
+        <a href="/shipper/dashboardShipper" style="display: flex; align-items: center; text-decoration: none;">
+            <div class="logo" style="display: flex; align-items: center;">
+                <img src="/img/logo.png" alt="NutriMeal" style="height: 60px;">
+                <h2 class="text-white mb-0" style="margin-left: 10px; color: white; font-size: 20px;">NutriMeal</h2>
+            </div>
+        </a>
         <div class="search-bar">
             <button id="toggle-sidebar-shipper" style="margin-left: 100px; padding: 16px; border: none; background-color: black; color: white; font-size: 20px; border-radius: 8px;">
                 <i class="bi bi-list" style="font-size: 24px;"></i>
@@ -188,5 +197,30 @@
         sidebar.classList.toggle('collapsed');
     });
 </script>
+
+
+<!--ADMIN-->
+
+<div th:fragment="sidebar-admin" class="body-sidebar">
+    <div class="header" style="background: black; padding: 40px; display: flex; justify-content: space-between; align-items: center;">
+        <a href="/admin/dashboard" style="display: flex; align-items: center; text-decoration: none;">
+            <div class="logo" style="display: flex; align-items: center;">
+                <img src="/img/logo.png" alt="NutriMeal" style="height: 60px;">
+                <h2 class="text-white mb-0" style="margin-left: 10px; color: white; font-size: 20px;">NutriMeal</h2>
+            </div>
+        </a>
+        <div class="user-info" style="display: flex; align-items: center;">
+            <img th:src="${#authentication.principal.image}" alt="User Image" style="height: 40px; border-radius: 50%;">
+            <div class="user-details" style="margin-left: 10px;">
+                <a th:href="@{/profile/account}" style="text-decoration-line: none;">
+                    <p style="color: lightgray; margin: 0;">Xin Chào <span class="user-name" th:text="${#authentication.principal.fullName}"></span></p>
+                </a>
+                <a th:href="@{/logout}" class="logout" style="font-size: 15px; text-decoration: none; color: lightgray;">Đăng xuất</a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
 </body>
 </html>
