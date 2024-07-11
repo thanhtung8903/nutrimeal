@@ -25,6 +25,7 @@ public class DeliveryService {
     private final DeliveryRepository deliveryRepository;
     private final DeliveryDetailRepository deliveryDetailRepository;
     private final UserRepository userRepository;
+    private final OrderService orderService;
 
     @Transactional
     public void createDelivery(Order order) {
@@ -293,6 +294,10 @@ public class DeliveryService {
         Order order = deliveryRepository.findByDeliveryId(deliveryId).getOrder();
         List<Delivery> listDelivery = deliveryRepository.findAllByOrder(order);
 
+        if (order.getDelay().equals(0)) {
+            return;
+        }
+
 //       delivery delayed
         Delivery delayedDelivery = deliveryRepository.findByDeliveryId(deliveryId);
         delayedDelivery.setDeliveryStatus(DeliveryStatus.DELAYED.toString());
@@ -328,6 +333,8 @@ public class DeliveryService {
 
         deliveryRepository.save(newDelivery);
 
+        order.setDelay(order.getDelay() - 1);
+        orderService.saveOrder(order);
 
         createDeliveryDetails(newDelivery, order.getOrderDetails(), index);
     }

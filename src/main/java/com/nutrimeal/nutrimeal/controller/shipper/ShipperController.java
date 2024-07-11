@@ -54,5 +54,4 @@ public class ShipperController {
         return "shipper/orderDeliveryFail";
     }
 
-
 }
