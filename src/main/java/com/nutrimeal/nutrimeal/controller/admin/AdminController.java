@@ -1,6 +1,4 @@
-package com.nutrimeal.nutrimeal.controller;
-
-import com.nutrimeal.nutrimeal.model.User;
+package com.nutrimeal.nutrimeal.controller.admin;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,6 +17,6 @@ public class AdminController {
     @GetMapping("/dashboard")
     public String customer(Model model,  Principal principal) {
         model.addAttribute("listUser", userService.getAllUsers());
-        return "dashboardAdmin";
+        return "admin/dashboardAdmin";
     }
 }

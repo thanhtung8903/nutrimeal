@@ -44,9 +44,7 @@
         background-color: red !important;
         font-weight: 600;
     }
-    .orderManager-h2 {
-        text-align: center;
-    }
+
     .beo1 {
         border: 1px solid rgb(255, 2, 2);
     }
@@ -85,17 +83,28 @@
         object-fit: cover;
         margin-right: 15px;
     }
+    .content-wrapper{
+        background-color: #ffffff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
 </style>
 
 <body>
 <div th:insert="fragments/sidebar :: sidebar-manager (page = 'listOrder')"></div>
 
 <div class="content" id="content">
+    <div class="content-wrapper">
+
     <div class="container-fluid">
 
         <!-- Content for managing orders -->
         <div id="content-view" class="order-content">
-            <h2 class="orderManager-h2">DANH MỤC ĐƠN HÀNG</h2>
+            <h3 class="orderManager-h2">DANH SÁCH ĐƠN HÀNG</h3>
+            <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+
             <!-- Add content for viewing and accepting orders -->
             <!-- Dropdown for selecting order status -->
             <div class="row mb-3">
@@ -132,8 +141,9 @@
             </table>
         </div>
     </div>
-</div>
 
+    </div>
+</div>
 <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
