@@ -123,17 +123,7 @@
 .submenu.open {
     display: block;
 }
-/*.opt-head:hover {*/
-/*    color: #4bc849; !* Màu thay đổi khi di chuột qua *!*/
-/*    font-weight: bold; !* Chữ đậm khi di chuột qua *!*/
-/*}*/
-/*.opt-head{*/
-/*    padding-bottom: 0px;*/
-/*}*/
-/*.item-head.active .opt-head {*/
-/*    font-weight: bold; !* Chữ đậm cho mục được chọn *!*/
-/*    color: #4d84e2;*/
-/*}*/
+
 .opt-head {
     padding-bottom: 0px;
 }
@@ -159,3 +149,53 @@
     font-weight: bold; /* Chữ đậm cho mục được chọn */
 }
 
+/*SHIPPER*/
+
+.sidebar-shipper {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 250px;
+    height: calc(100% - 60px);
+    background-color: #f8f9fa;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+.sidebar-shipper.collapsed {
+    width: 60px;
+}
+.sidebar-shipper ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar-shipper ul li {
+    padding: 10px 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sidebar-shipper ul li a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+.sidebar-shipper ul li a .bi {
+    margin-right: 10px;
+}
+.sidebar-shipper ul li a .sidebar-text {
+    display: inline-block;
+    transition: opacity 0.3s ease, max-width 0.3s ease;
+    max-width: 200px; /* Initial max-width */
+}
+.sidebar-shipper.collapsed ul li a .sidebar-text {
+    opacity: 0;
+    max-width: 0; /* Collapse width to hide text */
+}
+.sidebar-shipper ul li a:hover {
+    background-color: #e9ecef;
+    border-radius: 4px;
+}

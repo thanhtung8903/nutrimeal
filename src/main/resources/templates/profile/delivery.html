@@ -14,6 +14,14 @@
         background-color: #343a40;
         padding-top: 20px;
         color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebar-content {
+        width: 100%;
+        padding-left: 20px;
     }
 
     .sidebar a {
@@ -28,23 +36,15 @@
     .sidebar a.active {
         color: #F8B934; /* For Highlight */
     }
+    .sidebar-content a {
+        font-size: 17px;
+        margin-top: 28px;
+        margin-left: -8px;
 
-    .form-group label {
-        font-weight: bold;
     }
 
-    .btn-change {
-        font-size: 14px;
-        padding: 0.25rem 0.5rem;
-        color: #ffffff;
-        background-color: #F8B934;
-        border-color: #F8B934;
-    }
 
-    .btn-danger {
-        background-color: #F8B934;
-        border-color: #F8B934;
-    }
+
 
     .avatar {
         width: 80px; /* Fixed width */
@@ -52,45 +52,13 @@
         object-fit: cover; /* Maintain aspect ratio and cover the box */
     }
 
-    .point-minus {
-        color: red;
-    }
 
-    .point-bonus {
-        color: green;
-    }
-
-    .point-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        background-color: #fff;
-        margin-bottom: 5px;
-        border-radius: 5px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .point-item:last-child {
-        border-bottom: none;
-    }
 
     .point-item i {
         font-size: 24px;
         margin-right: 10px;
     }
 
-    .point-description {
-        flex-grow: 1;
-        font-size: 14px;
-        color: #555;
-    }
-
-    .point-amount {
-        font-size: 16px;
-        font-weight: bold;
-    }
 
     .pagination {
         margin-top: 20px;
@@ -129,32 +97,36 @@
     <div class="container-fluid">
         <div class="row" th:object="${user}">
             <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 sidebar d-flex flex-column align-items-center">
+            <nav class="col-md-4 col-lg-2 sidebar">
                 <img
                         th:src="*{getImage()}"
                         class="rounded-circle mb-3 avatar"
                         alt="Avatar"
                 />
-                <p th:text="*{getFullName()}"></p>
-                <a href="#" th:href="@{/profile/account}">
-                    <i class="bi bi-person"></i> Thông tin tài khoản
-                </a>
-                <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">
-                    <i class="bi bi-lock"></i> Đổi mật khẩu
-                </a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">
-                    <i class="bi bi-coin"></i> Điểm thưởng
-                </a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">
-                    <i class="bi bi-geo-alt"></i> Địa chỉ giao hàng
-                </a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">
-                    <i class="bi bi-card-list"></i> Đơn hàng của tôi
-                </a>
-                <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/delivery}" class="active">
-                    <i class="bi bi-truck"></i> Đơn nhận hôm nay
-                </a>
+                <p style="font-weight: bold" th:text="*{getFullName()}"></p>
+
+                <div class="sidebar-content">
+                    <a href="#" th:href="@{/profile/account}">
+                        <i class="bi bi-person"></i> Thông tin tài khoản
+                    </a>
+                    <a href="#" th:href="@{/profile/password}" th:if="${!isOauth2User}">
+                        <i class="bi bi-lock"></i> Đổi mật khẩu
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/point}">
+                        <i class="bi bi-coin"></i> Điểm thưởng
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">
+                        <i class="bi bi-geo-alt"></i> Địa chỉ giao hàng
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}" >
+                        <i class="bi bi-card-list"></i> Đơn hàng của tôi
+                    </a>
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/delivery}" class="active">
+                        <i class="bi bi-truck"></i> Đơn giao mỗi ngày
+                    </a>
+                </div>
             </nav>
+
 
             <!-- Main content -->
             <main class="col-md-9 col-lg-10 ml-sm-auto px-4">
@@ -266,7 +238,7 @@
             deliveryTableBody.innerHTML = paginatedData.map((delivery, index) => {
                 const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
                 const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED') ?
-                    `<button class="btn btn-warning btn-sm" onclick="showDelayConfirmation(${delivery.deliveryId})">Hoãn</button>` : '';
+                    `<button class="btn btn-warning btn-sm" style="margin-top: 5px" onclick="showDelayConfirmation(${delivery.deliveryId})">Hoãn</button>` : '';
                 return `
                 <tr>
                     <td>${delivery.deliveryId}</td>
