@@ -1,4 +1,4 @@
-package com.nutrimeal.nutrimeal.controller;
+package com.nutrimeal.nutrimeal.controller.admin;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
