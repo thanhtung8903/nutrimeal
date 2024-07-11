@@ -1,544 +1,523 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      .dashboard-manager {
-        display: flex;
-        justify-content: space-evenly;
-        margin: 30px;
-        width: calc(100%-250px);
-      }
-      .dashboard-manager .dashboard-manager-box {
-        width: 20%;
-        height: 100px;
-        box-shadow: 0 0 5px rgba(48, 46, 46, 0.5);
-        text-align: center;
-        padding: 10px;
-      }
-      .dashboard-manager .dashboard-manager-box p {
-        color: rgb(166, 168, 168);
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-          sans-serif;
-        font-size: 20px;
-      }
-      .dashboard-manager-table {
-        display: flex;
-        justify-content: center;
-      }
-      .dashboard-manager-table table {
-        width: 90%;
-        border-collapse: collapse;
-        border: 1px solid black;
-        align-items: center;
-      }
-      .dashboard-manager-table table th,
-      .dashboard-manager-table table td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-      .dashboard-manager-table table td:last-child {
-        width: 160px;
-      }
-      .dashboard-manager-table table tr:hover {
-        background-color: #f1f1f1;
-      }
-      .dashboard-manager-table table th {
-        background-color: #f2f2f2;
-        cursor: pointer;
-      }
-      button {
-        color: #f1f1f1;
-        border-radius: 3px;
-        width: 70px;
-        border: none;
-        height: 25px;
-      }
-      .dashboard-manager-chart {
-        margin: 20px auto;
-        width: 90%;
-        background-color: #ffffff;
-        padding: 20px;
-      }
-      .dashboard-manager-chart #searchForm button {
-        background: black;
-        color: white;
-      }
-      /*.dashboard-manager-chart #searchForm input{*/
-      /*  width: 60px;*/
-      /*}*/
-      /*.dashboard-manager-chart-contain {*/
-      /*  display: flex;*/
-      /*  width: 100%; !* Full viewport width *!*/
-      /*  height: 50%; !* Full viewport height *!*/
-      /*}*/
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .dashboard-manager {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 30px;
+      width: calc(100%-250px);
+    }
+    .dashboard-manager .dashboard-manager-box {
+      width: 20%;
+      height: 100px;
+      box-shadow: 0 0 5px rgba(48, 46, 46, 0.5);
+      text-align: center;
+      padding: 10px;
+    }
+    .dashboard-manager .dashboard-manager-box p {
+      color: rgb(166, 168, 168);
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+      font-size: 20px;
+    }
+    .dashboard-manager-table {
+      display: flex;
+      justify-content: center;
+    }
+    .dashboard-manager-table table {
+      width: 90%;
+      border-collapse: collapse;
+      border: 1px solid black;
+      align-items: center;
+    }
+    .dashboard-manager-table table th,
+    .dashboard-manager-table table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    .dashboard-manager-table table td:last-child {
+      width: 160px;
+    }
+    .dashboard-manager-table table tr:hover {
+      background-color: #f1f1f1;
+    }
+    .dashboard-manager-table table th {
+      background-color: #f2f2f2;
+      cursor: pointer;
+    }
+    button {
+      color: #f1f1f1;
+      border-radius: 3px;
+      width: 70px;
+      border: none;
+      height: 25px;
+    }
+    .dashboard-manager-chart {
+      margin: 20px auto;
+      width: 90%;
+      background-color: #ffffff;
+      padding: 20px;
+    }
+    .dashboard-manager-chart #searchForm button {
+      background: black;
+      color: white;
+    }
+    /*.dashboard-manager-chart #searchForm input{*/
+    /*  width: 60px;*/
+    /*}*/
+    /*.dashboard-manager-chart-contain {*/
+    /*  display: flex;*/
+    /*  width: 100%; !* Full viewport width *!*/
+    /*  height: 50%; !* Full viewport height *!*/
+    /*}*/
 
-      /*.dashboard-manager-chart-contain-barchart{*/
-      /*  width: 50%;*/
-      /*}*/
+    /*.dashboard-manager-chart-contain-barchart{*/
+    /*  width: 50%;*/
+    /*}*/
 
-      /*#barchart {*/
-      /*  flex: 1; !* Take up 50% of the screen width *!*/
-      /*  max-width: 50%; !* Ensure it doesn't exceed 50% of the screen width *!*/
-      /*  height: 100%; !* Full height of parent *!*/
-      /*}*/
+    /*#barchart {*/
+    /*  flex: 1; !* Take up 50% of the screen width *!*/
+    /*  max-width: 50%; !* Ensure it doesn't exceed 50% of the screen width *!*/
+    /*  height: 100%; !* Full height of parent *!*/
+    /*}*/
 
-      /*#piechart, #linechart {*/
-      /*  flex: 1; !* Each takes equal width *!*/
-      /*  height: 50%; !* 50% of the height of barchart *!*/
-      /*  max-height: 50%; !* Ensure it doesn't exceed 50% of the height of barchart *!*/
-      /*}*/
+    /*#piechart, #linechart {*/
+    /*  flex: 1; !* Each takes equal width *!*/
+    /*  height: 50%; !* 50% of the height of barchart *!*/
+    /*  max-height: 50%; !* Ensure it doesn't exceed 50% of the height of barchart *!*/
+    /*}*/
 
-      /*.dashboard-manager-chart-contain-column {*/
-      /*  display: flex;*/
-      /*  flex-direction: column;*/
-      /*  flex: 1; !* Takes the remaining width *!*/
-      /*  max-width: 50%; !* Take up 50% of the screen width *!*/
-      /*  height: 100%; !* Full height of parent *!*/
-      /*}*/
+    /*.dashboard-manager-chart-contain-column {*/
+    /*  display: flex;*/
+    /*  flex-direction: column;*/
+    /*  flex: 1; !* Takes the remaining width *!*/
+    /*  max-width: 50%; !* Take up 50% of the screen width *!*/
+    /*  height: 100%; !* Full height of parent *!*/
+    /*}*/
 
-      /*.dashboard-manager-chart-contain-column > canvas {*/
-      /*  flex: 1; !* Each chart takes equal height *!*/
-      /*  margin: 5px; !* Optional margin *!*/
-      /*}*/
+    /*.dashboard-manager-chart-contain-column > canvas {*/
+    /*  flex: 1; !* Each chart takes equal height *!*/
+    /*  margin: 5px; !* Optional margin *!*/
+    /*}*/
 
-      .dashboard-manager-chart-contain {
-        /*display: flex;*/
-        justify-content: space-between;
-        padding: 20px;
-        /*background-color: #f9f9f9;*/
-        /*border-radius: 10px;*/
-        /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
-        margin: 20px 0;
-      }
+    .dashboard-manager-chart-contain {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      /*background-color: #f9f9f9;*/
+      /*border-radius: 10px;*/
+      /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+      margin: 20px 0;
+    }
 
-      .dashboard-manager-chart-contain-barchart {
-        flex: 2;
-        margin-right: 20px;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
+    .dashboard-manager-chart-contain-barchart {
+      flex: 2;
+      margin-right: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-      .dashboard-manager-chart-contain-column {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
+    .dashboard-manager-chart-contain-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
 
-      .dashboard-manager-chart-contain-piechart {
-        flex: 1;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-      }
+    .dashboard-manager-chart-contain-piechart {
+      flex: 1;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
 
-      .dashboard-manager-chart-contain-piechart:last-child {
-        margin-bottom: 0;
-      }
+    .dashboard-manager-chart-contain-piechart:last-child {
+      margin-bottom: 0;
+    }
 
-      h3 {
-        font-size: 1.5em;
-        margin-bottom: 10px;
-      }
+    h3 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
 
-      canvas {
-        flex: 1;
-        width: 100% !important;
-        height: 100% !important;
-      }
+    canvas {
+      flex: 1;
+      width: 100% !important;
+      height: 100% !important;
+    }
 
-    </style>
-  </head>
-  <body>
-    <div class="dashboard-manager">
-      <div class="dashboard-manager-box">
-        <p class="dashboard-manager-title">Đơn cần xác nhận</p>
-        <div class="dashboard-manager-number">
-          <h1 id="order-confirm"></h1>
-        </div>
-      </div>
-      <div class="dashboard-manager-box">
-        <p class="dashboard-manager-title">Khách hàng</p>
-        <div class="dashboard-manager-number">
-          <h1 id="customer"></h1>
-        </div>
-      </div>
-      <div class="dashboard-manager-box">
-        <p class="dashboard-manager-title">Thực đơn có sẵn</p>
-        <div class="dashboard-manager-number">
-          <h1 id="menu"></h1>
-        </div>
-      </div>
-      <div class="dashboard-manager-box">
-        <p class="dashboard-manager-title">Đơn giao hôm nay</p>
-        <div class="dashboard-manager-number">
-          <h1 id="order-today"></h1>
-        </div>
-      </div>
+  </style>
+</head>
+<body>
+<div class="dashboard-manager">
+  <div class="dashboard-manager-box">
+    <p class="dashboard-manager-title">Đơn cần xác nhận</p>
+    <div class="dashboard-manager-number">
+      <h1 id="order-confirm"></h1>
     </div>
-    <div class="dashboard-manager-chart">
-      <form id="searchForm">
-        <label for="search-year">Select Year:</label>
-        <input
-          type="number"
-          id="search-year"
-          name="search-year"
-          min="1900"
-          max=""
-          placeholder="YYYY"
-        />
-        <button type="submit">Search</button>
-      </form>
-      <div class="dashboard-manager-chart-contain" >
-        <div class="dashboard-manager-chart-contain-barchart">
-          <h3></h3>
-          <p></p>
+  </div>
+  <div class="dashboard-manager-box">
+    <p class="dashboard-manager-title">Khách hàng</p>
+    <div class="dashboard-manager-number">
+      <h1 id="customer"></h1>
+    </div>
+  </div>
+  <div class="dashboard-manager-box">
+    <p class="dashboard-manager-title">Thực đơn có sẵn</p>
+    <div class="dashboard-manager-number">
+      <h1 id="menu"></h1>
+    </div>
+  </div>
+  <div class="dashboard-manager-box">
+    <p class="dashboard-manager-title">Đơn giao hôm nay</p>
+    <div class="dashboard-manager-number">
+      <h1 id="order-today"></h1>
+    </div>
+  </div>
+</div>
+<div class="dashboard-manager-chart">
+  <form id="searchForm">
+    <label for="search-year">Select Year:</label>
+    <input type="number" id="search-year" name="search-year" min="1900" max="" placeholder="YYYY" />
+    <button type="submit">Search</button>
+  </form>
+  <div class="dashboard-manager-chart-contain">
+    <div class="dashboard-manager-chart-contain-barchart">
+      <h3></h3>
+      <p></p>
       <canvas id="barchart"></canvas>
-        </div>
-        <div class="dashboard-manager-chart-contain-column">
-          <div class="dashboard-manager-chart-contain-piechart">
-            <h3></h3>
-            <p></p>
-            <canvas id="piechart"></canvas>
-          </div>
-          <div class="dashboard-manager-chart-contain-piechart">
-            <h3></h3>
-            <p></p>
-            <canvas id="linechart"></canvas>
-          </div>
+    </div>
+    <div class="dashboard-manager-chart-contain-column">
+      <div class="dashboard-manager-chart-contain-piechart">
+        <h3></h3>
+        <p></p>
+        <canvas id="piechart"></canvas>
+      </div>
+      <div class="dashboard-manager-chart-contain-piechart">
+        <h3></h3>
+        <p></p>
+        <canvas id="linechart"></canvas>
       </div>
     </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-  <script>
-      const chart1 = document.getElementById('barchart');
-      const chart2 =document.getElementById('piechart');
-      const chart3 =document.getElementById('linechart');
-      const barChart=new Chart(chart1, {
-          type: 'bar',
-          data: {
-              labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
-              datasets: [{
-                  label: 'Chi tiêu',
-                  data: [],
-                  backgroundColor:[
-                      'rgba(1,26,186)'
-                  ],
-                  borderWidth: 1
-              },
-                  {
-                      label: 'Doanh thu',
-                      data: [],
-                      backgroundColor:[
-                          'rgb(69,93,234)'
-                      ],
-                      borderWidth: 1
-                  }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+  const chart1 = document.getElementById('barchart');
+  const chart2 = document.getElementById('piechart');
+  const chart3 = document.getElementById('linechart');
+  const barChart = new Chart(chart1, {
+    type: 'bar',
+    data: {
+      labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+      datasets: [{
+        label: 'Chi tiêu',
+        data: [],
+        backgroundColor: ['rgba(1,26,186)'],
+        borderWidth: 1
+      },
+        {
+          label: 'Doanh thu',
+          data: [],
+          backgroundColor: ['rgb(69,93,234)'],
+          borderWidth: 1
+        }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+    }
+  });
+
+  const pieChart = new Chart(chart2, {
+    type: 'doughnut',
+    data: {
+      labels: ['Delivered', 'Pending', 'Processing', 'Cancelled', 'Shipped'],
+      datasets: [{
+        label: 'Chi tiêu',
+        data: [0, 0, 0, 0, 0],
+        backgroundColor: [
+          'rgb(236,108,108)',
+          'rgb(241,209,130)',
+          'rgb(149,248,142)',
+          'rgb(140,246,238)',
+          'rgb(94,176,243)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+    }
+  });
+
+  const lineChart = new Chart(chart3, {
+    type: 'line',
+    data: {
+      labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+      datasets: [{
+        label: 'Đơn hàng',
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        backgroundColor: 'rgba(75, 192, 192, 1)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 3,
+        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      elements: {
+        line: {
+          tension: 0.0
+        }
+      }
+    }
+  });
+
+  // Fetch API để lấy dữ liệu từ endpoint
+  fetch('http://localhost:8080/api/delivery?status=DELIVERED')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            const currentYear = new Date().getFullYear();
+            const monthlyDataSuccess = calculateMonthlyData(data, currentYear);
+            updateChartLine(lineChart, monthlyDataSuccess);
+            const revenue = calculateRevenueMonthlyData(data, currentYear);
+            updateChartBar1(barChart, revenue);
+          })
+          .catch(error => console.error('Error fetching delivery data:', error));
+
+  // Hàm tính toán số đơn đặt hàng theo từng tháng
+  function calculateMonthlyData(data, year) {
+    year = year || new Date().getFullYear();
+    const monthlyDataSuccess = Array(12).fill(0);
+    data.forEach(delivery => {
+      const orderDate = new Date(delivery.deliveryDate);
+      const orderYear = orderDate.getFullYear();
+      const orderMonth = orderDate.getMonth();
+      if (orderYear === year) {
+        monthlyDataSuccess[orderMonth]++;
+      }
+    });
+    console.log(monthlyDataSuccess + ',' + year + ',')
+    return monthlyDataSuccess;
+  }
+
+  function calculateRevenueMonthlyData(data, year) {
+    year = year || new Date().getFullYear();
+    const RevenuemonthlyDataSuccess = Array(12).fill(0);
+    data.forEach(delivery => {
+      const orderDate = new Date(delivery.deliveryDate);
+      const orderYear = orderDate.getFullYear();
+      const orderMonth = orderDate.getMonth();
+      if (orderYear === year) {
+        RevenuemonthlyDataSuccess[orderMonth] += delivery.deliveryPrice;
+      }
+    });
+    return RevenuemonthlyDataSuccess;
+  }
+
+  function updateChartLine(chart, dataSuccess) {
+    chart.data.datasets[0].data = dataSuccess;
+    chart.update();
+  }
+
+  function updateChartBar1(chart, dataSuccess) {
+    chart.data.datasets[1].data = dataSuccess;
+    chart.update();
+  }
+
+  fetch('http://localhost:8080/api/expense')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            const currentYear = new Date().getFullYear();
+            const Expense = calculateExpense(data, currentYear);
+            updateChartBar2(barChart, Expense);
+          })
+          .catch(error => console.error('Error fetching delivery data:', error));
+
+  // Hàm tính toán số đơn đặt hàng theo từng tháng
+  function calculateExpense(data, year) {
+    year = year || new Date().getFullYear();
+    const ExpensemonthlyData = Array(12).fill(0);
+    data.forEach(expense => {
+      const expenseDate = new Date(expense.expirationDate);
+      const expenseYear = expenseDate.getFullYear();
+      const expenseMonth = expenseDate.getMonth();
+      if (expenseYear === year) {
+        ExpensemonthlyData[expenseMonth]+=expense.totalPrice;
+      }
+    });
+    return ExpensemonthlyData;
+  }
+
+  function updateChartBar2(chart, dataSuccess) {
+    chart.data.datasets[0].data = dataSuccess;
+    chart.update();
+  }
+
+  fetch('http://localhost:8080/api/orders')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            const currentYear = new Date().getFullYear();
+            const StatusOrder = calculateStatusData(data, currentYear);
+            updateChartPie(pieChart, Object.values(StatusOrder));
+            countProcessing(data);
+          })
+          .catch(error => console.error('Error fetching order data:', error));
+
+  function calculateStatusData(data, year) {
+    year = year || new Date().getFullYear();
+    const statusData = {
+      DELIVERED: 0,
+      PENDING: 0,
+      PROCESSING: 0,
+      CANCELLED: 0,
+      SHIPPED: 0
+    };
+    data.forEach(order => {
+      const orderDate = new Date(order.orderDate);
+      const orderYear = orderDate.getFullYear();
+      const orderMonth = orderDate.getMonth();
+      if (orderYear === year) {
+        statusData[order.orderStatus]++;
+      }
+    });
+    return statusData;
+  }
+  function updateChartPie(chart, data) {
+    chart.data.datasets[0].data = data;
+    chart.update();
+  }
+  function countProcessing(data) {
+    const processingOrders = data.filter(order => order.orderStatus === 'PROCESSING').length;
+    document.getElementById('order-confirm').textContent = processingOrders;
+  }
+
+  fetch('http://localhost:8080/api/customers')
+          .then(response => {
+            // Xử lý phản hồi từ server
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json(); // Chuyển đổi phản hồi thành JSON
+          })
+          .then(data => {
+            countCustomer(data)
+          })
+          .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
+  function countCustomer(data) {
+    let count = data.length; // Use the length of the data array to count customers
+    document.getElementById('customer').textContent = count;
+  }
+  fetch('http://localhost:8080/api/delivery?status=IN_TRANSIT')
+          .then(response => {
+            // Xử lý phản hồi từ server
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json(); // Chuyển đổi phản hồi thành JSON
+          })
+          .then(data => {
+            countOrderTOday(data)
+          })
+          .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
+
+  function countOrderTOday(data) {
+    let count = data.length; // Use the length of the data array to count customers
+    document.getElementById('order-today').textContent = count;
+  }
+  // Xử lý form tìm kiếm
+  const currentYear = new Date().getFullYear();
+  const yearInput = document.getElementById("search-year");
+  yearInput.setAttribute('max', currentYear.toString());
+  const searchForm = document.getElementById('searchForm');
+  searchForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const searchYear = document.getElementById('search-year').value.trim();
+    if (searchYear === '') {
+      alert('Please enter a valid year');
+      return;
+    }
+    fetch(`http://localhost:8080/api/delivery?status=DELIVERED`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
               }
-            },
-          }
-      });
+              return response.json();
+            })
+            .then(data => {
+              const monthlyDataSuccess = calculateMonthlyData(data, parseInt(searchYear));
+              updateChartLine(lineChart, monthlyDataSuccess);
+              const revenue = calculateRevenueMonthlyData(data, parseInt(searchYear));
+              updateChartBar1(barChart, revenue);
+            })
+            .catch(error => console.error('Error fetching delivery data:', error));
 
-      const pieChart=new Chart(chart2, {
-        type: 'doughnut',
-        data: {
-          labels: ['Delivered', 'Pending', 'Processing', 'Cancelled', 'Shipped'],
-          datasets: [{
-            label: 'Chi tiêu',
-            data: [0, 0, 0, 0, 0],
-            backgroundColor:[
-              'rgb(236,108,108)',
-              'rgb(241,209,130)',
-              'rgb(149,248,142)',
-              'rgb(140,246,238)',
-              'rgb(94,176,243)'
-            ],
-            borderWidth: 1
-        }]},
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
-        }
-      });
-      const lineChart = new Chart(chart3, {
-        type: 'line',
-        data: {
-          labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
-          datasets: [{
-            label: 'Đơn hàng',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // Khởi tạo mảng 12 phần tử, ban đầu có giá trị 0 cho mỗi tháng
-            backgroundColor: 'rgba(75, 192, 192, 1)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 3,
-            pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
-          elements: {
-            line: {
-              tension: 0.0
-            }
-          }
-        }
-      });
+    fetch(`http://localhost:8080/api/orders`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              const StatusOrder = calculateStatusData(data, parseInt(searchYear));
+              updateChartPie(pieChart, Object.values(StatusOrder));
+            })
+            .catch(error => console.error('Error fetching delivery data:', error));
 
-      // Fetch API để lấy dữ liệu từ endpoint
-      fetch('http://localhost:8080/api/delivery?status=DELIVERED')
-              .then(response => {
-                // Xử lý phản hồi từ server
-                if (!response.ok) {
-                  throw new Error('Network response was not ok');
-                }
-                return response.json(); // Chuyển đổi phản hồi thành JSON
-              })
-              .then(data => {
-                const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
-                const monthlyDataSuccess = calculateMonthlyData(data, currentYear); // Tính toán số liệu hàng tháng
-                updateChartLine(lineChart, monthlyDataSuccess); // Cập nhật dữ liệu cho biểu đồ linechart
-                const revenue=calculateRevenueMonthlyData(data, currentYear);
-                updateChartBar1(barChart, revenue);
-              })
-              .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
-      // Hàm tính toán số đơn đặt hàng theo từng tháng
-      function calculateMonthlyData(data, year) {
-        year = year || new Date().getFullYear(); // Thiết lập năm mặc định nếu không được chỉ định
-        const monthlyDataSuccess = Array(12).fill(0); // Khởi tạo mảng 12 phần tử, mỗi phần tử tương ứng với một tháng, ban đầu có giá trị 0
-        data.forEach(delivery => {
-          // Kiểm tra và chuyển đổi ngày đặt hàng thành đối tượng Date
-          const orderDate = new Date(delivery.deliveryDate);
+    fetch('http://localhost:8080/api/expense')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              const Expense = calculateExpense(data, parseInt(searchYear));
+              updateChartBar2(barChart, Expense);
+            })
+            .catch(error => console.error('Error fetching delivery data:', error));
+  });
 
-          // Lấy thông tin năm và tháng từ ngày đặt hàng
-          const orderYear = orderDate.getFullYear();
-          const orderMonth = orderDate.getMonth();
-
-          // Kiểm tra nếu đơn hàng được đặt trong năm hiện tại
-          if (orderYear === year) {
-            monthlyDataSuccess[orderMonth]++; // Tăng số lượng đơn hàng cho tháng tương ứng
-          }
-        });
-        console.log(monthlyDataSuccess)
-        return monthlyDataSuccess; // Trả về mảng số liệu hàng tháng
-      }
-
-      function calculateRevenueMonthlyData(data, year) {
-        year = year || new Date().getFullYear(); // Thiết lập năm mặc định nếu không được chỉ định
-        const RevenuemonthlyDataSuccess = Array(12).fill(0); // Khởi tạo mảng 12 phần tử, mỗi phần tử tương ứng với một tháng, ban đầu có giá trị 0
-        data.forEach(delivery => {
-          // Kiểm tra và chuyển đổi ngày đặt hàng thành đối tượng Date
-          const orderDate = new Date(delivery.deliveryDate);
-
-          // Lấy thông tin năm và tháng từ ngày đặt hàng
-          const orderYear = orderDate.getFullYear();
-          const orderMonth = orderDate.getMonth();
-
-          // Kiểm tra nếu đơn hàng được đặt trong năm hiện tại
-          if (orderYear === year) {
-            RevenuemonthlyDataSuccess[orderMonth]+=delivery.deliveryPrice; // Tăng số lượng đơn hàng cho tháng tương ứng
-          }
-        });
-        return RevenuemonthlyDataSuccess; // Trả về mảng số liệu hàng tháng
-      }
-
-      // Hàm cập nhật dữ liệu cho biểu đồ linechart
-      function updateChartLine(chart, dataSuccess) {
-        chart.data.datasets[0].data = dataSuccess;
-        chart.update(); // Cập nhật biểu đồ
-      }
-
-      function updateChartBar1(chart, dataSuccess) {
-        chart.data.datasets[1].data = dataSuccess;
-        chart.update(); // Cập nhật biểu đồ
-      }
-
-      fetch('http://localhost:8080/api/orders')
-              .then(response => {
-                // Xử lý phản hồi từ server
-                if (!response.ok) {
-                  throw new Error('Network response was not ok');
-                }
-                return response.json(); // Chuyển đổi phản hồi thành JSON
-              })
-              .then(data => {
-                const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
-                const StatusOrder = calculateStatusData(data, currentYear); // Tính toán số liệu hàng tháng
-                updateChartPie(pieChart, Object.values(StatusOrder)); // Cập nhật dữ liệu cho biểu đồ linechart
-                countProcessing(data);
-              })
-              .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
-
-      // Hàm tính toán số đơn đặt hàng theo từng tháng
-      function calculateStatusData(data) {
-        const statusData = {
-          DELIVERED: 0,
-          PENDING: 0,
-          CANCELLED: 0,
-          PROCESSING: 0,
-          SHIPPED: 0,
-          // Thêm các loại status khác nếu cần
-        };
-
-        data.forEach(order => {
-          const orderStatus = order.orderStatus;
-          // Tăng số lượng đơn hàng cho status tương ứng
-          if (orderStatus === 'DELIVERED') {
-            statusData.DELIVERED++;
-          } else if (orderStatus === 'PENDING') {
-            statusData.PENDING++;
-          } else if (orderStatus === 'CANCELLED') {
-            statusData.CANCELLED++;
-          } else if (orderStatus === 'PROCESSING') {
-            statusData.PROCESSING++;
-          } else if (orderStatus === 'SHIPPED') {
-            statusData.SHIPPED++;
-          }
-          // Thêm các trường hợp khác nếu có
-        });
-        console.log(statusData)
-        return statusData; // Trả về đối tượng chứa số liệu đơn hàng theo từng loại status
-      }
-      function updateChartPie(chart, dataSuccess) {
-        chart.data.datasets[0].data = dataSuccess;
-        chart.update(); // Cập nhật biểu đồ
-      }
-
-      function countProcessing(data){
-        let count=0;
-        data.forEach(order =>{
-          const orderStatus = order.orderStatus;
-          // Tăng số lượng đơn hàng cho status tương ứng
-          if (orderStatus === 'PROCESSING') {
-            count++;
-          }
-                }
-        )
-        document.getElementById('order-confirm').textContent=count;
-      }
-      // Fetch API để lấy dữ liệu từ endpoint
-      fetch('http://localhost:8080/api/expense')
-              .then(response => {
-                // Xử lý phản hồi từ server
-                if (!response.ok) {
-                  throw new Error('Network response was not ok');
-                }
-                return response.json(); // Chuyển đổi phản hồi thành JSON
-              })
-              .then(data => {
-                const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
-                const expense=calculateExpenseMonthlyData(data, currentYear);
-                updateChartBar2(barChart,expense)
-              })
-              .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
-
-      function calculateExpenseMonthlyData(data, year) {
-        year = year || new Date().getFullYear(); // Thiết lập năm mặc định nếu không được chỉ định
-        const ExpensemonthlyDataSuccess = Array(12).fill(0); // Khởi tạo mảng 12 phần tử, mỗi phần tử tương ứng với một tháng, ban đầu có giá trị 0
-        data.forEach(expense => {
-          // Kiểm tra và chuyển đổi ngày đặt hàng thành đối tượng Date
-          const expenseDate = new Date(expense.purchaseDate);
-
-          // Lấy thông tin năm và tháng từ ngày đặt hàng
-          const expenseYear = expenseDate.getFullYear();
-          const expenseMonth = expenseDate.getMonth();
-
-          // Kiểm tra nếu đơn hàng được đặt trong năm hiện tại
-          if (expenseYear === year) {
-            ExpensemonthlyDataSuccess[expenseMonth]+=expense.totalPrice; // Tăng số lượng đơn hàng cho tháng tương ứng
-          }
-        });
-        console.log(ExpensemonthlyDataSuccess);
-        return ExpensemonthlyDataSuccess; // Trả về mảng số liệu hàng tháng
-      }
-
-      function updateChartBar2(chart, dataSuccess) {
-        chart.data.datasets[0].data = dataSuccess;
-        chart.update(); // Cập nhật biểu đồ
-      }
-
-      fetch('http://localhost:8080/api/customers')
-              .then(response => {
-                // Xử lý phản hồi từ server
-                if (!response.ok) {
-                  throw new Error('Network response was not ok');
-                }
-                return response.json(); // Chuyển đổi phản hồi thành JSON
-              })
-              .then(data => {
-                countCustomer(data)
-              })
-              .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
-
-      function countCustomer(data){
-        let count = data.length; // Use the length of the data array to count customers
-        document.getElementById('customer').textContent = count;
-      }
-
-      fetch('http://localhost:8080/api/delivery?status=IN_TRANSIT')
-              .then(response => {
-                // Xử lý phản hồi từ server
-                if (!response.ok) {
-                  throw new Error('Network response was not ok');
-                }
-                return response.json(); // Chuyển đổi phản hồi thành JSON
-              })
-              .then(data => {
-                countOrderTOday(data)
-              })
-              .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
-
-      function countOrderTOday(data){
-        let count = data.length; // Use the length of the data array to count customers
-        document.getElementById('order-today').textContent = count;
-      }
-      const currentYear = new Date().getFullYear();
-      const yearInput = document.getElementById("search-year");
-      yearInput.setAttribute('max', currentYear.toString());
-      fetchDataFromAPI(currentYear)
-              .then(data => {
-                const { monthlyDataSuccess, monthlyDataCancel } = calculateMonthlyData(data, currentYear);
-                updateChart(barchart, monthlyDataSuccess, monthlyDataCancel);
-              })
-              .catch(error => console.error('Error fetching data for chart:', error));
-
-      // Event listener for the search form
-      document.getElementById("searchForm").addEventListener("submit", function (event) {
-        event.preventDefault();
-        const year = parseInt(yearInput.value);
-        if (isNaN(year) || year < 1900 || year > currentYear) {
-          if (year < 1900) {
-            alert("Please enter a valid year (1900 or later).");
-          } else if (year > currentYear) {
-            alert(`Please enter a valid year (${currentYear} or earlier).`);
-          }
-          return;
-        }
-      })
-  </script>
-  </body>
+</script>
+</body>
 </html>

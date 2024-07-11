@@ -109,22 +109,24 @@ background-color: #0000000b;
     }
 
     tbody tr.hide {
+        display: none;
         opacity: 0;
         transform: translateX(100%);
     }
 
     tbody tr:hover {
-        background-color: rgba(216, 213, 213, 0.4) !important;
+        background-color: rgba(216, 213, 213, 0.4) ;
     }
 
+
     tbody tr td,
-    tbody tr td p,
-    tbody tr td p img {
+    tbody tr td span,
+    tbody tr td img {
         transition: 0.2s ease-in-out;
     }
 
     tbody tr.hide td,
-    tbody tr.hide td p {
+    tbody tr.hide td span {
         padding: 0;
         /*font: 0/0 sans-serif;*/
         transition: 0.2s ease-in-out 0.5s;
@@ -361,7 +363,7 @@ background-color: #0000000b;
     function searchtable() {
         table_rows.forEach((row, i) => {
             let table_data = row.textContent.toLowerCase();
-            search_data = search.value.toLowerCase();
+            let search_data = search.value.toLowerCase();
             row.classList.toggle("hide", table_data.indexOf(search_data) < 0);
             row.style.setProperty("--delay", i / 25 + "s");
         });
