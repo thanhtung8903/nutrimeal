@@ -547,7 +547,7 @@
             totalAmount -= discountAmount;
 
             if (xuCheckbox.checked) {
-                pointsDiscount = parseInt(xuCheckbox.value, 10) * 1000;
+                pointsDiscount = parseInt(xuCheckbox.value, 10) * 100;
             } else {
                 pointsDiscount = 0;
             }
@@ -565,7 +565,7 @@
             discountElement.innerText = formatCurrency(discountAmount + pointsDiscount);
             totalAmountElement.innerText = formatCurrency(totalAmount);
 
-            currentPointsElement.innerText = (currentPoints - pointsDiscount / 1000).toLocaleString('vi-VN');
+            currentPointsElement.innerText = (currentPoints - pointsDiscount / 100).toLocaleString('vi-VN');
 
         }
 
