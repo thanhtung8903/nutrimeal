@@ -22,6 +22,9 @@
       text-align: center;
       padding: 10px;
     }
+    .dashboard-admin .dashboard-admin-box:hover{
+      width: 22%;
+    }
     .dashboard-admin .dashboard-admin-box p {
       color: rgb(166, 168, 168);
       font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -89,9 +92,9 @@
       transform: translateX(100%);
     }
     .dashboard-admin-table table tbody tr.hide td,
-    .dashboard-admin-table table tbody tr.hide td p {
+    .dashboard-admin-table table tbody tr.hide td p{
       padding: 0;
-      /*font: 0/0 sans-serif;*/
+      /*font: 0 / 0 sans-serif;*/
       transition: 0.2s ease-in-out 0.5s;
     }
 
@@ -169,7 +172,7 @@
 </head>
 <body>
 <div class="dashboard-admin">
-  <div class="dashboard-admin-box" id="admin=box">
+  <div class="dashboard-admin-box" id="admin-box">
     <p class="dashboard-admin-title">Admin</p>
     <div class="dashboard-admin-number">
       <h1 id="adminCount"></h1>
@@ -496,6 +499,7 @@
     });
 
     displayUsers(roleFilteredRows);
+    setupEditButtons();
     setupPagination();
   }
 </script>

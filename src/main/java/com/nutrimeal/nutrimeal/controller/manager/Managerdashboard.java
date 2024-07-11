@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class Managerdashboard {
 
-    @GetMapping("/")
+    @GetMapping("/dashboard")
     public String managerDashboard() {
-        return "manager/managerpage";
+        return "manager/dashboard/dashboardManager";
     }
 }
