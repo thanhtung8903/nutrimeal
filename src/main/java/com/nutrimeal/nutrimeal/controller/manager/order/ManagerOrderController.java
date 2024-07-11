@@ -38,7 +38,7 @@ public class ManagerOrderController {
         model.addAttribute("ordersProcessing", orders);
         return "manager/order/order";
     }
-    @GetMapping("/order/listorder")
+    @GetMapping("/listorder")
     public String managerListOrder() {
         return "manager/order/listOrder";
     }

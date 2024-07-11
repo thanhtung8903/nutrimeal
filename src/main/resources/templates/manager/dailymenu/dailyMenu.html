@@ -24,6 +24,13 @@
         text-align: center;
         margin: 20px 0;
     }
+    .content-wrapper{
+        background-color: #ffffff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
     .list-group-item {
         background-color: #fff !important;
         color: #343a40 !important;
@@ -119,12 +126,16 @@
 
 <body>
 <div class="content" id="content">
+    <div class="content-wrapper">
+
     <div class="container-fluid ">
 
-            <h2 style="margin-bottom: 40px; text-align: center">
-                DANH MỤC THỰC ĐƠN
-            </h2>
-            <form
+            <h3 style="margin-bottom: 40px; ">
+                DANH SÁCH THỰC ĐƠN
+            </h3>
+        <svg style="width: 70px; margin-top: -140px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+
+        <form
                     th:action="@{/manager/dailymenu/search}"
                     method="get"
                     class="mb-3"
@@ -319,6 +330,7 @@
                     </li>
                 </ul>
             </nav>
+    </div>
     </div>
 </div>
 

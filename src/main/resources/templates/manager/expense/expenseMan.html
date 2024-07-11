@@ -83,14 +83,71 @@
       background: none;
       cursor: default;
     }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 1;
+    }
+    .edit-form {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: none;
+      z-index: 2;
+      max-width: 500px;
+      width: 100%;
+    }
+    .edit-form .form-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .edit-form .form-group label {
+      flex: 1;
+      padding-right: 10px;
+      text-align: right;
+    }
+    .edit-form .form-group input {
+      flex: 2;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .edit-form .form-group input[type="text"] {
+      width: 100%;
+    }
+    .edit-form button {
+      margin-top: 10px;
+      width: 100%;
+    }
+    .content-wrapper{
+      background-color: #ffffff;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
 <div th:insert="fragments/sidebar :: sidebar-manager (page = 'expense')"></div>
 
 <div class="content" id="content">
+  <div class="content-wrapper">
+
   <div class="container-fluid container-table">
-    <h2>DANH MỤC CHI TIÊU</h2>
+    <h3>DANH SÁCH CHI TIÊU</h3>
+    <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
 
     <div class="controls">
       <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
@@ -108,7 +165,7 @@
         <th>Đơn giá</th>
         <th>Tổng chi phí</th>
         <th>Nhà cung cấp</th>
-
+        <th>Action</th>
       </tr>
       </thead>
       <tbody id="table-body">
@@ -119,6 +176,48 @@
     <div class="pagination" id="pagination-controls">
     </div>
   </div>
+
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="edit-form" id="editForm">
+  <h3>Chỉnh sửa</h3>
+  <div class="form-group">
+    <label for="editExpenseId">ID:</label>
+    <input type="text" id="editExpenseId" disabled>
+  </div>
+  <div class="form-group">
+    <label for="editDeliveryDate">Ngày giao:</label>
+    <input type="date" id="editDeliveryDate" disabled>
+  </div>
+
+  <div class="form-group">
+    <label for="editIngredientName">Tên nguyên liệu:</label>
+    <input type="text" id="editIngredientName">
+  </div>
+  <div class="form-group">
+    <label for="editQuantity">Số lượng:</label>
+    <input type="text" id="editQuantity">
+  </div>
+  <div class="form-group">
+    <label for="editExpirationDate">Ngày hết hạn:</label>
+    <input type="text" id="editExpirationDate">
+  </div>
+  <div class="form-group">
+    <label for="editUnitPrice">Đơn giá:</label>
+    <input type="text" id="editUnitPrice">
+  </div>
+  <div class="form-group">
+    <label for="editTotalPrice">Tổng chi phí:</label>
+    <input type="text" id="editTotalPrice">
+  </div>
+  <div class="form-group">
+    <label for="editSupplier">Nhà cung cấp:</label>
+    <input type="text" id="editSupplier">
+  </div>
+  <button class="btn btn-primary" id="saveEdit">Cập nhật</button>
+  <button class="btn btn-secondary" id="cancelEdit">Hủy</button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -181,7 +280,7 @@
     const end = start + rowsPerPage;
     const paginatedExpenses = filteredExpenses.slice(start, end);
 
-    paginatedExpenses.forEach(expense => {
+    paginatedExpenses.forEach((expense, index) => {
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${expense.expenseId}</td>
@@ -192,8 +291,20 @@
         <td>${formatCurrency(expense.unitPrice) + "đ"}</td>
         <td>${formatCurrency(expense.totalPrice) + "đ"}</td>
         <td>${expense.supplier}</td>
+        <td style="display: inline-grid">
+           <button class="btn btn-sm btn-primary edit-btn" data-index="${start + index}">Cập nhật</button>
+        </td>
+
       `;
       tableBody.appendChild(row);
+    });
+
+    document.querySelectorAll('.edit-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const index = this.getAttribute('data-index');
+        const expense = filteredExpenses[index];
+        openEditForm(expense);
+      });
     });
   }
 
@@ -255,7 +366,73 @@
     }
   }
 
-  window.onload = function () {
+  function openEditForm(expense) {
+    const editForm = document.getElementById('editForm');
+    const overlay = document.getElementById('overlay');
+
+    document.getElementById('editExpenseId').value = expense.expenseId;
+    document.getElementById('editDeliveryDate').value = expense.purchaseDate;
+    document.getElementById('editIngredientName').value = expense.ingredientName;
+    document.getElementById('editQuantity').value = expense.quantity;
+    document.getElementById('editExpirationDate').value = expense.expirationDate;
+    document.getElementById('editUnitPrice').value = expense.unitPrice;
+    document.getElementById('editTotalPrice').value = expense.totalPrice;
+    document.getElementById('editSupplier').value = expense.supplier;
+
+    editForm.style.display = 'block';
+    overlay.style.display = 'block';
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const editForm = document.getElementById('editForm');
+    const overlay = document.getElementById('overlay');
+
+    document.getElementById('table-body').addEventListener('click', function(event) {
+      if (event.target.classList.contains('edit-btn')) {
+        const index = event.target.getAttribute('data-index');
+        const expense = expenses[index];
+        openEditForm(expense);
+      }
+    });
+
+    document.getElementById('cancelEdit').addEventListener('click', function() {
+      editForm.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+
+    document.getElementById('saveEdit').addEventListener('click', function() {
+      const updatedExpense = {
+        expenseId: document.getElementById('editExpenseId').value,
+        purchaseDate: document.getElementById('editDeliveryDate').value,
+        ingredientName: document.getElementById('editIngredientName').value,
+        quantity: document.getElementById('editQuantity').value,
+        expirationDate: document.getElementById('editExpirationDate').value,
+        unitPrice: document.getElementById('editUnitPrice').value,
+        totalPrice: document.getElementById('editTotalPrice').value,
+        supplier: document.getElementById('editSupplier').value
+      };
+
+      // Gửi dữ liệu cập nhật đến server
+      fetch(`http://localhost:8080/api/expense/${updatedExpense.expenseId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedExpense)
+      })
+              .then(response => response.json())
+              .then(data => {
+                const index = expenses.findIndex(expense => expense.expenseId === data.expenseId);
+                expenses[index] = data;
+                editForm.style.display = 'none';
+                overlay.style.display = 'none';
+                fetchExpenses(); // Tải lại dữ liệu sau khi cập nhật
+              })
+              .catch(error => console.error('Error updating expense:', error));
+    });
+  });
+
+  function fetchExpenses() {
     fetch('http://localhost:8080/api/expense')
             .then(response => response.json())
             .then(data => {
@@ -266,7 +443,9 @@
             .catch(error => {
               console.error('Error fetching expense details:', error);
             });
-  };
+  }
+
+  window.onload = fetchExpenses;
 </script>
 </body>
 </html>

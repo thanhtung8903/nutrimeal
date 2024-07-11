@@ -65,4 +65,8 @@ public class DailyMenuService {
         }
         return dailyMenuRepository.searchDailyMenu(date, type, name, pageable);
     }
+
+    public int getDailyMenuCount(Date date, String type) {
+        return dailyMenuRepository.findAllByDailyMenuDateGreaterThanEqualAndDailyMenuTypeAndIsActiveTrue(date, type).size();
+    }
 }
