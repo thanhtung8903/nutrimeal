@@ -401,13 +401,14 @@
         year = year || new Date().getFullYear();
         const ExpensemonthlyData = Array(12).fill(0);
         data.forEach(expense => {
-            const expenseDate = new Date(expense.expirationDate);
+            const expenseDate = new Date(expense.purchaseDate);
             const expenseYear = expenseDate.getFullYear();
             const expenseMonth = expenseDate.getMonth();
             if (expenseYear === year) {
                 ExpensemonthlyData[expenseMonth]+=expense.totalPrice;
             }
         });
+        console.log(ExpensemonthlyData);
         return ExpensemonthlyData;
     }
 
