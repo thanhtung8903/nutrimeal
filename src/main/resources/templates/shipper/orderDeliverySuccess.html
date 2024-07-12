@@ -439,7 +439,7 @@
         document.getElementById('search-date').addEventListener('input', function (event) {
             const searchValue = event.target.value.trim().toLowerCase();
             const filteredOrders = deliveries.filter(order =>
-                order.deliveryDate.toLowerCase().match(searchValue)
+                order.customerFullName.toLowerCase().match(searchValue)
             );
             displayOrders(filteredOrders, currentPage, rowsPerPage);
             setupPagination(filteredOrders.length, rowsPerPage);
