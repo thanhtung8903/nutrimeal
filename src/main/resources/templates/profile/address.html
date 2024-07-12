@@ -442,7 +442,7 @@
                             // Validate tên
                             const name = document.getElementById('editName').value;
                             const nameHelp = document.getElementById('editNameHelp');
-                            const nameRegex = /^[a-zA-Z\s]+$/;
+                            const nameRegex = /^[\p{L}\s]+$/u;
                             if (name.trim() === '') {
                                 nameHelp.textContent = 'Họ và tên không được bỏ trống.';
                                 isValid = false;
