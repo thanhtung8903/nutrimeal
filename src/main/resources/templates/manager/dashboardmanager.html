@@ -5,118 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <style>
-        .dashboard-manager {
+        .content {
+            margin-left: 250px;
+            padding: 80px 20px 20px;
+            transition: margin-left 0.3s ease;
+        }
+        .content.collapsed {
+            margin-left: 60px;
+        }
+        .content .dashboard-manager {
             display: flex;
             justify-content: space-evenly;
             margin: 30px;
-            width: calc(100%-250px);
+            width: 100%;
         }
-        .dashboard-manager .dashboard-manager-box {
+        .content .dashboard-manager .dashboard-manager-box {
             width: 20%;
             height: 100px;
             box-shadow: 0 0 5px rgba(48, 46, 46, 0.5);
             text-align: center;
             padding: 10px;
         }
-        .dashboard-manager .dashboard-manager-box p {
+        .content .dashboard-manager .dashboard-manager-box p {
             color: rgb(166, 168, 168);
             font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
             sans-serif;
             font-size: 20px;
         }
-        .dashboard-manager-table {
-            display: flex;
-            justify-content: center;
-        }
-        .dashboard-manager-table table {
-            width: 90%;
-            border-collapse: collapse;
-            border: 1px solid black;
-            align-items: center;
-        }
-        .dashboard-manager-table table th,
-        .dashboard-manager-table table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        .dashboard-manager-table table td:last-child {
-            width: 160px;
-        }
-        .dashboard-manager-table table tr:hover {
-            background-color: #f1f1f1;
-        }
-        .dashboard-manager-table table th {
-            background-color: #f2f2f2;
-            cursor: pointer;
-        }
-        button {
-            color: #f1f1f1;
-            border-radius: 3px;
-            width: 70px;
-            border: none;
-            height: 25px;
-        }
-        .dashboard-manager-chart {
+
+        .content .dashboard-manager-chart {
             margin: 20px auto;
             width: 90%;
             background-color: #ffffff;
             padding: 20px;
         }
-        .dashboard-manager-chart #searchForm button {
+        .content .dashboard-manager-chart #searchForm button {
             background: black;
             color: white;
         }
-        /*.dashboard-manager-chart #searchForm input{*/
-        /*  width: 60px;*/
-        /*}*/
-        /*.dashboard-manager-chart-contain {*/
-        /*  display: flex;*/
-        /*  width: 100%; !* Full viewport width *!*/
-        /*  height: 50%; !* Full viewport height *!*/
-        /*}*/
 
-        /*.dashboard-manager-chart-contain-barchart{*/
-        /*  width: 50%;*/
-        /*}*/
-
-        /*#barchart {*/
-        /*  flex: 1; !* Take up 50% of the screen width *!*/
-        /*  max-width: 50%; !* Ensure it doesn't exceed 50% of the screen width *!*/
-        /*  height: 100%; !* Full height of parent *!*/
-        /*}*/
-
-        /*#piechart, #linechart {*/
-        /*  flex: 1; !* Each takes equal width *!*/
-        /*  height: 50%; !* 50% of the height of barchart *!*/
-        /*  max-height: 50%; !* Ensure it doesn't exceed 50% of the height of barchart *!*/
-        /*}*/
-
-        /*.dashboard-manager-chart-contain-column {*/
-        /*  display: flex;*/
-        /*  flex-direction: column;*/
-        /*  flex: 1; !* Takes the remaining width *!*/
-        /*  max-width: 50%; !* Take up 50% of the screen width *!*/
-        /*  height: 100%; !* Full height of parent *!*/
-        /*}*/
-
-        /*.dashboard-manager-chart-contain-column > canvas {*/
-        /*  flex: 1; !* Each chart takes equal height *!*/
-        /*  margin: 5px; !* Optional margin *!*/
-        /*}*/
-
-        .dashboard-manager-chart-contain {
+        .content .dashboard-manager-chart-contain {
             display: flex;
             justify-content: space-between;
             padding: 20px;
-            /*background-color: #f9f9f9;*/
-            /*border-radius: 10px;*/
-            /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
             margin: 20px 0;
         }
 
-        .dashboard-manager-chart-contain-barchart {
+        .content .dashboard-manager-chart-contain-barchart {
             flex: 2;
             margin-right: 20px;
             background-color: #fff;
@@ -125,14 +63,14 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .dashboard-manager-chart-contain-column {
+        .content .dashboard-manager-chart-contain-column {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        .dashboard-manager-chart-contain-piechart {
+        .content .dashboard-manager-chart-contain-piechart {
             flex: 1;
             background-color: #fff;
             padding: 20px;
@@ -141,16 +79,11 @@
             margin-bottom: 20px;
         }
 
-        .dashboard-manager-chart-contain-piechart:last-child {
+        .content .dashboard-manager-chart-contain-piechart:last-child {
             margin-bottom: 0;
         }
 
-        h3 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        canvas {
+        .content canvas {
             flex: 1;
             width: 100% !important;
             height: 100% !important;
@@ -159,7 +92,8 @@
     </style>
 </head>
 <body>
-
+<div th:insert="fragments/sidebar :: sidebar-manager (page='manager')"></div>
+<div class="content" id="content">
 <div class="dashboard-manager">
     <div class="dashboard-manager-box">
         <p class="dashboard-manager-title">Đơn cần xác nhận</p>
@@ -194,26 +128,38 @@
     </form>
     <div class="dashboard-manager-chart-contain">
         <div class="dashboard-manager-chart-contain-barchart">
-            <h3></h3>
-            <p></p>
             <canvas id="barchart"></canvas>
         </div>
         <div class="dashboard-manager-chart-contain-column">
             <div class="dashboard-manager-chart-contain-piechart">
-                <h3></h3>
-                <p></p>
                 <canvas id="piechart"></canvas>
             </div>
             <div class="dashboard-manager-chart-contain-piechart">
-                <h3></h3>
-                <p></p>
                 <canvas id="linechart"></canvas>
             </div>
         </div>
     </div>
 </div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 <script>
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('collapsed');
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function(submenuToggle) {
+            submenuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
+    });
     const chart1 = document.getElementById('barchart');
     const chart2 = document.getElementById('piechart');
     const chart3 = document.getElementById('linechart');
@@ -327,7 +273,6 @@
                 monthlyDataSuccess[orderMonth]++;
             }
         });
-        console.log(monthlyDataSuccess + ',' + year + ',')
         return monthlyDataSuccess;
     }
 
@@ -352,6 +297,40 @@
 
     function updateChartBar1(chart, dataSuccess) {
         chart.data.datasets[1].data = dataSuccess;
+        chart.update();
+    }
+
+    fetch('http://localhost:8080/api/expense')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const currentYear = new Date().getFullYear();
+            const Expense = calculateExpense(data, currentYear);
+            updateChartBar2(barChart, Expense);
+        })
+        .catch(error => console.error('Error fetching delivery data:', error));
+
+    // Hàm tính toán số đơn đặt hàng theo từng tháng
+    function calculateExpense(data, year) {
+        year = year || new Date().getFullYear();
+        const ExpensemonthlyData = Array(12).fill(0);
+        data.forEach(expense => {
+            const expenseDate = new Date(expense.expirationDate);
+            const expenseYear = expenseDate.getFullYear();
+            const expenseMonth = expenseDate.getMonth();
+            if (expenseYear === year) {
+                ExpensemonthlyData[expenseMonth]+=expense.totalPrice;
+            }
+        });
+        return ExpensemonthlyData;
+    }
+
+    function updateChartBar2(chart, dataSuccess) {
+        chart.data.datasets[0].data = dataSuccess;
         chart.update();
     }
 
@@ -382,48 +361,20 @@
         data.forEach(order => {
             const orderDate = new Date(order.orderDate);
             const orderYear = orderDate.getFullYear();
-            const orderMonth = orderDate.getMonth();
             if (orderYear === year) {
                 statusData[order.orderStatus]++;
             }
         });
         return statusData;
     }
-
     function updateChartPie(chart, data) {
         chart.data.datasets[0].data = data;
         chart.update();
     }
-
     function countProcessing(data) {
         const processingOrders = data.filter(order => order.orderStatus === 'PROCESSING').length;
         document.getElementById('order-confirm').textContent = processingOrders;
     }
-
-    // Xử lý form tìm kiếm
-    const searchForm = document.getElementById('searchForm');
-    searchForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const searchYear = document.getElementById('search-year').value.trim();
-        if (searchYear === '') {
-            alert('Please enter a valid year');
-            return;
-        }
-        fetch(`http://localhost:8080/api/delivery?year=${searchYear}&status=DELIVERED`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const monthlyDataSuccess = calculateMonthlyData(data, parseInt(searchYear));
-                updateChartLine(lineChart, monthlyDataSuccess);
-                const revenue = calculateRevenueMonthlyData(data, parseInt(searchYear));
-                updateChartBar1(barChart, revenue);
-            })
-            .catch(error => console.error('Error fetching delivery data:', error));
-    });
 
     fetch('http://localhost:8080/api/customers')
         .then(response => {
@@ -437,12 +388,10 @@
             countCustomer(data)
         })
         .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
-
     function countCustomer(data) {
         let count = data.length; // Use the length of the data array to count customers
         document.getElementById('customer').textContent = count;
     }
-
     fetch('http://localhost:8080/api/delivery?status=IN_TRANSIT')
         .then(response => {
             // Xử lý phản hồi từ server
@@ -460,6 +409,73 @@
         let count = data.length; // Use the length of the data array to count customers
         document.getElementById('order-today').textContent = count;
     }
+
+    fetch('http://localhost:8080/api/dailyMenu/count/N')
+        .then(response => {
+            // Xử lý phản hồi từ server
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Chuyển đổi phản hồi thành JSON
+        })
+        .then(data => {
+           document.getElementById('menu').textContent=data;
+        })
+        .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
+
+    // Xử lý form tìm kiếm
+    const currentYear = new Date().getFullYear();
+    const yearInput = document.getElementById("search-year");
+    yearInput.setAttribute('max', currentYear.toString());
+    const searchForm = document.getElementById('searchForm');
+    searchForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const searchYear = document.getElementById('search-year').value.trim();
+        if (searchYear === '') {
+            alert('Please enter a valid year');
+            return;
+        }
+        fetch(`http://localhost:8080/api/delivery?status=DELIVERED`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const monthlyDataSuccess = calculateMonthlyData(data, parseInt(searchYear));
+                updateChartLine(lineChart, monthlyDataSuccess);
+                const revenue = calculateRevenueMonthlyData(data, parseInt(searchYear));
+                updateChartBar1(barChart, revenue);
+            })
+            .catch(error => console.error('Error fetching delivery data:', error));
+
+        fetch(`http://localhost:8080/api/orders`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const StatusOrder = calculateStatusData(data, parseInt(searchYear));
+                updateChartPie(pieChart, Object.values(StatusOrder));
+            })
+            .catch(error => console.error('Error fetching delivery data:', error));
+
+        fetch('http://localhost:8080/api/expense')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const Expense = calculateExpense(data, parseInt(searchYear));
+                updateChartBar2(barChart, Expense);
+            })
+            .catch(error => console.error('Error fetching delivery data:', error));
+    });
 
 </script>
 </body>
