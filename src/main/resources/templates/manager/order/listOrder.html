@@ -298,6 +298,110 @@
             fetchOrderDetails(orderId);
         }
     });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Các biến toàn cục
+        let currentPage = 1;
+        const rowsPerPage = 10; // Số dòng mỗi trang
+
+        // Hàm fetchOrders đã có sẵn
+
+        // Hàm fetchOrdersWithPagination để lấy dữ liệu theo từng trang
+        function fetchOrdersWithPagination(page, status = '') {
+            let url = `/api/orders?page=${page}&perPage=${rowsPerPage}`;
+            if (status) {
+                url += `&status=${status}`;
+            }
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('order-table-body');
+                    tableBody.innerHTML = ''; // Xóa các dòng cũ
+
+                    data.forEach(order => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${order.orderId}</td>
+                        <td>${order.fullName}</td>
+                        <td>${order.address}</td>
+                        <td>${order.orderNote}</td>
+                        <td>${order.orderDate}</td>
+                        <td>${order.orderTotalPrice}</td>
+                        <td>${order.orderStatus}</td>
+                        <td class="justify-content-center d-flex">
+                            <button class="btn btn-secondary btn-sm me-1" onclick="viewDetails(${order.orderId})" title="Xem chi tiết">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </td>
+                    `;
+                        tableBody.appendChild(row);
+                    });
+
+                    updatePaginationUI(page, Math.ceil(data.length / rowsPerPage));
+                })
+                .catch(error => console.error('Error fetching orders:', error));
+        }
+
+        // Hàm cập nhật giao diện phân trang
+        function updatePaginationUI(currentPage, totalPages) {
+            const previousPage = document.getElementById('previousPage');
+            const nextPage = document.getElementById('nextPage');
+
+            // Ẩn/hiện nút Previous
+            if (currentPage === 1) {
+                previousPage.classList.add('disabled');
+            } else {
+                previousPage.classList.remove('disabled');
+            }
+
+            // Ẩn/hiện nút Next
+            if (currentPage === totalPages) {
+                nextPage.classList.add('disabled');
+            } else {
+                nextPage.classList.remove('disabled');
+            }
+
+            // Xóa các nút trang cũ
+            const pagination = document.querySelector('.pagination');
+            pagination.innerHTML = '';
+
+            // Tạo các nút trang mới
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.classList.add('page-item');
+                if (i === currentPage) {
+                    li.classList.add('active');
+                    li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                } else {
+                    li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                    li.addEventListener('click', function() {
+                        fetchOrdersWithPagination(i);
+                    });
+                }
+                pagination.appendChild(li);
+            }
+        }
+
+        // Sự kiện khi click nút Previous
+        document.getElementById('previousPage').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentPage > 1) {
+                currentPage--;
+                fetchOrdersWithPagination(currentPage);
+            }
+        });
+
+        // Sự kiện khi click nút Next
+        document.getElementById('nextPage').addEventListener('click', function(e) {
+            e.preventDefault();
+            currentPage++;
+            fetchOrdersWithPagination(currentPage);
+        });
+
+        // Gọi hàm fetchOrdersWithPagination để lấy dữ liệu đầu tiên
+        fetchOrdersWithPagination(currentPage);
+    });
+
 
 
 </script>
