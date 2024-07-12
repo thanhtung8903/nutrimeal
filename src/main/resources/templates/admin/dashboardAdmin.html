@@ -134,12 +134,12 @@
         .btn-edit:hover {
             background-color: rgb(255, 224, 48);
         }
-        .btn-delete {
-            background-color: rgb(205, 23, 23);
-        }
-        .btn-delete:hover {
-            background-color: rgba(248, 12, 12, 0.945);
-        }
+        /*.btn-delete {*/
+        /*    background-color: rgb(205, 23, 23);*/
+        /*}*/
+        /*.btn-delete:hover {*/
+        /*    background-color: rgba(248, 12, 12, 0.945);*/
+        /*}*/
         /* Ẩn form mặc định */
         .dashboard-admin-form {
             display: none;
@@ -354,7 +354,6 @@
             <td data-role="${roleData}">${roleDisplay}</td>
             <td>
                 <button class="btn-edit" data-user-id="${user.userId}"><i class="bi bi-pencil"></i></button>
-                <button class="btn-delete" data-user-id="${user.userId}"><i class="bi bi-trash"></i></button>
             </td>
         `;
             tbody.appendChild(row);
