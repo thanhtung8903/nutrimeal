@@ -175,6 +175,7 @@
         <svg style="width: 70px; margin-left: -310px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
       </div>
       <input style="margin-bottom:20px " type="text" id="search-date" class="form-control_delivered" placeholder="Tìm kiếm đơn hàng">
+      <input type="date" id="searchDate" placeholder="Search by Date">
 
       <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -452,16 +453,6 @@
       return li;
     }
 
-
-    document.getElementById('search-date').addEventListener('input', function (event) {
-      const searchValue = event.target.value.trim().toLowerCase();
-      const filteredOrders = deliveries.filter(order =>
-              order.deliveryDate.toLowerCase().includes(searchValue)
-      );
-      currentPage = 1; // Reset to first page when searching
-      displayOrders(filteredOrders);
-    });
-
     document.addEventListener('click', function (event) {
       const btnConfirmOrder = event.target.closest('.btn-fail-order');
 
@@ -503,6 +494,24 @@
       toastContainer.appendChild(toast);
       setTimeout(() => toast.remove(), 2000);
     }
+
+    document.getElementById('search-date').addEventListener('input', function (event) {
+      const searchValue = event.target.value.trim().toLowerCase();
+      const filteredOrders = deliveries.filter(order =>
+              order.customerFullName.toLowerCase().includes(searchValue)
+      );
+      currentPage = 1;
+      displayOrders(filteredOrders);
+    });
+
+    document.getElementById('searchDate').addEventListener('change', function () {
+      const selectedDate = this.value;
+      const filteredOrders = deliveries.filter(order =>
+              order.deliveryDate === selectedDate
+      );
+      currentPage = 1;
+      displayOrders(filteredOrders);
+    });
 
     fetchDeliveredOrders();
   });
