@@ -109,6 +109,7 @@
             transition: 0.5s ease-in-out var(--delay), background-color 0s;
         }
         .dashboard-admin-table table tbody tr.hide {
+            display: none;
             opacity: 0;
             transform: translateX(100%);
         }
@@ -287,7 +288,7 @@
                 <div class="form-group">
                     <label for="account-role">Account Role:</label>
                     <select class="form-control" id="account-role" name="account-role" required>
-<!--                        <option value="ROLE_ADMIN">Admin</option>-->
+                        <!--                        <option value="ROLE_ADMIN">Admin</option>-->
                         <option value="ROLE_MANAGER">Manager</option>
                         <option value="ROLE_CUSTOMER">Customer</option>
                         <option value="ROLE_SHIPPER">Shipper</option>
@@ -329,6 +330,16 @@
         const tbody = document.getElementById('dashboard-admin-tbody');
         tbody.innerHTML = '';
         usersToDisplay.forEach((user, index) => {
+            const genderDisplay = user.gender === null ? '' : (user.gender ? 'Nam' : 'Nữ');
+            const dobDisplay = user.dob === null ? '' : user.dob;
+            const roleDisplayNames = {
+                'ROLE_CUSTOMER': 'Customer',
+                'ROLE_MANAGER': 'Manager',
+                'ROLE_SHIPPER': 'Shipper',
+                'ROLE_ADMIN': 'Admin'
+            };
+            const roleDisplay = user.roles.map(role => roleDisplayNames[role] || role).join(', ');
+            const roleData = user.roles.join(',');
             const row = document.createElement('tr');
             row.setAttribute('data-user-id', user.userId);
             row.innerHTML = `
@@ -337,9 +348,9 @@
             <td>${user.fullName}</td>
             <td>${user.email}</td>
             <td>${user.phone}</td>
-            <td>${user.gender}</td>
-            <td>${user.dob}</td>
-            <td>${user.roles.join(', ')}</td>
+            <td>${genderDisplay}</td>
+            <td>${dobDisplay}</td>
+            <td data-role="${roleData}">${roleDisplay}</td>
             <td>
                 <button class="btn-edit" data-user-id="${user.userId}"><i class="bi bi-pencil"></i></button>
                 <button class="btn-delete" data-user-id="${user.userId}"><i class="bi bi-trash"></i></button>
@@ -413,19 +424,34 @@
         const accountEmailInput = document.getElementById('account-email');
         const accountRoleInput = document.getElementById('account-role');
 
+        // Map role names to display names and vice versa
+        const roleDisplayNames = {
+            'ROLE_CUSTOMER': 'Customer',
+            'ROLE_MANAGER': 'Manager',
+            'ROLE_SHIPPER': 'Shipper',
+            'ROLE_ADMIN': 'Admin'
+        };
+        const displayRoleNames = {
+            'Customer': 'ROLE_CUSTOMER',
+            'Manager': 'ROLE_MANAGER',
+            'Shipper': 'ROLE_SHIPPER',
+            'Admin': 'ROLE_ADMIN'
+        };
+
         editButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const userId = button.getAttribute('data-user-id');
                 const userRow = document.querySelector(`tr[data-user-id="${userId}"]`);
                 if (userRow) {
                     const userName = userRow.querySelector('td:nth-child(3)').innerText;
                     const userEmail = userRow.querySelector('td:nth-child(4)').innerText;
                     const userRole = userRow.querySelector('td:nth-child(8)').innerText.trim();
+                    const originalRole = displayRoleNames[userRole];
 
                     accountIdInput.value = userId;
                     accountNameInput.value = userName;
                     accountEmailInput.value = userEmail;
-                    accountRoleInput.value = userRole;
+                    accountRoleInput.value = originalRole;
 
                     form.classList.add('show');
                     backdrop.classList.add('show');
@@ -433,12 +459,13 @@
             });
         });
 
-        backdrop.addEventListener('click', function() {
+        backdrop.addEventListener('click', function () {
             form.classList.remove('show');
             backdrop.classList.remove('show');
         });
 
-        form.addEventListener('submit', function(event) {
+        // Send PUT request via AJAX
+        form.addEventListener('submit', function (event) {
             event.preventDefault();
             const userId = accountIdInput.value;
             const selectedRole = accountRoleInput.value;
@@ -451,24 +478,24 @@
                 }
             })
                 .then(response => {
-                    if (response.ok) {
-                        return response.json();
+                    if (response.status === 204) {
+                        return {}; // No content, return an empty object
+                    } else if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
-                    throw new Error('Network response was not ok.');
+                    return response.text().then(text => text ? JSON.parse(text) : {});
                 })
                 .then(updatedUser => {
                     console.log('User updated:', updatedUser);
-                    // Update the user role in the table
                     const userRow = document.querySelector(`tr[data-user-id="${userId}"]`);
                     if (userRow) {
                         const roleCell = userRow.querySelector('td:nth-child(8)');
-                        roleCell.innerText = selectedRole;
+                        const newRoleDisplay = roleDisplayNames[selectedRole];
+                        roleCell.innerText = newRoleDisplay;
+                        roleCell.setAttribute('data-role', selectedRole);
                     }
-                    // Hide the form
                     form.classList.remove('show');
                     backdrop.classList.remove('show');
-                    // Reload the page to reflect changes
-                    location.reload();
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
