@@ -134,12 +134,12 @@
         .btn-edit:hover {
             background-color: rgb(255, 224, 48);
         }
-        .btn-delete {
-            background-color: rgb(205, 23, 23);
-        }
-        .btn-delete:hover {
-            background-color: rgba(248, 12, 12, 0.945);
-        }
+        /*.btn-delete {*/
+        /*    background-color: rgb(205, 23, 23);*/
+        /*}*/
+        /*.btn-delete:hover {*/
+        /*    background-color: rgba(248, 12, 12, 0.945);*/
+        /*}*/
         /* Ẩn form mặc định */
         .dashboard-admin-form {
             display: none;
@@ -302,7 +302,7 @@
 
 <script>
     let users = [];
-    const rowsPerPage = 5;
+    const rowsPerPage = 8;
     let filteredRows = [];
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -332,6 +332,7 @@
         usersToDisplay.forEach((user, index) => {
             const genderDisplay = user.gender === null ? '' : (user.gender ? 'Nam' : 'Nữ');
             const dobDisplay = user.dob === null ? '' : user.dob;
+            const phoneDisplay = user.phone === null ? '' : user.phone;
             const roleDisplayNames = {
                 'ROLE_CUSTOMER': 'Customer',
                 'ROLE_MANAGER': 'Manager',
@@ -347,13 +348,12 @@
             <td><img src="${user.avatar}" alt="user_image" width="50" height="50"></td>
             <td>${user.fullName}</td>
             <td>${user.email}</td>
-            <td>${user.phone}</td>
+            <td>${phoneDisplay}</td>
             <td>${genderDisplay}</td>
             <td>${dobDisplay}</td>
             <td data-role="${roleData}">${roleDisplay}</td>
             <td>
                 <button class="btn-edit" data-user-id="${user.userId}"><i class="bi bi-pencil"></i></button>
-                <button class="btn-delete" data-user-id="${user.userId}"><i class="bi bi-trash"></i></button>
             </td>
         `;
             tbody.appendChild(row);

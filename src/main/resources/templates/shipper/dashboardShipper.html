@@ -236,34 +236,8 @@
               document.getElementById('order-success').textContent = SuccessOrders;
               const CancelOrders=calculateCancelOrders(data);
               document.getElementById('order-cancel').textContent = CancelOrders;
-              const tableBody = document.getElementById('dashboard-shipper-tbody');
-              tableBody.innerHTML = '';
-              data.forEach((delivery, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${delivery.deliveryId}</td>
-                <td>${delivery.deliveryStatus}</td>
-                <td>${delivery.deliveryTime}</td>
-                <td>${formatDate(delivery.deliveryDate)}</td>
-                <td>${delivery.customerFullName}</td>
-                <td>${delivery.deliveryPhone}</td>
-                <td>${delivery.deliveryAddress}</td>
-                <td>${delivery.deliveryPrice}</td>
-                <td>${delivery.shipperFullName}</td>
-              `;
-                tableBody.appendChild(row);
-              });
             })
             .catch(error => console.error('Error fetching delivery data:', error));
-
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const year = String(date.getFullYear()).slice(-2);
-      return `${day}/${month}/${year}`;
-    }
 
     function fetchDataFromAPI(year) {
       return fetch(`http://localhost:8080/api/delivery/shipper?year=${year}`)
@@ -340,9 +314,9 @@
 
   function calculateTotalPrice(data) {
     let total=0;
-    data.forEach(order => {
-      if(order.deliveryStatus==='IN_TRANSIT'){
-        total+=order.totalPrice;
+    data.forEach(delivery => {
+      if(delivery.deliveryStatus==='IN_TRANSIT'){
+        total+=delivery.deliveryPrice;
       }
             })
     return total;
@@ -350,7 +324,7 @@
 
   function calculateTodayOrders(data) {
     const today = new Date().toISOString().split('T')[0];
-    return data.filter(order => order.deliveryDate === 'IN_TRANSIT').length;
+    return data.filter(order => order.deliveryStatus === 'IN_TRANSIT').length;
   }
   function calculateSuccessOrders(data) {
     return data.filter(order => order.deliveryStatus === 'DELIVERED').length;
