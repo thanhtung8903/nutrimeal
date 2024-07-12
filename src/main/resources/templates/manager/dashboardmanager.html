@@ -342,6 +342,7 @@
         })
         .catch(error => console.error('Error fetching delivery data:', error));
 
+    // Hàm tính toán số đơn đặt hàng theo từng tháng
     function calculateMonthlyData(data, year) {
         year = year || new Date().getFullYear();
         const monthlyDataSuccess = Array(12).fill(0);
@@ -381,6 +382,41 @@
         chart.update();
     }
 
+    fetch('http://localhost:8080/api/expense')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const currentYear = new Date().getFullYear();
+            const Expense = calculateExpense(data, currentYear);
+            updateChartBar2(barChart, Expense);
+        })
+        .catch(error => console.error('Error fetching delivery data:', error));
+
+    // Hàm tính toán số đơn đặt hàng theo từng tháng
+    function calculateExpense(data, year) {
+        year = year || new Date().getFullYear();
+        const ExpensemonthlyData = Array(12).fill(0);
+        data.forEach(expense => {
+            const expenseDate = new Date(expense.purchaseDate);
+            const expenseYear = expenseDate.getFullYear();
+            const expenseMonth = expenseDate.getMonth();
+            if (expenseYear === year) {
+                ExpensemonthlyData[expenseMonth]+=expense.totalPrice;
+            }
+        });
+        console.log(ExpensemonthlyData);
+        return ExpensemonthlyData;
+    }
+
+    function updateChartBar2(chart, dataSuccess) {
+        chart.data.datasets[0].data = dataSuccess;
+        chart.update();
+    }
+
     fetch('http://localhost:8080/api/orders')
         .then(response => {
             if (!response.ok) {
@@ -408,23 +444,74 @@
         data.forEach(order => {
             const orderDate = new Date(order.orderDate);
             const orderYear = orderDate.getFullYear();
+            const orderMonth = orderDate.getMonth();
             if (orderYear === year) {
                 statusData[order.orderStatus]++;
             }
         });
         return statusData;
     }
-
     function updateChartPie(chart, data) {
         chart.data.datasets[0].data = data;
         chart.update();
     }
-
     function countProcessing(data) {
         const processingOrders = data.filter(order => order.orderStatus === 'PROCESSING').length;
         document.getElementById('order-confirm').textContent = processingOrders;
     }
 
+    fetch('http://localhost:8080/api/customers')
+        .then(response => {
+            // Xử lý phản hồi từ server
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Chuyển đổi phản hồi thành JSON
+        })
+        .then(data => {
+            countCustomer(data)
+        })
+        .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
+    function countCustomer(data) {
+        let count = data.length; // Use the length of the data array to count customers
+        document.getElementById('customer').textContent = count;
+    }
+    fetch('http://localhost:8080/api/delivery?status=IN_TRANSIT')
+        .then(response => {
+            // Xử lý phản hồi từ server
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Chuyển đổi phản hồi thành JSON
+        })
+        .then(data => {
+            countOrderTOday(data)
+        })
+        .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
+
+    function countOrderTOday(data) {
+        let count = data.length; // Use the length of the data array to count customers
+        document.getElementById('order-today').textContent = count;
+    }
+
+    fetch('http://localhost:8080/api/dailyMenu/count/N')
+        .then(response => {
+            // Xử lý phản hồi từ server
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Chuyển đổi phản hồi thành JSON
+        })
+        .then(data => {
+            document.getElementById('menu').textContent=data;
+        })
+        .catch(error => console.error('Error fetching delivery data:', error)); // Xử lý lỗi khi gọi API
+
+
+    // Xử lý form tìm kiếm
+    const currentYear = new Date().getFullYear();
+    const yearInput = document.getElementById("search-year");
+    yearInput.setAttribute('max', currentYear.toString());
     const searchForm = document.getElementById('searchForm');
     searchForm.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -433,7 +520,7 @@
             alert('Please enter a valid year');
             return;
         }
-        fetch(`http://localhost:8080/api/delivery?year=${searchYear}&status=DELIVERED`)
+        fetch(`http://localhost:8080/api/delivery?status=DELIVERED`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -447,41 +534,35 @@
                 updateChartBar1(barChart, revenue);
             })
             .catch(error => console.error('Error fetching delivery data:', error));
+
+        fetch(`http://localhost:8080/api/orders`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const StatusOrder = calculateStatusData(data, parseInt(searchYear));
+                updateChartPie(pieChart, Object.values(StatusOrder));
+            })
+            .catch(error => console.error('Error fetching delivery data:', error));
+
+        fetch('http://localhost:8080/api/expense')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const Expense = calculateExpense(data, parseInt(searchYear));
+                updateChartBar2(barChart, Expense);
+            })
+            .catch(error => console.error('Error fetching delivery data:', error));
     });
 
-    fetch('http://localhost:8080/api/customers')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            countCustomer(data)
-        })
-        .catch(error => console.error('Error fetching delivery data:', error));
 
-    function countCustomer(data) {
-        let count = data.length;
-        document.getElementById('customer').textContent = count;
-    }
-
-    fetch('http://localhost:8080/api/delivery?status=IN_TRANSIT')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            countOrderTOday(data)
-        })
-        .catch(error => console.error('Error fetching delivery data:', error));
-
-    function countOrderTOday(data) {
-        let count = data.length;
-        document.getElementById('order-today').textContent = count;
-    }
 </script>
 </body>
 </html>
