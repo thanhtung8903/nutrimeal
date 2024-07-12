@@ -46,7 +46,7 @@ public class HomeController {
             boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
             model.addAttribute("isOauth2User", isOauth2User);
             if (isManager) {
-                return "redirect:/manager/customer";
+                return "redirect:/manager/dashboardmanager";
             } else if (isAdmin) {
                 return "redirect:/admin/dashboard";
             } else if (isShipper) {
@@ -64,7 +64,7 @@ public class HomeController {
                 isShipper = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_SHIPPER"));
             }
             if (isManager) {
-                return "redirect:/manager/customer";
+                return "redirect:/manager/dashboardmanager";
             } else if (isAdmin) {
                 return "redirect:/admin/dashboard";
             } else if (isShipper) {
