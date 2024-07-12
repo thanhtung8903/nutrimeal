@@ -287,8 +287,12 @@
                             // Validate tên
                             const name = document.getElementById('name').value;
                             const nameHelp = document.getElementById('nameHelp');
+                            const nameRegex = /^[\p{L}\s]+$/u;
                             if (name.trim() === '') {
                                 nameHelp.textContent = 'Họ và tên không được bỏ trống.';
+                                isValid = false;
+                            } else if (!nameRegex.test(name)) {
+                                nameHelp.textContent = 'Họ và tên chỉ được nhập chữ.';
                                 isValid = false;
                             } else {
                                 nameHelp.textContent = '';
@@ -328,8 +332,12 @@
                             // Validate số nhà và tên đường
                             const address = document.getElementById('address').value;
                             const addressHelp = document.getElementById('addressHelp');
+                            const houseNumberRegex = /^[\p{L}\p{N}\s]+$/u;
                             if (address.trim() === '') {
                                 addressHelp.textContent = 'Số nhà và tên đường không được bỏ trống.';
+                                isValid = false;
+                            } else if (!houseNumberRegex.test(address)) {
+                                addressHelp.textContent = 'Số nhà và tên đường không được nhập kí tự đặc biệt.';
                                 isValid = false;
                             } else {
                                 addressHelp.textContent = '';
@@ -434,8 +442,12 @@
                             // Validate tên
                             const name = document.getElementById('editName').value;
                             const nameHelp = document.getElementById('editNameHelp');
+                            const nameRegex = /^[\p{L}\s]+$/u;
                             if (name.trim() === '') {
                                 nameHelp.textContent = 'Họ và tên không được bỏ trống.';
+                                isValid = false;
+                            } else if (!nameRegex.test(name)) {
+                                nameHelp.textContent = 'Họ và tên chỉ được nhập chữ.';
                                 isValid = false;
                             } else {
                                 nameHelp.textContent = '';
@@ -475,8 +487,12 @@
                             // Validate số nhà và tên đường
                             const address = document.getElementById('editAddress').value;
                             const addressHelp = document.getElementById('editAddressHelp');
+                            const houseNumberRegex = /^[\p{L}\p{N}\s]+$/u;
                             if (address.trim() === '') {
                                 addressHelp.textContent = 'Số nhà và tên đường không được bỏ trống.';
+                                isValid = false;
+                            } else if (!houseNumberRegex.test(address)) {
+                                addressHelp.textContent = 'Số nhà và tên đường không được nhập kí tự đặc biệt.';
                                 isValid = false;
                             } else {
                                 addressHelp.textContent = '';

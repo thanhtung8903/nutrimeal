@@ -227,40 +227,40 @@
 <body class="delivered">
 <div th:insert="fragments/sidebar :: sidebar-shipper (page ='beingDelivery') "  ></div>
 <div class="content" id="content">
-<div class="content-wrapper">
-    <div class="">
-        <!-- Content for delivered orders -->
-        <div id="content-delivered" class="order-content_delivered">
-            <div class="search-bar_delivered">
-                <h3 class="delivery-manager-h2">ĐƠN HÀNG ĐANG GIAO</h3>
-                <svg style="width: 70px; margin-left: -313px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+    <div class="content-wrapper">
+        <div class="">
+            <!-- Content for delivered orders -->
+            <div id="content-delivered" class="order-content_delivered">
+                <div class="search-bar_delivered">
+                    <h3 class="delivery-manager-h2">ĐƠN HÀNG ĐANG GIAO</h3>
+                    <svg style="width: 70px; margin-left: -313px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+                </div>
+                <input style="margin-bottom:20px " type="text" id="search-date" class="form-control_delivered" placeholder="Tìm kiếm đơn hàng">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr class="text-center">
+                        <th>Ngày</th>
+                        <th>Thời gian giao hàng</th>
+                        <th>Mã đơn</th>
+                        <th>Tên khách hàng</th>
+                        <th>Số điện thoại khách hàng</th>
+                        <th>Địa chỉ khách hàng</th>
+                        <th>Tổng tiền</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="order-table-body">
+                    <!-- Table rows will be populated dynamically -->
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination" id="pagination">
+                        <!-- Pagination controls will be dynamically generated here -->
+                    </ul>
+                </nav>
             </div>
-            <input style="margin-bottom:20px " type="text" id="search-date" class="form-control_delivered" placeholder="Tìm kiếm đơn hàng">
-            <table class="table table-bordered table-striped table-hover">
-                <thead>
-                <tr class="text-center">
-                    <th>Ngày</th>
-                    <th>Thời gian giao hàng</th>
-                    <th>Mã đơn</th>
-                    <th>Tên khách hàng</th>
-                    <th>Số điện thoại khách hàng</th>
-                    <th>Địa chỉ khách hàng</th>
-                    <th>Tổng tiền</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody id="order-table-body">
-                <!-- Table rows will be populated dynamically -->
-                </tbody>
-            </table>
-            <nav>
-                <ul class="pagination" id="pagination">
-                    <!-- Pagination controls will be dynamically generated here -->
-                </ul>
-            </nav>
         </div>
     </div>
-</div>
 </div>
 <!-- Toast for success and failure notifications -->
 <div class="toast-container"></div>
