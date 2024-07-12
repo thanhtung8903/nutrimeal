@@ -287,7 +287,7 @@
                             // Validate tên
                             const name = document.getElementById('name').value;
                             const nameHelp = document.getElementById('nameHelp');
-                            const nameRegex = /^[a-zA-Z\s]+$/;
+                            const nameRegex = /^[\p{L}\s]+$/u;
                             if (name.trim() === '') {
                                 nameHelp.textContent = 'Họ và tên không được bỏ trống.';
                                 isValid = false;
