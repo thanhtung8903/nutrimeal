@@ -19,6 +19,12 @@ public class ShipperController {
 
     private final UserService userService;
 
+    @GetMapping("/dashboardShipper")
+    public String viewDashboardShipper(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "shipper/dashboardShipper";
+    }
 
     @GetMapping("/orderNotYetDelivery")
     public String viewOrderNotYetDelivery(Model model, Principal principal) {
