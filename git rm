@@ -1,0 +1,12 @@
+M	pom.xml
+A	src/main/java/com/nutrimeal/nutrimeal/controller/shipper/Demo.java
+M	src/main/java/com/nutrimeal/nutrimeal/controller/shipper/ShipperController.java
+M	src/main/resources/templates/fragments/sidebar.html
+A	src/main/resources/templates/img/img2.webp
+A	src/main/resources/templates/manager/deliveryOrder/change_status.html
+A	src/main/resources/templates/manager/deliveryOrder/delivery_manager.html
+A	src/main/resources/templates/manager/deliveryOrder/editDelivery.html
+A	src/main/resources/templates/manager/deliveryOrder/view_orders.html
+M	src/main/resources/templates/profile/address.html
+M	src/main/resources/templates/shipper/beingDelivery.html
+A	src/main/resources/templates/shipper/sidebarShipper.html
