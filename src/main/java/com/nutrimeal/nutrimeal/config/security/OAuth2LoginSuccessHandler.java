@@ -5,27 +5,23 @@ import com.nutrimeal.nutrimeal.model.RoleName;
 import com.nutrimeal.nutrimeal.model.User;
 import com.nutrimeal.nutrimeal.repository.RoleRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
+import com.nutrimeal.nutrimeal.service.CustomOAuth2User;
+import com.nutrimeal.nutrimeal.service.UserDetailsImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -51,14 +47,11 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                 return;
             }
 
-             userRepository.findByEmail(email)
+            userRepository.findByEmail(email)
                     .ifPresentOrElse(user -> {
-                        List<GrantedAuthority> authorities = user.getRoles().stream()
-                                .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
-                                .collect(Collectors.toList());
-                        DefaultOAuth2User newUser = new DefaultOAuth2User(authorities,
-                                attributes, "sub");
-                        Authentication securityAuth = new OAuth2AuthenticationToken(newUser, authorities,
+                        UserDetailsImpl userDetails = UserDetailsImpl.build(user);
+                        CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDetails, attributes);
+                        Authentication securityAuth = new OAuth2AuthenticationToken(customOAuth2User, customOAuth2User.getAuthorities(),
                                 oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
                         SecurityContextHolder.getContext().setAuthentication(securityAuth);
                     }, () -> {
@@ -72,12 +65,9 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                         user.setEmail(email);
                         user.setImage(picture);
                         userRepository.save(user);
-                        List<GrantedAuthority> authorities = user.getRoles().stream()
-                                .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
-                                .collect(Collectors.toList());
-                        DefaultOAuth2User newUser = new DefaultOAuth2User(authorities,
-                                attributes, "sub");
-                        Authentication securityAuth = new OAuth2AuthenticationToken(newUser, authorities,
+                        UserDetailsImpl userDetails = UserDetailsImpl.build(user);
+                        CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDetails, attributes);
+                        Authentication securityAuth = new OAuth2AuthenticationToken(customOAuth2User, customOAuth2User.getAuthorities(),
                                 oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
                         SecurityContextHolder.getContext().setAuthentication(securityAuth);
                     });
