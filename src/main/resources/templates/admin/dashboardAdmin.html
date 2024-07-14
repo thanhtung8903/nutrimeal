@@ -493,14 +493,24 @@
                         const newRoleDisplay = roleDisplayNames[selectedRole];
                         roleCell.innerText = newRoleDisplay;
                         roleCell.setAttribute('data-role', selectedRole);
+
+                        // Update the user role in the local users array
+                        const userIndex = users.findIndex(user => user.userId == userId);
+                        if (userIndex !== -1) {
+                            users[userIndex].roles = [selectedRole];
+                        }
                     }
                     form.classList.remove('show');
                     backdrop.classList.remove('show');
+
+                    // Update the statistical data
+                    updateStatistical(users);
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
                 });
         });
+
     }
 
     function updateStatistical(data) {
