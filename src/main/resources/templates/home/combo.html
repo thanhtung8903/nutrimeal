@@ -11,12 +11,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
 
 <style>
-    /** {*/
-    /*    box-sizing: border-box;*/
-    /*    margin: 0;*/
-    /*    padding: 0;*/
-    /*    font-family: sans-serif;*/
-    /*}*/
 
     .body-order {
         background-color: #ececec;
@@ -150,6 +144,12 @@
     </div>
     <div class="container">
         <div class="row">
+            <h3 class="title1 pb-4 mb-4">COMBO THƯỜNG</h3>
+            <div>
+                <svg style="width: 70px; margin-top: -100px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
+                </svg>
+            </div>
             <div class="col-md-3 order-combo" th:each="combo : ${comboList}">
                 <div class="listing-item list-combo-item" data-id="lunch-eatclean" data-type="package">
                     <div class="card">
@@ -171,6 +171,38 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <h3 class="title1 pb-4 mb-4">COMBO CHAY</h3>
+            <div >
+                <svg style="width: 70px; margin-top: -100px" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 448 512">
+                    <path fill="#3ecc5a"
+                          d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
+                </svg>
+            </div>
+            <div class="col-md-3 order-combo" th:each="combo : ${comboList}">
+                <div class="listing-item list-combo-item" data-id="lunch-eatclean" data-type="package">
+                    <div class="card">
+                        <a class="link" th:href="@{/combo/{id}(id=${combo.comboId})}">
+                            <img th:src="${combo.comboImage}" class="card-img-top" alt="">
+                        </a>
+                        <div class="card-body">
+                            <a style="text-decoration: none; color: black" class="link-text" th:href="@{/combo/{id}(id=${combo.comboId})}">
+                                <h3 class="card-title d-flex justify-content-between">
+                                    <span th:text="${combo.comboName}"></span>
+                                </h3>
+                            </a>
+                            <div class="price-cart">
+                                <span class="card-price" th:text="${combo.comboPrice7Days}"></span>
+                                <span class="icon icon-cart"><i class="fas fa-shopping-cart add-to-cart" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </section>
 <script>
