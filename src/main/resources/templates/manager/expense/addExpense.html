@@ -58,7 +58,7 @@
     </style>
 </head>
 <body>
-<div th:insert="fragments/sidebar :: sidebar-manager (page = 'expense')"></div>
+<div th:insert="~{fragments/sidebar :: sidebar-manager (page = 'expense')}"></div>
 
 <div class="content" id="content">
     <div class="content-wrapper">

@@ -3,11 +3,9 @@ package com.nutrimeal.nutrimeal.controller.api;
 import com.nutrimeal.nutrimeal.dto.response.DeliveryResponse;
 import com.nutrimeal.nutrimeal.dto.response.ShipperResponse;
 import com.nutrimeal.nutrimeal.dto.response.UserInfoResponse;
-import com.nutrimeal.nutrimeal.model.Delivery;
-import com.nutrimeal.nutrimeal.model.PointHistory;
-import com.nutrimeal.nutrimeal.model.PointHistoryStatus;
-import com.nutrimeal.nutrimeal.model.User;
+import com.nutrimeal.nutrimeal.model.*;
 import com.nutrimeal.nutrimeal.service.DeliveryService;
+import com.nutrimeal.nutrimeal.service.OrderService;
 import com.nutrimeal.nutrimeal.service.PointHistoryService;
 import com.nutrimeal.nutrimeal.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +25,7 @@ public class RestShipper {
     private final UserService userService;
     private final DeliveryService deliveryService;
     private final PointHistoryService pointHistoryService;
+    private final OrderService orderService;
 
 
     @GetMapping()
@@ -51,6 +50,11 @@ public class RestShipper {
 
         if (status.equals("DELIVERED") && Boolean.TRUE.equals(delivery.getIsBonus())) {
             int point = delivery.getOrder().getOrderTotalPrice() / 1000;
+
+            Order order = delivery.getOrder();
+            order.setOrderStatus(OrderStatus.COMPLETED);
+            orderService.save(order);
+
 
             if (point > 0) {
                 PointHistory pointHistory = new PointHistory();

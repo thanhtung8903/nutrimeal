@@ -498,7 +498,7 @@
     <div class="products">
         <div class="products">
             <div class="row product-listing">
-                <div class="col-md-3" th:each="combo : ${comboList}">
+                <div class="col-md-3" th:each="combo, iterStat : ${comboList}" th:if="${iterStat.index < 8}">
                     <div class="listing-item">
                         <div class="card">
                             <a th:href="@{/combo/{id}(id=${combo.comboId})}" class="link">
@@ -518,6 +518,7 @@
         </div>
     </div>
 </div>
+
 
 
 <!--</div>-->
