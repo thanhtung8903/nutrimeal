@@ -152,7 +152,10 @@
         <div class="row">
             <!-- Combo Thường -->
             <div class="col-12">
-                <h2>Combo Thường</h2>
+                <h3>COMBO THƯỜNG</h3>
+                <svg style="width: 70px; margin-top: -30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
+                </svg>
             </div>
             <div class="col-md-3 order-combo" th:each="combo : ${comboList}" th:if="${combo.comboType.comboTypeName == 'N'}">
                 <div class="listing-item list-combo-item" data-id="lunch-eatclean" data-type="package">
@@ -177,7 +180,11 @@
 
             <!-- Combo Chay -->
             <div class="col-12">
-                <h2>Combo Chay</h2>
+                <h3>COMBO CHAY</h3>
+                <svg style="width: 70px; margin-top: -30px" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 448 512">
+                    <path fill="#3ecc5a" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
+                </svg>
             </div>
             <div class="col-md-3 order-combo" th:each="combo : ${comboList}" th:if="${combo.comboType.comboTypeName == 'V'}">
                 <div class="listing-item list-combo-item" data-id="lunch-eatclean" data-type="package">
