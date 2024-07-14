@@ -150,7 +150,14 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-3 order-combo" th:each="combo : ${comboList}">
+            <!-- Combo Thường -->
+            <div class="col-12">
+                <h3>COMBO THƯỜNG</h3>
+                <svg style="width: 70px; margin-top: -30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="#e02606" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
+                </svg>
+            </div>
+            <div class="col-md-3 order-combo" th:each="combo : ${comboList}" th:if="${combo.comboType.comboTypeName == 'N'}">
                 <div class="listing-item list-combo-item" data-id="lunch-eatclean" data-type="package">
                     <div class="card">
                         <a class="link" th:href="@{/combo/{id}(id=${combo.comboId})}">
@@ -170,6 +177,36 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Combo Chay -->
+            <div class="col-12">
+                <h3>COMBO CHAY</h3>
+                <svg style="width: 70px; margin-top: -30px" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 448 512">
+                    <path fill="#3ecc5a" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
+                </svg>
+            </div>
+            <div class="col-md-3 order-combo" th:each="combo : ${comboList}" th:if="${combo.comboType.comboTypeName == 'V'}">
+                <div class="listing-item list-combo-item" data-id="lunch-eatclean" data-type="package">
+                    <div class="card">
+                        <a class="link" th:href="@{/combo/{id}(id=${combo.comboId})}">
+                            <img th:src="${combo.comboImage}" class="card-img-top" alt="">
+                        </a>
+                        <div class="card-body">
+                            <a style="text-decoration: none; color: black" class="link-text" th:href="@{/combo/{id}(id=${combo.comboId})}">
+                                <h3 class="card-title d-flex justify-content-between">
+                                    <span th:text="${combo.comboName}"></span>
+                                </h3>
+                            </a>
+                            <div class="price-cart">
+                                <span class="card-price" th:text="${combo.comboPrice7Days}"></span>
+                                <span class="icon icon-cart"><i class="fas fa-shopping-cart add-to-cart" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
