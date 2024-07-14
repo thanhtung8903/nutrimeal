@@ -150,7 +150,11 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-3 order-combo" th:each="combo : ${comboList}">
+            <!-- Combo Thường -->
+            <div class="col-12">
+                <h2>Combo Thường</h2>
+            </div>
+            <div class="col-md-3 order-combo" th:each="combo : ${comboList}" th:if="${combo.comboType.comboTypeName == 'N'}">
                 <div class="listing-item list-combo-item" data-id="lunch-eatclean" data-type="package">
                     <div class="card">
                         <a class="link" th:href="@{/combo/{id}(id=${combo.comboId})}">
@@ -170,6 +174,32 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Combo Chay -->
+            <div class="col-12">
+                <h2>Combo Chay</h2>
+            </div>
+            <div class="col-md-3 order-combo" th:each="combo : ${comboList}" th:if="${combo.comboType.comboTypeName == 'V'}">
+                <div class="listing-item list-combo-item" data-id="lunch-eatclean" data-type="package">
+                    <div class="card">
+                        <a class="link" th:href="@{/combo/{id}(id=${combo.comboId})}">
+                            <img th:src="${combo.comboImage}" class="card-img-top" alt="">
+                        </a>
+                        <div class="card-body">
+                            <a style="text-decoration: none; color: black" class="link-text" th:href="@{/combo/{id}(id=${combo.comboId})}">
+                                <h3 class="card-title d-flex justify-content-between">
+                                    <span th:text="${combo.comboName}"></span>
+                                </h3>
+                            </a>
+                            <div class="price-cart">
+                                <span class="card-price" th:text="${combo.comboPrice7Days}"></span>
+                                <span class="icon icon-cart"><i class="fas fa-shopping-cart add-to-cart" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
