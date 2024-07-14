@@ -126,7 +126,7 @@ public class ProfileController {
             boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
             model.addAttribute("isOauth2User", isOauth2User);
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
-            OAuth2User oauthUser = token.getPrincipal();
+            CustomOAuth2User oauthUser = (CustomOAuth2User) token.getPrincipal();
             user = userService.findByEmail(oauthUser.getAttribute("email"));
         } else {
             model.addAttribute("isOauth2User", false);

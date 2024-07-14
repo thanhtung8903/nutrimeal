@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Nutrimeal FAQs</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
 
@@ -114,7 +113,7 @@
                     button.setAttribute('data-target', `#collapse-${index}`);
                     button.setAttribute('aria-expanded', 'true');
                     button.setAttribute('aria-controls', `collapse-${index}`);
-                    button.textContent = faq.answer;  // Thay đổi nội dung thành câu trả lời
+                    button.textContent = faq.question;  // Thay đổi nội dung thành câu hỏi
 
                     h2.appendChild(button);
                     cardHeader.appendChild(h2);
@@ -130,7 +129,7 @@
                     cardBody.className = 'card-body';
 
                     // Tách các đoạn văn
-                    const paragraphs = faq.question.split('\n\n');
+                    const paragraphs = faq.answer.split('\n\n');  // Thay đổi nội dung thành câu trả lời
                     paragraphs.forEach(paragraph => {
                         const p = document.createElement('p');
                         p.textContent = paragraph;
