@@ -122,7 +122,7 @@
 </style>
 
 <!--<header th:replace="~{fragments :: header_manager}"></header>-->
-<div th:insert="fragments/sidebar :: sidebar-manager (page = 'dailymenu')"></div>
+<div th:insert="~{fragments/sidebar :: sidebar-manager (page = 'dailymenu')}"></div>
 
 <body>
 <div class="content" id="content">

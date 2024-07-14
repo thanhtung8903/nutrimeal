@@ -1,288 +1,319 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Quản lý chi tiêu</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" th:href="@{/css/sidebar.css}">
-  <style>
-    .content {
-      margin-left: 250px;
-      padding: 80px 20px 20px;
-      transition: margin-left 0.3s ease;
-    }
-    .content.collapsed {
-      margin-left: 60px;
-    }
-    h2 {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .controls input[type="text"],
-    .controls input[type="date"] {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .controls input[type="text"] {
-      width: 300px;
-    }
-    .controls input[type="date"] {
-      width: 150px;
-    }
-    .table-hover {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .table-hover th, .table-hover td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    .table-hover tr:hover {
-      background-color: #f1f1f1;
-    }
-    .table-hover th {
-      background-color: #f2f2f2;
-      cursor: pointer;
-    }
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
-    .pagination button {
-      padding: 10px 15px;
-      margin: 0 5px;
-      border: 1px solid #ddd;
-      background-color: #f9f9f9;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    .pagination button.active {
-      background-color: #007bff;
-      color: white;
-      border-color: #007bff;
-    }
-    .pagination button:disabled {
-      cursor: not-allowed;
-      background-color: #f1f1f1;
-    }
-    .pagination .ellipsis {
-      padding: 10px 15px;
-      margin: 0 5px;
-      border: none;
-      background: none;
-      cursor: default;
-    }
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      z-index: 1;
-    }
-    .edit-form {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      display: none;
-      z-index: 2;
-      max-width: 500px;
-      width: 100%;
-    }
-    .edit-form .form-group {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .edit-form .form-group label {
-      flex: 1;
-      padding-right: 10px;
-      text-align: right;
-    }
-    .edit-form .form-group input {
-      flex: 2;
-      padding: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .edit-form .form-group input[type="text"] {
-      width: 100%;
-    }
-    .edit-form button {
-      margin-top: 10px;
-      width: 100%;
-    }
-    .content-wrapper{
-      background-color: #ffffff;
-      border-radius: 5px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-top: 30px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Quản lý chi tiêu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+    <style>
+        .content {
+            margin-left: 250px;
+            padding: 80px 20px 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .content.collapsed {
+            margin-left: 60px;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .controls input[type="text"],
+        .controls input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .controls input[type="text"] {
+            width: 300px;
+        }
+
+        .controls input[type="date"] {
+            width: 150px;
+        }
+
+        .table-hover {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-hover th, .table-hover td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table-hover tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table-hover th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .pagination button:disabled {
+            cursor: not-allowed;
+            background-color: #f1f1f1;
+        }
+
+        .pagination .ellipsis {
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: none;
+            background: none;
+            cursor: default;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1;
+        }
+
+        .edit-form {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 2;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .edit-form .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .edit-form .form-group label {
+            flex: 1;
+            padding-right: 10px;
+            text-align: right;
+        }
+
+        .edit-form .form-group input {
+            flex: 2;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .edit-form .form-group input[type="text"] {
+            width: 100%;
+        }
+
+        .edit-form button {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .content-wrapper {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+    </style>
 </head>
 <body>
-<div th:insert="fragments/sidebar :: sidebar-manager (page = 'expense')"></div>
+<div th:insert="~{fragments/sidebar :: sidebar-manager (page = 'expense')}"></div>
 
 <div class="content" id="content">
-  <div class="content-wrapper">
+    <div class="content-wrapper">
 
-  <div class="container-fluid container-table">
-    <h3>DANH SÁCH CHI TIÊU</h3>
-    <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+        <div class="container-fluid container-table">
+            <h3>DANH SÁCH CHI TIÊU</h3>
+            <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                <path fill="#0e955b"
+                      d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/>
+            </svg>
 
-    <div class="controls">
-      <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
-      <input type="date" id="searchDate" placeholder="Search by Date">
-      <input type="search" id="searchInput" placeholder="Search now" style="width: 500px">
+            <div class="controls">
+                <button style="display: none" id="fetchDelivery" type="button">Fetch Delivery Details</button>
+                <input type="date" id="searchDate" placeholder="Search by Date">
+                <input type="search" id="searchInput" placeholder="Search now" style="width: 500px">
+            </div>
+            <table class="table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th id="sortDeliveryDate">Ngày giao</th>
+                    <th>Tên nguyên liệu</th>
+                    <th>Số lượng</th>
+                    <th>Ngày hết hạn</th>
+                    <th>Đơn giá</th>
+                    <th>Tổng chi phí</th>
+                    <th>Nhà cung cấp</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+            </table>
+            <button class="btn btn-success mb-2 bbb" style="margin-top: 10px"><a th:href="@{/manager/expense/add}"
+                                                                                 class="text-white text-decoration-none"><i
+                    class="bi bi-plus-circle"></i> THÊM </a></button>
+
+            <div class="pagination" id="pagination-controls">
+            </div>
+        </div>
+
     </div>
-    <table class="table-hover">
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th id="sortDeliveryDate">Ngày giao</th>
-        <th>Tên nguyên liệu</th>
-        <th>Số lượng</th>
-        <th>Ngày hết hạn</th>
-        <th>Đơn giá</th>
-        <th>Tổng chi phí</th>
-        <th>Nhà cung cấp</th>
-        <th>Action</th>
-      </tr>
-      </thead>
-      <tbody id="table-body">
-      </tbody>
-    </table>
-    <button class="btn btn-success mb-2 bbb" style="margin-top: 10px"><a th:href="@{/manager/expense/add}" class="text-white text-decoration-none"><i class="bi bi-plus-circle"></i> THÊM </a></button>
-
-    <div class="pagination" id="pagination-controls">
-    </div>
-  </div>
-
-  </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 <div class="edit-form" id="editForm">
-  <h3>Chỉnh sửa</h3>
-  <div class="form-group">
-    <label for="editExpenseId">ID:</label>
-    <input type="text" id="editExpenseId" disabled>
-  </div>
-  <div class="form-group">
-    <label for="editDeliveryDate">Ngày giao:</label>
-    <input type="date" id="editDeliveryDate" disabled>
-  </div>
+    <h3>Chỉnh sửa</h3>
+    <div class="form-group">
+        <label for="editExpenseId">ID:</label>
+        <input type="text" id="editExpenseId" disabled>
+    </div>
+    <div class="form-group">
+        <label for="editDeliveryDate">Ngày giao:</label>
+        <input type="date" id="editDeliveryDate" disabled>
+    </div>
 
-  <div class="form-group">
-    <label for="editIngredientName">Tên nguyên liệu:</label>
-    <input type="text" id="editIngredientName">
-  </div>
-  <div class="form-group">
-    <label for="editQuantity">Số lượng:</label>
-    <input type="text" id="editQuantity">
-  </div>
-  <div class="form-group">
-    <label for="editExpirationDate">Ngày hết hạn:</label>
-    <input type="text" id="editExpirationDate">
-  </div>
-  <div class="form-group">
-    <label for="editUnitPrice">Đơn giá:</label>
-    <input type="text" id="editUnitPrice">
-  </div>
-  <div class="form-group">
-    <label for="editTotalPrice">Tổng chi phí:</label>
-    <input type="text" id="editTotalPrice">
-  </div>
-  <div class="form-group">
-    <label for="editSupplier">Nhà cung cấp:</label>
-    <input type="text" id="editSupplier">
-  </div>
-  <button class="btn btn-primary" id="saveEdit">Cập nhật</button>
-  <button class="btn btn-secondary" id="cancelEdit">Hủy</button>
+    <div class="form-group">
+        <label for="editIngredientName">Tên nguyên liệu:</label>
+        <input type="text" id="editIngredientName">
+    </div>
+    <div class="form-group">
+        <label for="editQuantity">Số lượng:</label>
+        <input type="text" id="editQuantity">
+    </div>
+    <div class="form-group">
+        <label for="editExpirationDate">Ngày hết hạn:</label>
+        <input type="text" id="editExpirationDate">
+    </div>
+    <div class="form-group">
+        <label for="editUnitPrice">Đơn giá:</label>
+        <input type="text" id="editUnitPrice">
+    </div>
+    <div class="form-group">
+        <label for="editTotalPrice">Tổng chi phí:</label>
+        <input type="text" id="editTotalPrice">
+    </div>
+    <div class="form-group">
+        <label for="editSupplier">Nhà cung cấp:</label>
+        <input type="text" id="editSupplier">
+    </div>
+    <button class="btn btn-primary" id="saveEdit">Cập nhật</button>
+    <button class="btn btn-secondary" id="cancelEdit">Hủy</button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  document.getElementById('toggle-sidebar').addEventListener('click', function() {
-    var sidebar = document.getElementById('sidebar');
-    var content = document.getElementById('content');
-    sidebar.classList.toggle('collapsed');
-    content.classList.toggle('collapsed');
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var submenuToggles = document.querySelectorAll('.has-submenu > a');
-    submenuToggles.forEach(function(submenuToggle) {
-      submenuToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        var submenu = this.nextElementSibling;
-        submenu.classList.toggle('open');
-      });
-    });
-  });
-
-  let currentPage = 1;
-  const rowsPerPage = 20;
-  let expenses = [];
-
-  document.getElementById('fetchDelivery').addEventListener('click', function() {
-    location.reload();
-  });
-
-  document.getElementById('searchInput').addEventListener('input', function() {
-    currentPage = 1;
-    displayTable();
-    setupPagination();
-  });
-
-  document.getElementById('searchDate').addEventListener('input', function() {
-    currentPage = 1;
-    displayTable();
-    setupPagination();
-  });
-
-  function displayTable() {
-    const tableBody = document.getElementById('table-body');
-    tableBody.innerHTML = '';
-
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const searchDate = document.getElementById('searchDate').value;
-
-    const filteredExpenses = expenses.filter(expense => {
-      const matchesSearchTerm = Object.values(expense).some(val =>
-              val && val.toString().toLowerCase().includes(searchTerm)
-      );
-      const matchesSearchDate = searchDate ?
-              new Date(expense.purchaseDate).toISOString().split('T')[0] === searchDate : true;
-      return matchesSearchTerm && matchesSearchDate;
+    document.getElementById('toggle-sidebar').addEventListener('click', function () {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('collapsed');
     });
 
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginatedExpenses = filteredExpenses.slice(start, end);
+    document.addEventListener('DOMContentLoaded', function () {
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function (submenuToggle) {
+            submenuToggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
+    });
 
-    paginatedExpenses.forEach((expense, index) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
+    let currentPage = 1;
+    const rowsPerPage = 20;
+    let expenses = [];
+
+    document.getElementById('fetchDelivery').addEventListener('click', function () {
+        location.reload();
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+        currentPage = 1;
+        displayTable();
+        setupPagination();
+    });
+
+    document.getElementById('searchDate').addEventListener('input', function () {
+        currentPage = 1;
+        displayTable();
+        setupPagination();
+    });
+
+    function displayTable() {
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = '';
+
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchDate = document.getElementById('searchDate').value;
+
+        const filteredExpenses = expenses.filter(expense => {
+            const matchesSearchTerm = Object.values(expense).some(val =>
+                val && val.toString().toLowerCase().includes(searchTerm)
+            );
+            const matchesSearchDate = searchDate ?
+                new Date(expense.purchaseDate).toISOString().split('T')[0] === searchDate : true;
+            return matchesSearchTerm && matchesSearchDate;
+        });
+
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedExpenses = filteredExpenses.slice(start, end);
+
+        paginatedExpenses.forEach((expense, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
         <td>${expense.expenseId}</td>
         <td>${expense.purchaseDate}</td>
         <td>${expense.ingredientName}</td>
@@ -296,156 +327,156 @@
         </td>
 
       `;
-      tableBody.appendChild(row);
-    });
-
-    document.querySelectorAll('.edit-btn').forEach(button => {
-      button.addEventListener('click', function() {
-        const index = this.getAttribute('data-index');
-        const expense = filteredExpenses[index];
-        openEditForm(expense);
-      });
-    });
-  }
-
-  function formatCurrency(amount) {
-    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
-
-  function setupPagination() {
-    const paginationControls = document.getElementById('pagination-controls');
-    paginationControls.innerHTML = '';
-
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const searchDate = document.getElementById('searchDate').value;
-
-    const filteredExpenses = expenses.filter(expense => {
-      const matchesSearchTerm = Object.values(expense).some(val =>
-              val && val.toString().toLowerCase().includes(searchTerm)
-      );
-      const matchesSearchDate = searchDate ?
-              new Date(expense.purchaseDate).toISOString().split('T')[0] === searchDate : true;
-      return matchesSearchTerm && matchesSearchDate;
-    });
-
-    const totalPages = Math.ceil(filteredExpenses.length / rowsPerPage);
-
-    const createButton = (text, isActive, isDisabled, page) => {
-      const button = document.createElement('button');
-      button.textContent = text;
-      if (isActive) button.classList.add('active');
-      if (isDisabled) button.disabled = true;
-      if (page !== undefined) {
-        button.addEventListener('click', function () {
-          currentPage = page;
-          displayTable();
-          setupPagination();
+            tableBody.appendChild(row);
         });
-      }
-      return button;
-    };
 
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) {
-        paginationControls.appendChild(createButton(i, i === currentPage, false, i));
-      }
-    } else {
-      paginationControls.appendChild(createButton(1, currentPage === 1, false, 1));
-      if (currentPage > 4) {
-        paginationControls.appendChild(createButton('...', false, true));
-      }
-
-      for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) {
-        paginationControls.appendChild(createButton(i, i === currentPage, false, i));
-      }
-
-      if (currentPage < totalPages - 3) {
-        paginationControls.appendChild(createButton('...', false, true));
-      }
-      paginationControls.appendChild(createButton(totalPages, currentPage === totalPages, false, totalPages));
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const index = this.getAttribute('data-index');
+                const expense = filteredExpenses[index];
+                openEditForm(expense);
+            });
+        });
     }
-  }
 
-  function openEditForm(expense) {
-    const editForm = document.getElementById('editForm');
-    const overlay = document.getElementById('overlay');
+    function formatCurrency(amount) {
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 
-    document.getElementById('editExpenseId').value = expense.expenseId;
-    document.getElementById('editDeliveryDate').value = expense.purchaseDate;
-    document.getElementById('editIngredientName').value = expense.ingredientName;
-    document.getElementById('editQuantity').value = expense.quantity;
-    document.getElementById('editExpirationDate').value = expense.expirationDate;
-    document.getElementById('editUnitPrice').value = expense.unitPrice;
-    document.getElementById('editTotalPrice').value = expense.totalPrice;
-    document.getElementById('editSupplier').value = expense.supplier;
+    function setupPagination() {
+        const paginationControls = document.getElementById('pagination-controls');
+        paginationControls.innerHTML = '';
 
-    editForm.style.display = 'block';
-    overlay.style.display = 'block';
-  }
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchDate = document.getElementById('searchDate').value;
 
-  document.addEventListener('DOMContentLoaded', function() {
-    const editForm = document.getElementById('editForm');
-    const overlay = document.getElementById('overlay');
+        const filteredExpenses = expenses.filter(expense => {
+            const matchesSearchTerm = Object.values(expense).some(val =>
+                val && val.toString().toLowerCase().includes(searchTerm)
+            );
+            const matchesSearchDate = searchDate ?
+                new Date(expense.purchaseDate).toISOString().split('T')[0] === searchDate : true;
+            return matchesSearchTerm && matchesSearchDate;
+        });
 
-    document.getElementById('table-body').addEventListener('click', function(event) {
-      if (event.target.classList.contains('edit-btn')) {
-        const index = event.target.getAttribute('data-index');
-        const expense = expenses[index];
-        openEditForm(expense);
-      }
+        const totalPages = Math.ceil(filteredExpenses.length / rowsPerPage);
+
+        const createButton = (text, isActive, isDisabled, page) => {
+            const button = document.createElement('button');
+            button.textContent = text;
+            if (isActive) button.classList.add('active');
+            if (isDisabled) button.disabled = true;
+            if (page !== undefined) {
+                button.addEventListener('click', function () {
+                    currentPage = page;
+                    displayTable();
+                    setupPagination();
+                });
+            }
+            return button;
+        };
+
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) {
+                paginationControls.appendChild(createButton(i, i === currentPage, false, i));
+            }
+        } else {
+            paginationControls.appendChild(createButton(1, currentPage === 1, false, 1));
+            if (currentPage > 4) {
+                paginationControls.appendChild(createButton('...', false, true));
+            }
+
+            for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) {
+                paginationControls.appendChild(createButton(i, i === currentPage, false, i));
+            }
+
+            if (currentPage < totalPages - 3) {
+                paginationControls.appendChild(createButton('...', false, true));
+            }
+            paginationControls.appendChild(createButton(totalPages, currentPage === totalPages, false, totalPages));
+        }
+    }
+
+    function openEditForm(expense) {
+        const editForm = document.getElementById('editForm');
+        const overlay = document.getElementById('overlay');
+
+        document.getElementById('editExpenseId').value = expense.expenseId;
+        document.getElementById('editDeliveryDate').value = expense.purchaseDate;
+        document.getElementById('editIngredientName').value = expense.ingredientName;
+        document.getElementById('editQuantity').value = expense.quantity;
+        document.getElementById('editExpirationDate').value = expense.expirationDate;
+        document.getElementById('editUnitPrice').value = expense.unitPrice;
+        document.getElementById('editTotalPrice').value = expense.totalPrice;
+        document.getElementById('editSupplier').value = expense.supplier;
+
+        editForm.style.display = 'block';
+        overlay.style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const editForm = document.getElementById('editForm');
+        const overlay = document.getElementById('overlay');
+
+        document.getElementById('table-body').addEventListener('click', function (event) {
+            if (event.target.classList.contains('edit-btn')) {
+                const index = event.target.getAttribute('data-index');
+                const expense = expenses[index];
+                openEditForm(expense);
+            }
+        });
+
+        document.getElementById('cancelEdit').addEventListener('click', function () {
+            editForm.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
+        document.getElementById('saveEdit').addEventListener('click', function () {
+            const updatedExpense = {
+                expenseId: document.getElementById('editExpenseId').value,
+                purchaseDate: document.getElementById('editDeliveryDate').value,
+                ingredientName: document.getElementById('editIngredientName').value,
+                quantity: document.getElementById('editQuantity').value,
+                expirationDate: document.getElementById('editExpirationDate').value,
+                unitPrice: document.getElementById('editUnitPrice').value,
+                totalPrice: document.getElementById('editTotalPrice').value,
+                supplier: document.getElementById('editSupplier').value
+            };
+
+            // Gửi dữ liệu cập nhật đến server
+            fetch(`http://localhost:8080/api/expense/${updatedExpense.expenseId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedExpense)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const index = expenses.findIndex(expense => expense.expenseId === data.expenseId);
+                    expenses[index] = data;
+                    editForm.style.display = 'none';
+                    overlay.style.display = 'none';
+                    fetchExpenses(); // Tải lại dữ liệu sau khi cập nhật
+                })
+                .catch(error => console.error('Error updating expense:', error));
+        });
     });
 
-    document.getElementById('cancelEdit').addEventListener('click', function() {
-      editForm.style.display = 'none';
-      overlay.style.display = 'none';
-    });
-
-    document.getElementById('saveEdit').addEventListener('click', function() {
-      const updatedExpense = {
-        expenseId: document.getElementById('editExpenseId').value,
-        purchaseDate: document.getElementById('editDeliveryDate').value,
-        ingredientName: document.getElementById('editIngredientName').value,
-        quantity: document.getElementById('editQuantity').value,
-        expirationDate: document.getElementById('editExpirationDate').value,
-        unitPrice: document.getElementById('editUnitPrice').value,
-        totalPrice: document.getElementById('editTotalPrice').value,
-        supplier: document.getElementById('editSupplier').value
-      };
-
-      // Gửi dữ liệu cập nhật đến server
-      fetch(`http://localhost:8080/api/expense/${updatedExpense.expenseId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedExpense)
-      })
-              .then(response => response.json())
-              .then(data => {
-                const index = expenses.findIndex(expense => expense.expenseId === data.expenseId);
-                expenses[index] = data;
-                editForm.style.display = 'none';
-                overlay.style.display = 'none';
-                fetchExpenses(); // Tải lại dữ liệu sau khi cập nhật
-              })
-              .catch(error => console.error('Error updating expense:', error));
-    });
-  });
-
-  function fetchExpenses() {
-    fetch('http://localhost:8080/api/expense')
+    function fetchExpenses() {
+        fetch('http://localhost:8080/api/expense')
             .then(response => response.json())
             .then(data => {
-              expenses = data;
-              displayTable();
-              setupPagination();
+                expenses = data;
+                displayTable();
+                setupPagination();
             })
             .catch(error => {
-              console.error('Error fetching expense details:', error);
+                console.error('Error fetching expense details:', error);
             });
-  }
+    }
 
-  window.onload = fetchExpenses;
+    window.onload = fetchExpenses;
 </script>
 </body>
 </html>

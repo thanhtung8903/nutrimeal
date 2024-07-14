@@ -64,8 +64,7 @@
                     <li class="nav-item user-info d-flex align-items-center" style="margin-right: 15px;">
                         <img th:src="${userImage}" alt="User Image" class="rounded-circle" style="border: 2px solid white; width: 47px; height: 47px; margin-right: 10px;">
                         <div class="user-details d-flex flex-column">
-                            <a class="nav-link" th:href="@{/profile/account}">
-                            Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
+                            <a class="nav-link" th:href="@{/profile/account}">Xin chào <span class="bold" th:text="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.DefaultOAuth2User) ? #authentication.principal.attributes['name'] : #authentication.principal.fullName}"></span>
                         </a>
                             <a th:href="@{/logout}" class="logout" style="color: white; text-decoration: none; margin-top: 0px; font-size: 15px;">Đăng xuất</a>
                         </div>
