@@ -10,6 +10,7 @@ import com.nutrimeal.nutrimeal.repository.AddressRepository;
 import com.nutrimeal.nutrimeal.repository.UserRepository;
 import com.nutrimeal.nutrimeal.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;

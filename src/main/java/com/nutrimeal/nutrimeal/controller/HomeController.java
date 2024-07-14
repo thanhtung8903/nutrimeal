@@ -139,7 +139,7 @@ public class HomeController {
             model.addAttribute("weightGoal", weightGoal);
         } else {
             model.addAttribute("age", 25);
-            model.addAttribute("weight", 50);
+            model.addAttribute("weight", 80);
             model.addAttribute("height", 160);
         }
         return "home/consult";
