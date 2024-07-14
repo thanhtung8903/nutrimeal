@@ -35,18 +35,20 @@ public class ProfileController {
 
     @GetMapping("/profile/account")
     public String profileAccount(Model model, Principal principal) {
-        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+        if (principal instanceof OAuth2AuthenticationToken) {
             boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
             model.addAttribute("isOauth2User", isOauth2User);
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
             User user = userService.findByEmail(oauthUser.getAttribute("email"));
             model.addAttribute("user", user);
+            model.addAttribute("userImage", user.getImage());
             return "profile/account";
         }else{
             User user = userService.findByUsername(principal.getName());
             model.addAttribute("isOauth2User", false);
             model.addAttribute("user", user);
+            model.addAttribute("userImage", user.getImage());
             return "profile/account";
         }
     }
@@ -95,6 +97,7 @@ public class ProfileController {
             user = userService.findByUsername(principal.getName());
         }
         model.addAttribute("user", user);
+        model.addAttribute("userImage", user.getImage());
         return "profile/password";
     }
 
@@ -131,6 +134,7 @@ public class ProfileController {
         }
         model.addAttribute("user", user);
         model.addAttribute("point", user.getPoint());
+        model.addAttribute("userImage", user.getImage());
         return "profile/point";
     }
 
@@ -150,6 +154,8 @@ public class ProfileController {
         List<Address> addressList = addressService.findAllAddressByEmail(user.getEmail());
         model.addAttribute("user", user);
         model.addAttribute("addressList", addressList);
+        model.addAttribute("userImage", user.getImage());
+
         return "profile/address";
     }
 
@@ -194,6 +200,8 @@ public class ProfileController {
             user = userService.findByUsername(principal.getName());
         }
         addressService.setDefaultAddress(addressId, user.getEmail());
+        model.addAttribute("userImage", user.getImage());
+
         return "redirect:/profile/address";
     }
 
@@ -208,6 +216,8 @@ public class ProfileController {
             user = userService.findByUsername(principal.getName());
         }
         addressService.deleteAddress(addressId, user.getEmail());
+        model.addAttribute("userImage", user.getImage());
+
         return "redirect:/profile/address";
     }
 
@@ -225,6 +235,8 @@ public class ProfileController {
             user = userService.findByUsername(principal.getName());
         }
         model.addAttribute("user", user);
+        model.addAttribute("userImage", user.getImage());
+
         return "profile/order";
     }
 
@@ -244,6 +256,8 @@ public class ProfileController {
         List<Order> orders = orderService.getOrdersByStatusAndUser(status, user);
         model.addAttribute("user", user);
         model.addAttribute("orders", orders);
+        model.addAttribute("userImage", user.getImage());
+
         return "profile/order";
     }
 
@@ -265,6 +279,8 @@ public class ProfileController {
         model.addAttribute("order", order);
         model.addAttribute("orderDetails", orderDetails);
         model.addAttribute("user", user);
+        model.addAttribute("userImage", user.getImage());
+
         return "profile/orderDetail";
     }
 
@@ -281,7 +297,7 @@ public class ProfileController {
             model.addAttribute("isOauth2User", false);
             user = userService.findByUsername(principal.getName());
         }
-
+        model.addAttribute("userImage", user.getImage());
         model.addAttribute("user", user);
         return "profile/delivery";
     }

@@ -35,16 +35,16 @@ public class HomeController {
         boolean isAdmin = false;
         boolean isShipper = false;
 
-        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+        if (principal instanceof OAuth2AuthenticationToken) {
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
             User user = userRepository.findByEmail(oauthUser.getAttribute("email")).orElse(null);
             isManager = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_MANAGER"));
             isAdmin = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_ADMIN"));
             isShipper = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_SHIPPER"));
-
             boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
             model.addAttribute("isOauth2User", isOauth2User);
+            model.addAttribute("userImage", user.getImage());
             if (isManager) {
                 return "redirect:/manager/dashboardmanager";
             } else if (isAdmin) {
@@ -62,6 +62,7 @@ public class HomeController {
                 isManager = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_MANAGER"));
                 isAdmin = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_ADMIN"));
                 isShipper = user.getRoles().stream().anyMatch(role -> role.getRoleName().name().equals("ROLE_SHIPPER"));
+                model.addAttribute("userImage", user.getImage());
             }
             if (isManager) {
                 return "redirect:/manager/dashboardmanager";
