@@ -124,7 +124,7 @@
                     <td th:text="${order.address.fullAddress}"></td>
                     <td th:text="${order.orderNote}"></td>
                     <td th:text="${order.orderDate}"></td>
-                    <td th:text="${order.orderTotalPrice}"></td>
+                    <td class="price-cell" th:text="${order.orderTotalPrice}"></td>
                     <td th:text="${order.orderStatus}"></td>
                     <td>
                         <button class="btn btn-secondary btn-sm me-1" th:onclick="'viewDetails(' + ${order.orderId} + ')'" title="Xem chi tiết">
@@ -199,7 +199,23 @@
             });
         });
     });
+    function formatCurrency(amount) {
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    function formatCurrency1(amount) {
+        const formatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        return formatted.replace('₫', '').trim();
+    }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const priceCells = document.querySelectorAll('.price-cell');
+        priceCells.forEach(cell => {
+            const price = parseFloat(cell.textContent);
+            if (!isNaN(price)) {
+                cell.textContent = formatCurrency1(price);
+            }
+        });
+    });
     async function fetchOrderDetails(orderId) {
         try {
             const orderResponse = await fetch(`http://localhost:8080/api/orders/${orderId}`);
@@ -230,7 +246,7 @@
         <p><strong>Trạng thái:</strong> ${order.orderStatus}</p>
         <p><strong>Ngày đặt:</strong> ${order.orderDate}</p>
         <p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod}</p>
-        <p><strong>Tổng tiền:</strong> ${order.orderTotalPrice} VND</p>
+        <p><strong>Tổng tiền:</strong> ${formatCurrency(order.orderTotalPrice)} VND</p>
         <h4>Chi tiết sản phẩm</h4>
         <table class="table table-striped">
             <thead>
@@ -250,7 +266,7 @@
                         </td>
                         <td>${detail.comboDay}</td>
                         <td>${detail.quantity}</td>
-                        <td>${detail.price} VND</td>
+                        <td>${formatCurrency(detail.price)} VND</td>
                     </tr>
                 `).join('')}
             </tbody>

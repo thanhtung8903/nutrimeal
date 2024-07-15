@@ -186,6 +186,9 @@
                 submenu.classList.toggle('open');
             });
         });
+        function formatCurrency(amount) {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
 
         // Fetch order data from the API and populate the table
         function fetchOrders(status = '') {
@@ -210,7 +213,7 @@
                         <td>${order.address}</td>
                         <td>${order.orderNote}</td>
                         <td>${order.orderDate}</td>
-                        <td>${order.orderTotalPrice}</td>
+                        <td>${formatCurrency(order.orderTotalPrice)}</td>
                         <td>${order.orderStatus}</td>
                         <td class="justify-content-center d-flex">
                             <button class="btn btn-secondary btn-sm me-1" onclick="viewDetails(${order.orderId})" title="Xem chi tiết">
@@ -263,7 +266,7 @@
             <p><strong>Trạng thái:</strong> ${order.orderStatus}</p>
             <p><strong>Ngày đặt:</strong> ${order.orderDate}</p>
             <p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod}</p>
-            <p><strong>Tổng tiền:</strong> ${order.orderTotalPrice} VND</p>
+            <p><strong>Tổng tiền:</strong> ${formatCurrency(order.orderTotalPrice)} VND</p>
             <h4>Chi tiết sản phẩm</h4>
             <table class="table table-striped">
                 <thead>
@@ -283,7 +286,7 @@
                             </td>
                             <td>${detail.comboDay}</td>
                             <td>${detail.quantity}</td>
-                            <td>${detail.price} VND</td>
+                            <td>${formatCurrency(detail.price)} VND</td>
                         </tr>
                     `).join('')}
                 </tbody>
