@@ -14,34 +14,42 @@
         padding: 80px 20px 20px;
         transition: margin-left 0.3s ease;
     }
+
     .content.collapsed {
         margin-left: 60px;
     }
+
     h2 {
         text-align: center;
         margin: 20px 0;
         font-weight: 500;
     }
+
     .table-hover {
         width: 100%;
         border-collapse: collapse;
     }
+
     .table-hover th, .table-hover td {
         padding: 12px;
         text-align: left;
         border: 1px solid #ddd;
     }
+
     .table-hover tr:hover {
         background-color: #f1f1f1;
     }
+
     .table-hover th {
         background-color: #f2f2f2;
         cursor: pointer;
     }
+
     .btn-danger:hover {
         background-color: red !important;
         font-weight: 600;
     }
+
     .content-wrapper {
         background-color: #ffffff;
         border-radius: 5px;
@@ -49,13 +57,16 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         margin-top: 30px;
     }
+
     .table-hover th, .table-hover td {
         text-align: center;
         vertical-align: middle;
     }
+
     .action-buttons .btn {
         margin-right: 5px;
     }
+
     .action-buttons .btn:last-child {
         margin-right: 0;
     }
@@ -67,12 +78,16 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             <div style="display: flex">
-            <h3 style="margin-right: 26px">Quản lý câu hỏi</h3>
-                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addFaqModal" onclick="populateAddModal()">
+                <h3 style="margin-right: 26px">Quản lý câu hỏi</h3>
+                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addFaqModal"
+                        onclick="populateAddModal()">
                     <i class="bi bi-patch-plus" style="font-size: 16px"></i>
                 </button>
             </div>
-            <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+            <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path fill="#0e955b"
+                      d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/>
+            </svg>
 
             <table class="table table-hover" id="faqTable">
                 <thead>
@@ -165,26 +180,24 @@
                 let faqTableBody = $('#faqTable tbody');
                 faqTableBody.empty(); // Clear the table body
                 data.forEach(function(faq) {
+                    let formattedAnswer = faq.answer.split('\n\n').map(paragraph => `<p>${paragraph}</p>`).join('');
                     faqTableBody.append(`
-                        <tr>
-                            <td>${faq.faqId}</td>
-                            <td>${faq.question}</td>
-                            <td>${faq.answer}</td>
-                            <td>
-                                <div class="action-buttons d-flex justify-content-center">
-<!--                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addFaqModal" onclick="populateAddModal()">-->
-<!--                                        <i class="bi bi-patch-plus" style="font-size: 16px"></i>-->
-<!--                                    </button>-->
-                                   <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editFaqModal" onclick="populateEditModal(${faq.faqId})">
-    <i class="bi bi-pencil-square" style="font-size: 16px"></i>
-</button>
-                                    <button class="btn btn-danger btn-sm" onclick="deleteFaq(${faq.faqId})">
-                                        <i class="bi bi-archive" style="font-size: 16px"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    `);
+                    <tr>
+                        <td>${faq.faqId}</td>
+                        <td>${faq.question}</td>
+                        <td>${formattedAnswer}</td>
+                        <td>
+                            <div class="action-buttons d-flex justify-content-center">
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editFaqModal" onclick="populateEditModal(${faq.faqId})">
+                                    <i class="bi bi-pencil-square" style="font-size: 16px"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteFaq(${faq.faqId})">
+                                    <i class="bi bi-archive" style="font-size: 16px"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `);
                 });
             },
             error: function() {
@@ -204,12 +217,12 @@
         $.ajax({
             url: `http://localhost:8080/api/faq/${faqId}`,
             method: 'GET',
-            success: function(faq) {
+            success: function (faq) {
                 $('#editQuestion').val(faq.question);
                 $('#editAnswer').val(faq.answer);
                 $('#editFaqForm').attr('data-id', faq.faqId); // Gán ID cho thuộc tính data-id
             },
-            error: function() {
+            error: function () {
                 alert('Error loading FAQ data');
             }
         });
@@ -221,11 +234,11 @@
             $.ajax({
                 url: `http://localhost:8080/api/faq/${faqId}`,
                 method: 'DELETE',
-                success: function() {
+                success: function () {
                     loadFaqs(); // Reload FAQs after deletion
                     alert('FAQ deleted successfully');
                 },
-                error: function() {
+                error: function () {
                     alert('Error deleting FAQ');
                 }
             });
@@ -233,7 +246,7 @@
     }
 
     // Handle adding new FAQ
-    $('#addFaqForm').on('submit', function(event) {
+    $('#addFaqForm').on('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
         const faqData = {
             question: $('#question').val(),
@@ -244,19 +257,19 @@
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(faqData),
-            success: function() {
+            success: function () {
                 $('#addFaqModal').modal('hide');
                 loadFaqs(); // Reload FAQs after adding
                 alert('FAQ added successfully');
             },
-            error: function() {
+            error: function () {
                 alert('Error adding FAQ');
             }
         });
     });
 
     // Handle editing FAQ
-    $('#editFaqForm').on('submit', function(event) {
+    $('#editFaqForm').on('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
         const id = $(this).data('id'); // Get ID from form's data attribute
         const faqData = {
@@ -268,19 +281,36 @@
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(faqData),
-            success: function() {
+            success: function () {
                 $('#editFaqModal').modal('hide');
                 loadFaqs(); // Reload FAQs after editing
                 alert('FAQ updated successfully');
             },
-            error: function() {
+            error: function () {
                 alert('Error updating FAQ');
             }
         });
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         loadFaqs(); // Load FAQs on page load
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('toggle-sidebar').addEventListener('click', function () {
+            var sidebar = document.getElementById('sidebar');
+            var content = document.getElementById('content');
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        });
+
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function (submenuToggle) {
+            submenuToggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
     });
 </script>
 </body>

@@ -7,125 +7,132 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
 </head>
-
 <style>
-        body {
-            font-family: Arial, sans-serif;
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .content {
+        margin-left: 250px;
+        padding: 80px 20px 20px;
+        transition: margin-left 0.3s ease;
+    }
+    .content.collapsed {
+        margin-left: 60px;
+    }
+    @media (max-width: 768px) {
+        .content-wrapper {
+            margin-left: 0;
         }
-        .content {
-            margin-left: 250px;
-            padding: 80px 20px 20px;
-            transition: margin-left 0.3s ease;
-        }
-        .content.collapsed {
-            margin-left: 60px;
-        }
-        @media (max-width: 768px) {
-            .content-wrapper {
-                margin-left: 0;
-            }
-        }
-        .content-wrapper{
-            background-color: #ffffff;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 30px;
-        }
-        h2 {
-            text-align: center;
-            margin: 20px 0;
-            font-weight: 500;
-        }
-        .table-hover {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .table-hover th, .table-hover td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        .table-hover tr:hover {
-            background-color: #f1f1f1;
-        }
-        .table-hover th {
-            background-color: #f2f2f2;
-            cursor: pointer;
-        }
-        .bbb {
-            margin-right: 5px;
-        }
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .add-menu a {
-            text-decoration: none;
-            color: #fff;
-        }
-    </style>
+    }
+    .content-wrapper{
+        background-color: #ffffff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+    h2 {
+        text-align: center;
+        margin: 20px 0;
+        font-weight: 500;
+    }
+    .table-hover {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .table-hover th, .table-hover td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+    .table-hover tr:hover {
+        background-color: #f1f1f1;
+    }
+    .table-hover th {
+        background-color: #f2f2f2;
+        cursor: pointer;
+    }
+    .bbb {
+        margin-right: 5px;
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .add-menu a {
+        text-decoration: none;
+        color: #fff;
+    }
+</style>
 <body>
 <div th:insert="~{fragments/sidebar :: sidebar-manager (page = 'combo')}"></div>
 <div class="content" id="content">
     <div class="content-wrapper">
 
-    <div class="container">
-        <h3>DANH SÁCH COMBO</h3>
-        <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+        <div class="container">
+            <h3>DANH SÁCH COMBO</h3>
+            <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+            <div class="mb-3 d-flex me-3" >
+                <label for="filterComboType" class="form-label" style="font-weight: bold">Loại Combo</label>
+                <select class="form-select ms-3" id="filterComboType" style="width: 170px; margin-top: -5px" >
+                    <option value="all">Tất cả</option>
+                    <option value="V">Combo Chay</option>
+                    <option value="N">Combo Mặn</option>
+                </select>
+            </div>
+            <table class="table table-hover" id="comboTable">
 
-        <table class="table table-hover" id="comboTable">
-            <thead>
-            <tr>
-                <th>Tên combo</th>
-                <th>Ảnh</th>
-                <th>Mô tả combo</th>
-                <th>kCal TB</th>
-                <th>Loại combo</th>
-                <th>Bữa ăn</th>
-                <th>Giá 7 ngày</th>
-                <th>Giá 30 ngày</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody id="comboTableBody">
-            <tr th:each="combo : ${listCombos}">
-                <td th:text="${combo.getComboName()}"></td>
-                <td><img th:src="${combo.getComboImage()}" alt="" class="img-thumbnail" style="max-width: 100px;"></td>
-                <td th:text="${combo.getComboDescription()}"></td>
-                <td th:text="${combo.getComboCalories()}"></td>
-                <td>
-                    <span th:if="${combo.getComboType().getComboTypeName() == 'V'}">Combo chay</span>
-                    <span th:if="${combo.getComboType().getComboTypeName() == 'N'}">Combo mặn</span>
-                </td>
-                <td>
-                    <span th:if="${combo.getComboTime() == 'L'}">Ăn trưa</span>
-                    <span th:if="${combo.getComboTime() == 'BLD'}">Ăn cả ngày</span>
-                    <span th:if="${combo.getComboTime() == 'D'}">Ăn tối</span>
-                    <span th:if="${combo.getComboTime() == 'BL'}">Ăn sáng, trưa</span>
-                    <span th:if="${combo.getComboTime() == 'BD'}">Ăn sáng, tối</span>
-                    <span th:if="${combo.getComboTime() == 'LD'}">Ăn trưa, tối</span>
-                    <span th:if="${combo.getComboTime() == 'B'}">Ăn sáng</span>
-                </td>
-                <td th:text="${combo.getComboPrice7Days()}"></td>
-                <td th:text="${combo.getComboPrice30Days()}"></td>
-                <td style="display: compact; text-align: center">
-                    <a href="#" class="btn btn-warning btn-sm update-bt bbb" style="margin-bottom: 5px" th:href="@{/manager/combo/update/{comboId}(comboId=${combo.comboId})}">
-                        <i class="bi bi-pencil"></i>
-                    </a>
-                    <a href="#" class="btn btn-danger btn-sm delete-btn bbb" th:href="@{/manager/combo/delete/{comboId}(comboId=${combo.comboId})}" onclick="return confirm('Are you sure you want to delete this combo?')">
-                        <i class="bi bi-trash"></i>
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <button class="btn btn-success mb-2 bbb"><a th:href="@{/manager/combo/add}" class="text-white text-decoration-none"><i class="bi bi-plus-circle"></i> THÊM COMBO</a></button>
-        <div class="pagination" id="pagination-controls">
-            <!-- Pagination controls will be dynamically generated here -->
+                <thead>
+                <tr>
+                    <th>Tên combo</th>
+                    <th>Ảnh</th>
+                    <th>Mô tả combo</th>
+                    <th>kCal TB</th>
+                    <th>Loại combo</th>
+                    <th>Bữa ăn</th>
+                    <th>Giá 7 ngày</th>
+                    <th>Giá 30 ngày</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="comboTableBody">
+                <tr th:each="combo : ${listCombos}">
+                    <td th:text="${combo.getComboName()}"></td>
+                    <td><img th:src="${combo.getComboImage()}" alt="" class="img-thumbnail" style="max-width: 100px;"></td>
+                    <td th:text="${combo.getComboDescription()}"></td>
+                    <td th:text="${combo.getComboCalories()}"></td>
+                    <td>
+                        <span th:if="${combo.getComboType().getComboTypeName() == 'V'}">Combo chay</span>
+                        <span th:if="${combo.getComboType().getComboTypeName() == 'N'}">Combo mặn</span>
+                    </td>
+                    <td>
+                        <span th:if="${combo.getComboTime() == 'L'}">Ăn trưa</span>
+                        <span th:if="${combo.getComboTime() == 'BLD'}">Ăn cả ngày</span>
+                        <span th:if="${combo.getComboTime() == 'D'}">Ăn tối</span>
+                        <span th:if="${combo.getComboTime() == 'BL'}">Ăn sáng, trưa</span>
+                        <span th:if="${combo.getComboTime() == 'BD'}">Ăn sáng, tối</span>
+                        <span th:if="${combo.getComboTime() == 'LD'}">Ăn trưa, tối</span>
+                        <span th:if="${combo.getComboTime() == 'B'}">Ăn sáng</span>
+                    </td>
+                    <td th:text="${combo.getComboPrice7Days()}"></td>
+                    <td th:text="${combo.getComboPrice30Days()}"></td>
+                    <td style="display: ruby-base">
+                        <a href="#" class="btn btn-warning btn-sm update-btn ms-1" style="margin-bottom:15px " th:href="@{/manager/combo/update/{comboId}(comboId=${combo.comboId})}" onclick="return confirm('Bạn có chắc chắn muốn cập nhật combo này không?')">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="#" class="btn btn-danger btn-sm delete-btn ms-1" th:href="@{/manager/combo/delete/{comboId}(comboId=${combo.comboId})}" onclick="return confirm('Bạn có chắc chắn muốn xóa combo này không?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-success mb-2"><a th:href="@{/manager/combo/add}" class="text-white text-decoration-none"><i class="bi bi-plus-circle"></i> THÊM COMBO</a></button>
+            <div class="pagination" id="pagination-controls">
+                <!-- Pagination controls will be dynamically generated here -->
+            </div>
         </div>
-    </div>
     </div>
 </div>
 
@@ -148,33 +155,55 @@
             });
         });
     });
-
-    document.getElementById('view-food').addEventListener('click', function () {
-        window.location.href = this.querySelector('a').href;
+    // Filter combos by type
+    document.getElementById('filterComboType').addEventListener('change', function() {
+        currentPage = 1; // Reset to first page on filter change
+        displayTable();
     });
 
-    document.getElementById('view-combo').addEventListener('click', function () {
-        window.location.href = this.querySelector('a').href;
-    });
 
-    document.getElementById('view-daily').addEventListener('click', function () {
-        window.location.href = this.querySelector('a').href;
-    });
+
+
+    // Hàm định dạng số tiền
+    function formatCurrency(amount) {
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
 
     // Pagination functionality
-    const itemsPerPage = 10;
-    let currentPage = 1;
+    const itemsPerPage = 5; // Number of items per page
+    let currentPage = 1; // Current page initialized to 1
     const tableBody = document.getElementById('comboTableBody');
     const paginationControls = document.getElementById('pagination-controls');
 
     function displayTable() {
+        const filterType = document.getElementById('filterComboType').value;
         const rows = Array.from(tableBody.querySelectorAll('tr'));
-        const totalPages = Math.ceil(rows.length / itemsPerPage);
+        let filteredRows = rows;
 
-        rows.forEach((row, index) => {
-            row.style.display = 'none';
+        if (filterType !== 'all') {
+            filteredRows = rows.filter(row => {
+                const comboType = row.querySelector('td:nth-child(5)').textContent.trim();
+                return (filterType === 'V' && comboType === 'Combo chay') || (filterType === 'N' && comboType === 'Combo mặn');
+            });
+        }
+
+        const totalPages = Math.ceil(filteredRows.length / itemsPerPage);
+
+        rows.forEach(row => row.style.display = 'none'); // Hide all rows first
+
+        filteredRows.forEach((row, index) => {
             if (index >= (currentPage - 1) * itemsPerPage && index < currentPage * itemsPerPage) {
                 row.style.display = '';
+                // Định dạng số tiền trong các ô giá 7 ngày và giá 30 ngày
+                const price7DaysCell = row.querySelector('td:nth-child(7)');
+                const price30DaysCell = row.querySelector('td:nth-child(8)');
+                if (price7DaysCell && price7DaysCell.textContent) {
+                    price7DaysCell.textContent = formatCurrency(parseInt(price7DaysCell.textContent.replace(/\./g, '')));
+                }
+                if (price30DaysCell && price30DaysCell.textContent) {
+                    price30DaysCell.textContent = formatCurrency(parseInt(price30DaysCell.textContent.replace(/\./g, '')));
+                }
             }
         });
 
@@ -186,7 +215,7 @@
 
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = document.createElement('button');
-            pageButton.className = 'btn btn-light';
+            pageButton.className = 'btn btn-light'; // Đổi màu nút
             pageButton.textContent = i;
             pageButton.addEventListener('click', () => {
                 currentPage = i;

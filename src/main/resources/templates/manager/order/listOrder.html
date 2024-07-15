@@ -11,35 +11,43 @@
     body {
         /*background-color: #e5e5e5;*/
     }
+
     .content {
         margin-left: 250px;
         padding: 80px 20px 20px;
         transition: margin-left 0.3s ease;
     }
+
     .content.collapsed {
         margin-left: 60px;
     }
+
     h2 {
         text-align: center;
         margin: 20px 0;
         font-weight: 500;
     }
+
     .table-hover {
         width: 100%;
         border-collapse: collapse;
     }
+
     .table-hover th, .table-hover td {
         padding: 12px;
         text-align: left;
         border: 1px solid #ddd;
     }
+
     .table-hover tr:hover {
         background-color: #f1f1f1;
     }
+
     .table-hover th {
         background-color: #f2f2f2;
         cursor: pointer;
     }
+
     .btn-danger:hover {
         background-color: red !important;
         font-weight: 600;
@@ -48,42 +56,51 @@
     .beo1 {
         border: 1px solid rgb(255, 2, 2);
     }
+
     .beo1:hover {
         background-color: rgb(255, 2, 2);
         border: 1px solid rgb(255, 2, 2);
     }
+
     .beo1 a {
         text-decoration: none;
         color: #fff;
     }
+
     .me-1 {
         background-color: #343a40;
         border: 1px solid #343a40;
     }
+
     .me-1:hover {
         background-color: #000000;
         font-weight: 600;
         border: 1px solid #343a40;
     }
+
     .me-1 a {
         text-decoration: none;
         color: #fff;
     }
+
     .order-content {
         border-radius: 5px;
     }
+
     .combo-item {
         display: flex;
         align-items: center;
         margin-bottom: 15px;
     }
+
     .combo-image {
         width: 100px;
         height: 100px;
         object-fit: cover;
         margin-right: 15px;
     }
-    .content-wrapper{
+
+    .content-wrapper {
         background-color: #ffffff;
         border-radius: 5px;
         padding: 20px;
@@ -98,53 +115,60 @@
 <div class="content" id="content">
     <div class="content-wrapper">
 
-    <div class="container-fluid">
+        <div class="container-fluid">
 
-        <!-- Content for managing orders -->
-        <div id="content-view" class="order-content">
-            <h3 class="orderManager-h2">DANH SÁCH ĐƠN HÀNG</h3>
-            <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#0e955b" d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+            <!-- Content for managing orders -->
+            <div id="content-view" class="order-content">
+                <h3 class="orderManager-h2">DANH SÁCH ĐƠN HÀNG</h3>
+                <svg style="width: 70px; margin-top: -70px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                    <path fill="#0e955b"
+                          d="M32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/>
+                </svg>
 
-            <!-- Add content for viewing and accepting orders -->
-            <!-- Dropdown for selecting order status -->
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <select id="statusFilter" class="form-select">
-                        <option value="">Tất cả trạng thái</option>
-                        <option value="PENDING">PENDING</option>
-                        <option value="PROCESSING">PROCESSING</option>
-                        <option value="SHIPPED">SHIPPED</option>
-                        <option value="COMPLETED">COMPLETED</option>
-                        <option value="CANCELLED">CANCELLED</option>
-                    </select>
+                <!-- Add content for viewing and accepting orders -->
+                <!-- Dropdown for selecting order status -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <select id="statusFilter" class="form-select">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="PENDING">PENDING</option>
+                            <option value="PROCESSING">PROCESSING</option>
+                            <option value="SHIPPED">SHIPPED</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                            <option value="CANCELLED">CANCELLED</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="filterButton" class="btn btn-primary">Lọc</button>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <button id="filterButton" class="btn btn-primary">Lọc</button>
+                <table class="table table-hover">
+                    <thead>
+                    <tr style="text-align: center;">
+                        <th>ID</th>
+                        <th>Người đặt</th>
+                        <th>Địa chỉ</th>
+                        <th>Ghi chú</th>
+                        <th>Ngày đặt</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="order-table-body">
+                    <!-- Order rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+                <div class="pagination" id="pagination-controls">
                 </div>
             </div>
-            <table class="table table-hover">
-                <thead>
-                <tr style="text-align: center;">
-                    <th>ID</th>
-                    <th>Người đặt</th>
-                    <th>Địa chỉ</th>
-                    <th>Ghi chú</th>
-                    <th>Ngày đặt</th>
-                    <th>Tổng tiền</th>
-                    <th>Trạng thái</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody id="order-table-body">
-                <!-- Order rows will be inserted here by JavaScript -->
-                </tbody>
-            </table>
         </div>
-    </div>
 
     </div>
 </div>
-<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -159,6 +183,8 @@
             </div>
         </div>
     </div>
+
+
 </div>
 
 <!-- Bootstrap core JS -->
@@ -169,6 +195,10 @@
 <script>
 
     document.addEventListener('DOMContentLoaded', function() {
+        let ordersData = [];
+        const pageSize = 10;
+        let currentPage = 1;
+
         // Toggle sidebar
         document.getElementById('toggle-sidebar').addEventListener('click', function() {
             var sidebar = document.getElementById('sidebar');
@@ -187,6 +217,10 @@
             });
         });
 
+        function formatCurrency(amount) {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
         // Fetch order data from the API and populate the table
         function fetchOrders(status = '') {
             let url = '/api/orders';
@@ -194,34 +228,63 @@
                 url += `?status=${status}`;
             }
 
-            console.log('Fetching orders from URL:', url); // Log the URL
-
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    const tableBody = document.getElementById('order-table-body');
-                    tableBody.innerHTML = ''; // Clear any existing rows
-
-                    data.forEach(order => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                        <td>${order.orderId}</td>
-                        <td>${order.fullName}</td>
-                        <td>${order.address}</td>
-                        <td>${order.orderNote}</td>
-                        <td>${order.orderDate}</td>
-                        <td>${order.orderTotalPrice}</td>
-                        <td>${order.orderStatus}</td>
-                        <td class="justify-content-center d-flex">
-                            <button class="btn btn-secondary btn-sm me-1" onclick="viewDetails(${order.orderId})" title="Xem chi tiết">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                        </td>
-                    `;
-                        tableBody.appendChild(row);
-                    });
+                    ordersData = data;
+                    currentPage = 1;
+                    displayOrders();
+                    setupPagination();
                 })
                 .catch(error => console.error('Error fetching orders:', error));
+        }
+
+        function displayOrders() {
+            const tableBody = document.getElementById('order-table-body');
+            tableBody.innerHTML = ''; // Clear any existing rows
+
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const paginatedOrders = ordersData.slice(startIndex, endIndex);
+
+            paginatedOrders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.orderId}</td>
+                    <td>${order.fullName}</td>
+                    <td>${order.address}</td>
+                    <td>${order.orderNote}</td>
+                    <td>${order.orderDate}</td>
+                    <td>${formatCurrency(order.orderTotalPrice)}</td>
+                    <td>${order.orderStatus}</td>
+                    <td class="justify-content-center d-flex">
+                        <button class="btn btn-secondary btn-sm me-1" onclick="viewDetails(${order.orderId})" title="Xem chi tiết">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function setupPagination() {
+            const paginationControls = document.getElementById('pagination-controls');
+            paginationControls.innerHTML = '';
+
+            const totalPages = Math.ceil(ordersData.length / pageSize);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('div');
+                pageItem.className = 'page-item';
+                pageItem.innerHTML = `<a class="page-link ${i === currentPage ? 'active' : ''}" href="#">${i}</a>`;
+                pageItem.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentPage = i;
+                    displayOrders();
+                    setupPagination();
+                });
+                paginationControls.appendChild(pageItem);
+            }
         }
 
         // Fetch orders on page load
@@ -263,7 +326,7 @@
             <p><strong>Trạng thái:</strong> ${order.orderStatus}</p>
             <p><strong>Ngày đặt:</strong> ${order.orderDate}</p>
             <p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod}</p>
-            <p><strong>Tổng tiền:</strong> ${order.orderTotalPrice} VND</p>
+            <p><strong>Tổng tiền:</strong> ${formatCurrency(order.orderTotalPrice)} VND</p>
             <h4>Chi tiết sản phẩm</h4>
             <table class="table table-striped">
                 <thead>
@@ -283,7 +346,7 @@
                             </td>
                             <td>${detail.comboDay}</td>
                             <td>${detail.quantity}</td>
-                            <td>${detail.price} VND</td>
+                            <td>${formatCurrency(detail.price)} VND</td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -298,8 +361,6 @@
             fetchOrderDetails(orderId);
         }
     });
-
-
 </script>
 
 </body>
