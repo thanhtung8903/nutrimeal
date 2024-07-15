@@ -288,7 +288,7 @@ public class ProfileController {
     public String delivery(Model model, Principal principal) {
         User user;
         if (principal instanceof OAuth2AuthenticationToken) {
-            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken;
+            boolean isOauth2User = true;
             model.addAttribute("isOauth2User", isOauth2User);
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
