@@ -1,4 +1,5 @@
 package com.nutrimeal.nutrimeal.controller.manager.faqs;
+import com.nutrimeal.nutrimeal.service.FaqService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

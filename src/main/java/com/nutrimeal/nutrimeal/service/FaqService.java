@@ -29,5 +29,14 @@ public class FaqService {
         faqRepository.deleteById(id);
     }
 
+    public Faq update(int id, Faq faq) {
+        Faq faqToUpdate = faqRepository.findById(id).orElse(null);
+        if (faqToUpdate == null) {
+            return null;
+        }
+        faqToUpdate.setQuestion(faq.getQuestion());
+        faqToUpdate.setAnswer(faq.getAnswer());
+        return faqRepository.save(faqToUpdate);
+    }
 
 }
