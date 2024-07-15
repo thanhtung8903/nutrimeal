@@ -21,7 +21,7 @@ public class RestFaq {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Faq> getFaqById(int id) {
+    public ResponseEntity<Faq> getFaqById(@PathVariable int id) {
         return ResponseEntity.ok(faqService.findById(id));
     }
 
@@ -32,11 +32,11 @@ public class RestFaq {
 
     @PutMapping("/{id}")
     public ResponseEntity<Faq> updateFaq(@PathVariable int id, @RequestBody Faq faq) {
-        return ResponseEntity.ok(faqService.save(faq));
+        return ResponseEntity.ok(faqService.update(id, faq));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFaq(int id) {
+    public ResponseEntity<String> deleteFaq(@PathVariable int id) {
         faqService.deleteById(id);
         return ResponseEntity.ok("Faq with id " + id + " deleted");
     }
