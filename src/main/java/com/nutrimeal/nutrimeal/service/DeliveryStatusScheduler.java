@@ -1,6 +1,7 @@
 package com.nutrimeal.nutrimeal.service;
 
 import com.nutrimeal.nutrimeal.model.Delivery;
+import com.nutrimeal.nutrimeal.model.DeliveryStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -24,12 +25,12 @@ public void updateDeliveryStatus() {
 }
 
     public void updateStatus() {
-        List<Delivery> deliveries = deliveryService.findDeliveriesByDeliveryStatusToUpdateStatus("NOT_DELIVERED");
+        List<Delivery> deliveries = deliveryService.findDeliveriesByDeliveryStatusToUpdateStatus(DeliveryStatus.NOT_DELIVERED.name());
         LocalDate today = LocalDate.now();
         for (Delivery delivery : deliveries) {
             LocalDate deliveryDate = delivery.getDeliveryDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             if (deliveryDate.isBefore(today)) {
-                delivery.setDeliveryStatus("DELIVERY_FAILED");
+                delivery.setDeliveryStatus(DeliveryStatus.DELIVERY_FAILED.name());
                 deliveryService.save(delivery);
             }
         }
