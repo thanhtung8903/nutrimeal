@@ -314,12 +314,12 @@
 
     async function fetchUsers() {
         try {
-            const response = await fetch('http://localhost:8080/api/users'); // Thay URL này bằng URL của API thực tế
+            const response = await fetch('http://localhost:8080/api/users');
             const data = await response.json();
             users = data;
             displayUsers(users);
             setupPagination();
-            setupEditButtons(); // Thiết lập sự kiện cho nút edit sau khi dữ liệu được hiển thị
+            setupEditButtons();
             updateStatistical(users);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -329,7 +329,12 @@
     function displayUsers(usersToDisplay) {
         const tbody = document.getElementById('dashboard-admin-tbody');
         tbody.innerHTML = '';
+
         usersToDisplay.forEach((user, index) => {
+            if (user.roles.includes('ROLE_ADMIN')) {
+                return;
+            }
+
             const genderDisplay = user.gender === null ? '' : (user.gender ? 'Nam' : 'Nữ');
             const dobDisplay = user.dob === null ? '' : user.dob;
             const phoneDisplay = user.phone === null ? '' : user.phone;
@@ -341,6 +346,7 @@
             };
             const roleDisplay = user.roles.map(role => roleDisplayNames[role] || role).join(', ');
             const roleData = user.roles.join(',');
+
             const row = document.createElement('tr');
             row.setAttribute('data-user-id', user.userId);
             row.innerHTML = `
@@ -356,6 +362,7 @@
                 <button class="btn-edit" data-user-id="${user.userId}"><i class="bi bi-pencil"></i></button>
             </td>
         `;
+
             tbody.appendChild(row);
         });
 
@@ -370,13 +377,10 @@
             return Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
         });
 
-        // Hide all rows initially
         rows.forEach(row => row.classList.add('hide'));
 
-        // Show filtered rows
         filteredRows.forEach(row => row.classList.remove('hide'));
 
-        // Reset and setup pagination for filtered rows
         setupPagination();
     }
 
@@ -392,7 +396,6 @@
             pagination.appendChild(button);
         }
 
-        // Show the first page by default
         if (pageCount > 0) {
             showPage(1);
         }
@@ -424,7 +427,6 @@
         const accountEmailInput = document.getElementById('account-email');
         const accountRoleInput = document.getElementById('account-role');
 
-        // Map role names to display names and vice versa
         const roleDisplayNames = {
             'ROLE_CUSTOMER': 'Customer',
             'ROLE_MANAGER': 'Manager',
@@ -464,13 +466,11 @@
             backdrop.classList.remove('show');
         });
 
-        // Send PUT request via AJAX
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             const userId = accountIdInput.value;
             const selectedRole = accountRoleInput.value;
 
-            // Send PUT request via AJAX
             fetch(`http://localhost:8080/api/users/roles?userId=${userId}&role=${selectedRole}`, {
                 method: 'PUT',
                 headers: {
@@ -503,7 +503,6 @@
                     form.classList.remove('show');
                     backdrop.classList.remove('show');
 
-                    // Update the statistical data
                     updateStatistical(users);
                 })
                 .catch(error => {
