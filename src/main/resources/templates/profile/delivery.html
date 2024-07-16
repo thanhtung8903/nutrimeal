@@ -181,7 +181,7 @@
                 <p>Bạn có chắc chắn muốn hoãn đơn hàng này không?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                 <button type="button" class="btn btn-warning" id="confirmDelayBtn">Đồng ý</button>
             </div>
         </div>
@@ -230,6 +230,7 @@
             const end = page * itemsPerPage;
 
             const today = new Date();
+            today.setDate(today.getDate() + 1); // Add 1 day to get tomorrow's date
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
 
@@ -249,13 +250,13 @@
                 const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED') ?
                     `<button class="btn btn-warning btn-sm" style="margin-top: 5px" onclick="showDelayConfirmation(${delivery.deliveryId})">Hoãn</button>` : '';
                 return `
-            <tr>
+                <tr data-delivery-id="${delivery.deliveryId}">
                 <td>${delivery.deliveryId}</td>
-                <td>${delivery.deliveryStatus}</td>
+                    <td class="delivery-status">${delivery.deliveryStatus}</td>
                 <td>${delivery.deliveryTime}</td>
                 <td>${delivery.deliveryDate}</td>
                 <td>${delivery.deliveryPrice}</td>
-                <td>
+                    <td class="delay-button-container">
                     <button class="btn btn-primary btn-sm" onclick="showDetail(${delivery.deliveryId})">Chi tiết</button>
                     ${delayButton}
                 </td>
@@ -298,6 +299,7 @@
                 delayDelivery(currentDeliveryId);
                 const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
                 confirmationModal.hide();
+                window.location.reload(); // Reload the page
             }
         });
 
@@ -310,12 +312,21 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    fetchData(); // Refresh data
+                    updateRow(data);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+
+        function updateRow(delivery) {
+            const row = document.querySelector(`tr[data-delivery-id="${delivery.deliveryId}"]`);
+            if (row) {
+                row.querySelector('.delivery-status').textContent = delivery.deliveryStatus;
+                row.querySelector('.delay-button-container').innerHTML = ''; // Xóa nút hoãn
+            }
+        }
+
 
         document.getElementById('searchButton').addEventListener('click', function () {
             const searchDate = document.getElementById('searchDate').value;

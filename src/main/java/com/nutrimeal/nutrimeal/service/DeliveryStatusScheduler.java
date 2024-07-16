@@ -24,7 +24,6 @@ public void updateDeliveryStatus() {
     updateStatus();
 }
 
-    // Phương thức bổ sung để kiểm tra trực tiếp
     public void updateStatus() {
         List<Delivery> deliveries = deliveryService.findDeliveriesByDeliveryStatusToUpdateStatus(DeliveryStatus.NOT_DELIVERED.name());
         LocalDate today = LocalDate.now();
