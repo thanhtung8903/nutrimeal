@@ -230,6 +230,7 @@
             const end = page * itemsPerPage;
 
             const today = new Date();
+            today.setDate(today.getDate() + 1); // Add 1 day to get tomorrow's date
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
 
