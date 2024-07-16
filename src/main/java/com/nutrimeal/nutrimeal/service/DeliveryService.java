@@ -162,6 +162,10 @@ public class DeliveryService {
         return deliveryResponseList;
     }
 
+    public List<Delivery> findDeliveriesByDeliveryStatusToUpdateStatus(String deliveryStatus) {
+        return deliveryRepository.findDeliveriesByDeliveryStatus(deliveryStatus);
+    }
+
     public void updateDeliveryStatus(Integer deliveryId, String shipperId) {
         Delivery delivery = deliveryRepository.findByDeliveryId(deliveryId);
         User shipper = userRepository.findByUserId(shipperId);
@@ -337,5 +341,9 @@ public class DeliveryService {
         orderService.saveOrder(order);
 
         createDeliveryDetails(newDelivery, order.getOrderDetails(), index);
+    }
+
+    public void save(Delivery delivery) {
+        deliveryRepository.save(delivery);
     }
 }
