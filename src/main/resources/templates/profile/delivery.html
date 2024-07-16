@@ -142,9 +142,9 @@
                             <th>Trạng thái</th>
                             <th>Thời gian giao</th>
                             <th>Ngày giao</th>
-                            <th>Tên khách hàng</th>
-                            <th>SĐT</th>
-                            <th>Địa chỉ</th>
+<!--                            <th>Tên khách hàng</th>-->
+<!--                            <th>SĐT</th>-->
+<!--                            <th>Địa chỉ</th>-->
                             <th>Tiền hàng</th>
                             <th>Action</th>
                         </tr>
@@ -228,35 +228,42 @@
             const deliveryTableBody = document.getElementById('deliveryTableBody');
             const start = (page - 1) * itemsPerPage;
             const end = page * itemsPerPage;
-            const paginatedData = data.slice(start, end);
 
             const today = new Date();
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
+
+            const todayString = today.toISOString().slice(0, 10);
             const tomorrowString = tomorrow.toISOString().slice(0, 10);
+
+            // Filter data to include only today's and tomorrow's deliveries
+            const filteredData = data.filter(delivery => {
+                const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
+                return deliveryDate === todayString || deliveryDate === tomorrowString;
+            });
+
+            const paginatedData = filteredData.slice(start, end);
 
             deliveryTableBody.innerHTML = paginatedData.map((delivery, index) => {
                 const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
                 const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED') ?
                     `<button class="btn btn-warning btn-sm" style="margin-top: 5px" onclick="showDelayConfirmation(${delivery.deliveryId})">Hoãn</button>` : '';
                 return `
-                <tr>
-                    <td>${delivery.deliveryId}</td>
-                    <td>${delivery.deliveryStatus}</td>
-                    <td>${delivery.deliveryTime}</td>
-                    <td>${delivery.deliveryDate}</td>
-                    <td>${delivery.customerFullName}</td>
-                    <td>${delivery.deliveryPhone}</td>
-                    <td>${delivery.deliveryAddress}</td>
-                    <td>${delivery.deliveryPrice}</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" onclick="showDetail(${delivery.deliveryId})">Chi tiết</button>
-                        ${delayButton}
-                    </td>
-                </tr>
-            `;
+            <tr>
+                <td>${delivery.deliveryId}</td>
+                <td>${delivery.deliveryStatus}</td>
+                <td>${delivery.deliveryTime}</td>
+                <td>${delivery.deliveryDate}</td>
+                <td>${delivery.deliveryPrice}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="showDetail(${delivery.deliveryId})">Chi tiết</button>
+                    ${delayButton}
+                </td>
+            </tr>
+        `;
             }).join('');
         }
+
 
         function renderPagination(totalItems, itemsPerPage, currentPage) {
             const pagination = document.getElementById('pagination');
