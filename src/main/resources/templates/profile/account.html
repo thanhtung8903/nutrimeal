@@ -190,7 +190,11 @@
                             var dobAlert = document.getElementById('dob-alert');
                             if (dobAlert) dobAlert.remove();
 
-                            if (dob >= today || dob <= new Date('1924-01-01')) {
+                            // Calculate the date 18 years ago from today
+                            var eighteenYearsAgo = new Date();
+                            eighteenYearsAgo.setFullYear(today.getFullYear() - 18);
+
+                            if (dob >= today || dob > eighteenYearsAgo || dob <= new Date('1924-01-01') ) {
                                 var dobAlertDiv = document.createElement('div');
                                 dobAlertDiv.id = 'dob-alert';
                                 dobAlertDiv.className = 'alert alert-danger mt-2';

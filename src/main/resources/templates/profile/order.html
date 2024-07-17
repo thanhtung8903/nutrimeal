@@ -152,7 +152,7 @@
                         <tr>
                             <th>Ngày đặt</th>
                             <th>Địa chỉ</th>
-                            <th>Trạng thái</th>
+<!--                            <th>Trạng thái</th>-->
                             <th>Tổng tiền</th>
                             <th>Ghi chú</th>
                             <th>Hành động</th>
@@ -162,15 +162,15 @@
                         <tr th:each="order : ${orders}">
                             <td th:text="${order.orderDate}"></td>
                             <td th:text="${order.address.getFullAddress()}"></td>
-                            <td>
-                                <span th:if="${order.orderStatus == 'PENDING'}">Chờ xác nhận</span>
-                                <span th:if="${order.orderStatus == 'PROCESSING'}">Đang xử lý</span>
-                                <span th:if="${order.orderStatus == 'SHIPPED'}">Đang giao</span>
-                                <span th:if="${order.orderStatus == 'COMPLETED'}">Hoàn thành</span>
-                                <span th:if="${order.orderStatus == 'CANCELLED'}">Đã bị hủy</span>
-                                <span th:unless="${order.orderStatus == 'PENDING' || order.orderStatus == 'PROCESSING' || order.orderStatus == 'SHIPPED'
-                                || order.orderStatus == 'COMPLETED' || order.orderStatus == 'CANCELLED'}" th:text="${order.orderStatus}"></span>
-                            </td>
+<!--                            <td>-->
+<!--                                <span th:if="${order.orderStatus == 'PENDING'}">Chờ xác nhận</span>-->
+<!--                                <span th:if="${order.orderStatus == 'PROCESSING'}">Đang xử lý</span>-->
+<!--                                <span th:if="${order.orderStatus == 'SHIPPED'}">Đang giao</span>-->
+<!--                                <span th:if="${order.orderStatus == 'COMPLETED'}">Hoàn thành</span>-->
+<!--                                <span th:if="${order.orderStatus == 'CANCELLED'}">Đã bị hủy</span>-->
+<!--                                <span th:unless="${order.orderStatus == 'PENDING' || order.orderStatus == 'PROCESSING' || order.orderStatus == 'SHIPPED'-->
+<!--                                || order.orderStatus == 'COMPLETED' || order.orderStatus == 'CANCELLED'}" th:text="${order.orderStatus}"></span>-->
+<!--                            </td>-->
                             <td th:text="${order.orderTotalPrice}" th:data-price="${order.orderTotalPrice}" class="currency"></td>
                             <td th:text="${order.orderNote}"></td>
                             <td class="action-buttons">

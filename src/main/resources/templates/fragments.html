@@ -29,7 +29,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto ">
                     <li class="nav-item item-head" th:classappend="${page == 'home' ? 'active' : ''}" style="margin-right: 25px; font-weight: 400; font-size: 16px;">
                         <a class="nav-link text-grey opt-head" href="/" th:href="@{/}" style="transition: color 0.3s;">TRANG CHỦ</a>
                     </li>
@@ -61,15 +61,27 @@
                 </ul>
 
                 <ul class="navbar-nav ms-auto d-flex align-items-center" sec:authorize="isAuthenticated()" style="padding-right: 50px">
-                    <li class="nav-item user-info d-flex align-items-center" style="margin-right: 15px;">
-                        <!-- Use th:src to bind the user's image URL. If the image attribute is null or empty, provide a default image URL -->
-                        <img th:src="${#authentication.principal.image != null ? #authentication.principal.image : '/img/default-user.png'}" alt="User Image" class="rounded-circle" style="border: 2px solid white; width: 47px; height: 47px; margin-right: 10px;">
-                        <div class="user-details d-flex flex-column">
-                            <!-- Use th:text to display the user's full name -->
-                            <a class="nav-link" th:href="@{/profile/account}">Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span></a>
-                            <a th:href="@{/logout}" class="logout" style="color: white; text-decoration: none; margin-top: 0px; font-size: 15px;">Đăng xuất</a>
+<!--                    <li class="nav-item user-info d-flex align-items-center" style="margin-right: 15px;">-->
+<!--                        &lt;!&ndash; Use th:src to bind the user's image URL. If the image attribute is null or empty, provide a default image URL &ndash;&gt;-->
+<!--                        <img th:src="${#authentication.principal.image != null ? #authentication.principal.image : '/img/default-user.png'}" alt="User Image" class="rounded-circle" style="border: 2px solid white; width: 47px; height: 47px; margin-right: 10px;">-->
+<!--                        <div class="user-details d-flex flex-column">-->
+<!--                            &lt;!&ndash; Use th:text to display the user's full name &ndash;&gt;-->
+<!--                            <a class="nav-link" th:href="@{/profile/account}">Xin chào <span class="bold" th:text="${#authentication.principal.fullName}"></span></a>-->
+<!--                            <a th:href="@{/logout}" class="logout" style="color: white; text-decoration: none; margin-top: 0px; font-size: 15px;">Đăng xuất</a>-->
+<!--                        </div>-->
+<!--                    </li>-->
+                       <li class="nav-item user-info d-flex align-items-center" style="margin-right: -60px;">
+
+                    <div class="user-info">
+                        <img th:src="${#authentication.principal.image}" alt="User Image">
+                        <div class="user-details">
+                            <a th:href="@{/profile/account}" style="text-decoration-line: none;">
+                                <p style="color: lightgray; margin-top: 10px">Xin Chào <span class="user-name" th:text="${#authentication.principal.fullName}"></span></p>
+                            </a>
+                            <a  th:href="@{/logout}" class="logout" style="margin-top: -10px; font-size: 15px;text-decoration: none;">Đăng xuất</a>
                         </div>
-                    </li>
+                    </div>
+                       </li>
 
                     <li class="nav-item d-flex align-items-center" sec:authorize="hasAuthority('ROLE_CUSTOMER')">
                         <a class="nav-link text-white" href="/cart" style="position: relative;"><i class="bi bi-basket3" style="font-size: 1.5em;"></i></a>

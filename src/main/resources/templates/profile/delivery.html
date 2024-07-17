@@ -142,9 +142,9 @@
                             <th>Trạng thái</th>
                             <th>Thời gian giao</th>
                             <th>Ngày giao</th>
-                            <th>Tên khách hàng</th>
-                            <th>SĐT</th>
-                            <th>Địa chỉ</th>
+<!--                            <th>Tên khách hàng</th>-->
+<!--                            <th>SĐT</th>-->
+<!--                            <th>Địa chỉ</th>-->
                             <th>Tiền hàng</th>
                             <th>Action</th>
                         </tr>
@@ -153,11 +153,11 @@
                         <!-- Data will be injected here by JavaScript -->
                         </tbody>
                     </table>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination" id="pagination">
-                            <!-- Pagination controls will be injected here by JavaScript -->
-                        </ul>
-                    </nav>
+<!--                    <nav aria-label="Page navigation example">-->
+<!--                        <ul class="pagination" id="pagination">-->
+<!--                            &lt;!&ndash; Pagination controls will be injected here by JavaScript &ndash;&gt;-->
+<!--                        </ul>-->
+<!--                    </nav>-->
                 </div>
 
             </main>
@@ -181,7 +181,7 @@
                 <p>Bạn có chắc chắn muốn hoãn đơn hàng này không?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                 <button type="button" class="btn btn-warning" id="confirmDelayBtn">Đồng ý</button>
             </div>
         </div>
@@ -228,35 +228,51 @@
             const deliveryTableBody = document.getElementById('deliveryTableBody');
             const start = (page - 1) * itemsPerPage;
             const end = page * itemsPerPage;
-            const paginatedData = data.slice(start, end);
 
             const today = new Date();
+            today.setDate(today.getDate() + 1); // Add 1 day to get tomorrow's date
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
+
+            const todayString = today.toISOString().slice(0, 10);
             const tomorrowString = tomorrow.toISOString().slice(0, 10);
+
+            // Filter data to include only today's and tomorrow's deliveries
+            const filteredData = data.filter(delivery => {
+                const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
+                return deliveryDate === todayString || deliveryDate === tomorrowString;
+            });
+
+            const paginatedData = filteredData.slice(start, end);
+
+            const statusTranslations = {
+                'NOT_DELIVERED': 'Chưa giao',
+                'IN_TRANSIT': 'Đang giao',
+                'DELIVERED': 'Đã giao',
+                'DELIVERY_FAILED': 'Giao thất bại',
+                'DELAYED': 'Hoãn'
+            };
 
             deliveryTableBody.innerHTML = paginatedData.map((delivery, index) => {
                 const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
                 const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED') ?
                     `<button class="btn btn-warning btn-sm" style="margin-top: 5px" onclick="showDelayConfirmation(${delivery.deliveryId})">Hoãn</button>` : '';
                 return `
-                <tr>
-                    <td>${delivery.deliveryId}</td>
-                    <td>${delivery.deliveryStatus}</td>
-                    <td>${delivery.deliveryTime}</td>
-                    <td>${delivery.deliveryDate}</td>
-                    <td>${delivery.customerFullName}</td>
-                    <td>${delivery.deliveryPhone}</td>
-                    <td>${delivery.deliveryAddress}</td>
-                    <td>${delivery.deliveryPrice}</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" onclick="showDetail(${delivery.deliveryId})">Chi tiết</button>
-                        ${delayButton}
-                    </td>
-                </tr>
-            `;
+                <tr data-delivery-id="${delivery.deliveryId}">
+                <td>${delivery.deliveryId}</td>
+                <td class="delivery-status">${statusTranslations[delivery.deliveryStatus] || delivery.deliveryStatus}</td>
+                <td>${delivery.deliveryTime}</td>
+                <td>${delivery.deliveryDate}</td>
+                <td>${delivery.deliveryPrice}</td>
+                <td class="delay-button-container">
+                    <button class="btn btn-primary btn-sm" onclick="showDetail(${delivery.deliveryId})">Chi tiết</button>
+                    ${delayButton}
+                </td>
+            </tr>
+        `;
             }).join('');
         }
+
 
         function renderPagination(totalItems, itemsPerPage, currentPage) {
             const pagination = document.getElementById('pagination');
@@ -291,6 +307,7 @@
                 delayDelivery(currentDeliveryId);
                 const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
                 confirmationModal.hide();
+                window.location.reload(); // Reload the page
             }
         });
 
@@ -303,12 +320,21 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    fetchData(); // Refresh data
+                    updateRow(data);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+
+        function updateRow(delivery) {
+            const row = document.querySelector(`tr[data-delivery-id="${delivery.deliveryId}"]`);
+            if (row) {
+                row.querySelector('.delivery-status').textContent = delivery.deliveryStatus;
+                row.querySelector('.delay-button-container').innerHTML = ''; // Xóa nút hoãn
+            }
+        }
+
 
         document.getElementById('searchButton').addEventListener('click', function () {
             const searchDate = document.getElementById('searchDate').value;
