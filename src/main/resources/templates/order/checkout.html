@@ -502,7 +502,7 @@
                 <button type="button" class="btn btn-danger btn-lg btn-block mt-3" id="createOrderButton">Đặt hàng
                 </button>
 
-                <button type="button" class="btn btn-secondary btn-block mt-2">Trở về</button>
+                <button type="button" class="btn btn-secondary btn-block mt-2" id="goBackBtn">Trở về</button>
             </div>
         </div>
     </section>
@@ -515,7 +515,6 @@
                 </div>
                 <div class="modal-body">
                     <ul class="list-group" id="voucherList">
-                        <!-- Danh sách mã giảm giá sẽ được thêm vào đây -->
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -812,7 +811,9 @@
         document.getElementById('prevPage').disabled = (currentPage === 0);
         document.getElementById('nextPage').disabled = (currentPage === totalPages - 1);
     }
-
+    document.getElementById('goBackBtn').addEventListener('click', function() {
+        window.location.href = '/cart'; // Thay đổi đường dẫn tùy theo cấu trúc của trang web của bạn
+    });
 </script>
 
 </body>
