@@ -36,7 +36,7 @@ public class ProfileController {
     @GetMapping("/profile/account")
     public String profileAccount(Model model, Principal principal) {
         if (principal instanceof OAuth2AuthenticationToken) {
-            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
+            boolean isOauth2User = true;
             model.addAttribute("isOauth2User", isOauth2User);
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
@@ -60,7 +60,7 @@ public class ProfileController {
             Principal principal) {
         try {
             User user;
-            if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+            if (principal instanceof OAuth2AuthenticationToken) {
                 OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
                 OAuth2User oauthUser = token.getPrincipal();
                 user = userService.findByEmail(oauthUser.getAttribute("email"));
@@ -122,8 +122,8 @@ public class ProfileController {
     @GetMapping("/profile/point")
     public String profilePoint(Model model, Principal principal) {
         User user;
-        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
-            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
+        if (principal instanceof OAuth2AuthenticationToken) {
+            boolean isOauth2User = true;
             model.addAttribute("isOauth2User", isOauth2User);
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             CustomOAuth2User oauthUser = (CustomOAuth2User) token.getPrincipal();
@@ -142,7 +142,7 @@ public class ProfileController {
     public String profileAddress(Model model, Principal principal) {
         User user;
         if (principal instanceof OAuth2AuthenticationToken && principal != null) {
-            boolean isOauth2User = principal instanceof OAuth2AuthenticationToken && principal != null;
+            boolean isOauth2User = true;
             model.addAttribute("isOauth2User", isOauth2User);
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
@@ -162,7 +162,7 @@ public class ProfileController {
     @PostMapping("/profile/address")
     public String profileAddressAdd(@ModelAttribute Address address, Principal principal) {
         User user;
-        if (principal instanceof OAuth2AuthenticationToken && principal != null) {
+        if (principal instanceof OAuth2AuthenticationToken) {
             OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
             OAuth2User oauthUser = token.getPrincipal();
             user = userService.findByEmail(oauthUser.getAttribute("email"));
