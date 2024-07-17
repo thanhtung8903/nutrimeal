@@ -22,7 +22,6 @@ public class RestPointHistory {
     private User UserAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user;
-
         if (authentication instanceof OAuth2AuthenticationToken) {
             OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
             CustomOAuth2User oauthUser = (CustomOAuth2User) oauth2Token.getPrincipal();
