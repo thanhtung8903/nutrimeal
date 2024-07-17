@@ -153,11 +153,11 @@
                         <!-- Data will be injected here by JavaScript -->
                         </tbody>
                     </table>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination" id="pagination">
-                            <!-- Pagination controls will be injected here by JavaScript -->
-                        </ul>
-                    </nav>
+<!--                    <nav aria-label="Page navigation example">-->
+<!--                        <ul class="pagination" id="pagination">-->
+<!--                            &lt;!&ndash; Pagination controls will be injected here by JavaScript &ndash;&gt;-->
+<!--                        </ul>-->
+<!--                    </nav>-->
                 </div>
 
             </main>
@@ -245,6 +245,14 @@
 
             const paginatedData = filteredData.slice(start, end);
 
+            const statusTranslations = {
+                'NOT_DELIVERED': 'Chưa giao',
+                'IN_TRANSIT': 'Đang giao',
+                'DELIVERED': 'Đã giao',
+                'DELIVERY_FAILED': 'Giao thất bại',
+                'DELAYED': 'Hoãn'
+            };
+
             deliveryTableBody.innerHTML = paginatedData.map((delivery, index) => {
                 const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
                 const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED') ?
@@ -252,11 +260,11 @@
                 return `
                 <tr data-delivery-id="${delivery.deliveryId}">
                 <td>${delivery.deliveryId}</td>
-                    <td class="delivery-status">${delivery.deliveryStatus}</td>
+                <td class="delivery-status">${statusTranslations[delivery.deliveryStatus] || delivery.deliveryStatus}</td>
                 <td>${delivery.deliveryTime}</td>
                 <td>${delivery.deliveryDate}</td>
                 <td>${delivery.deliveryPrice}</td>
-                    <td class="delay-button-container">
+                <td class="delay-button-container">
                     <button class="btn btn-primary btn-sm" onclick="showDetail(${delivery.deliveryId})">Chi tiết</button>
                     ${delayButton}
                 </td>
