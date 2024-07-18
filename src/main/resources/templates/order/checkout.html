@@ -776,6 +776,9 @@
         const voucherList = document.getElementById('voucherList');
 
         vouchers.forEach(voucher => {
+            if(voucher.promotionQuantity===0){
+                return;
+            }
             const li = document.createElement('li');
             li.className = 'list-group-item voucher-item';
             li.setAttribute('data-code', voucher.promotionCode);
@@ -812,7 +815,7 @@
         document.getElementById('nextPage').disabled = (currentPage === totalPages - 1);
     }
     document.getElementById('goBackBtn').addEventListener('click', function() {
-        window.location.href = '/cart'; // Thay đổi đường dẫn tùy theo cấu trúc của trang web của bạn
+        window.location.href = '/cart';
     });
 </script>
 
