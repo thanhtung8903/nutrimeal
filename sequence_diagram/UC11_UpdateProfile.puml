@@ -1,0 +1,44 @@
+@startuml
+
+actor User
+participant "Profile Page" as ProfilePage
+participant "ProfileController" as ProfileController
+participant "UserService" as UserService
+participant "UserRepository" as UserRepository
+database "Database" as Database
+
+User -> ProfilePage: Enter updated profile information
+activate ProfilePage
+User -> ProfilePage: Submit profile update form
+ProfilePage -> ProfileController: HTTP POST /profile/update with updated info
+activate ProfileController
+ProfileController -> UserService: updateUserProfile(updatedInfo)
+activate UserService
+UserService -> UserService: validate(updatedInfo)
+activate UserService
+
+alt Validation fails
+    UserService -> ProfileController: Return validation errors
+    deactivate UserService
+    ProfileController -> ProfilePage: Display validation errors
+    deactivate ProfileController
+    ProfilePage -> User: Display validation errors
+    deactivate ProfilePage
+else Validation succeeds
+    UserService -> UserRepository: saveUpdatedUser(updatedInfo)
+    activate UserRepository
+    UserRepository -> Database: UPDATE User SET ... WHERE userId = ?
+    activate Database
+    Database --> UserRepository: Return update confirmation
+    deactivate Database
+    UserRepository -> UserService: Return update confirmation
+    deactivate UserRepository
+    UserService -> ProfileController: Return update confirmation
+    deactivate UserService
+    ProfileController -> ProfilePage: Redirect to profile page
+    deactivate ProfileController
+    ProfilePage -> User: Display updated profile information
+    deactivate ProfilePage
+end
+
+@enduml

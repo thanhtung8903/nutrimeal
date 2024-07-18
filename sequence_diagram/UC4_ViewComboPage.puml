@@ -1,0 +1,31 @@
+@startuml
+
+actor Customer
+participant "Browser" as Browser
+participant "HomeController" as HomeController
+participant "ComboService" as ComboService
+participant "ComboRepository" as ComboRepository
+database "Database" as Database
+
+Customer -> Browser: Request to view combo page
+activate Browser
+Browser -> HomeController: HTTP GET /combo
+activate HomeController
+HomeController -> ComboService: getAllCombos()
+activate ComboService
+ComboService -> ComboRepository: findAllCombos()
+activate ComboRepository
+ComboRepository -> Database: SELECT * FROM Combo
+activate Database
+Database --> ComboRepository: Result set
+deactivate Database
+ComboRepository --> ComboService: Combos
+deactivate ComboRepository
+ComboService --> HomeController: Combos
+deactivate ComboService
+HomeController -> Browser: Render combo page with combos
+deactivate HomeController
+Browser -> Customer: Display combo page with combos
+deactivate Browser
+
+@enduml

@@ -1,0 +1,51 @@
+@startuml
+
+actor Guest
+participant "Signup Form" as SignupForm
+participant "AuthController" as AuthController
+participant "AuthService" as AuthService
+participant "UserRepository" as UserRepository
+database "Database" as Database
+
+Guest -> SignupForm: Request to register an account
+activate SignupForm
+SignupForm -> AuthController: Submit registration form
+activate AuthController
+AuthController -> AuthService: signupUser()
+activate AuthService
+AuthService -> UserRepository: check if username or email exists
+activate UserRepository
+UserRepository -> Database: query for username or email
+activate Database
+Database --> UserRepository: return query result
+deactivate Database
+
+alt Username or email exists
+    UserRepository -> AuthService: Username or email exists
+    deactivate UserRepository
+    AuthService -> AuthController: Return error
+    deactivate AuthService
+    AuthController -> SignupForm: Display error message
+    deactivate AuthController
+    SignupForm -> Guest: Display error message
+    deactivate SignupForm
+else Username and email do not exist
+    UserRepository -> AuthService: Username and email do not exist
+    deactivate UserRepository
+    AuthService -> UserRepository: save new user
+    activate UserRepository
+    UserRepository -> Database: insert new user
+    activate Database
+    Database --> UserRepository: confirmation
+    deactivate Database
+    UserRepository -> AuthService: confirmation
+    deactivate UserRepository
+    AuthService -> AuthController: Return success
+    deactivate AuthService
+    AuthController -> SignupForm: Display success message
+    deactivate AuthController
+    SignupForm -> Guest: Display success message
+    deactivate SignupForm
+end
+
+@enduml

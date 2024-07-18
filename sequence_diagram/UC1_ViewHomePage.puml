@@ -1,10 +1,29 @@
 @startuml
+actor User
+participant Browser
+participant HomeController
+participant ComboService
+participant ComboRepository
+database "Database" as Database
 
-title: UC1 View Home Page
-
-
-
-
-actor User as u
-
+User -> Browser: Request to view home page
+activate Browser
+Browser -> HomeController: HTTP GET /home
+activate HomeController
+HomeController -> ComboService: getCombos()
+activate ComboService
+ComboService -> ComboRepository: findAllCombos()
+activate ComboRepository
+ComboRepository -> Database: SELECT * FROM Combo
+activate Database
+Database --> ComboRepository: Result set
+deactivate Database
+ComboRepository --> ComboService: List<Combos>
+deactivate ComboRepository
+ComboService --> HomeController: List<Combos>
+deactivate ComboService
+HomeController -> Browser: Render home page with combos
+deactivate HomeController
+Browser -> User: Display home page with combos
+deactivate Browser
 @enduml

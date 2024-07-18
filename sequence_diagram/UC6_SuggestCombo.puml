@@ -1,0 +1,31 @@
+@startuml
+
+actor User
+participant "Consult Page" as ConsultPage
+participant "HomeController" as HomeController
+participant "Combo Service" as ComboService
+participant "Combo Repository" as ComboRepository
+
+User -> ConsultPage: Enter weight, height, age, gender, activityMultiplier, weightGoal
+activate ConsultPage
+ConsultPage -> HomeController: Submit form with user info
+activate HomeController
+
+HomeController -> HomeController: Check if calorieValue is present
+HomeController -> HomeController: Parse calorieValue
+HomeController -> ComboService: getCombosByCalories(calorieValue - 500, calorieValue + 500)
+activate ComboService
+ComboService -> ComboRepository: findCombosByCalories(calorieValue - 500, calorieValue + 500)
+activate ComboRepository
+ComboRepository -> ComboService: Return matching combos
+deactivate ComboRepository
+ComboService -> HomeController: Return matching combos
+deactivate ComboService
+
+HomeController -> HomeController: Check other parameters (calorieResult, age, weight, height, gender, activityMultiplier, weightGoal)
+HomeController -> ConsultPage: Render consult page with combo suggestions and user info
+deactivate HomeController
+ConsultPage -> User: Display consult page with combo suggestions
+deactivate ConsultPage
+
+@enduml

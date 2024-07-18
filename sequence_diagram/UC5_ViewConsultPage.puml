@@ -1,0 +1,16 @@
+@startuml
+
+actor User
+participant "Browser" as Browser
+participant "HomeController" as HomeController
+
+User -> Browser: Request to view consult page
+activate Browser
+Browser -> HomeController: HTTP GET /consult
+activate HomeController
+HomeController -> Browser: Render consult page
+deactivate HomeController
+Browser -> User: Display consult page
+deactivate Browser
+
+@enduml

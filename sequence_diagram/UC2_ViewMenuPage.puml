@@ -1,0 +1,29 @@
+@startuml
+actor User
+participant Browser
+participant HomeController
+participant DailyMenuService
+participant DailyMenuRepository
+database "Database" as Database
+
+User -> Browser: Request to view menu page
+activate Browser
+Browser -> HomeController: HTTP GET /menu
+activate HomeController
+HomeController -> DailyMenuService: findDailyMenuWeek(today, today+6)
+activate DailyMenuService
+DailyMenuService -> DailyMenuRepository: findDailyMenuWeek(today, today+6)
+activate DailyMenuRepository
+DailyMenuRepository -> Database: Retrieve daily menu data
+activate Database
+Database --> DailyMenuRepository: Result set
+deactivate Database
+DailyMenuRepository --> DailyMenuService: List<DailyMenu>
+deactivate DailyMenuRepository
+DailyMenuService --> HomeController: List<DailyMenu>
+deactivate DailyMenuService
+HomeController -> Browser: Render menu page with daily menu
+deactivate HomeController
+Browser -> User: Display menu page with combos
+deactivate Browser
+@enduml

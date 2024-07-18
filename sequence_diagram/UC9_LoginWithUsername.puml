@@ -1,0 +1,47 @@
+@startuml
+
+actor User
+participant "Login Page" as LoginPage
+participant "Home Page" as HomePage
+participant "AuthController" as AuthController
+participant "AuthService" as AuthService
+participant "UserRepository" as UserRepository
+database "Database" as Database
+
+User -> LoginPage: Enter username and password
+activate LoginPage
+User -> LoginPage: Submit login form
+LoginPage -> AuthController: HTTP POST /login with credentials
+activate AuthController
+AuthController -> AuthService: authenticate(username, password)
+activate AuthService
+AuthService -> UserRepository: checkUserCredentials(username, password)
+activate UserRepository
+UserRepository -> Database: queryUserCredentials(username, password
+activate Database
+Database --> UserRepository: Return user details
+deactivate Database
+
+alt Credentials invalid
+    UserRepository -> AuthService: Return error
+    deactivate UserRepository
+    AuthService -> AuthController: Return error
+    deactivate AuthService
+    AuthController -> LoginPage: Display error message
+    deactivate AuthController
+    LoginPage -> User: Display error message
+    deactivate LoginPage
+else Credentials valid
+    UserRepository -> AuthService: Return user details
+    deactivate UserRepository
+    AuthService -> AuthController: Return user details
+    deactivate AuthService
+    AuthController -> LoginPage: Redirect to home page
+    deactivate AuthController
+    LoginPage -> HomePage: Load home page
+    deactivate LoginPage
+    HomePage -> User: Display home page
+    deactivate HomePage
+end
+
+@enduml
