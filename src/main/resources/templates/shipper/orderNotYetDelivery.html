@@ -163,7 +163,7 @@
   </style>
 </head>
 <body class="delivered">
-<div th:insert="~{fragments/sidebar :: sidebar-shipper (page ='beingDelivery')}"></div>
+<div th:insert="~{fragments/sidebar :: sidebar-shipper (page ='notdeli')}"></div>
 <div class="content" id="content">
 
 <div class="content-wrapper">
@@ -245,6 +245,9 @@
       });
     });
   });
+  function formatNumber(number) {
+    return new Intl.NumberFormat('vi-VN').format(number);
+  }
   document.addEventListener("DOMContentLoaded", function () {
     const orderTableBody = document.getElementById('order-table-body');
     const toastContainer = document.querySelector('.toast-container');
@@ -287,7 +290,7 @@
         <td>${delivery.customerFullName}</td>
         <td>${delivery.deliveryPhone}</td>
         <td>${delivery.deliveryAddress}</td>
-        <td>${delivery.deliveryPrice}</td>
+        <td>${formatNumber(delivery.deliveryPrice)}</td>
         <td>
            <div class="btn-group">
                 <a href="#" class="btn btn-success btn-fail-order ${!isToday ? 'disabled' : ''}">Xác nhận giao</a>
@@ -498,7 +501,7 @@
     document.getElementById('search-date').addEventListener('input', function (event) {
       const searchValue = event.target.value.trim().toLowerCase();
       const filteredOrders = deliveries.filter(order =>
-              order.customerFullName.toLowerCase().includes(searchValue)
+              order.customerFullName.toLowerCase().includes(searchValue) || order.deliveryAddress.toLowerCase().includes(searchValue) || order.deliveryId.toString().includes(searchValue) || order.deliveryPhone.toString().includes(searchValue)
       );
       currentPage = 1;
       displayOrders(filteredOrders);

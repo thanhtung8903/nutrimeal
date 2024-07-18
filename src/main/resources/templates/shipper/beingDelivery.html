@@ -333,7 +333,9 @@
             });
         });
     });
-
+    function formatNumber(number) {
+        return new Intl.NumberFormat('vi-VN').format(number);
+    }
     document.addEventListener("DOMContentLoaded", function () {
         const orderTableBody = document.getElementById('order-table-body');
         const pagination = document.getElementById('pagination');
@@ -377,7 +379,7 @@
                     <td>${deliveries.customerFullName}</td>
                     <td>${deliveries.deliveryPhone}</td>
                     <td>${deliveries.deliveryAddress}</td>
-                    <td>${deliveries.deliveryPrice}</td>
+                    <td>${formatNumber(deliveries.deliveryPrice)}</td>
                     <td>
                         <div class="btn-group">
                             <a href="#" class="btn btn-success btn-success-order">Thành công</a>
@@ -617,7 +619,7 @@
         document.getElementById('search-date').addEventListener('input', function (event) {
             const searchValue = event.target.value.trim().toLowerCase();
             const filteredOrders = deliveries.filter(order =>
-                order.deliveryDate.toLowerCase().match(searchValue)
+                order.deliveryDate.toLowerCase().match(searchValue) || order.customerFullName.toLowerCase().includes(searchValue) || order.deliveryAddress.toLowerCase().includes(searchValue) || order.deliveryId.toString().includes(searchValue) || order.deliveryPhone.toString().includes(searchValue)
             );
             displayOrders(filteredOrders, currentPage, rowsPerPage);
             setupPagination(filteredOrders.length, rowsPerPage);
