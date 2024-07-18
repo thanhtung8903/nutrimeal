@@ -347,4 +347,8 @@ public class DeliveryService {
     public void save(Delivery delivery) {
         deliveryRepository.save(delivery);
     }
+
+    public List<Delivery> findDeliveriesByOrder(Order order) {
+        return deliveryRepository.findAllByOrder(order);
+    }
 }

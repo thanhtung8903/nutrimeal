@@ -185,7 +185,7 @@
                     <th>Địa chỉ khách hàng</th>
                     <th>Ghi chú</th>
                     <th>Tổng tiền</th>
-                    <th>Trạng thái</th>
+<!--                    <th>Trạng thái</th>-->
                     <th>Action</th>
 
                 </tr>
@@ -247,6 +247,9 @@
             });
         });
     });
+    function formatNumber(number) {
+        return new Intl.NumberFormat('vi-VN').format(number);
+    }
     document.addEventListener("DOMContentLoaded", function () {
         const orderTableBody = document.getElementById('order-table-body');
         const pagination = document.getElementById('pagination');
@@ -288,8 +291,7 @@
                     <td>${delivery.deliveryPhone}</td>
                     <td>${delivery.deliveryAddress}</td>
                     <td>${delivery.deliveryNote}</td>
-                    <td>${delivery.deliveryPrice}</td>
-                    <td>${delivery.deliveryStatus}</td>
+                    <td>${formatNumber(delivery.deliveryPrice)}</td>
                     <td>
                          <div class="btn-group">
                             <button class="btn btn-sm btn-secondary detail-btn" data-id="${delivery.deliveryId}">Chi tiết</button>
@@ -446,7 +448,7 @@
         document.getElementById('search-date').addEventListener('input', function (event) {
             const searchValue = event.target.value.trim().toLowerCase();
             const filteredOrders = deliveries.filter(order =>
-                order.deliveryDate.toLowerCase().match(searchValue)
+                order.deliveryDate.toLowerCase().match(searchValue) || order.customerFullName.toLowerCase().includes(searchValue) || order.deliveryAddress.toLowerCase().includes(searchValue) || order.deliveryId.toString().includes(searchValue) || order.deliveryPhone.toString().includes(searchValue)
             );
             displayOrders(filteredOrders, currentPage, rowsPerPage);
             setupPagination(filteredOrders.length, rowsPerPage);
