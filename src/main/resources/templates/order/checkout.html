@@ -5,6 +5,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+
 <style>
     body {
         background-color: #f8f7f7;
@@ -206,6 +208,15 @@
         background-color: #f0f0f0;
     }
 
+    .list-group-item {
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .list-group-item:hover {
+        background-color: #f0f0f0;
+    }
+
 </style>
 
 <header th:replace="~{fragments :: header-fragment}"></header>
@@ -218,17 +229,17 @@
     <nav aria-label="breadcrumb" class="breadcrumb-container container">
         <ol class="breadcrumb ">
             <li class="breadcrumb-item">
-                <a href="javascript:void(0);">
+                <a href="/combo">
                     <span><i class="fas fa-shopping-cart" aria-hidden="true"></i></span>Đặt hàng
                 </a>
             </li>
             <li class="breadcrumb-item active">
-                <a href="javascript:void(0);">
+                <a href="/cart">
                     <span><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>Chỉnh sửa
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="javascript:void(0);" class="active">
+                <a href="/checkout" class="active">
                     <span><i class="bi bi-coin"></i></span>Thanh toán
                 </a>
             </li>
@@ -491,14 +502,31 @@
                 <button type="button" class="btn btn-danger btn-lg btn-block mt-3" id="createOrderButton">Đặt hàng
                 </button>
 
-                <button type="button" class="btn btn-secondary btn-block mt-2">Trở về</button>
+                <button type="button" class="btn btn-secondary btn-block mt-2" id="goBackBtn">Trở về</button>
             </div>
         </div>
     </section>
-
+    <div class="modal fade" id="voucherListModal" tabindex="-1" aria-labelledby="voucherListModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="voucherListModalLabel">Available Vouchers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group" id="voucherList">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="prevPage">Previous</button>
+                    <button type="button" class="btn btn-secondary" id="nextPage">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </main>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const inputs = document.querySelectorAll('.card-quantity input');
@@ -696,7 +724,96 @@
             sendToApi();
         });
     });
+    let currentPage = 0;
+    const pageSize = 12;
+    let totalPages = 0;
+    let voucherListModal;
 
+    document.getElementById('promoCode').addEventListener('click', function() {
+        fetchVouchers(currentPage);
+    });
+
+    document.getElementById('prevPage').addEventListener('click', function() {
+        if (currentPage > 0) {
+            currentPage--;
+            fetchVouchers(currentPage);
+        }
+    });
+
+    document.getElementById('nextPage').addEventListener('click', function() {
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            fetchVouchers(currentPage);
+        }
+    });
+
+    function fetchVouchers(page) {
+        const apiUrl = `http://localhost:8080/api/promotion?page=${page}&size=${pageSize}`;
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Fetched vouchers:', data);
+                currentPage = data.number;
+                totalPages = data.totalPages;
+                clearVoucherList();
+                populateVoucherList(data.content);
+
+            })
+            .catch(error => console.error('Error fetching vouchers:', error));
+    }
+
+    function clearVoucherList() {
+        const voucherList = document.getElementById('voucherList');
+        voucherList.innerHTML = '';
+    }
+
+    function populateVoucherList(vouchers) {
+        const voucherList = document.getElementById('voucherList');
+
+        vouchers.forEach(voucher => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item voucher-item';
+            li.setAttribute('data-code', voucher.promotionCode);
+
+            const icon = document.createElement('i');
+            icon.className = 'bi bi-tag';
+            icon.style.marginRight = '10px';
+            icon.style.fontSize = '20px';
+            icon.style.color = 'red';
+            li.appendChild(icon);
+
+            const textNode = document.createTextNode(`${voucher.promotionCode} - ${voucher.promotionDescription}`);
+            li.appendChild(textNode);
+
+            voucherList.appendChild(li);
+
+            li.addEventListener('click', function() {
+                if (document.getElementById('promoCode')) {
+                    document.getElementById('promoCode').value = voucher.promotionCode;
+                }
+
+                if (voucherListModal) {
+                    voucherListModal.hide();
+                }
+            });
+        });
+
+        if (!voucherListModal) {
+            voucherListModal = new bootstrap.Modal(document.getElementById('voucherListModal'));
+        }
+        voucherListModal.show();
+
+        document.getElementById('prevPage').disabled = (currentPage === 0);
+        document.getElementById('nextPage').disabled = (currentPage === totalPages - 1);
+    }
+    document.getElementById('goBackBtn').addEventListener('click', function() {
+        window.location.href = '/cart'; // Thay đổi đường dẫn tùy theo cấu trúc của trang web của bạn
+    });
 </script>
 
 </body>
