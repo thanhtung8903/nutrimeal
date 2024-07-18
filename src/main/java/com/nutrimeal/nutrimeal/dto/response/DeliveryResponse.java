@@ -21,5 +21,5 @@ public class DeliveryResponse {
     private String shipperFullName;
     private String deliveryUpdateTime;
     private int deliveryPrice;
-
+    private int delay;
 }

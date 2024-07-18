@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="~{fragments :: head('Point', 'none')}"></head>
+<head th:replace="~{fragments :: head('Delivery', 'none')}"></head>
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
 
@@ -230,7 +230,7 @@
             const end = page * itemsPerPage;
 
             const today = new Date();
-            today.setDate(today.getDate() + 1); // Add 1 day to get tomorrow's date
+            today.setDate(today.getDate()); // Add 1 day to get tomorrow's date
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
 
@@ -255,8 +255,8 @@
 
             deliveryTableBody.innerHTML = paginatedData.map((delivery, index) => {
                 const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
-                const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED') ?
-                    `<button class="btn btn-warning btn-sm" style="margin-top: 5px" onclick="showDelayConfirmation(${delivery.deliveryId})">Hoãn</button>` : '';
+                const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED'  && delivery.delay !== 0) ?
+                    `<button class="btn btn-warning btn-sm" style="margin-top: 5px" onclick="showDelayConfirmation(${delivery.deliveryId})" >Hoãn</button>` : '';
                 return `
                 <tr data-delivery-id="${delivery.deliveryId}">
                 <td>${delivery.deliveryId}</td>

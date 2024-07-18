@@ -261,6 +261,7 @@ public class DeliveryService {
                     .shipperFullName(delivery.getShipper().getFullName())
                     .deliveryUpdateTime(delivery.getDeliveryUpdateTime() == null ? null : delivery.getDeliveryUpdateTime().toString())
                     .deliveryPrice(delivery.getDeliveryPrice())
+                    .delay(delivery.getOrder().getDelay())
             .build();
 
             deliveryResponseList.add(deliveryResponse);
