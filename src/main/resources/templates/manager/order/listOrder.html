@@ -194,98 +194,200 @@
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
-        let ordersData = [];
-        const pageSize = 10;
-        let currentPage = 1;
+    let ordersData = [];
+    const pageSize = 10;
+    let currentPage = 1;
 
-        // Toggle sidebar
-        document.getElementById('toggle-sidebar').addEventListener('click', function() {
-            var sidebar = document.getElementById('sidebar');
-            var content = document.getElementById('content');
-            sidebar.classList.toggle('collapsed');
-            content.classList.toggle('collapsed');
-        });
+    function formatCurrency(amount) {
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 
-        // Handle submenu toggles
-        var submenuToggles = document.querySelectorAll('.has-submenu > a');
-        submenuToggles.forEach(function(submenuToggle) {
-            submenuToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                var submenu = this.nextElementSibling;
-                submenu.classList.toggle('open');
-            });
-        });
-
-        function formatCurrency(amount) {
-            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    function fetchOrders(status = '') {
+        let url = '/api/orders';
+        if (status) {
+            url += `?status=${status}`;
         }
 
-        // Fetch order data from the API and populate the table
-        function fetchOrders(status = '') {
-            let url = '/api/orders';
-            if (status) {
-                url += `?status=${status}`;
-            }
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                ordersData = data;
+                currentPage = 1;
+                displayOrders();
+                setupPagination();
+            })
+            .catch(error => console.error('Error fetching orders:', error));
+    }
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    ordersData = data;
-                    currentPage = 1;
-                    displayOrders();
-                    setupPagination();
-                })
-                .catch(error => console.error('Error fetching orders:', error));
-        }
+    function displayOrders() {
+        const tableBody = document.getElementById('order-table-body');
+        tableBody.innerHTML = ''; // Clear any existing rows
 
-        function displayOrders() {
-            const tableBody = document.getElementById('order-table-body');
-            tableBody.innerHTML = ''; // Clear any existing rows
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedOrders = ordersData.slice(startIndex, endIndex);
 
-            const startIndex = (currentPage - 1) * pageSize;
-            const endIndex = startIndex + pageSize;
-            const paginatedOrders = ordersData.slice(startIndex, endIndex);
-
-            paginatedOrders.forEach(order => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
+        paginatedOrders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
                     <td>${order.orderId}</td>
                     <td>${order.fullName}</td>
                     <td>${order.address}</td>
                     <td>${order.orderNote}</td>
                     <td>${order.orderDate}</td>
                     <td>${formatCurrency(order.orderTotalPrice)}</td>
-                    <td>${order.orderStatus}</td>
+                    <td id="status-${order.orderId}">${order.orderStatus}</td>
                     <td class="justify-content-center d-flex">
                         <button class="btn btn-secondary btn-sm me-1" onclick="viewDetails(${order.orderId})" title="Xem chi tiết">
                             <i class="bi bi-eye"></i>
                         </button>
+                        <button class="btn btn-secondary btn-sm me-1" onclick="cancelOrder(${order.orderId})" title="cancel">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
                     </td>
                 `;
-                tableBody.appendChild(row);
+            tableBody.appendChild(row);
+        });
+    }
+
+    function cancelOrder(orderId) {
+        if (!confirm('Are you sure you want to cancel this order?')) {
+            return;
+        }
+
+        // Call your API to update the order status to 'canceled'
+        fetch(`/api/orders/${orderId}/cancel`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any necessary authentication headers here
+            },
+            body: JSON.stringify({ status: 'canceled' })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle successful response
+                console.log('Order canceled:', data);
+                // Update the UI to reflect the canceled status
+                document.getElementById(`status-${orderId}`).innerText = 'Canceled';
+                // Optionally disable the cancel button or change its appearance
+                const cancelButton = document.querySelector(`button[onclick="cancelOrder(${orderId})"]`);
+                cancelButton.disabled = true;
+                cancelButton.classList.add('disabled');
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('There was a problem with the fetch operation:', error);
+                alert('Failed to cancel the order. Please try again.');
             });
+    }
+
+    function setupPagination() {
+        const paginationControls = document.getElementById('pagination-controls');
+        paginationControls.innerHTML = '';
+
+        const totalPages = Math.ceil(ordersData.length / pageSize);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageItem = document.createElement('div');
+            pageItem.className = 'page-item';
+            pageItem.innerHTML = `<a class="page-link ${i === currentPage ? 'active' : ''}" href="#">${i}</a>`;
+            pageItem.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentPage = i;
+                displayOrders();
+                setupPagination();
+            });
+            paginationControls.appendChild(pageItem);
         }
+    }
 
-        function setupPagination() {
-            const paginationControls = document.getElementById('pagination-controls');
-            paginationControls.innerHTML = '';
+    async function fetchOrderDetails(orderId) {
+        try {
+            const orderResponse = await fetch(`/api/orders/${orderId}`);
+            const orderDetailsResponse = await fetch(`/api/orders/${orderId}/orderdetail`);
 
-            const totalPages = Math.ceil(ordersData.length / pageSize);
-
-            for (let i = 1; i <= totalPages; i++) {
-                const pageItem = document.createElement('div');
-                pageItem.className = 'page-item';
-                pageItem.innerHTML = `<a class="page-link ${i === currentPage ? 'active' : ''}" href="#">${i}</a>`;
-                pageItem.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    currentPage = i;
-                    displayOrders();
-                    setupPagination();
-                });
-                paginationControls.appendChild(pageItem);
+            if (!orderResponse.ok || !orderDetailsResponse.ok) {
+                throw new Error('Failed to fetch order details');
             }
+
+            const order = await orderResponse.json();
+            const orderDetails = await orderDetailsResponse.json();
+
+            displayOrderDetails(order, orderDetails);
+        } catch (error) {
+            alert('Failed to fetch order details');
+            console.error(error);
         }
+    }
+
+    function displayOrderDetails(order, orderDetails) {
+        const orderDetailsContent = document.getElementById('orderDetailsContent');
+        orderDetailsContent.innerHTML = `
+                <h4>Thông tin đơn hàng</h4>
+                <p><strong>ID:</strong> ${order.orderId}</p>
+                <p><strong>Người đặt:</strong> ${order.fullName}</p>
+                <p><strong>Địa chỉ:</strong> ${order.address}</p>
+                <p><strong>Số điện thoại:</strong> ${order.phone}</p>
+                <p><strong>Trạng thái:</strong> ${order.orderStatus}</p>
+                <p><strong>Ngày đặt:</strong> ${order.orderDate}</p>
+                <p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod}</p>
+                <p><strong>Tổng tiền:</strong> ${formatCurrency(order.orderTotalPrice)} VND</p>
+                <h4>Chi tiết sản phẩm</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Loại</th>
+                            <th>Số lượng</th>
+                            <th>Số tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${orderDetails.map(detail => `
+                            <tr>
+                                <td>
+                                    <img src="${detail.comboImage}" alt="${detail.comboName}" class="combo-image">
+                                    <div>${detail.comboName}</div>
+                                </td>
+                                <td>${detail.comboDay}</td>
+                                <td>${detail.quantity}</td>
+                                <td>${formatCurrency(detail.price)} VND</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+        const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+        modal.show();
+    }
+
+    window.viewDetails = function(orderId) {
+        fetchOrderDetails(orderId);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('toggle-sidebar').addEventListener('click', function () {
+            var sidebar = document.getElementById('sidebar');
+            var content = document.getElementById('content');
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        });
+
+        var submenuToggles = document.querySelectorAll('.has-submenu > a');
+        submenuToggles.forEach(function (submenuToggle) {
+            submenuToggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                var submenu = this.nextElementSibling;
+                submenu.classList.toggle('open');
+            });
+        });
 
         // Fetch orders on page load
         fetchOrders();
@@ -295,71 +397,6 @@
             const status = document.getElementById('statusFilter').value;
             fetchOrders(status);
         });
-
-        async function fetchOrderDetails(orderId) {
-            try {
-                const orderResponse = await fetch(`/api/orders/${orderId}`);
-                const orderDetailsResponse = await fetch(`/api/orders/${orderId}/orderdetail`);
-
-                if (!orderResponse.ok || !orderDetailsResponse.ok) {
-                    throw new Error('Failed to fetch order details');
-                }
-
-                const order = await orderResponse.json();
-                const orderDetails = await orderDetailsResponse.json();
-
-                displayOrderDetails(order, orderDetails);
-            } catch (error) {
-                alert('Failed to fetch order details');
-                console.error(error);
-            }
-        }
-
-        function displayOrderDetails(order, orderDetails) {
-            const orderDetailsContent = document.getElementById('orderDetailsContent');
-            orderDetailsContent.innerHTML = `
-            <h4>Thông tin đơn hàng</h4>
-            <p><strong>ID:</strong> ${order.orderId}</p>
-            <p><strong>Người đặt:</strong> ${order.fullName}</p>
-            <p><strong>Địa chỉ:</strong> ${order.address}</p>
-            <p><strong>Số điện thoại:</strong> ${order.phone}</p>
-            <p><strong>Trạng thái:</strong> ${order.orderStatus}</p>
-            <p><strong>Ngày đặt:</strong> ${order.orderDate}</p>
-            <p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod}</p>
-            <p><strong>Tổng tiền:</strong> ${formatCurrency(order.orderTotalPrice)} VND</p>
-            <h4>Chi tiết sản phẩm</h4>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Sản phẩm</th>
-                        <th>Loại</th>
-                        <th>Số lượng</th>
-                        <th>Số tiền</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${orderDetails.map(detail => `
-                        <tr>
-                            <td>
-                                <img src="${detail.comboImage}" alt="${detail.comboName}" class="combo-image">
-                                <div>${detail.comboName}</div>
-                            </td>
-                            <td>${detail.comboDay}</td>
-                            <td>${detail.quantity}</td>
-                            <td>${formatCurrency(detail.price)} VND</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        `;
-
-            const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
-            modal.show();
-        }
-
-        window.viewDetails = function(orderId) {
-            fetchOrderDetails(orderId);
-        }
     });
 </script>
 
