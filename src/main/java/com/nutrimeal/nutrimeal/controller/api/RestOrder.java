@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @RestController
@@ -59,8 +62,19 @@ public class RestOrder {
         List<Delivery> deliveries = deliveryService.findDeliveriesByOrder(order);
 
         for (Delivery delivery : deliveries) {
-            delivery.setDeliveryStatus(DeliveryStatus.CANCELLED.name());
-            deliveryService.save(delivery);
+            LocalDate deliveryDate = Instant.ofEpochMilli(delivery.getDeliveryDate().getTime())
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            LocalDate currentDate = LocalDate.now();
+
+            System.out.println("Delivery Date: " + deliveryDate);
+            System.out.println("Current Date: " + currentDate);
+
+            if (deliveryDate.isAfter(currentDate)) {
+                System.out.println("Cancelling delivery with ID: " + delivery.getDeliveryId());
+                delivery.setDeliveryStatus(DeliveryStatus.CANCELLED.name());
+                deliveryService.save(delivery);
+            }
         }
 
         orderService.save(order);
