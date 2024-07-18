@@ -48,9 +48,10 @@
         cursor: pointer;
     }
 
-    .btn-danger:hover {
+    .btn-danger{
         background-color: red !important;
         font-weight: 600;
+        border: none;
     }
 
     .beo1 {
@@ -228,30 +229,53 @@
         const paginatedOrders = ordersData.slice(startIndex, endIndex);
 
         paginatedOrders.forEach(order => {
+            let displayStatus = order.orderStatus;
+            if (order.orderStatus === 'SHIPPED') {
+                displayStatus = 'SHIPPING';
+            }
+
             const row = document.createElement('tr');
             row.innerHTML = `
-                    <td>${order.orderId}</td>
-                    <td>${order.fullName}</td>
-                    <td>${order.address}</td>
-                    <td>${order.orderNote}</td>
-                    <td>${order.orderDate}</td>
-                    <td>${formatCurrency(order.orderTotalPrice)}</td>
-                    <td id="status-${order.orderId}">${order.orderStatus}</td>
-                    <td class="justify-content-center d-flex">
-                        <button class="btn btn-secondary btn-sm me-1" onclick="viewDetails(${order.orderId})" title="Xem chi tiết">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <button class="btn btn-secondary btn-sm me-1" onclick="cancelOrder(${order.orderId})" title="cancel">
-                            <i class="bi bi-x-lg"></i>
-                        </button>
-                    </td>
-                `;
+            <td>${order.orderId}</td>
+            <td>${order.fullName}</td>
+            <td>${order.address}</td>
+            <td>${order.orderNote}</td>
+            <td>${order.orderDate}</td>
+            <td>${formatCurrency(order.orderTotalPrice)}</td>
+            <td id="status-${order.orderId}">${displayStatus}</td>
+             <td class="justify-content-start d-flex">
+                <button class="btn btn-secondary btn-sm me-1" onclick="viewDetails(${order.orderId})" title="Xem chi tiết">
+                    <i class="bi bi-eye"></i>
+                </button>
+                ${order.orderStatus === 'SHIPPED' ? `
+                <button class="btn btn-danger btn-sm me-1" onclick="cancelOrder(${order.orderId})" title="Hủy">
+                   <i class="bi bi-x-circle"></i>
+                </button>` : ''}
+            </td>
+        `;
+        //     if (order.orderStatus === 'SHIPPED') {
+        //         row.innerHTML += `
+        //         <button class="btn btn-danger btn-sm me-1" onclick="cancelOrder(${order.orderId})" title="Hủy">
+        //             <i class="bi bi-x-lg"></i>
+        //         </button>
+        //     `;
+        //     }else {
+        //         row.innerHTML += `
+        //         <button class="btn btn-secondary btn-sm me-1 disabled" title="Hủy" disabled>
+        //             <i class="bi bi-x-lg"></i>
+        //         </button>
+        //     `;
+        //     }
+        //     row.innerHTML += `
+        //     </td>
+        // `;
+
             tableBody.appendChild(row);
         });
     }
 
     function cancelOrder(orderId) {
-        if (!confirm('Are you sure you want to cancel this order?')) {
+        if (!confirm('Bạn có chắc chắn muốn hủy đơn hàng?')) {
             return;
         }
 
@@ -274,7 +298,7 @@
                 // Handle successful response
                 console.log('Order canceled:', data);
                 // Update the UI to reflect the canceled status
-                document.getElementById(`status-${orderId}`).innerText = 'Canceled';
+                document.getElementById(`status-${orderId}`).innerText = 'CANCELLED';
                 // Optionally disable the cancel button or change its appearance
                 const cancelButton = document.querySelector(`button[onclick="cancelOrder(${orderId})"]`);
                 cancelButton.disabled = true;
