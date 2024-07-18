@@ -1,0 +1,10 @@
+@startuml
+
+title: UC1 View Home Page
+
+
+
+
+actor User as u
+
+@enduml
