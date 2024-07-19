@@ -153,11 +153,11 @@
                         <!-- Data will be injected here by JavaScript -->
                         </tbody>
                     </table>
-<!--                    <nav aria-label="Page navigation example">-->
-<!--                        <ul class="pagination" id="pagination">-->
-<!--                            &lt;!&ndash; Pagination controls will be injected here by JavaScript &ndash;&gt;-->
-<!--                        </ul>-->
-<!--                    </nav>-->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination" id="pagination">
+                            <!-- Pagination controls will be injected here by JavaScript -->
+                        </ul>
+                    </nav>
                 </div>
 
             </main>
@@ -214,14 +214,40 @@
         let allData = [];
         let currentDeliveryId = null;
 
+        // function fetchData() {
+        //     fetch('http://localhost:8080/api/delivery/user')
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             allData = data;
+        //             renderTable(data, currentPage);
+        //             renderPagination(data.length, itemsPerPage, currentPage);
+        //         });
+        // }
+
         function fetchData() {
             fetch('http://localhost:8080/api/delivery/user')
                 .then(response => response.json())
                 .then(data => {
                     allData = data;
-                    renderTable(data, currentPage);
-                    renderPagination(data.length, itemsPerPage, currentPage);
+                    const filteredData = getFilteredData(data);
+                    renderTable(filteredData, currentPage);
+                    renderPagination(filteredData.length, itemsPerPage, currentPage);
                 });
+        }
+
+        function getFilteredData(data) {
+            const today = new Date();
+            today.setDate(today.getDate());
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+
+            const todayString = today.toISOString().slice(0, 10);
+            const tomorrowString = tomorrow.toISOString().slice(0, 10);
+
+            return data.filter(delivery => {
+                const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
+                return deliveryDate === todayString || deliveryDate === tomorrowString;
+            });
         }
 
         function renderTable(data, page) {
@@ -274,26 +300,45 @@
         }
 
 
+        // function renderPagination(totalItems, itemsPerPage, currentPage) {
+        //     const pagination = document.getElementById('pagination');
+        //     const totalPages = Math.ceil(totalItems / itemsPerPage);
+        //     let paginationHtml = '';
+        //
+        //     for (let i = 1; i <= totalPages; i++) {
+        //         paginationHtml += `
+        //         <li class="page-item ${i === currentPage ? 'active' : ''}">
+        //             <a class="page-link" href="#" onclick="navigateToPage(${i})">${i}</a>
+        //         </li>
+        //     `;
+        //     }
+        //
+        //     pagination.innerHTML = paginationHtml;
+        // }
+
         function renderPagination(totalItems, itemsPerPage, currentPage) {
-            const pagination = document.getElementById('pagination');
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             let paginationHtml = '';
 
             for (let i = 1; i <= totalPages; i++) {
                 paginationHtml += `
-                <li class="page-item ${i === currentPage ? 'active' : ''}">
-                    <a class="page-link" href="#" onclick="navigateToPage(${i})">${i}</a>
-                </li>
-            `;
+        <li class="page-item ${i === currentPage ? 'active' : ''}">
+            <a class="page-link" href="#" onclick="navigateToPage(${i})">${i}</a>
+        </li>
+    `;
             }
 
+            const pagination = document.getElementById('pagination');
             pagination.innerHTML = paginationHtml;
         }
 
         window.navigateToPage = function (page) {
             currentPage = page;
-            renderTable(allData, page);
-            renderPagination(allData.length, itemsPerPage, page);
+            // renderTable(allData, page);
+            // renderPagination(allData.length, itemsPerPage, page);
+            const filteredData = getFilteredData(allData);
+            renderTable(filteredData, page);
+            renderPagination(filteredData.length, itemsPerPage, page);
         };
 
         window.showDelayConfirmation = function (deliveryId) {
