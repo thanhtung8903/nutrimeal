@@ -122,7 +122,7 @@ public class HomeController {
         if (calorieValue != null) {
             int calorieValueResult = Integer.parseInt(calorieValue);
             if (calorieValueResult > 0) {
-                List<Combo> comboList = comboService.getCombosByCalories(calorieValueResult - 400, calorieValueResult + 400);
+                List<Combo> comboList = comboService.getCombosByCalories(calorieValueResult - 500, calorieValueResult + 500);
                 model.addAttribute("comboList", comboList);
                 model.addAttribute("calorieValue", calorieValue);
                 model.addAttribute("comboSuggest", "Combo gợi ý");

@@ -1,0 +1,55 @@
+@startuml
+
+actor User
+participant "Login Page" as LoginPage
+participant "AuthController" as AuthController
+participant "AuthService" as AuthService
+participant "UserRepository" as UserRepository
+database "Database" as Database
+participant "Google OAuth Service" as GoogleOAuthService
+participant "Home Page" as HomePage
+
+User -> LoginPage: Click "Login with Google"
+activate LoginPage
+LoginPage -> GoogleOAuthService: Redirect to Google OAuth
+activate GoogleOAuthService
+GoogleOAuthService -> User: Display Google login page
+deactivate LoginPage
+User -> GoogleOAuthService: Enter Google credentials
+GoogleOAuthService -> AuthController: Return authorization code
+deactivate GoogleOAuthService
+activate AuthController
+AuthController -> AuthService: authenticateWithGoogle(authCode)
+activate AuthService
+AuthService -> GoogleOAuthService: Validate authCode
+activate GoogleOAuthService
+GoogleOAuthService -> AuthService: Return user info
+deactivate GoogleOAuthService
+AuthService -> UserRepository: findOrCreateUser(googleUserInfo)
+activate UserRepository
+UserRepository -> Database: queryUserByGoogleId(googleUserInfo.id)
+activate Database
+Database --> UserRepository: Return user details or null
+deactivate Database
+
+alt User not found
+    UserRepository -> Database: createUser(googleUserInfo)
+    activate Database
+    Database --> UserRepository: Return new user details
+    deactivate Database
+end
+
+UserRepository -> AuthService: Return user details
+deactivate UserRepository
+AuthService -> AuthController: Return user details
+deactivate AuthService
+AuthController -> LoginPage: Redirect to home page
+deactivate AuthController
+activate LoginPage
+LoginPage -> HomePage: Load home page
+deactivate LoginPage
+HomePage -> User: Display home page
+activate HomePage
+deactivate HomePage
+
+@enduml
