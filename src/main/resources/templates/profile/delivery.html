@@ -276,8 +276,13 @@
                 'IN_TRANSIT': 'Đang giao',
                 'DELIVERED': 'Đã giao',
                 'DELIVERY_FAILED': 'Giao thất bại',
-                'DELAYED': 'Hoãn'
+                'DELAYED': 'Hoãn',
+                'CANCELLED': 'Hủy'
             };
+
+            function formatCurrency(amount) {
+                return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
 
             deliveryTableBody.innerHTML = paginatedData.map((delivery, index) => {
                 const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
@@ -289,7 +294,7 @@
                 <td class="delivery-status">${statusTranslations[delivery.deliveryStatus] || delivery.deliveryStatus}</td>
                 <td>${delivery.deliveryTime}</td>
                 <td>${delivery.deliveryDate}</td>
-                <td>${delivery.deliveryPrice}</td>
+                <td>${formatCurrency(delivery.deliveryPrice)}</td>
                 <td class="delay-button-container">
                     <button class="btn btn-primary btn-sm" onclick="showDetail(${delivery.deliveryId})">Chi tiết</button>
                     ${delayButton}
