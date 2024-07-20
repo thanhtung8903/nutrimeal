@@ -1,0 +1,14 @@
+@startuml
+actor Shipper
+
+Shipper -> ShipperPage: Search order information
+ShipperPage -> ShipperController: getOrderInfo()
+ShipperController -> ShipperService: getOrderInfo()
+ShipperService -> ShipperRepository: findOrderById()
+ShipperRepository -> Database: Query order by ID
+Database --> ShipperRepository: Return order data
+ShipperRepository --> ShipperService: Return order data
+ShipperService --> ShipperController: Return order data
+ShipperController --> ShipperPage: Return order data
+ShipperPage --> Shipper: Display order information
+@enduml

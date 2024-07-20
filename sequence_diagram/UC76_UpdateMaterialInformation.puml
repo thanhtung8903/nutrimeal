@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Update material information
+ManagerPage -> ManagerMaterialController: updateMaterial(materialId, newInfo)
+ManagerMaterialController -> MaterialService: updateMaterial(materialId, newInfo)
+MaterialService -> MaterialRepository: updateMaterial(materialId, newInfo)
+MaterialRepository -> Database: Execute update query
+Database --> MaterialRepository: Confirm update
+MaterialRepository --> MaterialService: Confirm update
+MaterialService --> ManagerMaterialController: Confirm update
+ManagerMaterialController --> ManagerPage: Confirm update
+ManagerPage --> Manager: Display update confirmation
+@enduml

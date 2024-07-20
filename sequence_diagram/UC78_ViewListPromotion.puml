@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Request list of promotions
+ManagerPage -> PromotionController: getPromotions()
+PromotionController -> PromotionService: getPromotions()
+PromotionService -> PromotionRepository: findAll()
+PromotionRepository -> Database: Query all promotions
+Database --> PromotionRepository: Return promotion data
+PromotionRepository --> PromotionService: Return promotion data
+PromotionService --> PromotionController: Return promotion data
+PromotionController --> ManagerPage: Return promotion data
+ManagerPage --> Manager: Display list of promotions
+@enduml

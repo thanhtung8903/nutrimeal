@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Request list of questions
+ManagerPage -> FaqController: getFaqs()
+FaqController -> FaqService: getFaqs()
+FaqService -> FaqRepository: findAll()
+FaqRepository -> Database: Query all FAQs
+Database --> FaqRepository: Return FAQ data
+FaqRepository --> FaqService: Return FAQ data
+FaqService --> FaqController: Return FAQ data
+FaqController --> ManagerPage: Return FAQ data
+ManagerPage --> Manager: Display list of questions
+@enduml

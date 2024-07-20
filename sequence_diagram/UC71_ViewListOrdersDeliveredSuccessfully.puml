@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Request list of orders delivered successfully
+ManagerPage -> ManagerOrderController: getOrdersDeliveredSuccessfully()
+ManagerOrderController -> OrderService: getOrdersByStatus("DELIVERED")
+OrderService -> OrderRepository: findOrdersByStatus("DELIVERED")
+OrderRepository -> Database: Query orders with status "DELIVERED"
+Database --> OrderRepository: Return orders data
+OrderRepository --> OrderService: Return orders data
+OrderService --> ManagerOrderController: Return orders data
+ManagerOrderController --> ManagerPage: Return orders data
+ManagerPage --> Manager: Display list of orders delivered successfully
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Add new material information
+ManagerPage -> ManagerMaterialController: addMaterial(newMaterialInfo)
+ManagerMaterialController -> MaterialService: addMaterial(newMaterialInfo)
+MaterialService -> MaterialRepository: save(newMaterialInfo)
+MaterialRepository -> Database: Execute insert query
+Database --> MaterialRepository: Confirm insert
+MaterialRepository --> MaterialService: Confirm insert
+MaterialService --> ManagerMaterialController: Confirm insert
+ManagerMaterialController --> ManagerPage: Confirm insert
+ManagerPage --> Manager: Display add confirmation
+@enduml

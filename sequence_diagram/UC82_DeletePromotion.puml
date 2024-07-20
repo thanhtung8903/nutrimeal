@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Delete promotion
+ManagerPage -> PromotionController: deletePromotion(promotionId)
+PromotionController -> PromotionService: deletePromotion(promotionId)
+PromotionService -> PromotionRepository: delete(promotionId)
+PromotionRepository -> Database: Execute delete query
+Database --> PromotionRepository: Confirm delete
+PromotionRepository --> PromotionService: Confirm delete
+PromotionService --> PromotionController: Confirm delete
+PromotionController --> ManagerPage: Confirm delete
+ManagerPage --> Manager: Display delete confirmation
+@enduml

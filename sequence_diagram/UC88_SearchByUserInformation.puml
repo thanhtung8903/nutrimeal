@@ -1,0 +1,14 @@
+@startuml
+actor Admin
+
+Admin -> AdminDashboard: Search by user information
+AdminDashboard -> AdminController: searchUserInfo(query)
+AdminController -> AdminService: searchUserInfo(query)
+AdminService -> AdminRepository: searchUserInfo(query)
+AdminRepository -> Database: Query user information with search criteria
+Database --> AdminRepository: Return search results
+AdminRepository --> AdminService: Return search results
+AdminService --> AdminController: Return search results
+AdminController --> AdminDashboard: Return search results
+AdminDashboard --> Admin: Display search results
+@enduml

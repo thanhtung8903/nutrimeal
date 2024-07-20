@@ -1,0 +1,14 @@
+@startuml
+actor Shipper
+
+Shipper -> ShipperDashboard: View list of orders not yet delivered
+ShipperDashboard -> ShipperController: getOrdersNotYetDelivered()
+ShipperController -> ShipperService: getOrdersByStatus("NOT_DELIVERED")
+ShipperService -> ShipperRepository: findOrdersByStatus("NOT_DELIVERED")
+ShipperRepository -> Database: Query orders with status "NOT_DELIVERED"
+Database --> ShipperRepository: Return order data
+ShipperRepository --> ShipperService: Return order data
+ShipperService --> ShipperController: Return order data
+ShipperController --> ShipperDashboard: Return order data
+ShipperDashboard --> Shipper: Display list of orders not yet delivered
+@enduml

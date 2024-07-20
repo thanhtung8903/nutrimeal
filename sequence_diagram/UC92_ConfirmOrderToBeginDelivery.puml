@@ -1,0 +1,14 @@
+@startuml
+actor Shipper
+
+Shipper -> ShipperDashboard: Confirm order to begin delivery
+ShipperDashboard -> ShipperController: confirmOrderToBeginDelivery(orderId)
+ShipperController -> ShipperService: confirmOrderToBeginDelivery(orderId)
+ShipperService -> ShipperRepository: updateOrderStatus(orderId, "IN_TRANSIT")
+ShipperRepository -> Database: Execute update query
+Database --> ShipperRepository: Confirm update
+ShipperRepository --> ShipperService: Confirm update
+ShipperService --> ShipperController: Confirm update
+ShipperController --> ShipperDashboard: Confirm update
+ShipperDashboard --> Shipper: Display confirmation
+@enduml

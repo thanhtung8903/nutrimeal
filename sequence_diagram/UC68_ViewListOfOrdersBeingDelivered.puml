@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Request list of orders being delivered
+ManagerPage -> ManagerOrderController: getOrdersBeingDelivered()
+ManagerOrderController -> OrderService: getOrdersBeingDelivered()
+OrderService -> OrderRepository: findOrdersByStatus("IN_TRANSIT")
+OrderRepository -> Database: Query orders with status "IN_TRANSIT"
+Database --> OrderRepository: Return orders data
+OrderRepository --> OrderService: Return orders data
+OrderService --> ManagerOrderController: Return orders data
+ManagerOrderController --> ManagerPage: Return orders data
+ManagerPage --> Manager: Display list of orders being delivered
+@enduml

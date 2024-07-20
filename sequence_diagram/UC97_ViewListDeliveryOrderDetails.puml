@@ -1,0 +1,14 @@
+@startuml
+actor Shipper
+
+Shipper -> ShipperDashboard: View list of delivery order details
+ShipperDashboard -> ShipperController: getDeliveryOrderDetails()
+ShipperController -> ShipperService: getDeliveryOrderDetails()
+ShipperService -> ShipperRepository: findDeliveryOrderDetails()
+ShipperRepository -> Database: Query delivery order details
+Database --> ShipperRepository: Return delivery order details
+ShipperRepository --> ShipperService: Return delivery order details
+ShipperService --> ShipperController: Return delivery order details
+ShipperController --> ShipperDashboard: Return delivery order details
+ShipperDashboard --> Shipper: Display delivery order details
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Request list of orders delayed delivered
+ManagerPage -> ManagerOrderController: getOrdersDelayedDelivered()
+ManagerOrderController -> OrderService: getOrdersDelayedDelivered()
+OrderService -> OrderRepository: findOrdersByStatus("DELAYED")
+OrderRepository -> Database: Query orders with status "DELAYED"
+Database --> OrderRepository: Return orders data
+OrderRepository --> OrderService: Return orders data
+OrderService --> ManagerOrderController: Return orders data
+ManagerOrderController --> ManagerPage: Return orders data
+ManagerPage --> Manager: Display list of orders delayed delivered
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Search info in the Expense list
+ManagerPage -> ManagerExpenseController: searchExpenseInfo(query)
+ManagerExpenseController -> ExpenseService: searchExpenseInfo(query)
+ExpenseService -> ExpenseRepository: searchExpenseInfo(query)
+ExpenseRepository -> Database: Query expenses with search criteria
+Database --> ExpenseRepository: Return search results
+ExpenseRepository --> ExpenseService: Return search results
+ExpenseService --> ManagerExpenseController: Return search results
+ManagerExpenseController --> ManagerPage: Return search results
+ManagerPage --> Manager: Display search results
+@enduml
