@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Search for orders
+ManagerPage -> ManagerOrderController: searchOrders(query)
+ManagerOrderController -> OrderService: searchOrders(query)
+OrderService -> OrderRepository: searchOrders(query)
+OrderRepository -> Database: Query orders with search criteria
+Database --> OrderRepository: Return search results
+OrderRepository --> OrderService: Return search results
+OrderService --> ManagerOrderController: Return search results
+ManagerOrderController --> ManagerPage: Return search results
+ManagerPage --> Manager: Display search results
+@enduml

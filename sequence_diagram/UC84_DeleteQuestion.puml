@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Delete question
+ManagerPage -> FaqController: deleteFaq(faqId)
+FaqController -> FaqService: deleteFaq(faqId)
+FaqService -> FaqRepository: delete(faqId)
+FaqRepository -> Database: Execute delete query
+Database --> FaqRepository: Confirm delete
+FaqRepository --> FaqService: Confirm delete
+FaqService --> FaqController: Confirm delete
+FaqController --> ManagerPage: Confirm delete
+ManagerPage --> Manager: Display delete confirmation
+@enduml

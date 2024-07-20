@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Request list of orders delivered failed
+ManagerPage -> ManagerOrderController: getOrdersDeliveredFailed()
+ManagerOrderController -> OrderService: getOrdersDeliveredFailed()
+OrderService -> OrderRepository: findOrdersByStatus("DELIVERY_FAILED")
+OrderRepository -> Database: Query orders with status "DELIVERY_FAILED"
+Database --> OrderRepository: Return orders data
+OrderRepository --> OrderService: Return orders data
+OrderService --> ManagerOrderController: Return orders data
+ManagerOrderController --> ManagerPage: Return orders data
+ManagerPage --> Manager: Display list of orders delivered failed
+@enduml

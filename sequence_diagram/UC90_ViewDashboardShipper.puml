@@ -1,0 +1,16 @@
+@startuml
+actor Shipper
+
+Shipper -> ShipperDashboard: View dashboard
+ShipperDashboard -> ShipperController: getDashboardData()
+ShipperController -> ShipperService: getDashboardData()
+
+ShipperService -> ShipperRepository: getOrderStats()
+ShipperRepository -> Database: Query order statistics
+Database --> ShipperRepository: Return order stats
+ShipperRepository --> ShipperService: Return order stats
+
+ShipperService --> ShipperController: Return compiled statistical data
+ShipperController --> ShipperDashboard: Return compiled statistical data
+ShipperDashboard --> Shipper: Display compiled statistical data
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Update question
+ManagerPage -> FaqController: updateFaq(faqId, updatedInfo)
+FaqController -> FaqService: updateFaq(faqId, updatedInfo)
+FaqService -> FaqRepository: update(faqId, updatedInfo)
+FaqRepository -> Database: Execute update query
+Database --> FaqRepository: Confirm update
+FaqRepository --> FaqService: Confirm update
+FaqService --> FaqController: Confirm update
+FaqController --> ManagerPage: Confirm update
+ManagerPage --> Manager: Display update confirmation
+@enduml

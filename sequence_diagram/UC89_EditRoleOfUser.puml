@@ -1,0 +1,14 @@
+@startuml
+actor Admin
+
+Admin -> AdminDashboard: Edit role of user
+AdminDashboard -> AdminController: editUserRole(userId, newRole)
+AdminController -> AdminService: editUserRole(userId, newRole)
+AdminService -> AdminRepository: updateUserRole(userId, newRole)
+AdminRepository -> Database: Execute update role query
+Database --> AdminRepository: Confirm role update
+AdminRepository --> AdminService: Confirm role update
+AdminService --> AdminController: Confirm role update
+AdminController --> AdminDashboard: Confirm role update
+AdminDashboard --> Admin: Display role update confirmation
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+actor Admin
+
+Admin -> AdminDashboard: View dashboard
+AdminDashboard -> AdminController: getDashboardData()
+AdminController -> AdminService: getDashboardData()
+
+AdminService -> AdminRepository: getCustomerStats()
+AdminRepository -> Database: Query customer statistics
+Database --> AdminRepository: Return customer stats
+AdminRepository --> AdminService: Return customer stats
+
+AdminService -> AdminRepository: getShipperStats()
+AdminRepository -> Database: Query shipper statistics
+Database --> AdminRepository: Return shipper stats
+AdminRepository --> AdminService: Return shipper stats
+
+AdminService -> AdminRepository: getAdminStats()
+AdminRepository -> Database: Query admin statistics
+Database --> AdminRepository: Return admin stats
+AdminRepository --> AdminService: Return admin stats
+
+AdminService --> AdminController: Return compiled statistical data
+AdminController --> AdminDashboard: Return compiled statistical data
+AdminDashboard --> Admin: Display compiled statistical data
+@enduml

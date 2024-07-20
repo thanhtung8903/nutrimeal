@@ -1,0 +1,14 @@
+@startuml
+actor Shipper
+
+Shipper -> ShipperDashboard: Confirm delivery
+ShipperDashboard -> ShipperController: confirmDelivery(orderId)
+ShipperController -> ShipperService: confirmDelivery(orderId)
+ShipperService -> ShipperRepository: updateOrderStatus(orderId, "DELIVERED")
+ShipperRepository -> Database: Execute update query
+Database --> ShipperRepository: Confirm update
+ShipperRepository --> ShipperService: Confirm update
+ShipperService --> ShipperController: Confirm update
+ShipperController --> ShipperDashboard: Confirm update
+ShipperDashboard --> Shipper: Display delivery confirmation
+@enduml

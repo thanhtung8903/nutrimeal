@@ -1,0 +1,14 @@
+@startuml
+actor Shipper
+
+Shipper -> ShipperDashboard: View list of orders delivered successfully
+ShipperDashboard -> ShipperController: getOrdersDeliveredSuccessfully()
+ShipperController -> ShipperService: getOrdersByStatus("DELIVERED")
+ShipperService -> ShipperRepository: findOrdersByStatus("DELIVERED")
+ShipperRepository -> Database: Query orders with status "DELIVERED"
+Database --> ShipperRepository: Return order data
+ShipperRepository --> ShipperService: Return order data
+ShipperService --> ShipperController: Return order data
+ShipperController --> ShipperDashboard: Return order data
+ShipperDashboard --> Shipper: Display list of orders delivered successfully
+@enduml

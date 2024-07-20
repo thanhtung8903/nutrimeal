@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Add new promotion information
+ManagerPage -> PromotionController: addPromotion(newPromotionInfo)
+PromotionController -> PromotionService: addPromotion(newPromotionInfo)
+PromotionService -> PromotionRepository: save(newPromotionInfo)
+PromotionRepository -> Database: Execute insert query
+Database --> PromotionRepository: Confirm insert
+PromotionRepository --> PromotionService: Confirm insert
+PromotionService --> PromotionController: Confirm insert
+PromotionController --> ManagerPage: Confirm insert
+ManagerPage --> Manager: Display add confirmation
+@enduml

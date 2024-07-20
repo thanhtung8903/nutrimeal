@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Request list of delivery order details
+ManagerPage -> ManagerOrderController: getDeliveryOrderDetails()
+ManagerOrderController -> OrderService: getDeliveryOrderDetails()
+OrderService -> OrderRepository: findDeliveryOrderDetails()
+OrderRepository -> Database: Query all delivery order details
+Database --> OrderRepository: Return delivery order details
+OrderRepository --> OrderService: Return delivery order details
+OrderService --> ManagerOrderController: Return delivery order details
+ManagerOrderController --> ManagerPage: Return delivery order details
+ManagerPage --> Manager: Display list of delivery order details
+@enduml

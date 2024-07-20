@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Search for promotions
+ManagerPage -> PromotionController: searchPromotions(query)
+PromotionController -> PromotionService: searchPromotions(query)
+PromotionService -> PromotionRepository: searchPromotions(query)
+PromotionRepository -> Database: Query promotions with search criteria
+Database --> PromotionRepository: Return search results
+PromotionRepository --> PromotionService: Return search results
+PromotionService --> PromotionController: Return search results
+PromotionController --> ManagerPage: Return search results
+ManagerPage --> Manager: Display search results
+@enduml

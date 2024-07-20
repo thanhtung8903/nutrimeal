@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Add new question
+ManagerPage -> FaqController: addFaq(newQuestion)
+FaqController -> FaqService: addFaq(newQuestion)
+FaqService -> FaqRepository: save(newQuestion)
+FaqRepository -> Database: Execute insert query
+Database --> FaqRepository: Confirm insert
+FaqRepository --> FaqService: Confirm insert
+FaqService --> FaqController: Confirm insert
+FaqController --> ManagerPage: Confirm insert
+ManagerPage --> Manager: Display add confirmation
+@enduml

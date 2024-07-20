@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Update promotion information
+ManagerPage -> PromotionController: updatePromotion(promotionId, updatedInfo)
+PromotionController -> PromotionService: updatePromotion(promotionId, updatedInfo)
+PromotionService -> PromotionRepository: update(promotionId, updatedInfo)
+PromotionRepository -> Database: Execute update query
+Database --> PromotionRepository: Confirm update
+PromotionRepository --> PromotionService: Confirm update
+PromotionService --> PromotionController: Confirm update
+PromotionController --> ManagerPage: Confirm update
+ManagerPage --> Manager: Display update confirmation
+@enduml

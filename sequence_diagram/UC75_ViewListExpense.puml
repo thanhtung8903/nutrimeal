@@ -1,0 +1,14 @@
+@startuml
+actor Manager
+
+Manager -> ManagerPage: Request list of expenses
+ManagerPage -> ManagerExpenseController: getExpenses()
+ManagerExpenseController -> ExpenseService: getExpenses()
+ExpenseService -> ExpenseRepository: findAll()
+ExpenseRepository -> Database: Query all expenses
+Database --> ExpenseRepository: Return expense data
+ExpenseRepository --> ExpenseService: Return expense data
+ExpenseService --> ManagerExpenseController: Return expense data
+ManagerExpenseController --> ManagerPage: Return expense data
+ManagerPage --> Manager: Display list of expenses
+@enduml
