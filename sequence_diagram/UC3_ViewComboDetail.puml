@@ -2,15 +2,12 @@
 
 actor User
 
-participant Browser
 participant HomeController
 participant ComboService
 participant ComboRepository
 database "Database" as Database
 
-User -> Browser: Request to view combo detail
-activate Browser
-Browser -> HomeController: HTTP GET /combo/{id}
+User -> HomeController: Request to view combo detail
 activate HomeController
 HomeController -> ComboService: getComboById(id)
 activate ComboService
@@ -24,9 +21,7 @@ ComboRepository --> ComboService: Combo
 deactivate ComboRepository
 ComboService --> HomeController: Combo
 deactivate ComboService
-HomeController -> Browser: Render combo detail page with combo
+HomeController -> User: Render combo detail page with combo
 deactivate HomeController
-Browser -> User: Display combo detail page with combo
-deactivate Browser
 
 @enduml

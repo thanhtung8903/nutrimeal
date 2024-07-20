@@ -1,0 +1,31 @@
+@startuml
+
+class User {
+}
+
+class HomeController {
+    - dailyMenuService: DailyMenuService
+    + getMenuPage(): List<DailyMenu>
+}
+
+class DailyMenuService {
+    - dailyMenuRepository: DailyMenuRepository
+    + findDailyMenuWeek(Date, Date): List<DailyMenu>
+}
+
+class DailyMenuRepository {
+    + findDailyMenuWeek(Date, Date): List<DailyMenu>
+}
+
+class DailyMenu {
+    + id: int
+    + date: Date
+    + menuItems: String
+}
+
+User --> HomeController
+HomeController --> DailyMenuService
+DailyMenuService --> DailyMenuRepository
+DailyMenuRepository --> DailyMenu
+
+@enduml

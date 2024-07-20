@@ -1,0 +1,33 @@
+@startuml
+
+actor Manager
+participant "Dish Page" as DishPage
+participant "DishController" as Dish
+participant "DishService" as DishService
+participant "DishRepository" as DishRepository
+database "Database" as Database
+
+'add dish
+Manager -> DishPage: Request to add a dish
+activate DishPage
+DishPage -> Dish: HTTP POST manager/dishes/add
+activate Dish
+Dish -> DishService: addDish(dishInfo)
+activate DishService
+DishService -> DishRepository: saveDish(dishInfo)
+activate DishRepository
+DishRepository -> Database: INSERT INTO Dish VALUES ...
+activate Database
+Database --> DishRepository: confirmation
+deactivate Database
+DishRepository --> DishService: confirmation
+deactivate DishRepository
+DishService --> Dish: confirmation
+deactivate DishService
+Dish -> DishPage: Redirect to dish page
+deactivate Dish
+DishPage -> Manager: Display dish page with new dish
+deactivate DishPage
+
+
+@enduml

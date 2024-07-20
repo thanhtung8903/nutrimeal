@@ -1,14 +1,11 @@
 @startuml
 actor User
-participant Browser
 participant HomeController
 participant DailyMenuService
 participant DailyMenuRepository
 database "Database" as Database
 
-User -> Browser: Request to view menu page
-activate Browser
-Browser -> HomeController: HTTP GET /menu
+User -> HomeController: Request to view menu page
 activate HomeController
 HomeController -> DailyMenuService: findDailyMenuWeek(today, today+6)
 activate DailyMenuService
@@ -22,8 +19,7 @@ DailyMenuRepository --> DailyMenuService: List<DailyMenu>
 deactivate DailyMenuRepository
 DailyMenuService --> HomeController: List<DailyMenu>
 deactivate DailyMenuService
-HomeController -> Browser: Render menu page with daily menu
+HomeController -> User: Render menu page with daily menu
 deactivate HomeController
-Browser -> User: Display menu page with combos
-deactivate Browser
+
 @enduml

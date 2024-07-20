@@ -1,0 +1,31 @@
+@startuml
+actor Manager
+participant "Dish Page" as DishPage
+participant "DishController" as Dish
+participant "DishService" as DishService
+participant "DishRepository" as DishRepository
+database "Database" as Database
+
+'edit dish
+Manager -> DishPage: Request to edit a dish
+activate DishPage
+DishPage -> Dish: HTTP POST manager/dishes/edit
+activate Dish
+Dish -> DishService: editDish(dishInfo)
+activate DishService
+DishService -> DishRepository: updateDish(dishInfo)
+activate DishRepository
+DishRepository -> Database: UPDATE Dish SET ... WHERE dishId = ?
+activate Database
+Database --> DishRepository: confirmation
+deactivate Database
+DishRepository --> DishService: confirmation
+deactivate DishRepository
+DishService --> Dish: confirmation
+deactivate DishService
+Dish -> DishPage: Redirect to dish page
+deactivate Dish
+DishPage -> Manager: Display dish page with updated dish
+deactivate DishPage
+
+@enduml

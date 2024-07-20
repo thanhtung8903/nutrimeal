@@ -1,0 +1,33 @@
+@startuml
+
+actor Manager
+participant "Dish Page" as DishPage
+participant "DishController" as Dish
+participant "DishService" as DishService
+participant "DishRepository" as DishRepository
+database "Database" as Database
+
+'delete dish
+Manager -> DishPage: Request to delete a dish
+activate DishPage
+DishPage -> Dish: HTTP POST manager/dishes/delete
+activate Dish
+Dish -> DishService: deleteDish(dishId)
+activate DishService
+DishService -> DishRepository: deleteDish(dishId)
+activate DishRepository
+DishRepository -> Database: DELETE FROM Dish WHERE dishId = ?
+activate Database
+Database --> DishRepository: confirmation
+deactivate Database
+DishRepository --> DishService: confirmation
+deactivate DishRepository
+DishService --> Dish: confirmation
+deactivate DishService
+Dish -> DishPage: Redirect to dish page
+deactivate Dish
+DishPage -> Manager: Display dish page without deleted dish
+deactivate DishPage
+
+
+@enduml

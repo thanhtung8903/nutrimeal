@@ -1,0 +1,31 @@
+@startuml
+
+actor Manager
+participant "Dish Page" as DishPage
+participant "DishController" as DishController
+participant "DishService" as DishService
+participant "DishRepository" as DishRepository
+database "Database" as Database
+
+Manager -> DishPage: Request to view list of dishes
+activate DishPage
+DishPage -> DishController: HTTP GET manager/dishes
+activate DishController
+DishController -> DishService: getDishes()
+activate DishService
+DishService -> DishRepository: findAllDishes()
+activate DishRepository
+DishRepository -> Database: SELECT * FROM Dish
+activate Database
+Database --> DishRepository: Result set
+deactivate Database
+DishRepository --> DishService: List<Dishes>
+deactivate DishRepository
+DishService --> DishController: List<Dishes>
+deactivate DishService
+DishController -> DishPage: Render dish page with dishes
+deactivate DishController
+DishPage -> Manager: Display dish page with dishes
+deactivate DishPage
+
+@enduml

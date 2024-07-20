@@ -1,0 +1,25 @@
+@startuml
+
+class HomeController {
+    - comboService: ComboService
+    + getHomePage(): void
+}
+
+class ComboService {
+    - comboRepository: ComboRepository
+    + getCombos(): List<Combo>
+}
+
+class ComboRepository {
+    + findAllCombos(): List<Combo>
+}
+
+class Combo {
+
+}
+
+HomeController --> ComboService
+ComboService --> ComboRepository
+ComboRepository --> Combo
+
+@enduml
