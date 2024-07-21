@@ -1,0 +1,29 @@
+@startuml
+class Shipper {
+}
+
+class ShipperDashboard {
+  +getOrdersNotYetDelivered()
+}
+
+class ShipperController {
+  +getOrdersByStatus(status: String)
+}
+
+class ShipperService {
+  +findOrdersByStatus(status: String)
+}
+
+class ShipperRepository {
+  +findOrdersByStatus(status: String)
+}
+
+class Database {
+}
+
+Shipper --> ShipperDashboard : uses
+ShipperDashboard --> ShipperController : interacts with
+ShipperController --> ShipperService : depends on
+ShipperService --> ShipperRepository : depends on
+ShipperRepository --> Database : interacts with
+@enduml

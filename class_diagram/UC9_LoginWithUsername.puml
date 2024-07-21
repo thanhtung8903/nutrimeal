@@ -1,0 +1,32 @@
+@startuml
+class User {
+}
+
+class LoginPage {
+  +submitLoginForm()
+}
+
+class HomePage {
+}
+
+class AuthController {
+  +authenticate(username, password)
+}
+
+class AuthService {
+  +checkUserCredentials(username, password)
+}
+
+class UserRepository {
+  +queryUserCredentials(username, password)
+}
+
+class Database {
+}
+
+User --> LoginPage : uses
+LoginPage --> AuthController : interacts with
+AuthController --> AuthService : depends on
+AuthService --> UserRepository : depends on
+UserRepository --> Database : interacts with
+@enduml

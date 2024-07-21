@@ -1,0 +1,23 @@
+@startuml
+class HomeController {
+    +getComboById(id: int): Combo
+}
+
+class ComboService {
+    +findComboById(id: int): Combo
+}
+
+class ComboRepository {
+    +SELECT * FROM Combo WHERE id = ?: ResultSet
+}
+
+class Combo {
+    -id: int
+    -name: String
+    -details: String
+}
+
+HomeController --> ComboService : uses
+ComboService --> ComboRepository : uses
+ComboRepository --> Combo : returns
+@enduml

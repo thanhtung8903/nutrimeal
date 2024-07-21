@@ -1,0 +1,29 @@
+@startuml
+class Shipper {
+}
+
+class ShipperDashboard {
+  +confirmDelivery(orderId: String): void
+}
+
+class ShipperController {
+  +confirmDelivery(orderId: String): void
+}
+
+class ShipperService {
+  +updateOrderStatus(orderId: String, status: String): void
+}
+
+class ShipperRepository {
+  +updateOrderStatus(orderId: String, status: String): void
+}
+
+class Database {
+}
+
+Shipper --> ShipperDashboard : uses
+ShipperDashboard --> ShipperController : interacts with
+ShipperController --> ShipperService : interacts with
+ShipperService --> ShipperRepository : interacts with
+ShipperRepository --> Database : interacts with
+@enduml

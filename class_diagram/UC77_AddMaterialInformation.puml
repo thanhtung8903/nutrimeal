@@ -1,0 +1,29 @@
+@startuml
+class Manager {
+}
+
+class ManagerPage {
+  +addMaterial(newMaterialInfo)
+}
+
+class ManagerMaterialController {
+  +addMaterial(newMaterialInfo)
+}
+
+class MaterialService {
+  +save(newMaterialInfo)
+}
+
+class MaterialRepository {
+  +executeInsertQuery(newMaterialInfo)
+}
+
+class Database {
+}
+
+Manager --> ManagerPage : uses
+ManagerPage --> ManagerMaterialController : interacts with
+ManagerMaterialController --> MaterialService : depends on
+MaterialService --> MaterialRepository : depends on
+MaterialRepository --> Database : interacts with
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+class User {
+}
+
+class Browser {
+  +HTTP GET /faqs
+}
+
+class HomeController {
+  +renderFaqsPage()
+}
+
+User --> Browser : uses
+Browser --> HomeController : interacts with
+@enduml

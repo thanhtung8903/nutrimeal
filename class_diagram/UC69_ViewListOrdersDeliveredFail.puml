@@ -1,0 +1,29 @@
+@startuml
+class Manager {
+}
+
+class ManagerPage {
+  +getOrdersDeliveredFailed()
+}
+
+class ManagerOrderController {
+  +getOrdersDeliveredFailed()
+}
+
+class OrderService {
+  +findOrdersByStatus(status)
+}
+
+class OrderRepository {
+  +queryOrdersByStatus(status)
+}
+
+class Database {
+}
+
+Manager --> ManagerPage : uses
+ManagerPage --> ManagerOrderController : interacts with
+ManagerOrderController --> OrderService : depends on
+OrderService --> OrderRepository : depends on
+OrderRepository --> Database : interacts with
+@enduml

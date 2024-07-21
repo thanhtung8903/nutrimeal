@@ -1,0 +1,30 @@
+@startuml
+class SignupForm {
+    +submitRegistrationForm(): void
+}
+
+class AuthController {
+    +signupUser(): void
+}
+
+class AuthService {
+    +checkIfUsernameOrEmailExists(username: String, email: String): boolean
+    +saveNewUser(user: User): void
+}
+
+class UserRepository {
+    +queryForUsernameOrEmail(username: String, email: String): boolean
+    +insertNewUser(user: User): void
+}
+
+class User {
+    -username: String
+    -email: String
+    -password: String
+}
+
+SignupForm --> AuthController : uses
+AuthController --> AuthService : uses
+AuthService --> UserRepository : uses
+UserRepository --> User : interacts
+@enduml

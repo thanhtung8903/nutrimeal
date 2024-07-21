@@ -1,0 +1,32 @@
+@startuml
+class Shipper {
+    + searchOrderInformation()
+}
+
+class ShipperPage {
+    + getOrderInfo()
+}
+
+class ShipperController {
+    + getOrderInfo()
+}
+
+class ShipperService {
+    + findOrderById()
+}
+
+class ShipperRepository {
+    + queryOrderById()
+}
+
+class Database {
+    + orderData
+}
+
+Shipper --> ShipperPage : searchOrderInformation()
+ShipperPage --> ShipperController : getOrderInfo()
+ShipperController --> ShipperService : getOrderInfo()
+ShipperService --> ShipperRepository : findOrderById()
+ShipperRepository --> Database : queryOrderById()
+
+@enduml

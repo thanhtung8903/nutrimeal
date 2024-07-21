@@ -1,0 +1,32 @@
+@startuml
+class Shipper {
+    + viewListOfDeliveryOrderDetails()
+}
+
+class ShipperDashboard {
+    + getDeliveryOrderDetails()
+}
+
+class ShipperController {
+    + getDeliveryOrderDetails()
+}
+
+class ShipperService {
+    + findDeliveryOrderDetails()
+}
+
+class ShipperRepository {
+    + queryDeliveryOrderDetails()
+}
+
+class Database {
+    + deliveryOrderDetails
+}
+
+Shipper --> ShipperDashboard : viewListOfDeliveryOrderDetails()
+ShipperDashboard --> ShipperController : getDeliveryOrderDetails()
+ShipperController --> ShipperService : getDeliveryOrderDetails()
+ShipperService --> ShipperRepository : findDeliveryOrderDetails()
+ShipperRepository --> Database : queryDeliveryOrderDetails()
+
+@enduml

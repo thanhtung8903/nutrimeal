@@ -1,0 +1,29 @@
+@startuml
+class Manager {
+}
+
+class ManagerPage {
+  +getExpenses()
+}
+
+class ManagerExpenseController {
+  +getExpenses()
+}
+
+class ExpenseService {
+  +findAll()
+}
+
+class ExpenseRepository {
+  +queryAllExpenses()
+}
+
+class Database {
+}
+
+Manager --> ManagerPage : uses
+ManagerPage --> ManagerExpenseController : interacts with
+ManagerExpenseController --> ExpenseService : depends on
+ExpenseService --> ExpenseRepository : depends on
+ExpenseRepository --> Database : interacts with
+@enduml
