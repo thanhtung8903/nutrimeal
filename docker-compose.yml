@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: nutrimeal:0.0.1
+    image: gnut89/nutrimeal:latest
     container_name: nutrimeal_java
     ports:
       - "8080:8080"
