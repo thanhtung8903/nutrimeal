@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments :: head(${combo.comboName}, 'none')}"></head>
 <link
         rel="stylesheet"
@@ -358,26 +358,30 @@
                     <p th:text="'- ' + ${item}"></p>
                 </div>
 
-                <form id="form-package" method="post" data-show-cart="0"
-                      th:action="@{/basket/add/{cid}(cid=${combo.comboId})}">
-                    <div class="form-group_comboDetail">
-                        <div class="form-check input-radio">
-                            <input class="form-check-input" type="radio" name="day" id="orderRadios1" value="7"
-                                   checked="">
-                            <label class="form-check-label" for="orderRadios1">Gói Tuần - 7 ngày</label>
+                <div sec:authorize="hasAuthority('ROLE_CUSTOMER')">
+                    <form id="form-package" method="post" data-show-cart="0"
+                          th:action="@{/basket/add/{cid}(cid=${combo.comboId})}">
+                        <div class="form-group_comboDetail">
+                            <div class="form-check input-radio">
+                                <input class="form-check-input" type="radio" name="day" id="orderRadios1" value="7"
+                                       checked="">
+                                <label class="form-check-label" for="orderRadios1">Gói Tuần - 7 ngày</label>
+                            </div>
+                            <div class="form-check input-radio">
+                                <input class="form-check-input" type="radio" name="day" id="orderRadios2" value="30">
+                                <label class="form-check-label" for="orderRadios2">Gói Tháng - 30 ngày</label>
+                            </div>
                         </div>
-                        <div class="form-check input-radio">
-                            <input class="form-check-input" type="radio" name="day" id="orderRadios2" value="30">
-                            <label class="form-check-label" for="orderRadios2">Gói Tháng - 30 ngày</label>
-                        </div>
-                    </div>
 
-                    <button type="submit" id="add-to-cart" class="btn_comboDetail btn-primary_comboDetail submit">Thêm
-                        vào giỏ
-                    </button>
+                        <button type="submit" id="add-to-cart" class="btn_comboDetail btn-primary_comboDetail submit">
+                            Thêm
+                            vào giỏ
+                        </button>
 
-                    <div id="notification" class="alert mt-2" role="alert" style="display: none; width: 450px"></div>
-                </form>
+                        <div id="notification" class="alert mt-2" role="alert"
+                             style="display: none; width: 450px"></div>
+                    </form>
+                </div>
 
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                 <script>
@@ -518,7 +522,6 @@
         </div>
     </div>
 </div>
-
 
 
 <!--</div>-->
