@@ -358,7 +358,7 @@
                     <p th:text="'- ' + ${item}"></p>
                 </div>
 
-                <div sec:authorize="hasAuthority('ROLE_CUSTOMER')">
+                <div sec:authorize="isAnonymous() or hasAuthority('ROLE_CUSTOMER')">
                     <form id="form-package" method="post" data-show-cart="0"
                           th:action="@{/basket/add/{cid}(cid=${combo.comboId})}">
                         <div class="form-group_comboDetail">
