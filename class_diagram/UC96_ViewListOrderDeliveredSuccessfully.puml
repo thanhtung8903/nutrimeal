@@ -1,0 +1,32 @@
+@startuml
+class Shipper {
+    + viewListOfOrdersDeliveredSuccessfully()
+}
+
+class ShipperDashboard {
+    + getOrdersDeliveredSuccessfully()
+}
+
+class ShipperController {
+    + getOrdersByStatus(status: String)
+}
+
+class ShipperService {
+    + findOrdersByStatus(status: String)
+}
+
+class ShipperRepository {
+    + queryOrdersByStatus(status: String)
+}
+
+class Database {
+    + orderData
+}
+
+Shipper --> ShipperDashboard : viewListOfOrdersDeliveredSuccessfully()
+ShipperDashboard --> ShipperController : getOrdersDeliveredSuccessfully()
+ShipperController --> ShipperService : getOrdersByStatus("DELIVERED")
+ShipperService --> ShipperRepository : findOrdersByStatus("DELIVERED")
+ShipperRepository --> Database : queryOrdersByStatus("DELIVERED")
+
+@enduml

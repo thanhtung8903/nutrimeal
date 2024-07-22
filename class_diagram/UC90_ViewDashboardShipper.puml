@@ -1,0 +1,29 @@
+@startuml
+class Shipper {
+}
+
+class ShipperDashboard {
+  +getDashboardData()
+}
+
+class ShipperController {
+  +getDashboardData()
+}
+
+class ShipperService {
+  +getOrderStats()
+}
+
+class ShipperRepository {
+  +getOrderStats()
+}
+
+class Database {
+}
+
+Shipper --> ShipperDashboard : uses
+ShipperDashboard --> ShipperController : interacts with
+ShipperController --> ShipperService : depends on
+ShipperService --> ShipperRepository : depends on
+ShipperRepository --> Database : interacts with
+@enduml

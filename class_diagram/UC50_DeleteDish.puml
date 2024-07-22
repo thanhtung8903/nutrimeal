@@ -1,0 +1,29 @@
+@startuml
+class Manager {
+}
+
+class DishPage {
+  +displayUpdatedDishList()
+}
+
+class DishController {
+  +deleteDish(dishId)
+}
+
+class DishService {
+  +deleteDish(dishId)
+}
+
+class DishRepository {
+  +DELETE FROM Dish WHERE dishId = ?
+}
+
+class Database {
+}
+
+Manager --> DishPage : uses
+DishPage --> DishController : interacts with
+DishController --> DishService : depends on
+DishService --> DishRepository : depends on
+DishRepository --> Database : interacts with
+@enduml

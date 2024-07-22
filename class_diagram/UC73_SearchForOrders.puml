@@ -1,0 +1,29 @@
+@startuml
+class Manager {
+}
+
+class ManagerPage {
+  +searchOrders(query)
+}
+
+class ManagerOrderController {
+  +searchOrders(query)
+}
+
+class OrderService {
+  +searchOrders(query)
+}
+
+class OrderRepository {
+  +queryOrdersWithSearchCriteria(query)
+}
+
+class Database {
+}
+
+Manager --> ManagerPage : uses
+ManagerPage --> ManagerOrderController : interacts with
+ManagerOrderController --> OrderService : depends on
+OrderService --> OrderRepository : depends on
+OrderRepository --> Database : interacts with
+@enduml

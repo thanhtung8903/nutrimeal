@@ -1,0 +1,29 @@
+@startuml
+class Admin {
+}
+
+class AdminDashboard {
+  +editUserRole(userId: String, newRole: String)
+}
+
+class AdminController {
+  +editUserRole(userId: String, newRole: String)
+}
+
+class AdminService {
+  +updateUserRole(userId: String, newRole: String)
+}
+
+class AdminRepository {
+  +updateUserRole(userId: String, newRole: String)
+}
+
+class Database {
+}
+
+Admin --> AdminDashboard : uses
+AdminDashboard --> AdminController : interacts with
+AdminController --> AdminService : depends on
+AdminService --> AdminRepository : depends on
+AdminRepository --> Database : interacts with
+@enduml

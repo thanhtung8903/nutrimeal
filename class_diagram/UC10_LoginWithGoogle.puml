@@ -1,0 +1,41 @@
+@startuml
+class User {
+}
+
+class LoginPage {
+  +redirectToGoogleOAuth()
+}
+
+class AuthController {
+  +authenticateWithGoogle(authCode)
+}
+
+class AuthService {
+  +validateAuthCode(authCode)
+  +findOrCreateUser(googleUserInfo)
+}
+
+class UserRepository {
+  +queryUserByGoogleId(googleUserInfo.id)
+  +createUser(googleUserInfo)
+}
+
+class Database {
+}
+
+class GoogleOAuthService {
+  +authenticateUser()
+}
+
+class HomePage {
+}
+
+User --> LoginPage : uses
+LoginPage --> GoogleOAuthService : interacts with
+GoogleOAuthService --> LoginPage : returns auth code
+LoginPage --> AuthController : interacts with
+AuthController --> AuthService : depends on
+AuthService --> UserRepository : depends on
+UserRepository --> Database : interacts with
+LoginPage --> HomePage : redirects to
+@enduml

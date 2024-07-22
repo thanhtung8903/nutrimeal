@@ -1,0 +1,29 @@
+@startuml
+class Manager {
+}
+
+class DishPage {
+  +displayNewDish(dishInfo)
+}
+
+class DishController {
+  +addDish(dishInfo)
+}
+
+class DishService {
+  +saveDish(dishInfo)
+}
+
+class DishRepository {
+  +INSERT INTO Dish VALUES (...)
+}
+
+class Database {
+}
+
+Manager --> DishPage : uses
+DishPage --> DishController : interacts with
+DishController --> DishService : depends on
+DishService --> DishRepository : depends on
+DishRepository --> Database : interacts with
+@enduml

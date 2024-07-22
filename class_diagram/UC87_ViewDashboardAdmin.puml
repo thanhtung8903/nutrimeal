@@ -1,0 +1,33 @@
+@startuml
+class Admin {
+}
+
+class AdminDashboard {
+  +getDashboardData()
+}
+
+class AdminController {
+  +getDashboardData()
+}
+
+class AdminService {
+  +getCustomerStats()
+  +getShipperStats()
+  +getAdminStats()
+}
+
+class AdminRepository {
+  +getCustomerStats()
+  +getShipperStats()
+  +getAdminStats()
+}
+
+class Database {
+}
+
+Admin --> AdminDashboard : uses
+AdminDashboard --> AdminController : interacts with
+AdminController --> AdminService : depends on
+AdminService --> AdminRepository : depends on
+AdminRepository --> Database : interacts with
+@enduml

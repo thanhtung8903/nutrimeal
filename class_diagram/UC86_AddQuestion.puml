@@ -1,0 +1,29 @@
+@startuml
+class Manager {
+}
+
+class ManagerPage {
+  +addFaq(newQuestion)
+}
+
+class FaqController {
+  +addFaq(newQuestion)
+}
+
+class FaqService {
+  +save(newQuestion)
+}
+
+class FaqRepository {
+  +save(newQuestion)
+}
+
+class Database {
+}
+
+Manager --> ManagerPage : uses
+ManagerPage --> FaqController : interacts with
+FaqController --> FaqService : depends on
+FaqService --> FaqRepository : depends on
+FaqRepository --> Database : interacts with
+@enduml

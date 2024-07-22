@@ -1,0 +1,40 @@
+@startuml
+class ConsultPage {
+    +submitForm(userInfo: UserInfo): void
+    +renderConsultPage(comboSuggestions: List<Combo>, userInfo: UserInfo): void
+}
+
+class HomeController {
+    +getCombosByCalories(calorieValue: int): List<Combo>
+    +parseCalorieValue(userInfo: UserInfo): int
+}
+
+class ComboService {
+    +findCombosByCalories(minCalories: int, maxCalories: int): List<Combo>
+}
+
+class ComboRepository {
+    +findCombosByCalories(minCalories: int, maxCalories: int): List<Combo>
+}
+
+class Combo {
+    -id: int
+    -name: String
+    -calories: int
+    -details: String
+}
+
+class UserInfo {
+    -weight: float
+    -height: float
+    -age: int
+    -gender: String
+    -activityMultiplier: float
+    -weightGoal: float
+}
+
+ConsultPage --> HomeController : uses
+HomeController --> ComboService : uses
+ComboService --> ComboRepository : uses
+ComboRepository --> Combo : returns
+@enduml

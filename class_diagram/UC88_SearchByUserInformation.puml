@@ -1,0 +1,29 @@
+@startuml
+class Admin {
+}
+
+class AdminDashboard {
+  +searchUserInfo(query: String)
+}
+
+class AdminController {
+  +searchUserInfo(query: String)
+}
+
+class AdminService {
+  +searchUserInfo(query: String)
+}
+
+class AdminRepository {
+  +searchUserInfo(query: String)
+}
+
+class Database {
+}
+
+Admin --> AdminDashboard : uses
+AdminDashboard --> AdminController : interacts with
+AdminController --> AdminService : depends on
+AdminService --> AdminRepository : depends on
+AdminRepository --> Database : interacts with
+@enduml

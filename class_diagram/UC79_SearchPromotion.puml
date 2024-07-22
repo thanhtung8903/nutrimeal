@@ -1,0 +1,29 @@
+@startuml
+class Manager {
+}
+
+class ManagerPage {
+  +searchPromotions(query)
+}
+
+class PromotionController {
+  +searchPromotions(query)
+}
+
+class PromotionService {
+  +searchPromotions(query)
+}
+
+class PromotionRepository {
+  +queryPromotionsWithSearchCriteria(query)
+}
+
+class Database {
+}
+
+Manager --> ManagerPage : uses
+ManagerPage --> PromotionController : interacts with
+PromotionController --> PromotionService : depends on
+PromotionService --> PromotionRepository : depends on
+PromotionRepository --> Database : interacts with
+@enduml

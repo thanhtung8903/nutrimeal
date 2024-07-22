@@ -1,0 +1,30 @@
+@startuml
+class User {
+}
+
+class ProfilePage {
+  +submitProfileUpdateForm()
+}
+
+class ProfileController {
+  +updateUserProfile(updatedInfo)
+}
+
+class UserService {
+  +validate(updatedInfo)
+  +saveUpdatedUser(updatedInfo)
+}
+
+class UserRepository {
+  +UPDATE User SET ... WHERE userId = ?
+}
+
+class Database {
+}
+
+User --> ProfilePage : uses
+ProfilePage --> ProfileController : interacts with
+ProfileController --> UserService : depends on
+UserService --> UserRepository : depends on
+UserRepository --> Database : interacts with
+@enduml
