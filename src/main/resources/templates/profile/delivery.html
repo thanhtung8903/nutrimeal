@@ -36,6 +36,7 @@
     .sidebar a.active {
         color: #F8B934; /* For Highlight */
     }
+
     .sidebar-content a {
         font-size: 17px;
         margin-top: 28px;
@@ -44,14 +45,11 @@
     }
 
 
-
-
     .avatar {
         width: 80px; /* Fixed width */
         height: 80px; /* Fixed height */
         object-fit: cover; /* Maintain aspect ratio and cover the box */
     }
-
 
 
     .point-item i {
@@ -118,10 +116,11 @@
                     <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/address}">
                         <i class="bi bi-geo-alt"></i> Địa chỉ giao hàng
                     </a>
-                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}" >
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/order}">
                         <i class="bi bi-card-list"></i> Đơn hàng của tôi
                     </a>
-                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/delivery}" class="active">
+                    <a sec:authorize="hasAuthority('ROLE_CUSTOMER')" href="#" th:href="@{/profile/delivery}"
+                       class="active">
                         <i class="bi bi-truck"></i> Đơn giao mỗi ngày
                     </a>
                 </div>
@@ -142,9 +141,9 @@
                             <th>Trạng thái</th>
                             <th>Thời gian giao</th>
                             <th>Ngày giao</th>
-<!--                            <th>Tên khách hàng</th>-->
-<!--                            <th>SĐT</th>-->
-<!--                            <th>Địa chỉ</th>-->
+                            <!--                            <th>Tên khách hàng</th>-->
+                            <!--                            <th>SĐT</th>-->
+                            <!--                            <th>Địa chỉ</th>-->
                             <th>Tiền hàng</th>
                             <th>Action</th>
                         </tr>
@@ -237,15 +236,27 @@
 
         function getFilteredData(data) {
             const today = new Date();
-            today.setDate(today.getDate());
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayString = `${year}-${month}-${day}`;
+
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
+            const tomorrowYear = tomorrow.getFullYear();
+            const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
+            const tomorrowString = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
 
-            const todayString = today.toISOString().slice(0, 10);
-            const tomorrowString = tomorrow.toISOString().slice(0, 10);
+            console.log(todayString);
+            console.log(tomorrowString);
 
             return data.filter(delivery => {
-                const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
+                const deliveryDateObj = new Date(delivery.deliveryDate);
+                const deliveryYear = deliveryDateObj.getFullYear();
+                const deliveryMonth = String(deliveryDateObj.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const deliveryDay = String(deliveryDateObj.getDate()).padStart(2, '0');
+                const deliveryDate = `${deliveryYear}-${deliveryMonth}-${deliveryDay}`;
                 return deliveryDate === todayString || deliveryDate === tomorrowString;
             });
         }
@@ -256,16 +267,25 @@
             const end = page * itemsPerPage;
 
             const today = new Date();
-            today.setDate(today.getDate()); // Add 1 day to get tomorrow's date
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayString = `${year}-${month}-${day}`;
+
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
-
-            const todayString = today.toISOString().slice(0, 10);
-            const tomorrowString = tomorrow.toISOString().slice(0, 10);
+            const tomorrowYear = tomorrow.getFullYear();
+            const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
+            const tomorrowString = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
 
             // Filter data to include only today's and tomorrow's deliveries
             const filteredData = data.filter(delivery => {
-                const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
+                const deliveryDateObj = new Date(delivery.deliveryDate);
+                const deliveryYear = deliveryDateObj.getFullYear();
+                const deliveryMonth = String(deliveryDateObj.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const deliveryDay = String(deliveryDateObj.getDate()).padStart(2, '0');
+                const deliveryDate = `${deliveryYear}-${deliveryMonth}-${deliveryDay}`;
                 return deliveryDate === todayString || deliveryDate === tomorrowString;
             });
 
@@ -285,15 +305,19 @@
             }
 
             deliveryTableBody.innerHTML = paginatedData.map((delivery, index) => {
-                const deliveryDate = new Date(delivery.deliveryDate).toISOString().slice(0, 10);
-                const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED'  && delivery.delay !== 0) ?
+                const deliveryDateObj = new Date(delivery.deliveryDate);
+                const deliveryYear = deliveryDateObj.getFullYear();
+                const deliveryMonth = String(deliveryDateObj.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const deliveryDay = String(deliveryDateObj.getDate()).padStart(2, '0');
+                const deliveryDate = `${deliveryYear}-${deliveryMonth}-${deliveryDay}`;
+                const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED' && delivery.delay !== 0) ?
                     `<button class="btn btn-warning btn-sm" style="margin-top: 5px" onclick="showDelayConfirmation(${delivery.deliveryId})" >Hoãn</button>` : '';
                 return `
-                <tr data-delivery-id="${delivery.deliveryId}">
+            <tr data-delivery-id="${delivery.deliveryId}">
                 <td>${delivery.deliveryId}</td>
                 <td class="delivery-status">${statusTranslations[delivery.deliveryStatus] || delivery.deliveryStatus}</td>
                 <td>${delivery.deliveryTime}</td>
-                <td>${delivery.deliveryDate}</td>
+                <td>${deliveryDate}</td>
                 <td>${formatCurrency(delivery.deliveryPrice)}</td>
                 <td class="delay-button-container">
                     <button class="btn btn-primary btn-sm" onclick="showDetail(${delivery.deliveryId})">Chi tiết</button>
