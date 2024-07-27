@@ -141,9 +141,6 @@
                             <th>Trạng thái</th>
                             <th>Thời gian giao</th>
                             <th>Ngày giao</th>
-                            <!--                            <th>Tên khách hàng</th>-->
-                            <!--                            <th>SĐT</th>-->
-                            <!--                            <th>Địa chỉ</th>-->
                             <th>Tiền hàng</th>
                             <th>Action</th>
                         </tr>
@@ -152,13 +149,7 @@
                         <!-- Data will be injected here by JavaScript -->
                         </tbody>
                     </table>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination" id="pagination">
-                            <!-- Pagination controls will be injected here by JavaScript -->
-                        </ul>
-                    </nav>
                 </div>
-
             </main>
         </div>
     </div>
@@ -170,9 +161,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmationModalLabel">Xác nhận hoãn đơn hàng</h5>
-                <!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-                <!--                    <span aria-hidden="true">&times;</span>-->
-                <!--                </button>-->
             </div>
             <div class="modal-body">
                 <p>Nếu đơn hàng của bạn chỉ có gói tuần, số lần hoãn là 1, nếu có gói tháng thì là 3. Khi hoãn đơn giao
@@ -189,7 +177,7 @@
 
 <div class="modal fade" id="deliveryDetailsModal" tabindex="-1" aria-labelledby="deliveryDetailsModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- Use modal-lg to increase width -->
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deliveryDetailsModalLabel">Chi tiết đơn giao</h5>
@@ -208,20 +196,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let currentPage = 1;
-        const itemsPerPage = 10;
         let allData = [];
         let currentDeliveryId = null;
-
-        // function fetchData() {
-        //     fetch('http://localhost:8080/api/delivery/user')
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             allData = data;
-        //             renderTable(data, currentPage);
-        //             renderPagination(data.length, itemsPerPage, currentPage);
-        //         });
-        // }
 
         function fetchData() {
             fetch('http://localhost:8080/api/delivery/user')
@@ -229,15 +205,15 @@
                 .then(data => {
                     allData = data;
                     const filteredData = getFilteredData(data);
-                    renderTable(filteredData, currentPage);
-                    renderPagination(filteredData.length, itemsPerPage, currentPage);
-                });
+                    renderTable(filteredData);
+                })
+                .catch(error => console.error('Error fetching data:', error));
         }
 
         function getFilteredData(data) {
             const today = new Date();
             const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const month = String(today.getMonth() + 1).padStart(2, '0');
             const day = String(today.getDate()).padStart(2, '0');
             const todayString = `${year}-${month}-${day}`;
 
@@ -248,49 +224,28 @@
             const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
             const tomorrowString = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
 
-            console.log(todayString);
-            console.log(tomorrowString);
-
             return data.filter(delivery => {
                 const deliveryDateObj = new Date(delivery.deliveryDate);
                 const deliveryYear = deliveryDateObj.getFullYear();
-                const deliveryMonth = String(deliveryDateObj.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const deliveryMonth = String(deliveryDateObj.getMonth() + 1).padStart(2, '0');
                 const deliveryDay = String(deliveryDateObj.getDate()).padStart(2, '0');
                 const deliveryDate = `${deliveryYear}-${deliveryMonth}-${deliveryDay}`;
                 return deliveryDate === todayString || deliveryDate === tomorrowString;
             });
         }
 
-        function renderTable(data, page) {
-            const deliveryTableBody = document.getElementById('deliveryTableBody');
-            const start = (page - 1) * itemsPerPage;
-            const end = page * itemsPerPage;
-
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-            const day = String(today.getDate()).padStart(2, '0');
-            const todayString = `${year}-${month}-${day}`;
-
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1);
-            const tomorrowYear = tomorrow.getFullYear();
-            const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
-            const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
-            const tomorrowString = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
-
-            // Filter data to include only today's and tomorrow's deliveries
-            const filteredData = data.filter(delivery => {
-                const deliveryDateObj = new Date(delivery.deliveryDate);
-                const deliveryYear = deliveryDateObj.getFullYear();
-                const deliveryMonth = String(deliveryDateObj.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-                const deliveryDay = String(deliveryDateObj.getDate()).padStart(2, '0');
-                const deliveryDate = `${deliveryYear}-${deliveryMonth}-${deliveryDay}`;
-                return deliveryDate === todayString || deliveryDate === tomorrowString;
+        function renderTable(data) {
+            // Sắp xếp dữ liệu trước khi render
+            data.sort((a, b) => {
+                const dateA = new Date(a.deliveryDate);
+                const dateB = new Date(b.deliveryDate);
+                if (dateA - dateB !== 0) {
+                    return dateA - dateB; // Sắp xếp theo ngày giao
+                }
+                return a.deliveryId - b.deliveryId; // Nếu cùng ngày thì sắp xếp theo deliveryId tăng dần
             });
 
-            const paginatedData = filteredData.slice(start, end);
-
+            const deliveryTableBody = document.getElementById('deliveryTableBody');
             const statusTranslations = {
                 'NOT_DELIVERED': 'Chưa giao',
                 'IN_TRANSIT': 'Đang giao',
@@ -304,13 +259,13 @@
                 return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
 
-            deliveryTableBody.innerHTML = paginatedData.map((delivery, index) => {
+            deliveryTableBody.innerHTML = data.map(delivery => {
                 const deliveryDateObj = new Date(delivery.deliveryDate);
                 const deliveryYear = deliveryDateObj.getFullYear();
-                const deliveryMonth = String(deliveryDateObj.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const deliveryMonth = String(deliveryDateObj.getMonth() + 1).padStart(2, '0');
                 const deliveryDay = String(deliveryDateObj.getDate()).padStart(2, '0');
                 const deliveryDate = `${deliveryYear}-${deliveryMonth}-${deliveryDay}`;
-                const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === tomorrowString && delivery.deliveryStatus === 'NOT_DELIVERED' && delivery.delay !== 0) ?
+                const delayButton = (delivery.deliveryPrice == 0 && deliveryDate === deliveryDate && delivery.deliveryStatus === 'NOT_DELIVERED' && delivery.delay !== 0) ?
                     `<button class="btn btn-warning btn-sm" style="margin-top: 5px" onclick="showDelayConfirmation(${delivery.deliveryId})" >Hoãn</button>` : '';
                 return `
             <tr data-delivery-id="${delivery.deliveryId}">
@@ -328,48 +283,6 @@
             }).join('');
         }
 
-
-        // function renderPagination(totalItems, itemsPerPage, currentPage) {
-        //     const pagination = document.getElementById('pagination');
-        //     const totalPages = Math.ceil(totalItems / itemsPerPage);
-        //     let paginationHtml = '';
-        //
-        //     for (let i = 1; i <= totalPages; i++) {
-        //         paginationHtml += `
-        //         <li class="page-item ${i === currentPage ? 'active' : ''}">
-        //             <a class="page-link" href="#" onclick="navigateToPage(${i})">${i}</a>
-        //         </li>
-        //     `;
-        //     }
-        //
-        //     pagination.innerHTML = paginationHtml;
-        // }
-
-        function renderPagination(totalItems, itemsPerPage, currentPage) {
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            let paginationHtml = '';
-
-            for (let i = 1; i <= totalPages; i++) {
-                paginationHtml += `
-        <li class="page-item ${i === currentPage ? 'active' : ''}">
-            <a class="page-link" href="#" onclick="navigateToPage(${i})">${i}</a>
-        </li>
-    `;
-            }
-
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = paginationHtml;
-        }
-
-        window.navigateToPage = function (page) {
-            currentPage = page;
-            // renderTable(allData, page);
-            // renderPagination(allData.length, itemsPerPage, page);
-            const filteredData = getFilteredData(allData);
-            renderTable(filteredData, page);
-            renderPagination(filteredData.length, itemsPerPage, page);
-        };
-
         window.showDelayConfirmation = function (deliveryId) {
             currentDeliveryId = deliveryId;
             const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
@@ -381,7 +294,6 @@
                 delayDelivery(currentDeliveryId);
                 const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
                 confirmationModal.hide();
-                window.location.reload(); // Reload the page
             }
         });
 
@@ -392,29 +304,17 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(data => {
-                    updateRow(data);
+                    fetchData(); // Reload the data
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                .catch(error => console.error('Error:', error));
         }
-
-        function updateRow(delivery) {
-            const row = document.querySelector(`tr[data-delivery-id="${delivery.deliveryId}"]`);
-            if (row) {
-                row.querySelector('.delivery-status').textContent = delivery.deliveryStatus;
-                row.querySelector('.delay-button-container').innerHTML = ''; // Xóa nút hoãn
-            }
-        }
-
 
         document.getElementById('searchButton').addEventListener('click', function () {
             const searchDate = document.getElementById('searchDate').value;
             const filteredData = allData.filter(delivery => delivery.deliveryDate === searchDate);
-            renderTable(filteredData, 1);
-            renderPagination(filteredData.length, itemsPerPage, 1);
+            renderTable(filteredData);
         });
 
         window.showDetail = function (deliveryId) {
@@ -427,59 +327,56 @@
                 .then(data => {
                     displayDeliveryDetails(data);
                 })
-                .catch(error => {
-                    console.error('Error fetching delivery details:', error);
-                });
+                .catch(error => console.error('Error fetching delivery details:', error));
         }
 
         function displayDeliveryDetails(data) {
             const modalBody = document.getElementById('deliveryDetailsModalBody');
             modalBody.innerHTML = `
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Combo</th>
-                        <th>Bữa sáng</th>
-                        <th>Bữa trưa</th>
-                        <th>Bữa tối</th>
-                        <th>Số lượng</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${data.deliveryDetails.map(detail => `
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td>${detail.deliveryDetailCombo}</td>
-                            <td>${detail.dishBreakfast ? `
-                                <div>
-                                    <p>${detail.dishBreakfast.dishName}</p>
-                                    <img src="${detail.dishBreakfast.dishImage}" alt="${detail.dishBreakfast.dishName}" width="100">
-                                </div>` : 'N/A'}
-                            </td>
-                            <td>${detail.dishLunch ? `
-                                <div>
-                                    <p>${detail.dishLunch.dishName}</p>
-                                    <img src="${detail.dishLunch.dishImage}" alt="${detail.dishLunch.dishName}" width="100">
-                                </div>` : 'N/A'}
-                            </td>
-                            <td>${detail.dishDinner ? `
-                                <div>
-                                    <p>${detail.dishDinner.dishName}</p>
-                                    <img src="${detail.dishDinner.dishImage}" alt="${detail.dishDinner.dishName}" width="100">
-                                </div>` : 'N/A'}
-                            </td>
-                            <td>${detail.deliveryDetailQuantity}</td>
+                            <th>Combo</th>
+                            <th>Bữa sáng</th>
+                            <th>Bữa trưa</th>
+                            <th>Bữa tối</th>
+                            <th>Số lượng</th>
                         </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        `;
+                    </thead>
+                    <tbody>
+                        ${data.deliveryDetails.map(detail => `
+                            <tr>
+                                <td>${detail.deliveryDetailCombo}</td>
+                                <td>${detail.dishBreakfast ? `
+                                    <div>
+                                        <p>${detail.dishBreakfast.dishName}</p>
+                                        <img src="${detail.dishBreakfast.dishImage}" alt="${detail.dishBreakfast.dishName}" width="100">
+                                    </div>` : ''}
+                                </td>
+                                <td>${detail.dishLunch ? `
+                                    <div>
+                                        <p>${detail.dishLunch.dishName}</p>
+                                        <img src="${detail.dishLunch.dishImage}" alt="${detail.dishLunch.dishName}" width="100">
+                                    </div>` : ''}
+                                </td>
+                                <td>${detail.dishDinner ? `
+                                    <div>
+                                        <p>${detail.dishDinner.dishName}</p>
+                                        <img src="${detail.dishDinner.dishImage}" alt="${detail.dishDinner.dishName}" width="100">
+                                    </div>` : ''}
+                                </td>
+                                <td>${detail.deliveryDetailQuantity}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
             const modal = new bootstrap.Modal(document.getElementById('deliveryDetailsModal'));
             modal.show();
         }
 
         fetchData();
     });
-
 </script>
 </body>
 <footer th:replace="~{fragments :: footer}"></footer>
