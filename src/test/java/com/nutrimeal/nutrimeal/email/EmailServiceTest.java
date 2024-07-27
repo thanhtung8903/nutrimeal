@@ -30,7 +30,7 @@ class EmailServiceTest {
         MimeMessage mimeMessage = Mockito.mock(MimeMessage.class);
         Mockito.when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
 
-        emailService.forgetPassword("nguyenthanhtungclc@gmail.com", "123", "token");
+        emailService.forgetPassword("nguyenthanhtungclc@gmail.com", "123", "token", "Nguyen Thanh Tung");
 
         Mockito.verify(mailSender).send(any(MimeMessage.class));
     }

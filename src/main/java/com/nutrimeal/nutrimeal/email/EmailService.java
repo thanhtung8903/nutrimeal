@@ -21,7 +21,7 @@ public class EmailService implements EmailSender {
 
     @Override
     @Async
-    public void forgetPassword(String to, String userId, String token) {
+    public void forgetPassword(String to, String userId, String token, String fullName) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -110,7 +110,7 @@ public class EmailService implements EmailSender {
                     "            <h2>QUÊN MẬT KHẨU</h2>" +
                     "        </div>" +
                     "        <div class=\"email-body\">" +
-                    "            <p>Xin chào,</p>" +
+                    "            <p>Xin chào, " + fullName + "</p>" +
                     "            <p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu của bạn, vui lòng bấm vào nút bên dưới để được chuyển hướng đến trang khôi phục</p>" +
                     "            <div class=\"email-footer\">" +
                     "                <a style=\"color: white\" + href=\"http://localhost:8080/forget/" + userId + "/" + token + "\" class=\"reset-button\">Đặt lại mật khẩu</a>" +

@@ -90,7 +90,7 @@ public class AuthController {
                 forgetTokenService.createOrUpdateForgetToken(user);
                 String token = forgetTokenService.getForgetTokenByUser(user);
                 LOGGER.info("Generated token for user {}: {}", user.getUsername(), token);
-                emailService.forgetPassword(user.getEmail(), user.getUserId(), token);
+                emailService.forgetPassword(user.getEmail(), user.getUserId(), token, user.getFullName());
                 LOGGER.info("Sent forget password email to: {}", user.getEmail());
                 model.addAttribute("successMessage", "Vui lòng kiểm tra email để đặt lại mật khẩu!");
             } else {

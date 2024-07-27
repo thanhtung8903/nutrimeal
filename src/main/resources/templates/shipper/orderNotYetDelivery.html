@@ -275,14 +275,19 @@
       const endIndex = startIndex + itemsPerPage;
       const paginatedOrders = deliveries.slice(startIndex, endIndex);
 
-      const today = new Date().toISOString().split('T')[0]; // Ngày hiện tại ở định dạng YYYY-MM-DD
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const day = String(today.getDate()).padStart(2, '0');
+      const formattedToday = `${year}-${month}-${day}`;
 
+      console.log('Today:', formattedToday);
 
       orderTableBody.innerHTML = '';
       paginatedOrders.forEach(delivery => {
         const row = document.createElement('tr');
         row.classList.add('text-center');
-        const isToday = delivery.deliveryDate === today;
+        const isToday = delivery.deliveryDate === formattedToday;
         row.innerHTML = `
         <td>${delivery.deliveryDate}</td>
         <td>${delivery.deliveryTime}</td>
@@ -306,7 +311,6 @@
       document.querySelectorAll('.detail-btn').forEach(button => {
         button.addEventListener('click', function () {
           const deliveryId = this.getAttribute('data-id');
-          // console.log('Fetching delivery details for delivery ID:', deliveryId);
           fetchDeliveryDetails(deliveryId);
         });
       });
