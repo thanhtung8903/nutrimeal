@@ -311,6 +311,9 @@
     });
   });
 
+  function formatCurrency(amount) {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
 
   function calculateTotalPrice(data) {
     let total=0;
@@ -319,7 +322,7 @@
         total+=delivery.deliveryPrice;
       }
             })
-    return total;
+    return formatCurrency(total);
   }
 
   function calculateTodayOrders(data) {
