@@ -1,19 +1,35 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-            }
-        }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                sh 'mvn test'
             }
         }
-        stage('Deploy') {
+        stage('Create docker image and push to docker hub') {
             steps {
-                echo 'Deploying....'
+                script {
+                    // Get the job name and build number
+                    def jobName = env.JOB_NAME
+                    def buildNumber = env.BUILD_NUMBER
+
+                    withCredentials([usernamePassword(credentialsId: '840758e3-e587-4621-9380-85d1095f205f', usernameVariable: 'DOCKER_HUB_USER', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                        // Build Docker image
+                        sh "docker image build -t gnut89/nutrimeal:${buildNumber} -f Dockerfile ."
+
+                        // Login to Docker Hub
+                        sh "docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD"
+
+                        // Push Docker image to Docker Hub
+                        sh "docker push gnut89/nutrimeal:${buildNumber}"
+
+                        // Optionally tag as 'latest' and push
+                        sh "docker tag gnut89/nutrimeal:${buildNumber} gnut89/nutrimeal:latest"
+                        sh "docker push gnut89/nutrimeal:latest"
+                    }
+
+                    echo "Build Completed - Job Name: $jobName  --  Build Number: $buildNumber"
+                }
             }
         }
     }
