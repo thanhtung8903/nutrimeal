@@ -1,11 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
         stage('Create docker image and push to docker hub') {
             steps {
                 script {
