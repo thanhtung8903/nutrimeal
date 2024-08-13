@@ -1,11 +1,11 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout Jenkins Upgrade3 Git Repository') {
+        stage('Checkout nutrimeal Git Repository') {
             steps {
                 script {
                     // Clone the Git repository's master branch
-                    def gitRepoUrl = 'https://github.com/thanhtung8903/Jenkins_Upgradev3'
+                    def gitRepoUrl = 'https://github.com/thanhtung8903/nutrimeal'
 
                     checkout([$class: 'GitSCM',
                         branches: [[name: '*/master']],
