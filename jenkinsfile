@@ -8,7 +8,7 @@ pipeline {
                     def gitRepoUrl = 'https://github.com/thanhtung8903/nutrimeal'
 
                     checkout([$class: 'GitSCM',
-                        branches: [[name: '*/master']],
+                        branches: [[name: '*/main']],
                         userRemoteConfigs: [[url: gitRepoUrl]],
                         extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'CloneOption', noTags: false, shallow: true, depth: 1]]
                     ])
